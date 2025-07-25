@@ -97,3 +97,8 @@ npm run build:web
 -   svgo: [MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
+
+## リンク
+
+- GitHub : [https://github.com/steelpipe75/padtools_ts](https://github.com/steelpipe75/padtools_ts)
+- 公開サイト : [https://steelpipe75.github.io/padtools_ts/](https://steelpipe75.github.io/padtools_ts/)
