@@ -1,0 +1,18 @@
+:terminal 開始
+:comment コメント文
+:call 関数呼び出し
+	process: 中身
+:if 条件式
+	process: 真の場合
+:else
+	process: 偽の場合
+:switch 条件
+:case ケース1
+	process: ケース1の中身
+:case ケース2
+	process: ケース2の中身
+:while 繰り返し条件（先判定）
+	process: 中身
+:dowhile 繰り返し条件（後判定）
+	process: 中身
+:terminal 終了

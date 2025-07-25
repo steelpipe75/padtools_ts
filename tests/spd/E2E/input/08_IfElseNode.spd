@@ -1,0 +1,4 @@
+:if condition
+	True
+:else
+	False

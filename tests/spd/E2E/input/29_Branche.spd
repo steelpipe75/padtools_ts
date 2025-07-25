@@ -1,0 +1,86 @@
+:comment if-else通常パターン
+:if a
+	True
+:else
+	False
+:comment if-else両方サブノードなしパターン
+:if a
+:else
+:comment if-else両方elseだけサブノードなしパターン
+:if a
+	True
+:else
+:comment if-else両方ifだけサブノードなしパターン
+:if a
+:else
+	False
+
+:comment switch通常パターン case2個
+:switch a
+:case 1
+	Process1
+:case 2
+	Process2
+
+:comment switch通常パターン case3個
+:switch a
+:case 1
+	Process1
+:case 2
+	Process2
+:case 3
+	Process3
+
+:comment switchだけパターン
+:switch a
+
+:comment switch case2つのうち1つ目がサブノードなしパターン
+:switch a
+:case 1
+:case 2
+	Process2
+
+:comment switch case2つのうち2つ目がサブノードなしパターン
+:switch a
+:case 1
+	Process1
+:case 2
+
+:comment switch case3つのうち2つ目がサブノードなしパターン
+:switch a
+:case 1
+:case 2
+	Process2
+:case 3
+	Process3
+
+:comment switch case3つのうち2つ目がサブノードなしパターン
+:switch a
+:case 1
+	Process1
+:case 2
+:case 3
+	Process3
+
+:comment switch case3つのうち3つ目がサブノードなしパターン
+:switch a
+:case 1
+	Process1
+:case 2
+	Process2
+:case 3
+
+:comment switch caseのサブノードの高さがあるパターン
+:switch a
+:case 1
+	Process11
+	Process12
+	Process13
+:case 2
+	Process21
+	Process22
+	Process23
+:case 3
+	Process31
+	Process32
+	Process33

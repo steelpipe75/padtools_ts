@@ -1,0 +1,3 @@
+process: a = 10 a を表示@
+標準エラー出力に出力
+process: a = 0

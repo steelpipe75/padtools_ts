@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPD to SVG Converter</title>
+    <link rel="stylesheet" href="index_styles.css">
+</head>
+<body>
+    <h1>SPD(Simple PAD Description) to SVG Converter</h1>
+    <div class="link-group">
+        <p class="reference-link"><a href="commands.html">SPD Commands Reference</a></p>
+        <p class="github-link"><a href="https://github.com/steelpipe75/padtools_ts" target="_blank">GitHub Repository</a></p>
+    </div>
+    <div class="container">
+        <div class="input-section">
+            <h2>SPD Input</h2>
+            <textarea id="spdInput" placeholder="ここにSPD記法のテキストを入力してください..."></textarea>
+            <div class="file-operations">
+                <input type="file" id="fileInput" accept=".spd">
+                <button id="downloadButton">Download SPD</button>
+            </div>
+        </div>
+        <div class="output-section">
+            <h2>SVG Output</h2>
+            <div id="svgOutput">
+                <!-- 変換されたSVGがここに表示されます -->
+            </div>
+            <div class="svg-operations">
+                <button id="downloadSvgButton">Download SVG</button>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="./src/main.ts"></script>
+</body>
+</html>

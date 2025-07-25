@@ -1,0 +1,128 @@
+html, body {
+    height: 95%;
+    margin: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    padding-bottom: 30px;
+}
+
+h1 {
+    color: #0056b3;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.reference-link,
+.github-link {
+    text-align: center;
+    margin-bottom: 0; /* 親要素で余白を管理するため */
+}
+
+.reference-link a,
+.github-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.reference-link a:hover,
+.github-link a:hover {
+    text-decoration: underline;
+}
+
+.link-group {
+    display: flex;
+    justify-content: center; /* 中央揃え */
+    gap: 20px; /* リンク間のスペース */
+    margin-bottom: 20px; /* 下部の余白 */
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.input-section,
+.output-section {
+    flex: 1;
+    min-width: 300px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+h2 {
+    color: #0056b3;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 100%;
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    font-family: monospace;
+    resize: vertical;
+    height: 100%;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.file-operations {
+    margin-top: 0;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.file-operations input[type="file"] {
+    margin-right: 10px;
+}
+
+.svg-operations {
+    margin-top: 10px;
+    text-align: right;
+}
+
+#svgOutput {
+    border: 1px solid #ddd;
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    overflow: auto;
+    height: 100%;
+}

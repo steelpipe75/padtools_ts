@@ -1,0 +1,53 @@
+{
+  "name": "padtools_ts",
+  "version": "0.1.0",
+  "bin": {
+    "padtools_ts": "dist/cli/cli.js"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "prepublishOnly": "npm run build",
+    "format": "dprint fmt",
+    "start": "ts-node src/cli/cli.ts",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "start:web": "parcel web/index.html web/commands.html",
+    "build:web": "rm -rf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/"
+  },
+  "keywords": [
+    "pad",
+    "flowchart",
+    "diagram",
+    "generator",
+    "cli",
+    "svg",
+    "typescript",
+    "PAD"
+  ],
+  "author": "steelpipe",
+  "license": "MIT",
+  "description": "Simple tool to write PAD.",
+  "dependencies": {
+    "commander": "^14.0.0",
+    "svgo": "^4.0.0",
+    "xml-formatter": "^3.6.6"
+  },
+  "devDependencies": {
+    "@dprint/typescript": "^0.95.8",
+    "@fullhuman/postcss-purgecss": "^7.0.2",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.10",
+    "@types/svgo": "^2.6.4",
+    "@types/xml-formatter": "^1.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.37.0",
+    "@typescript-eslint/parser": "^8.37.0",
+    "dprint": "^0.50.1",
+    "eslint": "^9.31.0",
+    "jest": "^30.0.3",
+    "parcel": "^2.15.4",
+    "postcss": "^8.5.6",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
