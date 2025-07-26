@@ -8,29 +8,37 @@
             <h3>ブロック</h3>
             <p>1行がPADの1ボックスと対応します。空白行や「#」(シャープ)から始まる行は読み飛ばします。</p>
             <pre>#コメント
-process: a = 10
-process: a を表示</pre>
-            <img src=/padtools_ts/block.2850837f.svg alt="Example diagram for block command">
+a = 10
+a を表示</pre>
+            <img src=/padtools_ts/block.5d53dec3.svg alt="Example diagram for block command">
         </div>
 
         <div class=command-section>
             <h3>ブロック内の改行 (@)</h3>
             <p>文中に「@」(アットマーク)を使用した場合、改行文字として扱われます。文末に「@」が現れた場合は、改行を行うとともに、次の行も含めてPADの1ボックスを作成します。</p>
-            <pre>process: a = 10 a を表示@
+            <p>例1:</p>
+            <pre>a = 10
+a を表示@標準エラー出力に出力
+a = 0</pre>
+            <img src=/padtools_ts/newline1.0a1ff163.svg alt="Example diagram for newline command">
+            <p>例2:</p>
+            <pre>a = 10
+a を表示@
 標準エラー出力に出力
-process: a = 0</pre>
-            <img src=/padtools_ts/newline.1679bdc7.svg alt="Example diagram for newline command">
+a = 0</pre>
+            <img src=/padtools_ts/newline2.0a1ff163.svg alt="Example diagram for newline command">
         </div>
 
         <div class=command-section>
             <h3>親子関係 (Tab)</h3>
             <p>タブ文字でインデントをつけることで、ブロックの親子関係を記述できます。</p>
-            <pre>process: 親ブロック
-	process: 子ブロック1
-		process: 孫ブロック1
-		process: 孫ブロック2
-	process: 子ブロック2</pre>
-            <img src=/padtools_ts/indentation.d6e60679.svg alt="Example diagram for indentation command">
+            <pre>ブロック
+	タブインデントを上げる事で子のブロックを定義できます
+	小ブロック1
+		孫ブロック1
+		孫ブロック2
+	子ブロック2</pre>
+            <img src=/padtools_ts/indentation.72f76bfc.svg alt="Example diagram for indentation command">
         </div>
 
         <div class=command-section>
@@ -51,22 +59,24 @@ process: a = 0</pre>
             <pre>:terminal 開始
 :comment コメント文
 :call 関数呼び出し
-	process: 中身
+	中身
 :if 条件式
-	process: 真の場合
+	真の場合
 :else
-	process: 偽の場合
+	偽の場合(:else以下は省略可能)
 :switch 条件
 :case ケース1
-	process: ケース1の中身
+	ケース1の中身
 :case ケース2
-	process: ケース2の中身
+	ケース2の中身
+:case ...
+	ケース文は必要に応じていくつでも追加できます
 :while 繰り返し条件（先判定）
-	process: 中身
+	中身
 :dowhile 繰り返し条件（後判定）
-	process: 中身
+	中身
 :terminal 終了</pre>
-            <img src=/padtools_ts/commands_diagram.5e44f5b0.svg alt="Example diagram for commands">
+            <img src=/padtools_ts/commands_diagram.dca224a9.svg alt="Example diagram for commands">
         </div>
     </div>
 
