@@ -42,6 +42,7 @@ interface RenderOptions {
   strokeWidth: number;
   strokeColor: string;
   backgroundColor: string;
+  baseBackgroundColor: string | null;
   textColor: string;
   lineHeight: number;
   doubleLineWidth: number; // 二重線の幅
@@ -72,6 +73,7 @@ const defaultRenderOptions: RenderOptions = {
   strokeWidth: 1,
   strokeColor: "#000000",
   backgroundColor: "#ffffff",
+  baseBackgroundColor: null,
   textColor: "#000000",
   lineHeight: 1.2,
   doubleLineWidth: 5,
@@ -100,9 +102,11 @@ export function render(node: Node | null, options?: Partial<RenderOptions>): str
   svg += `width="${svgWidth}" height="${svgHeight}" `;
   svg += `viewBox="0 0 ${svgWidth} ${svgHeight}" `;
   svg += `xmlns="http://www.w3.org/2000/svg">`;
-  svg += `<rect x="0" y="0" `;
-  svg += `width="${svgWidth}" height="${svgHeight}" `;
-  svg += `fill="${mergedOptions.backgroundColor}"/>`;
+  if (mergedOptions.baseBackgroundColor) {
+    svg += `<rect x="0" y="0" `;
+    svg += `width="${svgWidth}" height="${svgHeight}" `;
+    svg += `fill="${mergedOptions.backgroundColor}"/>`;
+  }
   svg += renderTransformTranslateSvg(
     mergedOptions.margin.left,
     mergedOptions.margin.top,
