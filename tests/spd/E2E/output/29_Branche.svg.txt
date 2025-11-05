@@ -1,5 +1,4 @@
 <svg width="438" height="2034.7999999999997" viewBox="0 0 438 2034.7999999999997" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="438" height="2034.7999999999997" fill="#ffffff"/>
     <g transform="translate(20, 20)">
         <g transform="translate(0, 0)">
             <text x="10" y="14" dy="0" font-family="sans-serif" font-size="14" fill="#000000">

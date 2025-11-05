@@ -5,14 +5,14 @@
     "padtools_ts": "dist/cli/cli.js"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc",
+    "build": "rimraf dist && tsc",
     "prepublishOnly": "npm run build",
     "format": "dprint fmt",
     "start": "ts-node src/cli/cli.ts",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
     "start:web": "parcel web/index.html web/commands.html --dist-dir temp/",
-    "build:web": "rm -rf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/"
+    "build:web": "rimraf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/"
   },
   "keywords": [
     "pad",
@@ -46,6 +46,7 @@
     "jest": "^30.0.3",
     "parcel": "^2.15.4",
     "postcss": "^8.5.6",
+    "rimraf": "^6.1.0",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
