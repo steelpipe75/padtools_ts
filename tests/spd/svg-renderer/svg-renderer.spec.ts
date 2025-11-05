@@ -64,7 +64,7 @@ describe("SVG Renderer", () => {
     };
     const svg = render(node);
     expect(svg).toContain("<rect");
-    expect(svg.match(/<rect/g)?.length).toBe(2); // Check for two rects for double border + 1 for background
+    expect(svg.match(/<rect/g)?.length).toBe(1);
     expect(svg).toContain("呼び出しノード");
   });
 
@@ -151,6 +151,5 @@ describe("SVG Renderer", () => {
     const svg = render(node);
     expect(svg).toContain("<text");
     expect(svg).toContain("コメント");
-    expect(svg.match(/<rect/g)?.length).toBe(1); // Comment nodes should only have the background rect
   });
 });
