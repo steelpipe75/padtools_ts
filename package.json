@@ -11,7 +11,7 @@
     "start": "ts-node src/cli/cli.ts",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "start:web": "parcel web/index.html web/commands.html",
+    "start:web": "parcel web/index.html web/commands.html --dist-dir temp/",
     "build:web": "rm -rf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/"
   },
   "keywords": [
