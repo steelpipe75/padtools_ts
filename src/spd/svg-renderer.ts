@@ -105,7 +105,7 @@ export function render(node: Node | null, options?: Partial<RenderOptions>): str
   if (mergedOptions.baseBackgroundColor) {
     svg += `<rect x="0" y="0" `;
     svg += `width="${svgWidth}" height="${svgHeight}" `;
-    svg += `fill="${mergedOptions.backgroundColor}"/>`;
+    svg += `fill="${mergedOptions.baseBackgroundColor}"/>`;
   }
   svg += renderTransformTranslateSvg(
     mergedOptions.margin.left,
