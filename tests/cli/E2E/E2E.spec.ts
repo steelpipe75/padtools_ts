@@ -65,7 +65,7 @@ describe("CLI E2E tests", () => {
       const goldenPath = path.join(outputDir, file.replace(".spd", "_base_background_color_gray.svg.txt"));
 
       expect(() => {
-        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color #888`);
+        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#888"`);
       }).not.toThrow();
 
       const actual = fs.readFileSync(outputPath, "utf-8");
@@ -81,7 +81,7 @@ describe("CLI E2E tests", () => {
       const goldenPath = path.join(outputDir, file.replace(".spd", "_base_background_color_black.svg.txt"));
 
       expect(() => {
-        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color #000`);
+        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#000"`);
       }).not.toThrow();
 
       const actual = fs.readFileSync(outputPath, "utf-8");
@@ -97,7 +97,7 @@ describe("CLI E2E tests", () => {
       const goldenPath = path.join(outputDir, file.replace(".spd", "_base_background_color_white.svg.txt"));
 
       expect(() => {
-        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color #FFF`);
+        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#FFF"`);
       }).not.toThrow();
 
       const actual = fs.readFileSync(outputPath, "utf-8");
