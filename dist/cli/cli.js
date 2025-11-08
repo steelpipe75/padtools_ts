@@ -51,6 +51,13 @@ commander_1.program
     .option("-i, --input <inputFilePath>", "Path to the input SPD text file")
     .option("-o, --output <outputFilePath>", "Path to the output SVG file")
     .option("-p, --prettyprint", "Pretty print the output SVG")
+    .option("--font-size <fontSize>", "Font size for the SVG", parseFloat)
+    .option("--font-family <fontFamily>", "Font family for the SVG")
+    .option("--stroke-width <strokeWidth>", "Stroke width for the SVG", parseFloat)
+    .option("--stroke-color <strokeColor>", "Stroke color for the SVG")
+    .option("--background-color <backgroundColor>", "Background color for the SVG")
+    .option("--text-color <textColor>", "Text color for the SVG")
+    .option("--line-height <lineHeight>", "Line height for the SVG", parseFloat)
     .action((options) => {
     try {
         let spdContent;
@@ -61,7 +68,22 @@ commander_1.program
             spdContent = fs.readFileSync(0, "utf-8"); // Read from stdin
         }
         const ast = parser_1.SPDParser.parse(spdContent);
-        const svgOutput = (0, svg_renderer_1.render)(ast);
+        const renderOptions = {};
+        if (options.fontSize !== undefined)
+            renderOptions.fontSize = options.fontSize;
+        if (options.fontFamily !== undefined)
+            renderOptions.fontFamily = options.fontFamily;
+        if (options.strokeWidth !== undefined)
+            renderOptions.strokeWidth = options.strokeWidth;
+        if (options.strokeColor !== undefined)
+            renderOptions.strokeColor = options.strokeColor;
+        if (options.backgroundColor !== undefined)
+            renderOptions.backgroundColor = options.backgroundColor;
+        if (options.textColor !== undefined)
+            renderOptions.textColor = options.textColor;
+        if (options.lineHeight !== undefined)
+            renderOptions.lineHeight = options.lineHeight;
+        const svgOutput = (0, svg_renderer_1.render)(ast, renderOptions);
         const optimizedSvg = (0, svgo_1.optimize)(svgOutput, {
             // optional but recommended
             path: options.output || "output.svg", // Provide a dummy path for svgo if no output file
