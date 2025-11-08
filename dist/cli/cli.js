@@ -56,6 +56,7 @@ commander_1.program
     .option("--stroke-width <strokeWidth>", "Stroke width for the SVG", parseFloat)
     .option("--stroke-color <strokeColor>", "Stroke color for the SVG")
     .option("--background-color <backgroundColor>", "Background color for the SVG")
+    .option("--base-background-color <baseBackgroundColor>", "Base background color for the SVG")
     .option("--text-color <textColor>", "Text color for the SVG")
     .option("--line-height <lineHeight>", "Line height for the SVG", parseFloat)
     .action((options) => {
@@ -79,6 +80,8 @@ commander_1.program
             renderOptions.strokeColor = options.strokeColor;
         if (options.backgroundColor !== undefined)
             renderOptions.backgroundColor = options.backgroundColor;
+        if (options.baseBackgroundColor !== undefined)
+            renderOptions.baseBackgroundColor = options.baseBackgroundColor;
         if (options.textColor !== undefined)
             renderOptions.textColor = options.textColor;
         if (options.lineHeight !== undefined)
