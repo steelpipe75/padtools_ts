@@ -103,9 +103,11 @@ export function render(node: Node | null, options?: Partial<RenderOptions>): str
   svg += `viewBox="0 0 ${svgWidth} ${svgHeight}" `;
   svg += `xmlns="http://www.w3.org/2000/svg">`;
   if (mergedOptions.baseBackgroundColor) {
-    svg += `<rect x="0" y="0" `;
-    svg += `width="${svgWidth}" height="${svgHeight}" `;
-    svg += `fill="${mergedOptions.baseBackgroundColor}"/>`;
+    if (mergedOptions.baseBackgroundColor !== "") {
+      svg += `<rect x="0" y="0" `;
+      svg += `width="${svgWidth}" height="${svgHeight}" `;
+      svg += `fill="${mergedOptions.baseBackgroundColor}"/>`;
+    }
   }
   svg += renderTransformTranslateSvg(
     mergedOptions.margin.left,
