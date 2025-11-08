@@ -58,11 +58,43 @@ describe("CLI E2E tests", () => {
       expect(actual).toBe(expected);
     });
 
-    it("should correctly apply --base-background-color option", () => {
+    it("should correctly apply --base-background-color gray option", () => {
       const file = "sample_input.spd";
       const inputPath = path.join(inputDir, file);
       const outputPath = path.join(tempDir, file.replace(".spd", "_base_background_color_gray.svg"));
       const goldenPath = path.join(outputDir, file.replace(".spd", "_base_background_color_gray.svg.txt"));
+
+      expect(() => {
+        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color #888`);
+      }).not.toThrow();
+
+      const actual = fs.readFileSync(outputPath, "utf-8");
+      const expected = fs.readFileSync(goldenPath, "utf-8");
+
+      expect(actual).toBe(expected);
+    });
+
+    it("should correctly apply --base-background-color black option", () => {
+      const file = "sample_input.spd";
+      const inputPath = path.join(inputDir, file);
+      const outputPath = path.join(tempDir, file.replace(".spd", "_base_background_color_black.svg"));
+      const goldenPath = path.join(outputDir, file.replace(".spd", "_base_background_color_black.svg.txt"));
+
+      expect(() => {
+        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color #888`);
+      }).not.toThrow();
+
+      const actual = fs.readFileSync(outputPath, "utf-8");
+      const expected = fs.readFileSync(goldenPath, "utf-8");
+
+      expect(actual).toBe(expected);
+    });
+
+    it("should correctly apply --base-background-color white option", () => {
+      const file = "sample_input.spd";
+      const inputPath = path.join(inputDir, file);
+      const outputPath = path.join(tempDir, file.replace(".spd", "_base_background_color_white.svg"));
+      const goldenPath = path.join(outputDir, file.replace(".spd", "_base_background_color_white.svg.txt"));
 
       expect(() => {
         execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color #888`);
