@@ -74,7 +74,7 @@ describe("CLI", () => {
     // Assertions
     expect(fs.readFileSync).toHaveBeenCalledWith(inputPath, "utf-8");
     expect(SPDParser.parse).toHaveBeenCalledWith(spdContent);
-    expect(render).toHaveBeenCalledWith(ast);
+    expect(render).toHaveBeenCalledWith(ast, {});
     expect(optimize).toHaveBeenCalledWith(svgOutput, expect.any(Object));
     expect(fs.writeFileSync).toHaveBeenCalledWith(outputPath, optimizedSvg.data);
     expect(xmlFormat).not.toHaveBeenCalled();
@@ -108,7 +108,8 @@ describe("CLI", () => {
     runCli(["-i", inputPath, "-o", outputPath, "--prettyprint"]);
 
     // Assertions
-    expect(xmlFormat).toHaveBeenCalledWith(optimizedSvg.data);
+    expect(render).toHaveBeenCalledWith(ast, {});
+    expect(xmlFormat).toHaveBeenCalledWith(svgOutput);
     expect(fs.writeFileSync).toHaveBeenCalledWith(outputPath, formattedSvg);
   });
 
@@ -138,7 +139,8 @@ describe("CLI", () => {
     runCli(["-i", inputPath, "-o", outputPath, "-p"]);
 
     // Assertions
-    expect(xmlFormat).toHaveBeenCalledWith(optimizedSvg.data);
+    expect(render).toHaveBeenCalledWith(ast, {});
+    expect(xmlFormat).toHaveBeenCalledWith(svgOutput);
     expect(fs.writeFileSync).toHaveBeenCalledWith(outputPath, formattedSvg);
   });
 

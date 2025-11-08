@@ -41,6 +41,22 @@ describe("CLI E2E tests", () => {
         });
       });
     });
+
+    it("should correctly apply --font-size option", () => {
+      const file = "sample_input.spd";
+      const inputPath = path.join(inputDir, file);
+      const outputPath = path.join(tempDir, file.replace(".spd", "_font_size_20.svg"));
+      const goldenPath = path.join(outputDir, file.replace(".spd", "_font_size_20.svg.txt"));
+
+      expect(() => {
+        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --font-size 20`);
+      }).not.toThrow();
+
+      const actual = fs.readFileSync(outputPath, "utf-8");
+      const expected = fs.readFileSync(goldenPath, "utf-8");
+
+      expect(actual).toBe(expected);
+    });
   });
 
   // Failure cases
