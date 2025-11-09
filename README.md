@@ -4,6 +4,8 @@ padtools_ts はPAD図を活用することを目的として作成された、PA
 
 このプロジェクトは、padtools (https://github.com/knaou/padtools) をTypeScriptで書き直したものです。
 
+[![CI](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml/badge.svg)](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml)
+
 ## インストール
 
 ### グローバルインストール
