@@ -6,7 +6,7 @@ padtools_ts はPAD図を活用することを目的として作成された、PA
 
 このプロジェクトは、padtools (https://github.com/knaou/padtools) をTypeScriptで書き直したものです。
 
-[![CI](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml/badge.svg)](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml)
+[![CI](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml/badge.svg)](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/steelpipe75/padtools_ts/branch/main/graph/badge.svg)](https://codecov.io/gh/steelpipe75/padtools_ts)
 
 ## インストール
 
