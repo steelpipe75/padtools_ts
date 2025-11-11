@@ -9,15 +9,16 @@ import {
   UnexpectedElseException,
   UnknownCommandException,
 } from "../../../src/spd/parser";
+import { NodeListNode } from "../../../src/spd/ast";
 
 describe("SPDParser - Exception Handling", () => {
   it("引数なしのcallコマンドに対してRequireArgumentExceptionをスローすること", () => {
-    const spd = `:call`;
+    const spd = ":call";
     expect(() => SPDParser.parse(spd)).toThrow(RequireArgumentException);
   });
 
   it("最初の行がインデントされている場合にIllegalIndentExceptionをスローすること", () => {
-    const spd = `	Process A`;
+    const spd = `\tProcess A`;
     expect(() => SPDParser.parse(spd)).toThrow(IllegalIndentException);
   });
 
@@ -27,9 +28,14 @@ describe("SPDParser - Exception Handling", () => {
     expect(() => SPDParser.parse(spd)).toThrow(IllegalIndentException);
   });
 
+  it("コメントの後にインデントが1レベル増加した場合にIllegalIndentExceptionをスローすること", () => {
+    const spd = `:comment A\n\tprocess B`;
+    expect(() => SPDParser.parse(spd)).toThrow(IllegalIndentException);
+  });
+
   it("複数レベルのインデントに対してIllegalIndentExceptionをスローすること", () => {
     const spd = `Process
-\t\tProcess B`;
+		Process B`;
     expect(() => SPDParser.parse(spd)).toThrow(IllegalIndentException);
   });
 
@@ -56,16 +62,21 @@ describe("SPDParser - Exception Handling", () => {
 
   it("予期しない内部エラーをキャッチしてParseErrorとして再スローすること", () => {
     const spd = `A`;
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    
     // handleBody内で予期しないエラーを発生させる
-    const spy = jest.spyOn(SPDParser as any, "handleBody").mockImplementation(() => {
+    const handleBodySpy = jest.spyOn(SPDParser as any, "handleBody").mockImplementation(() => {
       throw new Error("予期しないテストエラー");
     });
 
     // カスタムエラーでラップされていることを確認
     expect(() => SPDParser.parse(spd)).toThrow(ParseError);
     expect(() => SPDParser.parse(spd)).toThrow("予期しないエラー: Error: 予期しないテストエラー");
+    
+    expect(consoleSpy).toHaveBeenCalled();
 
     // モックをクリーンアップ
-    spy.mockRestore();
+    handleBodySpy.mockRestore();
+    consoleSpy.mockRestore();
   });
 });
