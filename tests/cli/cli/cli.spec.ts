@@ -164,4 +164,109 @@ describe("CLI", () => {
     expect(processExitSpy).toHaveBeenCalledWith(1);
     expect(consoleLogSpy).not.toHaveBeenCalled();
   });
+
+  it("should read from stdin and write to stdout when no files are provided", () => {
+    const spdContent = "dummy spd content from stdin";
+    const ast: Node | null = { type: "process", text: "test", childNode: null };
+    const svgOutput = "<svg/>";
+    const optimizedSvg = { data: "<svg/>" };
+
+    // Setup mocks
+    const fs = require("fs");
+    const { SPDParser } = require("../../../src/spd/parser");
+    const { render } = require("../../../src/spd/svg-renderer");
+    const { optimize } = require("svgo");
+    const process = require("process");
+
+    fs.readFileSync.mockImplementation((path: string | number) => {
+      if (path === 0) {
+        return spdContent;
+      }
+      return "";
+    });
+    SPDParser.parse.mockReturnValue(ast);
+    render.mockReturnValue(svgOutput);
+    optimize.mockReturnValue(optimizedSvg);
+    const writeSpy = jest.spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    // Run CLI
+    runCli([]);
+
+    // Assertions
+    expect(fs.readFileSync).toHaveBeenCalledWith(0, "utf-8");
+    expect(SPDParser.parse).toHaveBeenCalledWith(spdContent);
+    expect(render).toHaveBeenCalledWith(ast, {});
+    expect(optimize).toHaveBeenCalledWith(svgOutput, expect.any(Object));
+    expect(writeSpy).toHaveBeenCalledWith(optimizedSvg.data);
+    expect(fs.writeFileSync).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(processExitSpy).not.toHaveBeenCalled();
+
+    writeSpy.mockRestore();
+  });
+
+  it("should pass all render options to the render function", () => {
+    const inputPath = "input.spd";
+    const outputPath = "output.svg";
+    const spdContent = "dummy spd content";
+    const ast: Node | null = { type: "process", text: "test", childNode: null };
+    const svgOutput = "<svg/>";
+    const optimizedSvg = { data: "<svg/>" };
+
+    // Setup mocks
+    const fs = require("fs");
+    const { SPDParser } = require("../../../src/spd/parser");
+    const { render } = require("../../../src/spd/svg-renderer");
+    const { optimize } = require("svgo");
+
+    fs.readFileSync.mockReturnValue(spdContent);
+    SPDParser.parse.mockReturnValue(ast);
+    render.mockReturnValue(svgOutput);
+    optimize.mockReturnValue(optimizedSvg);
+
+    // CLI arguments
+    const args = [
+      "-i",
+      inputPath,
+      "-o",
+      outputPath,
+      "--font-size",
+      "16",
+      "--font-family",
+      "Arial",
+      "--stroke-width",
+      "2",
+      "--stroke-color",
+      "red",
+      "--background-color",
+      "blue",
+      "--base-background-color",
+      "green",
+      "--text-color",
+      "yellow",
+      "--line-height",
+      "1.5",
+    ];
+
+    // Expected render options
+    const expectedRenderOptions = {
+      fontSize: 16,
+      fontFamily: "Arial",
+      strokeWidth: 2,
+      strokeColor: "red",
+      backgroundColor: "blue",
+      baseBackgroundColor: "green",
+      textColor: "yellow",
+      lineHeight: 1.5,
+    };
+
+    // Run CLI
+    runCli(args);
+
+    // Assertions
+    expect(render).toHaveBeenCalledWith(ast, expectedRenderOptions);
+    expect(fs.writeFileSync).toHaveBeenCalledWith(outputPath, optimizedSvg.data);
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(processExitSpy).not.toHaveBeenCalled();
+  });
 });
