@@ -152,4 +152,48 @@ describe("SVG Renderer", () => {
     expect(svg).toContain("<text");
     expect(svg).toContain("コメント");
   });
+
+  it("should return an empty string for a null node", () => {
+    const svg = render(null);
+    expect(svg).toBe("");
+  });
+
+  it("should render with a base background color", () => {
+    const node: ProcessNode = {
+      type: "process",
+      text: "test",
+      childNode: null,
+    };
+    const svg = render(node, { baseBackgroundColor: "red" });
+    expect(svg).toContain('<rect x="0" y="0"');
+    expect(svg).toContain('fill="red"');
+  });
+
+  it("should not render a background rect for an empty base background color", () => {
+    const node: ProcessNode = {
+      type: "process",
+      text: "test",
+      childNode: null,
+    };
+    const svg = render(node, { baseBackgroundColor: "" });
+    const widthMatch = svg.match(/width="([^"]+)"/);
+    const heightMatch = svg.match(/height="([^"]+)"/);
+    const svgWidth = widthMatch ? widthMatch[1] : "";
+    const svgHeight = heightMatch ? heightMatch[1] : "";
+
+    // Check for a rect that spans the entire SVG, which is the background
+    const backgroundRectString = `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}"`;
+    expect(svg).not.toContain(backgroundRectString);
+  });
+
+  it("should handle unknown node types gracefully", () => {
+    const node = {
+      type: "unknown",
+      text: "unknown",
+    } as any;
+    const svg = render(node);
+    // It should produce an SVG wrapper but the fragment inside will be empty
+    expect(svg).toContain("<svg");
+    expect(svg).not.toContain("unknown"); // Text from the node should not be rendered
+  });
 });
