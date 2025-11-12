@@ -135,3 +135,34 @@ button:hover {
 
     height: 100%;
 }
+
+.options-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.option-group label {
+    font-weight: bold;
+    min-width: 80px;
+}
+
+.option-group input[type="number"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 80px;
+}
+
+.options-section button {
+    margin-top: 10px;
+}

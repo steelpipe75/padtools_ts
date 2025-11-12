@@ -9,11 +9,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const downloadButton = document.getElementById("downloadButton") as HTMLButtonElement;
   const downloadSvgButton = document.getElementById("downloadSvgButton") as HTMLButtonElement;
 
+  // Render Options
+  const fontSizeInput = document.getElementById("fontSizeInput") as HTMLInputElement;
+  const applyOptionsButton = document.getElementById("applyOptionsButton") as HTMLButtonElement;
+
   const convertAndRender = () => {
     const spdText = spdInput.value;
     try {
       const ast = SPDParser.parse(spdText);
-      const svgString = renderSvg(ast);
+      const options = {
+        fontSize: parseInt(fontSizeInput.value),
+      };
+      const svgString = renderSvg(ast, options);
       svgOutput.innerHTML = svgString;
     } catch (error: any) {
       svgOutput.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
@@ -22,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   spdInput.addEventListener("input", convertAndRender);
+  applyOptionsButton.addEventListener("click", convertAndRender);
 
   spdInput.addEventListener("keydown", (event) => {
     if (event.key === "Tab") {
