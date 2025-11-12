@@ -337,4 +337,26 @@ Process 4
       ],
     } as NodeListNode);
   });
+
+  it("should ignore errors and continue parsing when exr returns true", () => {
+    const spd = `
+Process 1
+:invalid-command
+Process 2
+`;
+    const errorHandler = jest.fn((line, lineNo, err) => {
+      return err instanceof UnknownCommandException;
+    });
+
+    const ast = SPDParser.parse(spd, errorHandler);
+
+    expect(errorHandler).toHaveBeenCalled();
+    expect(ast).toEqual({
+      type: "nodeList",
+      children: [
+        { type: "process", text: "Process 1", childNode: null },
+        { type: "process", text: "Process 2", childNode: null },
+      ],
+    } as NodeListNode);
+  });
 });

@@ -79,4 +79,21 @@ describe("SPDParser - Exception Handling", () => {
     handleBodySpy.mockRestore();
     consoleSpy.mockRestore();
   });
+
+  it("should handle and re-throw non-Error, non-ParseError exceptions", () => {
+    const spd = "some input";
+    const errorObject = "just a string error";
+
+    // Mock handleBody to throw a string
+    const handleBodySpy = jest.spyOn(SPDParser as any, "handleBody").mockImplementation(() => {
+      throw errorObject;
+    });
+
+    // Expect SPDParser.parse to throw a ParseError wrapping the string
+    expect(() => SPDParser.parse(spd)).toThrow(ParseError);
+    expect(() => SPDParser.parse(spd)).toThrow(`予期しないエラー: ${errorObject}`);
+
+    // Restore mock
+    handleBodySpy.mockRestore();
+  });
 });

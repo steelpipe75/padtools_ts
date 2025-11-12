@@ -269,4 +269,25 @@ describe("CLI", () => {
     expect(consoleErrorSpy).not.toHaveBeenCalled();
     expect(processExitSpy).not.toHaveBeenCalled();
   });
+
+  it("should handle non-Error exceptions", () => {
+    const inputPath = "input.spd";
+    const outputPath = "output.svg";
+    const errorMessage = "This is not an Error object";
+
+    // Setup mocks
+    const fs = require("fs");
+    fs.readFileSync.mockImplementation(() => {
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      throw errorMessage;
+    });
+
+    // Run CLI
+    runCli(["-i", inputPath, "-o", outputPath]);
+
+    // Assertions
+    expect(fs.readFileSync).toHaveBeenCalledWith(inputPath, "utf-8");
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(processExitSpy).toHaveBeenCalledWith(1);
+  });
 });
