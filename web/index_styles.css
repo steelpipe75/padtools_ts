@@ -106,10 +106,13 @@ button:hover {
     margin-bottom: 10px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
-.file-operations input[type="file"] {
-    margin-right: 10px;
+.file-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Add some space between label and input */
 }
 
 .svg-operations {
