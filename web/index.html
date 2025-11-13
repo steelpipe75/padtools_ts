@@ -12,14 +12,28 @@
         <p class="reference-link"><a href="commands.html">SPD Commands Reference</a></p>
         <p class="github-link"><a href="https://github.com/steelpipe75/padtools_ts" target="_blank">GitHub Repository</a></p>
     </div>
-    <div class="options-section">
-        <h2>Render Options</h2>
+    <details class="options-section">
+        <summary><h2>Render Options</h2></summary>
         <div class="option-group">
             <label for="fontSizeInput">Font Size:</label>
             <input type="number" id="fontSizeInput" value="14" min="8" max="72">
         </div>
+        <div class="option-group">
+            <label for="baseBackgroundColorInput">Base Background Color:</label>
+            <input type="color" id="baseBackgroundColorInput" value="#ffffff">
+            <input type="checkbox" id="transparentBackgroundCheckbox">
+            <label for="transparentBackgroundCheckbox">Transparent</label>
+        </div>
+        <div class="option-group">
+            <label for="backgroundColorInput">Node Background Color:</label>
+            <input type="color" id="backgroundColorInput" value="#ffffff">
+        </div>
+        <div class="option-group">
+            <label for="textColorInput">Text Color:</label>
+            <input type="color" id="textColorInput" value="#000000">
+        </div>
         <button id="applyOptionsButton">Apply Options</button>
-    </div>
+    </details>
 
     <div class="container">
         <div class="input-section">

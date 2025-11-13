@@ -67,10 +67,38 @@ h1 {
 
 h2 {
     color: #0056b3;
-    border-bottom: 1px solid #eee;
     padding-bottom: 10px;
     margin-top: 0;
     margin-bottom: 10px;
+}
+
+details > summary {
+    list-style: none;
+}
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+summary h2 {
+    display: inline-block;
+    border-bottom: 1px solid #eee;
+    margin-right: 10px;
+}
+
+summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+summary::before {
+    content: '▶';
+    font-size: 1em;
+    margin-right: 10px;
+}
+
+details[open] > summary::before {
+    content: '▼';
 }
 
 textarea {

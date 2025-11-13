@@ -11,7 +11,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Render Options
   const fontSizeInput = document.getElementById("fontSizeInput") as HTMLInputElement;
+  const baseBackgroundColorInput = document.getElementById("baseBackgroundColorInput") as HTMLInputElement;
+  const transparentBackgroundCheckbox = document.getElementById("transparentBackgroundCheckbox") as HTMLInputElement;
+  const backgroundColorInput = document.getElementById("backgroundColorInput") as HTMLInputElement;
+  const textColorInput = document.getElementById("textColorInput") as HTMLInputElement;
   const applyOptionsButton = document.getElementById("applyOptionsButton") as HTMLButtonElement;
+
+  transparentBackgroundCheckbox.addEventListener("change", () => {
+    baseBackgroundColorInput.disabled = transparentBackgroundCheckbox.checked;
+    convertAndRender();
+  });
 
   const convertAndRender = () => {
     const spdText = spdInput.value;
@@ -19,6 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const ast = SPDParser.parse(spdText);
       const options = {
         fontSize: parseInt(fontSizeInput.value),
+        baseBackgroundColor: transparentBackgroundCheckbox.checked ? null : baseBackgroundColorInput.value,
+        backgroundColor: backgroundColorInput.value,
+        textColor: textColorInput.value,
       };
       const svgString = renderSvg(ast, options);
       svgOutput.innerHTML = svgString;
@@ -113,6 +125,26 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 初期表示用のサンプルSPDテキスト
-  spdInput.value = `:terminal START\n\n#ロジックを記述してください\nロジック\n\n:terminal END`;
+  spdInput.value = `:terminal 開始
+命令
+:comment コメント文
+:call 関数呼び出し
+	中身
+:if 条件式
+	真の場合
+:else
+	偽の場合(:else以下は省略可能)
+:switch 条件
+:case ケース1
+	ケース1の中身
+:case ケース2
+	ケース2の中身
+:case ...
+	ケース文は必要に応じていくつでも追加できます
+:while 繰り返し条件（先判定）
+	中身
+:dowhile 繰り返し条件（後判定）
+	中身
+:terminal 終了`;
   convertAndRender(); // ページロード時に一度変換を実行
 });
