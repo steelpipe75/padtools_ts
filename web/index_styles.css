@@ -92,14 +92,13 @@ summary {
 }
 
 summary::before {
-    content: '+';
-    font-size: 20px;
-    font-weight: bold;
+    content: '▶';
+    font-size: 1em;
     margin-right: 10px;
 }
 
 details[open] > summary::before {
-    content: '-';
+    content: '▼';
 }
 
 textarea {
