@@ -1,17 +1,31 @@
-<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/padtools_ts/web.30a4add2.css><body>
+<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/padtools_ts/web.4ee13138.css><body>
     <h1>SPD(Simple PAD Description) to SVG Converter</h1>
     <div class=link-group>
         <p class=reference-link><a href=/padtools_ts/commands.html>SPD Commands Reference</a></p>
         <p class=github-link><a href=https://github.com/steelpipe75/padtools_ts target=_blank>GitHub Repository</a></p>
     </div>
-    <div class=options-section>
-        <h2>Render Options</h2>
+    <details class=options-section>
+        <summary><h2>Render Options</h2></summary>
         <div class=option-group>
             <label for=fontSizeInput>Font Size:</label>
             <input type=number id=fontSizeInput value=14 min=8 max=72>
         </div>
+        <div class=option-group>
+            <label for=baseBackgroundColorInput>Base Background Color:</label>
+            <input type=color id=baseBackgroundColorInput value=#ffffff>
+            <input type=checkbox id=transparentBackgroundCheckbox>
+            <label for=transparentBackgroundCheckbox>Transparent</label>
+        </div>
+        <div class=option-group>
+            <label for=backgroundColorInput>Node Background Color:</label>
+            <input type=color id=backgroundColorInput value=#ffffff>
+        </div>
+        <div class=option-group>
+            <label for=textColorInput>Text Color:</label>
+            <input type=color id=textColorInput value=#000000>
+        </div>
         <button id=applyOptionsButton>Apply Options</button>
-    </div>
+    </details>
 
     <div class=container>
         <div class=input-section>
@@ -35,5 +49,5 @@
             </div>
         </div>
     </div>
-    <script type=module src=/padtools_ts/web.1aa6f2c8.js></script>
+    <script type=module src=/padtools_ts/web.b2b8b581.js></script>
 
