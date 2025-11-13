@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Render Options
   const fontSizeInput = document.getElementById("fontSizeInput") as HTMLInputElement;
+  const baseBackgroundColorInput = document.getElementById("baseBackgroundColorInput") as HTMLInputElement;
+  const backgroundColorInput = document.getElementById("backgroundColorInput") as HTMLInputElement;
+  const textColorInput = document.getElementById("textColorInput") as HTMLInputElement;
   const applyOptionsButton = document.getElementById("applyOptionsButton") as HTMLButtonElement;
 
   const convertAndRender = () => {
@@ -19,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const ast = SPDParser.parse(spdText);
       const options = {
         fontSize: parseInt(fontSizeInput.value),
+        baseBackgroundColor: baseBackgroundColorInput.value,
+        backgroundColor: backgroundColorInput.value,
+        textColor: textColorInput.value,
       };
       const svgString = renderSvg(ast, options);
       svgOutput.innerHTML = svgString;
