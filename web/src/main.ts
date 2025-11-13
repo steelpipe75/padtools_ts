@@ -12,9 +12,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Render Options
   const fontSizeInput = document.getElementById("fontSizeInput") as HTMLInputElement;
   const baseBackgroundColorInput = document.getElementById("baseBackgroundColorInput") as HTMLInputElement;
+  const transparentBackgroundCheckbox = document.getElementById("transparentBackgroundCheckbox") as HTMLInputElement;
   const backgroundColorInput = document.getElementById("backgroundColorInput") as HTMLInputElement;
   const textColorInput = document.getElementById("textColorInput") as HTMLInputElement;
   const applyOptionsButton = document.getElementById("applyOptionsButton") as HTMLButtonElement;
+
+  transparentBackgroundCheckbox.addEventListener("change", () => {
+    baseBackgroundColorInput.disabled = transparentBackgroundCheckbox.checked;
+    convertAndRender();
+  });
 
   const convertAndRender = () => {
     const spdText = spdInput.value;
@@ -22,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const ast = SPDParser.parse(spdText);
       const options = {
         fontSize: parseInt(fontSizeInput.value),
-        baseBackgroundColor: baseBackgroundColorInput.value,
+        baseBackgroundColor: transparentBackgroundCheckbox.checked ? null : baseBackgroundColorInput.value,
         backgroundColor: backgroundColorInput.value,
         textColor: textColorInput.value,
       };
