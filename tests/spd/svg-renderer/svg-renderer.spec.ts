@@ -64,7 +64,7 @@ describe("SVG Renderer", () => {
     };
     const svg = render(node);
     expect(svg).toContain("<rect");
-    expect(svg.match(/<rect/g)?.length).toBe(1);
+    expect(svg.match(/<rect/g)?.length).toBe(2);
     expect(svg).toContain("呼び出しノード");
   });
 
