@@ -24,6 +24,7 @@ const defaultRenderOptions = {
  * ASTを受け取り、完全なSVG文字列を返す
  */
 function render(node, options) {
+    var _a;
     const mergedOptions = Object.assign(Object.assign({}, defaultRenderOptions), options);
     if (!node) {
         return "";
@@ -35,13 +36,10 @@ function render(node, options) {
     svg += `width="${svgWidth}" height="${svgHeight}" `;
     svg += `viewBox="0 0 ${svgWidth} ${svgHeight}" `;
     svg += `xmlns="http://www.w3.org/2000/svg">`;
-    if (mergedOptions.baseBackgroundColor) {
-        if (mergedOptions.baseBackgroundColor !== "") {
-            svg += `<rect x="0" y="0" `;
-            svg += `width="${svgWidth}" height="${svgHeight}" `;
-            svg += `fill="${mergedOptions.baseBackgroundColor}"/>`;
-        }
-    }
+    const baseFillColor = (_a = mergedOptions.baseBackgroundColor) !== null && _a !== void 0 ? _a : "none";
+    svg += `<rect x="0" y="0" `;
+    svg += `width="${svgWidth}" height="${svgHeight}" `;
+    svg += `fill="${baseFillColor}"/>`;
     svg += renderTransformTranslateSvg(mergedOptions.margin.left, mergedOptions.margin.top, fragment.svg);
     svg += `</svg>`;
     return svg;
@@ -76,6 +74,7 @@ function renderNode(node, options) {
  * 箱型ノードの描画処理
  */
 function renderBoxFragment(node, options) {
+    var _a, _b;
     const textMetrics = measureTextSvg(node.text, options);
     let contentWidth = textMetrics.width;
     let contentHeight = textMetrics.height;
@@ -87,9 +86,10 @@ function renderBoxFragment(node, options) {
         contentWidth += options.boxPadding.left + options.boxPadding.right;
         contentHeight += options.boxPadding.top + options.boxPadding.bottom;
         textOffsetY += options.boxPadding.top;
-        svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}"
-      stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}"
-      fill="${options.backgroundColor}"/>`;
+        const fillColor = (_a = options.backgroundColor) !== null && _a !== void 0 ? _a : "none";
+        svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}" `;
+        svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
+        svg += `fill="${fillColor}"/>`;
     }
     else if (node.borderType === "WRound") {
         // 丸みを帯びた四角形
@@ -98,10 +98,11 @@ function renderBoxFragment(node, options) {
         const radius = contentHeight / 2; // 高さの半分を丸みの半径とする
         contentWidth += contentHeight;
         textOffsetX = radius;
-        svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}"
-      rx="${radius}" ry="${radius}"
-      stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}"
-      fill="${options.backgroundColor}"/>`;
+        const fillColor = (_b = options.backgroundColor) !== null && _b !== void 0 ? _b : "none";
+        svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}" `;
+        svg += `rx="${radius}" ry="${radius}" `;
+        svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
+        svg += `fill="${fillColor}"/>`;
     }
     else {
         // ボーダーなし
@@ -216,6 +217,7 @@ function renderTextSvgForBranche(text, posX, posY, options) {
  * 分岐ノードの描画
  */
 function renderBrancheFragment(node, options) {
+    var _a;
     // ケースの数が2未満の場合はダミーを追加する
     if (node.branches.length < 2) {
         while (node.branches.length < 2) {
@@ -336,10 +338,11 @@ function renderBrancheFragment(node, options) {
     poly.push({ x: x, y: lasty }); // Pos:E
     const polyPoints = poly.map((p) => `${p.x},${p.y}`).join(" ");
     // polyの描画
-    svg += `<polygon points="${polyPoints}"
-    stroke="${options.strokeColor}"
-    stroke-width="${options.strokeWidth}"
-    fill="${options.backgroundColor}"/>`;
+    const fillColor = (_a = options.backgroundColor) !== null && _a !== void 0 ? _a : "none";
+    svg += `<polygon points="${polyPoints}" `;
+    svg += `stroke="${options.strokeColor}" `;
+    svg += `stroke-width="${options.strokeWidth}" `;
+    svg += `fill="${fillColor}"/>`;
     for (const [index, brancheFragment] of brancheFragments.entries()) {
         const label = brancheFragment.label;
         const lh_temp = ymap.get(index);
@@ -485,11 +488,11 @@ function renderTextSvg(text, posX, posY, options) {
     let svg = "";
     lines.forEach((line, index) => {
         const dy = index === 0 ? 0 : index * options.fontSize * options.lineHeight;
-        svg += `<text
-      x="${posX}" y="${posY + options.fontSize}" dy="${dy}"
-      font-family="${options.fontFamily}"
-      font-size="${options.fontSize}"
-      fill="${options.textColor}">${line}</text>`;
+        svg += `<text `;
+        svg += `x="${posX}" y="${posY + options.fontSize}" dy="${dy}" `;
+        svg += `font-family="${options.fontFamily}" `;
+        svg += `font-size="${options.fontSize}" `;
+        svg += `fill="${options.textColor}">${line}</text>`;
     });
     return svg;
 }
