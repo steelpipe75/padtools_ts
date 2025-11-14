@@ -224,15 +224,12 @@ class SPDParser {
         else if (context.nodeList.length == 1) {
             newNode = context.nodeList[0];
         }
-        else if (context.nodeList.length > 1) {
+        else {
             let nodeList = { type: "nodeList", children: [] };
             for (let i = 0; i < context.nodeList.length; i++) {
                 nodeList.children.push(context.nodeList[i]);
             }
             newNode = nodeList;
-        }
-        else {
-            throw new UnexpectedInnerException("Parent node is not found");
         }
         // ノードの追加先となるノード。
         let pnode = context.parent.nodeList[context.parent.nodeList.length - 1];
@@ -267,12 +264,7 @@ class SPDParser {
                         ifnode.falseNode = newNode;
                     }
                 }
-                else {
-                    throw new UnexpectedInnerException("Illegal option status");
-                }
                 break;
-            default:
-                throw new UnexpectedInnerException("Illegal command");
         }
         // 親ノードの状態をリセットする。
         context.parent.optionStatus = "Default";
@@ -291,8 +283,6 @@ class SPDParser {
         const rootContext = new Context();
         // 現在のコンテキスト
         let context = rootContext;
-        // 終了フラグ
-        let errExit = false;
         // １行づつ読み込む
         // ソースコードを行ごとに分割
         const lines = src.split(/\r?\n/);
@@ -400,7 +390,7 @@ class SPDParser {
                 }
             }
             // 先頭まで戻る
-            while (!errExit && context != null) {
+            while (context != null) {
                 context = SPDParser.upToParent(context);
             }
         }
@@ -413,9 +403,6 @@ class SPDParser {
                 throw new ParseError(`予期しないエラー: ${ex}`); // その他のエラーをラップ
             }
         }
-        // 途中で解析が終了した場合は、nullを返す。
-        if (errExit)
-            return null;
         // モデルを最終化して返す
         if (rootContext.nodeList.length === 0) {
             return null;
