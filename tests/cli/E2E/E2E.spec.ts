@@ -113,7 +113,7 @@ describe("CLI E2E tests", () => {
       const goldenPath = path.join(outputDir, file.replace(".spd", "_base_background_color_none.svg.txt"));
 
       expect(() => {
-        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color ""`);
+        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "none"`);
       }).not.toThrow();
 
       const actual = fs.readFileSync(outputPath, "utf-8");
