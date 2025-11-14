@@ -102,11 +102,10 @@ export function render(node: Node | null, options?: Partial<RenderOptions>): str
   svg += `width="${svgWidth}" height="${svgHeight}" `;
   svg += `viewBox="0 0 ${svgWidth} ${svgHeight}" `;
   svg += `xmlns="http://www.w3.org/2000/svg">`;
-  if (mergedOptions.baseBackgroundColor) {
-    svg += `<rect x="0" y="0" `;
-    svg += `width="${svgWidth}" height="${svgHeight}" `;
-    svg += `fill="${mergedOptions.baseBackgroundColor}"/>`;
-  }
+  const baseFillColor = mergedOptions.baseBackgroundColor ?? "none";
+  svg += `<rect x="0" y="0" `;
+  svg += `width="${svgWidth}" height="${svgHeight}" `;
+  svg += `fill="${baseFillColor}"/>`;
   svg += renderTransformTranslateSvg(
     mergedOptions.margin.left,
     mergedOptions.margin.top,
@@ -161,9 +160,10 @@ function renderBoxFragment(node: BoxNode, options: RenderOptions): ViewFragment 
     contentWidth += options.boxPadding.left + options.boxPadding.right;
     contentHeight += options.boxPadding.top + options.boxPadding.bottom;
     textOffsetY += options.boxPadding.top;
+    const fillColor = options.backgroundColor ?? "none";
     svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}" `
     svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `
-    svg += `fill="${options.backgroundColor}"/>`;
+    svg += `fill="${fillColor}"/>`;
   } else if (node.borderType === "WRound") {
     // 丸みを帯びた四角形
     contentHeight += options.boxPadding.top + options.boxPadding.bottom;
@@ -171,10 +171,11 @@ function renderBoxFragment(node: BoxNode, options: RenderOptions): ViewFragment 
     const radius = contentHeight / 2; // 高さの半分を丸みの半径とする
     contentWidth += contentHeight;
     textOffsetX = radius;
+    const fillColor = options.backgroundColor ?? "none";
     svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}" `
     svg += `rx="${radius}" ry="${radius}" `
     svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `
-    svg += `fill="${options.backgroundColor}"/>`;
+    svg += `fill="${fillColor}"/>`;
   } else {
     // ボーダーなし
     contentWidth += options.boxPadding.left + options.boxPadding.right;
@@ -479,10 +480,11 @@ function renderBrancheFragment(node: BrancheNode, options: RenderOptions): ViewF
   const polyPoints = poly.map((p) => `${p.x},${p.y}`).join(" ");
 
   // polyの描画
+  const fillColor = options.backgroundColor ?? "none";
   svg += `<polygon points="${polyPoints}" `
   svg += `stroke="${options.strokeColor}" `
   svg += `stroke-width="${options.strokeWidth}" `
-  svg += `fill="${options.backgroundColor}"/>`;
+  svg += `fill="${fillColor}"/>`;
 
   for (const [index, brancheFragment] of brancheFragments.entries()) {
     const label = brancheFragment.label;
