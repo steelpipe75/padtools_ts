@@ -169,21 +169,21 @@ describe("SVG Renderer", () => {
     expect(svg).toContain('fill="red"');
   });
 
-  it("should not render a background rect for an empty base background color", () => {
+  it("should render a transparent background rect for a null base background color", () => {
     const node: ProcessNode = {
       type: "process",
       text: "test",
       childNode: null,
     };
-    const svg = render(node, { baseBackgroundColor: "" });
+    const svg = render(node, { baseBackgroundColor: null });
     const widthMatch = svg.match(/width="([^"]+)"/);
     const heightMatch = svg.match(/height="([^"]+)"/);
     const svgWidth = widthMatch ? widthMatch[1] : "";
     const svgHeight = heightMatch ? heightMatch[1] : "";
 
-    // Check for a rect that spans the entire SVG, which is the background
-    const backgroundRectString = `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}"`;
-    expect(svg).not.toContain(backgroundRectString);
+    // Check for a rect that spans the entire SVG with a "none" fill
+    const backgroundRectString = `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}" fill="none"`;
+    expect(svg).toContain(backgroundRectString);
   });
 
   it("should handle unknown node types gracefully", () => {
