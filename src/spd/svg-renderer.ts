@@ -50,6 +50,7 @@ interface RenderOptions {
   connectorWidth: number; // 子ノードとの接続線幅
   nodeListSpace: number; // ノードListNodeの子ノード間のスペース
   childNodeOffsetWidth: number;
+  listRenderType: string;
 }
 
 /**
@@ -81,6 +82,7 @@ const defaultRenderOptions: RenderOptions = {
   connectorWidth: 2,
   nodeListSpace: 10,
   childNodeOffsetWidth: 20,
+  listRenderType: "orignal"
 };
 
 /**
@@ -573,6 +575,14 @@ function renderIfFragment(node: IfNode, options: RenderOptions): ViewFragment {
  * 連結ノード（NodeListNode）の描画
  */
 function renderListFragment(node: NodeListNode, options: RenderOptions): ViewFragment {
+  if (options.listRenderType === "TerminalOffset") {
+    return renderListFragmentTerminalOffset(node, options)
+  } else {
+    return renderListFragmentOrignal(node, options)
+  }
+}
+
+function renderListFragmentOrignal(node: NodeListNode, options: RenderOptions): ViewFragment {
   let totalHeight = 0;
   let maxWidth = 0;
   let currentY = 0;
@@ -620,6 +630,101 @@ function renderListFragment(node: NodeListNode, options: RenderOptions): ViewFra
   return {
     svg: childrenSvg,
     width: maxWidth,
+    height: totalHeight,
+    type: "NodeList",
+  };
+}
+
+function renderListFragmentTerminalOffset(node: NodeListNode, options: RenderOptions): ViewFragment {
+  let totalHeight = 0;
+  let maxWidth = 0;
+  let offsetX = 0;
+  let topAddWidth = 0;
+  let bottomAddWidth = 0;
+  let currentY = 0;
+  let childrenSvg = "";
+  const childFragments: ViewFragment[] = [];
+
+  // 子ノードを再帰的に描画し、サイズとSVGを収集
+  for (const child of node.children) {
+    const childFragment = renderNode(child, options);
+    childFragments.push(childFragment);
+    totalHeight += childFragment.height;
+    maxWidth = Math.max(maxWidth, childFragment.width);
+  }
+
+  const topChildFragment = childFragments[0];
+  if (topChildFragment.type === "Terminal") {
+    const topWidth = topChildFragment.width;
+    offsetX = topWidth / 2;
+  }
+  const bottomChildFragment = childFragments[childFragments.length - 1];
+  if (bottomChildFragment.type === "Terminal") {
+    const bottomWidth = bottomChildFragment.width;
+    const bottomOffset = bottomWidth / 2;
+    if (bottomOffset > offsetX) {
+      topAddWidth = bottomOffset - offsetX;
+      offsetX = bottomOffset
+    } else {
+      bottomAddWidth = offsetX - bottomOffset;
+    }
+  }
+
+  // 子ノードのSVGを配置し、接続線を描画
+  for (let i = 0; i < childFragments.length; i++) {
+    const childFragment = childFragments[i];
+    // const xOffset = (maxWidth - childFragment.width) / 2; // 中央揃え
+    if (i === 0) {
+      childrenSvg += renderTransformTranslateSvg(
+        topAddWidth,
+        currentY,
+        childFragment.svg,
+      );
+    } else if (i === (childFragments.length - 1)) {
+      childrenSvg += renderTransformTranslateSvg(
+        bottomAddWidth,
+        currentY,
+        childFragment.svg,
+      );
+    } else {
+      childrenSvg += renderTransformTranslateSvg(
+        offsetX,
+        currentY,
+        childFragment.svg,
+      );
+    }
+
+    // 接続線を描画 (最後のノード以外)
+    if (i < childFragments.length - 1) {
+      let startY = 0;
+      let endY = 0;
+      if (childFragment.type === "Terminal") {
+        if (i === 0) {
+          startY = currentY + childFragment.height;
+        } else {
+          startY = currentY + childFragment.height / 2;
+        }
+      } else {
+        startY = currentY;
+      }
+      if (childFragments[i + 1].type === "Terminal") {
+        if ((i + 1) === (childFragments.length - 1)){
+          endY = currentY + childFragment.height + options.nodeListSpace;
+        } else {
+          endY = currentY + childFragment.height + options.nodeListSpace + childFragments[i + 1].height / 2;
+        }
+      } else {
+        endY = currentY + childFragment.height + options.nodeListSpace + childFragments[i + 1].height;
+      }
+      childrenSvg += renderLineSvg(offsetX, startY, offsetX, endY, options);
+      totalHeight += options.nodeListSpace;
+    }
+    currentY += childFragment.height + options.nodeListSpace;
+  }
+
+  return {
+    svg: childrenSvg,
+    width: maxWidth + offsetX,
     height: totalHeight,
     type: "NodeList",
   };
