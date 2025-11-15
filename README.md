@@ -64,6 +64,15 @@ npm run start -- -i sample_input.spd -o sample_output.svg
 *   `-i, --input <inputFilePath>`: 入力SPDテキストファイルへのパスを指定します。
 *   `-o, --output <outputFilePath>`: 出力SVGファイルへのパスを指定します。
 *   `-p, --prettyprint`: 出力SVGを整形して出力します。
+*   `--font-size <fontSize>`: SVGのフォントサイズを指定します。
+*   `--font-family <fontFamily>`: SVGのフォントファミリーを指定します。
+*   `--stroke-width <strokeWidth>`: SVGの線の太さを指定します。
+*   `--stroke-color <strokeColor>`: SVGの線の色を指定します。
+*   `--background-color <backgroundColor>`: SVGの背景色を指定します。
+*   `--base-background-color <baseBackgroundColor>`: SVGのベース背景色を指定します。
+*   `--text-color <textColor>`: SVGのテキスト色を指定します。
+*   `--line-height <lineHeight>`: SVGの行の高さを指定します。
+*   `--list-render-type <listRenderType>`: SVGのリスト描画タイプを指定します (`original` or `TerminalOffset`)。
 *   `-h, --help`: コマンドのヘルプ情報を表示します。
 
 ## Webツール
