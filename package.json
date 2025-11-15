@@ -11,7 +11,7 @@
     "start": "ts-node src/cli/cli.ts",
     "test": "jest",
     "test:cov": "jest --coverage",
-    "update-golden-files": "node tests/cli/E2E/updateGoldenFile.js",
+    "update-cli-golden-files": "node tests/cli/E2E/updateGoldenFile.js",
     "update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
     "lint": "eslint src/**/*.ts",
     "start:web": "parcel web/index.html web/commands.html --dist-dir temp/",
