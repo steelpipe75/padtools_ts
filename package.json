@@ -16,7 +16,7 @@
     "lint": "eslint src/**/*.ts",
     "start:web": "parcel web/index.html web/commands.html --dist-dir temp/",
     "build:web": "rimraf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/",
-    "convert:web": "ts-node web/convert.ts"
+    "convert:web": "ts-node web/utility/convert.ts"
   },
   "keywords": [
     "pad",
