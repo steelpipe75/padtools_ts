@@ -21,7 +21,11 @@ describe("E2E tests", () => {
           listRenderType,
           file.replace(".spd", ".svg.txt"),
         );
-        const outputPath = path.join(tempDir, file.replace(".spd", ".svg"));
+        const outputPath = path.join(
+          tempDir,
+          listRenderType,
+          file.replace(".spd", ".svg")
+        );
 
         test(`should correctly convert ${file}`, () => {
           const input = fs.readFileSync(inputPath, "utf-8");
