@@ -41,16 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   transparentBackgroundCheckbox.addEventListener("change", () => {
     baseBackgroundColorInput.disabled = transparentBackgroundCheckbox.checked;
-    convertAndRender();
   });
 
   transparentNodeBackgroundCheckbox.addEventListener("change", () => {
     backgroundColorInput.disabled = transparentNodeBackgroundCheckbox.checked;
-    convertAndRender();
   });
 
-  listRenderTypeTerminalOffset.addEventListener("change", convertAndRender);
-  listRenderTypeOriginal.addEventListener("change", convertAndRender);
+
   spdInput.addEventListener("input", convertAndRender);
   applyOptionsButton.addEventListener("click", convertAndRender);
 
