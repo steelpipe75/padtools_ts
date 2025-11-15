@@ -24,6 +24,7 @@ program
   .option("--base-background-color <baseBackgroundColor>", "Base background color for the SVG")
   .option("--text-color <textColor>", "Text color for the SVG")
   .option("--line-height <lineHeight>", "Line height for the SVG", parseFloat)
+  .option("--list-render-type <listRenderType>", "List render type for the SVG (original, TerminalOffset)", "original")
   .action((options) => {
     try {
       let spdContent: string;
@@ -43,6 +44,7 @@ program
       if (options.baseBackgroundColor !== undefined) renderOptions.baseBackgroundColor = options.baseBackgroundColor;
       if (options.textColor !== undefined) renderOptions.textColor = options.textColor;
       if (options.lineHeight !== undefined) renderOptions.lineHeight = options.lineHeight;
+      if (options.listRenderType !== undefined) renderOptions.listRenderType = options.listRenderType;
 
       const svgOutput = render(ast, renderOptions);
       const optimizedSvg = optimize(svgOutput, {

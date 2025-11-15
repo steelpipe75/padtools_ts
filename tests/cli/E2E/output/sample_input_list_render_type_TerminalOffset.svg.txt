@@ -1,0 +1,137 @@
+<svg width="538.8" height="592" viewBox="0 0 538.8 592" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="538.8" height="592" fill="none"/>
+    <g transform="translate(20, 20)">
+        <g transform="translate(0, 0)">
+            <rect x="0" y="0" width="64.8" height="36.8" rx="18.4" ry="18.4" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="18.4" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                開始
+            </text>
+        </g>
+        <line x1="32.4" y1="36.8" x2="32.4" y2="83.6" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(32.4, 46.8)">
+            <rect x="0" y="0" width="48" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                命令
+            </text>
+        </g>
+        <line x1="32.4" y1="46.8" x2="32.4" y2="110.39999999999999" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(32.4, 93.6)">
+            <text x="10" y="14" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                (コメント文)
+            </text>
+        </g>
+        <line x1="32.4" y1="93.6" x2="32.4" y2="157.2" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(32.4, 120.39999999999999)">
+            <rect x="0" y="0" width="104" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <line x1="5" y1="0" x2="5" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <line x1="99" y1="0" x2="99" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                関数呼び出し
+            </text>
+            <g transform="translate(124, 0)">
+                <rect x="0" y="0" width="48" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                    中身
+                </text>
+            </g>
+            <line x1="104" y1="0" x2="124" y2="0" stroke="#000000" stroke-width="1"/>
+        </g>
+        <line x1="32.4" y1="120.39999999999999" x2="32.4" y2="257.6" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(32.4, 167.2)">
+            <g transform="translate(102, 0)">
+                <rect x="0" y="0" width="76" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                    真の場合
+                </text>
+            </g>
+            <line x1="82" y1="0" x2="102" y2="0" stroke="#000000" stroke-width="1"/>
+            <g transform="translate(102, 53.6)">
+                <rect x="0" y="0" width="232.79999999999995" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                    偽の場合(:else以下は省略可能)
+                </text>
+            </g>
+            <line x1="82" y1="53.6" x2="102" y2="53.6" stroke="#000000" stroke-width="1"/>
+            <polygon points="0,0 82,0 62,26.8 82,53.6 0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="57" y="19" dy="0" font-family="sans-serif" font-size="14" fill="#000000"></text>
+            <text x="57" y="45.8" dy="0" font-family="sans-serif" font-size="14" fill="#000000"></text>
+            <text x="5" y="32.4" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                条件式
+            </text>
+        </g>
+        <line x1="32.4" y1="167.2" x2="32.4" y2="411.6" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(32.4, 267.6)">
+            <g transform="translate(138.4, 0)">
+                <rect x="0" y="0" width="112.39999999999999" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                    ケース1の中身
+                </text>
+            </g>
+            <line x1="118.4" y1="0" x2="138.4" y2="0" stroke="#000000" stroke-width="1"/>
+            <g transform="translate(138.4, 53.6)">
+                <rect x="0" y="0" width="112.39999999999999" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                    ケース2の中身
+                </text>
+            </g>
+            <line x1="118.4" y1="53.6" x2="138.4" y2="53.6" stroke="#000000" stroke-width="1"/>
+            <g transform="translate(138.4, 107.2)">
+                <rect x="0" y="0" width="328" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                    ケース文は必要に応じていくつでも追加できます
+                </text>
+            </g>
+            <line x1="118.4" y1="107.2" x2="138.4" y2="107.2" stroke="#000000" stroke-width="1"/>
+            <polygon points="0,0 118.4,0 98.4,26.8 118.4,53.6 98.4,80.4 118.4,107.2 0,107.2" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="43.00000000000001" y="19" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                ケース1
+            </text>
+            <text x="43.00000000000001" y="59.2" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                ケース2
+            </text>
+            <text x="68.20000000000002" y="99.4" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                ...
+            </text>
+            <text x="5" y="59.2" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                条件
+            </text>
+        </g>
+        <line x1="32.4" y1="267.6" x2="32.4" y2="458.40000000000003" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(32.4, 421.6)">
+            <rect x="0" y="0" width="174" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <line x1="5" y1="0" x2="5" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                繰り返し条件（先判定）
+            </text>
+            <g transform="translate(194, 0)">
+                <rect x="0" y="0" width="48" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                    中身
+                </text>
+            </g>
+            <line x1="174" y1="0" x2="194" y2="0" stroke="#000000" stroke-width="1"/>
+        </g>
+        <line x1="32.4" y1="421.6" x2="32.4" y2="505.20000000000005" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(32.4, 468.40000000000003)">
+            <rect x="0" y="0" width="174" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <line x1="169" y1="0" x2="169" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                繰り返し条件（後判定）
+            </text>
+            <g transform="translate(194, 0)">
+                <rect x="0" y="0" width="48" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                    中身
+                </text>
+            </g>
+            <line x1="174" y1="0" x2="194" y2="0" stroke="#000000" stroke-width="1"/>
+        </g>
+        <line x1="32.4" y1="468.40000000000003" x2="32.4" y2="515.2" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(0, 515.2)">
+            <rect x="0" y="0" width="64.8" height="36.8" rx="18.4" ry="18.4" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="18.4" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                終了
+            </text>
+        </g>
+    </g>
+</svg>

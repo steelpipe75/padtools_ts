@@ -121,6 +121,22 @@ describe("CLI E2E tests", () => {
 
       expect(actual).toBe(expected);
     });
+
+    it('should correctly apply --list-render-type TerminalOffset option', () => {
+      const file = "sample_input.spd";
+      const inputPath = path.join(inputDir, file);
+      const outputPath = path.join(tempDir, file.replace(".spd", "_list_render_type_TerminalOffset.svg"));
+      const goldenPath = path.join(outputDir, file.replace(".spd", "_list_render_type_TerminalOffset.svg.txt"));
+
+      expect(() => {
+        execSync(`npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --list-render-type TerminalOffset -p`);
+      }).not.toThrow();
+
+      const actual = fs.readFileSync(outputPath, "utf-8");
+      const expected = fs.readFileSync(goldenPath, "utf-8");
+
+      expect(actual).toBe(expected);
+    });
   });
 
   // Failure cases
