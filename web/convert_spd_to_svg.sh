@@ -3,7 +3,7 @@
 # This script converts .spd files in web/input_spd to .svg files in web/.
 
 INPUT_DIR="./web/input_spd"
-OUTPUT_DIR="./web"
+OUTPUT_DIR="./web/svg"
 
 # Ensure the output directory exists
 mkdir -p "$OUTPUT_DIR"
