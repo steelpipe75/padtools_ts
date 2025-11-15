@@ -19,7 +19,7 @@ const defaultRenderOptions = {
     connectorWidth: 2,
     nodeListSpace: 10,
     childNodeOffsetWidth: 20,
-    listRenderType: "orignal"
+    listRenderType: "original"
 };
 /**
  * ASTを受け取り、完全なSVG文字列を返す
@@ -414,10 +414,10 @@ function renderListFragment(node, options) {
         return renderListFragmentTerminalOffset(node, options);
     }
     else {
-        return renderListFragmentOrignal(node, options);
+        return renderListFragmentOriginal(node, options);
     }
 }
-function renderListFragmentOrignal(node, options) {
+function renderListFragmentOriginal(node, options) {
     let totalHeight = 0;
     let maxWidth = 0;
     let currentY = 0;
