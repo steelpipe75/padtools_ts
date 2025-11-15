@@ -1,0 +1,13 @@
+<svg width="144" height="73.6" viewBox="0 0 144 73.6" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="144" height="73.6" fill="none"/>
+    <g transform="translate(20, 20)">
+        <g transform="translate(0, 0)">
+            <text x="10" y="14" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                (comment
+            </text>
+            <text x="10" y="14" dy="16.8" font-family="sans-serif" font-size="14" fill="#000000">
+                MultiLine)
+            </text>
+        </g>
+    </g>
+</svg>
