@@ -82,7 +82,7 @@ const defaultRenderOptions: RenderOptions = {
   connectorWidth: 2,
   nodeListSpace: 10,
   childNodeOffsetWidth: 20,
-  listRenderType: "orignal"
+  listRenderType: "original"
 };
 
 /**
@@ -578,11 +578,11 @@ function renderListFragment(node: NodeListNode, options: RenderOptions): ViewFra
   if (options.listRenderType === "TerminalOffset") {
     return renderListFragmentTerminalOffset(node, options)
   } else {
-    return renderListFragmentOrignal(node, options)
+    return renderListFragmentOriginal(node, options)
   }
 }
 
-function renderListFragmentOrignal(node: NodeListNode, options: RenderOptions): ViewFragment {
+function renderListFragmentOriginal(node: NodeListNode, options: RenderOptions): ViewFragment {
   let totalHeight = 0;
   let maxWidth = 0;
   let currentY = 0;
