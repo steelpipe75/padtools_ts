@@ -5,7 +5,7 @@ Remove-Item -Path ./tests/spd/E2E/output/original/*.svg.txt -ErrorAction Silentl
 Remove-Item -Path ./tests/spd/E2E/output/TerminalOffset/*.svg.txt -ErrorAction SilentlyContinue
 
 # Copy the newly generated .svg files from the temp directory to the original output directory.
-Copy-Item -Path ./tests/spd/E2E/temp/*.svg -Destination ./tests/spd/E2E/output/original/
+Copy-Item -Path ./tests/spd/E2E/temp/original/*.svg -Destination ./tests/spd/E2E/output/original/
 
 # Rename the copied .svg files to .svg.txt in the original directory.
 Get-ChildItem -Path ./tests/spd/E2E/output/original/*.svg | ForEach-Object {
@@ -13,7 +13,7 @@ Get-ChildItem -Path ./tests/spd/E2E/output/original/*.svg | ForEach-Object {
 }
 
 # Copy the newly generated .svg files from the temp directory to the TerminalOffset output directory.
-Copy-Item -Path ./tests/spd/E2E/temp/*.svg -Destination ./tests/spd/E2E/output/TerminalOffset/
+Copy-Item -Path ./tests/spd/E2E/temp/TerminalOffset/*.svg -Destination ./tests/spd/E2E/output/TerminalOffset/
 
 # Rename the copied .svg files to .svg.txt in the TerminalOffset directory.
 Get-ChildItem -Path ./tests/spd/E2E/output/TerminalOffset/*.svg | ForEach-Object {
