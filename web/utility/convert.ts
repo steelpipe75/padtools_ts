@@ -20,7 +20,7 @@ if (!fs.existsSync(outputDir)) {
 
     console.log(`Converting ${spdFile} to ${outputSvg}...`);
 
-    const command = `npm run start -- -i "${spdFile}" -o "${outputSvg}"`;
+    const command = `npm run start -- -i "${spdFile}" --list-render-type TerminalOffset -o "${outputSvg}"`;
 
     exec(command, (error, stdout, stderr) => {
       if (error) {
