@@ -4,7 +4,7 @@ import { exec } from "child_process";
 import { glob } from "glob";
 
 const inputDir = "./web/input_spd";
-const outputDir = "./web/svg";
+const outputDir = "./web/svg/commands";
 
 // Ensure the output directory exists
 if (!fs.existsSync(outputDir)) {
