@@ -4,7 +4,7 @@ import { exec } from "child_process";
 import { glob } from "glob";
 
 const inputDir = "./web/input_spd";
-const outputDir = "./web/svg";
+const outputDir = "./web/svg/commands";
 
 // Ensure the output directory exists
 if (!fs.existsSync(outputDir)) {
@@ -20,7 +20,7 @@ if (!fs.existsSync(outputDir)) {
 
     console.log(`Converting ${spdFile} to ${outputSvg}...`);
 
-    const command = `npm run start -- -i "${spdFile}" -o "${outputSvg}"`;
+    const command = `npm run start -- -i "${spdFile}" --list-render-type TerminalOffset -o "${outputSvg}"`;
 
     exec(command, (error, stdout, stderr) => {
       if (error) {
