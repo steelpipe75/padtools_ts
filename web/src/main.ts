@@ -16,7 +16,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const backgroundColorInput = document.getElementById("backgroundColorInput") as HTMLInputElement;
   const transparentNodeBackgroundCheckbox = document.getElementById("transparentNodeBackgroundCheckbox") as HTMLInputElement;
   const textColorInput = document.getElementById("textColorInput") as HTMLInputElement;
+  const listRenderTypeTerminalOffset = document.getElementById("listRenderTypeTerminalOffset") as HTMLInputElement;
+  const listRenderTypeOriginal = document.getElementById("listRenderTypeOriginal") as HTMLInputElement;
   const applyOptionsButton = document.getElementById("applyOptionsButton") as HTMLButtonElement;
+
+  const convertAndRender = () => {
+    const spdText = spdInput.value;
+    try {
+      const ast = SPDParser.parse(spdText);
+      const options = {
+        fontSize: parseInt(fontSizeInput.value),
+        baseBackgroundColor: transparentBackgroundCheckbox.checked ? null : baseBackgroundColorInput.value,
+        backgroundColor: transparentNodeBackgroundCheckbox.checked ? null : backgroundColorInput.value,
+        textColor: textColorInput.value,
+        listRenderType: listRenderTypeTerminalOffset.checked ? "TerminalOffset" : "Original",
+      };
+      const svgString = renderSvg(ast, options);
+      svgOutput.innerHTML = svgString;
+    } catch (error: any) {
+      svgOutput.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+      console.error("SPD conversion error:", error);
+    }
+  };
 
   transparentBackgroundCheckbox.addEventListener("change", () => {
     baseBackgroundColorInput.disabled = transparentBackgroundCheckbox.checked;
@@ -28,24 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
     convertAndRender();
   });
 
-  const convertAndRender = () => {
-    const spdText = spdInput.value;
-    try {
-      const ast = SPDParser.parse(spdText);
-      const options = {
-        fontSize: parseInt(fontSizeInput.value),
-        baseBackgroundColor: transparentBackgroundCheckbox.checked ? null : baseBackgroundColorInput.value,
-        backgroundColor: transparentNodeBackgroundCheckbox.checked ? null : backgroundColorInput.value,
-        textColor: textColorInput.value,
-      };
-      const svgString = renderSvg(ast, options);
-      svgOutput.innerHTML = svgString;
-    } catch (error: any) {
-      svgOutput.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
-      console.error("SPD conversion error:", error);
-    }
-  };
-
+  listRenderTypeTerminalOffset.addEventListener("change", convertAndRender);
+  listRenderTypeOriginal.addEventListener("change", convertAndRender);
   spdInput.addEventListener("input", convertAndRender);
   applyOptionsButton.addEventListener("click", convertAndRender);
 
