@@ -1,0 +1,17 @@
+<svg width="130.4" height="93.6" viewBox="0 0 130.4 93.6" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="130.4" height="93.6" fill="none"/>
+    <g transform="translate(20, 20)">
+        <g transform="translate(0, 0)">
+            <polygon points="0,0 90.4,0 70.4,26.8 90.4,53.6 0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="57.00000000000001" y="19" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                A
+            </text>
+            <text x="57.00000000000001" y="45.8" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                B
+            </text>
+            <text x="5" y="32.4" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                value
+            </text>
+        </g>
+    </g>
+</svg>

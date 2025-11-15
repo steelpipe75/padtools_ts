@@ -1,0 +1,17 @@
+<svg width="271.59999999999997" height="110.4" viewBox="0 0 271.59999999999997 110.4" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="271.59999999999997" height="110.4" fill="none"/>
+    <g transform="translate(20, 20)">
+        <g transform="translate(0, 0)">
+            <rect x="0" y="0" width="154.39999999999998" height="70.4" rx="35.2" ry="35.2" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="35.2" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+                Terminal
+            </text>
+            <text x="35.2" y="24" dy="16.8" font-family="sans-serif" font-size="14" fill="#000000">
+                MuntiLine1
+            </text>
+            <text x="35.2" y="24" dy="33.6" font-family="sans-serif" font-size="14" fill="#000000">
+                MuntiLine2
+            </text>
+        </g>
+    </g>
+</svg>
