@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPD Render Options Reference</title>
+    <link rel="stylesheet" href="render_options_style.css">
+</head>
+<body>
+    <h1>SPD(Simple PAD Description) Render Options Reference</h1>
+    <p class="back-link">
+        <a href="index.html">Back to Converter</a>
+    </p>
+    <div class="container">
+        <div class="option-section">
+            <h3>Font Size</h3>
+            <p>SVGに出力されるテキストのフォントサイズをピクセル単位で指定します。デフォルト値は14です。</p>
+            <p>設定可能範囲: 8pxから72px</p>
+        </div>
+
+        <div class="option-section">
+            <h3>Base Background Color</h3>
+            <p>SVG全体の背景色を指定します。カラーピッカーで色を選択できます。</p>
+            <p>「Transparent」チェックボックスをオンにすると、背景が透明になります。この設定は、他のアプリケーションでSVGを使用する際に背景が不要な場合に便利です。</p>
+            <p>デフォルト値: #ffffff (白)</p>
+        </div>
+
+        <div class="option-section">
+            <h3>Node Background Color</h3>
+            <p>PADの各ノード（ブロック）の背景色を指定します。カラーピッカーで色を選択できます。</p>
+            <p>「Transparent」チェックボックスをオンにすると、ノードの背景が透明になります。これにより、Base Background Colorが透けて表示されます。</p>
+            <p>デフォルト値: #ffffff (白)</p>
+        </div>
+
+        <div class="option-section">
+            <h3>Text Color</h3>
+            <p>SVGに出力されるテキストの色を指定します。カラーピッカーで色を選択できます。</p>
+            <p>デフォルト値: #000000 (黒)</p>
+        </div>
+
+        <div class="option-section">
+            <h3>List Render Type</h3>
+            <p>リスト構造（複数のノードが連続するブロック）の描画方法を選択します。</p>
+            <ul>
+                <li><strong>TerminalOffset:</strong> リスト内の各ノードが、端子（:terminal）のように少しオフセットされて描画されます。これにより、リストの開始と終了が視覚的に区別しやすくなります。</li>
+                <li><strong>Original:</strong> リスト内の各ノードが、通常のプロセスブロックと同様に描画されます。</li>
+            </ul>
+            <p>デフォルト値: TerminalOffset</p>
+        </div>
+    </div>
+</body>
+</html>
