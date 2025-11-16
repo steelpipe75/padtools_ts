@@ -13,7 +13,7 @@
     "test:cov": "jest --coverage",
     "update-cli-golden-files": "node tests/cli/E2E/updateGoldenFile.js",
     "update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
-    "lint": "eslint src/**/*.ts",
+    "lint": "eslint src/**/*.ts web/**/*.ts",
     "start:web": "parcel web/index.html web/commands.html --dist-dir temp/",
     "build:web": "rimraf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/",
     "convert:web:commands": "ts-node web/utility/convert_commands.ts",
