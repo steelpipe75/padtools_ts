@@ -41,7 +41,7 @@ interface RenderOptions {
   branchePadding: { top: number; right: number; bottom: number; left: number };
   strokeWidth: number;
   strokeColor: string;
-  backgroundColor: string;
+  backgroundColor: string | null;
   baseBackgroundColor: string | null;
   textColor: string;
   lineHeight: number;
