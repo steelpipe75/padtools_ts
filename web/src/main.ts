@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const transparentNodeBackgroundCheckbox = document.getElementById("transparentNodeBackgroundCheckbox") as HTMLInputElement;
   const textColorInput = document.getElementById("textColorInput") as HTMLInputElement;
   const listRenderTypeTerminalOffset = document.getElementById("listRenderTypeTerminalOffset") as HTMLInputElement;
-  const listRenderTypeOriginal = document.getElementById("listRenderTypeOriginal") as HTMLInputElement;
   const applyOptionsButton = document.getElementById("applyOptionsButton") as HTMLButtonElement;
 
   const convertAndRender = () => {
@@ -33,9 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
       };
       const svgString = renderSvg(ast, options);
       svgOutput.innerHTML = svgString;
-    } catch (error: any) {
-      svgOutput.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
-      console.error("SPD conversion error:", error);
+    } catch (error) {
+      if (error instanceof Error) {
+        svgOutput.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        console.error("SPD conversion error:", error);
+      } else {
+        svgOutput.innerHTML = `<p style="color: red;">An unknown error occurred</p>`;
+        console.error("An unknown error occurred:", error);
+      }
     }
   };
 
