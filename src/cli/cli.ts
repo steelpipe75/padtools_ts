@@ -76,9 +76,10 @@ program
 program
   .command("web")
   .description("Start a web server to serve the web application")
-  .action(() => {
+  .option("-p, --port <port>", "Port for the web server", (value) => parseInt(value, 10), 8080)
+  .action((options) => {
     const webPath = path.join(__dirname, "..", "web");
-    const port = 8080;
+    const port = options.port;
     const command = `npx serve -s ${webPath} -l ${port}`;
 
     console.log(`Serving web application from: ${webPath}`);
