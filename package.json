@@ -14,6 +14,7 @@
     "start": "ts-node src/cli/cli.ts",
     "test": "jest",
     "test:e2e": "playwright test",
+    "test:headed": "playwright test --headed",
     "test:cov": "jest --coverage",
     "update-cli-golden-files": "node tests/cli/E2E/updateGoldenFile.js",
     "update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
