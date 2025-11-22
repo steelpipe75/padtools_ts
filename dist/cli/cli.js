@@ -38,7 +38,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const commander_1 = require("commander");
+const child_process = __importStar(require("child_process"));
 const fs = __importStar(require("fs"));
+const path = __importStar(require("path"));
 const svgo_1 = require("svgo");
 const xml_formatter_1 = __importDefault(require("xml-formatter"));
 const parser_1 = require("../spd/parser");
@@ -113,5 +115,26 @@ commander_1.program
         }
         process.exit(1);
     }
+});
+commander_1.program
+    .command("web")
+    .description("Start a web server to serve the web application")
+    .action(() => {
+    var _a, _b;
+    const docsPath = path.join(__dirname, "..", "..", "docs");
+    const port = 8080;
+    const command = `npx serve -s ${docsPath} -l ${port}`;
+    console.log(`Serving web application from: ${docsPath}`);
+    console.log(`Listening on http://localhost:${port}`);
+    const child = child_process.exec(command);
+    (_a = child.stdout) === null || _a === void 0 ? void 0 : _a.on("data", (data) => {
+        process.stdout.write(data);
+    });
+    (_b = child.stderr) === null || _b === void 0 ? void 0 : _b.on("data", (data) => {
+        process.stderr.write(data);
+    });
+    child.on("close", (code) => {
+        console.log(`child process exited with code ${code}`);
+    });
 });
 commander_1.program.parse(process.argv);
