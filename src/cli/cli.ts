@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import { program } from "commander";
+import * as child_process from "child_process";
 import * as fs from "fs";
+import * as path from "path";
 import { optimize } from "svgo";
 import xmlFormat from "xml-formatter";
 import { SPDParser } from "../spd/parser";
@@ -69,6 +71,32 @@ program
       }
       process.exit(1);
     }
+  });
+
+program
+  .command("web")
+  .description("Start a web server to serve the web application")
+  .action(() => {
+    const docsPath = path.join(__dirname, "..", "..", "docs");
+    const port = 8080;
+    const command = `npx serve -s ${docsPath} -l ${port}`;
+
+    console.log(`Serving web application from: ${docsPath}`);
+    console.log(`Listening on http://localhost:${port}`);
+
+    const child = child_process.exec(command);
+
+    child.stdout?.on("data", (data) => {
+      process.stdout.write(data);
+    });
+
+    child.stderr?.on("data", (data) => {
+      process.stderr.write(data);
+    });
+
+    child.on("close", (code) => {
+      console.log(`child process exited with code ${code}`);
+    });
   });
 
 program.parse(process.argv);

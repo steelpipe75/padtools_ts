@@ -4,6 +4,10 @@
   "bin": {
     "padtools_ts": "dist/cli/cli.js"
   },
+  "files": [
+    "dist",
+    "docs"
+  ],
   "scripts": {
     "build": "rimraf dist && tsc",
     "prepublishOnly": "npm run build",
@@ -35,6 +39,7 @@
   "dependencies": {
     "commander": "^14.0.0",
     "glob": "^11.0.3",
+    "serve": "^14.2.3",
     "svgo": "^4.0.0",
     "xml-formatter": "^3.6.6"
   },
