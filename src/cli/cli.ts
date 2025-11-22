@@ -79,7 +79,7 @@ program
   .option("-p, --port <port>", "Port for the web server", (value) => parseInt(value, 10), 8080)
   .action((options) => {
     const isTsNode = !!(process as any)[Symbol.for("ts-node.register.instance")];
-    const webPath = isTsNode ? path.join(__dirname, "..", "..", "web") : path.join(__dirname, "..", "web");
+    const webPath = isTsNode ? path.join(__dirname, "..", "..", "dist", "web") : path.join(__dirname, "..", "web");
     const port = options.port;
     const command = `npx serve -s ${webPath} -l ${port}`;
 
