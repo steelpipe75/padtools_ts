@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist/cli dist/spd && tsc",
     "prepublishOnly": "npm run build && npm run build:web",
     "format": "dprint fmt",
     "start": "ts-node src/cli/cli.ts",
