@@ -121,10 +121,10 @@ commander_1.program
     .description("Start a web server to serve the web application")
     .action(() => {
     var _a, _b;
-    const docsPath = path.join(__dirname, "..", "..", "docs");
+    const webPath = path.join(__dirname, "..", "web");
     const port = 8080;
-    const command = `npx serve -s ${docsPath} -l ${port}`;
-    console.log(`Serving web application from: ${docsPath}`);
+    const command = `npx serve -s ${webPath} -l ${port}`;
+    console.log(`Serving web application from: ${webPath}`);
     console.log(`Listening on http://localhost:${port}`);
     const child = child_process.exec(command);
     (_a = child.stdout) === null || _a === void 0 ? void 0 : _a.on("data", (data) => {
