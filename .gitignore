@@ -2,7 +2,7 @@
 /node_modules
 
 # Transpiled/compiled code
-# /dist
+/dist
 /build
 
 # Logs

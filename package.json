@@ -5,8 +5,7 @@
     "padtools_ts": "dist/cli/cli.js"
   },
   "files": [
-    "dist",
-    "docs"
+    "dist"
   ],
   "scripts": {
     "build": "rimraf dist && tsc",
@@ -19,7 +18,7 @@
     "update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
     "lint": "eslint src/**/*.ts web/**/*.ts",
     "start:web": "parcel web/index.html web/commands.html --dist-dir temp/",
-    "build:web": "rimraf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/",
+    "build:web": "rimraf dist/web && parcel build web/index.html web/commands.html --dist-dir dist/web",
     "build:web:gh-pages": "rimraf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/",
     "convert:web:commands": "ts-node web/utility/convert_commands.ts",
     "convert:web:render_options": "ts-node web/utility/convert_render_options.ts"
