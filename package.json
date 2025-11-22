@@ -13,6 +13,7 @@
     "format": "dprint fmt",
     "start": "ts-node src/cli/cli.ts",
     "test": "jest",
+    "test:e2e": "playwright test",
     "test:cov": "jest --coverage",
     "update-cli-golden-files": "node tests/cli/E2E/updateGoldenFile.js",
     "update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
@@ -46,6 +47,7 @@
   "devDependencies": {
     "@dprint/typescript": "^0.95.8",
     "@fullhuman/postcss-purgecss": "^7.0.2",
+    "@playwright/test": "^1.56.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.10",
     "@types/svgo": "^2.6.4",
