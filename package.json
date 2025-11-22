@@ -4,9 +4,12 @@
   "bin": {
     "padtools_ts": "dist/cli/cli.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "rimraf dist && tsc",
-    "prepublishOnly": "npm run build",
+    "build": "rimraf dist/cli dist/spd && tsc",
+    "prepublishOnly": "npm run build && npm run build:web",
     "format": "dprint fmt",
     "start": "ts-node src/cli/cli.ts",
     "test": "jest",
@@ -15,7 +18,8 @@
     "update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
     "lint": "eslint src/**/*.ts web/**/*.ts",
     "start:web": "parcel web/index.html web/commands.html --dist-dir temp/",
-    "build:web": "rimraf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/",
+    "build:web": "rimraf dist/web && parcel build web/index.html web/commands.html --dist-dir dist/web",
+    "build:web:gh-pages": "rimraf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/",
     "convert:web:commands": "ts-node web/utility/convert_commands.ts",
     "convert:web:render_options": "ts-node web/utility/convert_render_options.ts"
   },
@@ -35,6 +39,7 @@
   "dependencies": {
     "commander": "^14.0.0",
     "glob": "^11.0.3",
+    "serve": "^14.2.3",
     "svgo": "^4.0.0",
     "xml-formatter": "^3.6.6"
   },

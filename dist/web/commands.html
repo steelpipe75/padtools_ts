@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD Commands Reference</title><link rel=stylesheet href=/commands.e7034535.css><body>
+    <h1>SPD(Simple PAD Description) Commands Reference</h1>
+    <p class=back-link>
+        <a href=/index.html>Back to Converter</a>
+    </p>
+    <div class=container>
+        <div class=command-section>
+            <h3>ブロック</h3>
+            <p>1行がPADの1ボックスと対応します。空白行や「#」(シャープ)から始まる行は読み飛ばします。</p>
+            <pre>#コメント
+a = 10
+a を表示</pre>
+            <img src=/block.b2213df3.svg alt="Example diagram for block command">
+        </div>
+
+        <div class=command-section>
+            <h3>ブロック内の改行 (@)</h3>
+            <p>文中に「@」(アットマーク)を使用した場合、改行文字として扱われます。文末に「@」が現れた場合は、改行を行うとともに、次の行も含めてPADの1ボックスを作成します。</p>
+            <p>例1:</p>
+            <pre>a = 10
+a を表示@標準エラー出力に出力
+a = 0</pre>
+            <img src=/newline1.2d705f93.svg alt="Example diagram for newline command">
+            <p>例2:</p>
+            <pre>a = 10
+a を表示@
+標準エラー出力に出力
+a = 0</pre>
+            <img src=/newline2.2d705f93.svg alt="Example diagram for newline command">
+        </div>
+
+        <div class=command-section>
+            <h3>親子関係 (Tab)</h3>
+            <p>タブ文字でインデントをつけることで、ブロックの親子関係を記述できます。</p>
+            <pre>ブロック
+	タブインデントを上げる事で子のブロックを定義できます
+	小ブロック1
+		孫ブロック1
+		孫ブロック2
+	子ブロック2</pre>
+            <img src=/indentation.aebbd950.svg alt="Example diagram for indentation command">
+        </div>
+
+        <div class=command-section>
+            <h3>命令文 (:)</h3>
+            <p>条件分岐や繰返し文など、特別なボックスを作成するには、「:」(コロン)から始まる命令文を使用します。文頭で「:」を使用した場合のみ命令文と認識されます。文中で「:」を使用した場合は、命令文ではなく通常の文字として扱われます。</p>
+            <p>以下の命令文が定義されています。</p>
+            <ul>
+                <li><code>:comment</code> … コメントを定義する</li>
+                <li><code>:terminal</code> … 端子を定義する</li>
+                <li><code>:call</code> … 関数呼び出しを定義する</li>
+                <li><code>:if</code> … 条件分岐（真／偽）を定義する</li>
+                <li><code>:else</code> … <code>:if</code> と組み合わせて使用し、偽の場合を定義する</li>
+                <li><code>:switch</code> … 条件分岐（任意のケース）を定義する</li>
+                <li><code>:case</code> … <code>:switch</code> と組み合わせて使用し、指定のケースを定義する</li>
+                <li><code>:while</code> … 前判定の繰り返し処理を定義する</li>
+                <li><code>:dowhile</code> … 後判定の繰り返し処理を定義する</li>
+            </ul>
+            <pre>:terminal 開始
+:comment コメント文
+:call 関数呼び出し
+	中身
+:if 条件式
+	真の場合
+:else
+	偽の場合(:else以下は省略可能)
+:switch 条件
+:case ケース1
+	ケース1の中身
+:case ケース2
+	ケース2の中身
+:case ...
+	ケース文は必要に応じていくつでも追加できます
+:while 繰り返し条件（先判定）
+	中身
+:dowhile 繰り返し条件（後判定）
+	中身
+:terminal 終了</pre>
+            <img src=/commands_diagram.95257d67.svg alt="Example diagram for commands">
+        </div>
+    </div>
+

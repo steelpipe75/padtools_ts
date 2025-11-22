@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD Render Options Reference</title><link rel=stylesheet href=/render_options.9800f33d.css><body>
+    <h1>SPD(Simple PAD Description) Render Options Reference</h1>
+    <p class=back-link>
+        <a href=/index.html>Back to Converter</a>
+    </p>
+    <div class=container>
+        <div class=option-section>
+            <h3>Font Size</h3>
+            <p>SVGに出力されるテキストのフォントサイズをピクセル単位で指定します。デフォルト値は14です。</p>
+            <p>設定可能範囲: 8pxから72px</p>
+        </div>
+
+        <div class=option-section>
+            <h3>Base Background Color</h3>
+            <p>SVG全体の背景色を指定します。カラーピッカーで色を選択できます。</p>
+            <p>「Transparent」チェックボックスをオンにすると、背景が透明になります。この設定は、他のアプリケーションでSVGを使用する際に背景が不要な場合に便利です。</p>
+            <p>デフォルト値: #ffffff (白)</p>
+        </div>
+
+        <div class=option-section>
+            <h3>Node Background Color</h3>
+            <p>PADの各ノード（ブロック）の背景色を指定します。カラーピッカーで色を選択できます。</p>
+            <p>「Transparent」チェックボックスをオンにすると、ノードの背景が透明になります。これにより、Base Background Colorが透けて表示されます。</p>
+            <p>デフォルト値: #ffffff (白)</p>
+        </div>
+
+        <div class=option-section>
+            <h3>Text Color</h3>
+            <p>SVGに出力されるテキストの色を指定します。カラーピッカーで色を選択できます。</p>
+            <p>デフォルト値: #000000 (黒)</p>
+        </div>
+
+        <div class=option-section>
+            <h3>List Render Type</h3>
+            <p>リスト構造（複数のノードが連続するブロック）の描画方法を選択します。</p>
+            <ul>
+                <li><strong>TerminalOffset:</strong> リスト内の先頭、末尾ある端子ノードが少しオフセットされて描画されます。</li>
+                <li><strong>Original:</strong> リスト内の各ノードが、一直線に描画されます。</li>
+            </ul>
+            <p>デフォルト値: TerminalOffset</p>
+            <h4>描画例</h4>
+            <div class=image-container>
+                <div>
+                    <p><strong>TerminalOffset</strong></p>
+                    <img src=/commands_diagram_TerminalOffset.95257d67.svg alt="TerminalOffset rendering example" class=render-example>
+                </div>
+                <div>
+                    <p><strong>Original</strong></p>
+                    <img src=/commands_diagram_Original.e738b1a4.svg alt="Original rendering example" class=render-example>
+                </div>
+            </div>
+        </div>
+    </div>
+
