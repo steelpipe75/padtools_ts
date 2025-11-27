@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import * as fs from 'fs';
+import * as path from 'path';
 
 test.describe('E2E tests for web', () => {
   test.beforeEach(async ({ page }) => {
@@ -76,17 +78,45 @@ test.describe('E2E tests for web', () => {
   });
 
   test('should download SVG file', async ({ page }) => {
-    // Ensure SVG is rendered first
+    // #spdInput 欄を ':terminal 開始\ntest\n:terminal 終了' に書き換えた後
+    await page.fill('#spdInput', ':terminal 開始\ntest\n:terminal 終了');
+
+    // Wait for SVG to be rendered
     await expect(page.locator('#svgOutput svg')).toBeVisible();
 
-    // Setup dialog handler for prompt
-    page.on('dialog', dialog => dialog.accept('test_output.svg'));
+    // #downloadButtonでダウンロードできたsvgファイルがGoldenFileと一致するか確かめる
+    // 実際にはSVGダウンロードボタンは #downloadSvgButton
+    const expectedFileName = 'test_output.svg';
+    page.on('dialog', dialog => dialog.accept(expectedFileName));
 
     // Start download
     const downloadPromise = page.waitForEvent('download');
     await page.click('#downloadSvgButton');
     const download = await downloadPromise;
 
-    expect(download.suggestedFilename()).toBe('test_output.svg');
+    expect(download.suggestedFilename()).toBe(expectedFileName);
+
+    // Read the downloaded file content from the stream
+    const stream = await download.createReadStream();
+    if (!stream) {
+      throw new Error('Could not create read stream for download');
+    }
+    const chunks = [];
+    for await (const chunk of stream) {
+        chunks.push(chunk);
+    }
+    const downloadedSvg = Buffer.concat(chunks).toString('utf-8').replace(/\r\n/g, '\n');
+
+    const goldenFilePath = path.join(process.cwd(), 'tests', 'web', 'output', 'simple_test.svg.txt');
+
+    const updateGoldenFiles = process.env.UPDATE_GOLDEN_FILES === 'true';
+    if (updateGoldenFiles || !fs.existsSync(goldenFilePath)) {
+      fs.mkdirSync(path.dirname(goldenFilePath), { recursive: true });
+      fs.writeFileSync(goldenFilePath, downloadedSvg);
+    }
+
+    const goldenSvg = fs.readFileSync(goldenFilePath, 'utf-8').replace(/\r\n/g, '\n');
+
+    expect(downloadedSvg).toBe(goldenSvg);
   });
 });
