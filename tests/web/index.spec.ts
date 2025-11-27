@@ -109,12 +109,6 @@ test.describe('E2E tests for web', () => {
 
     const goldenFilePath = path.join(process.cwd(), 'tests', 'web', 'output', 'simple_test.svg.txt');
 
-    const updateGoldenFiles = process.env.UPDATE_GOLDEN_FILES === 'true';
-    if (updateGoldenFiles || !fs.existsSync(goldenFilePath)) {
-      fs.mkdirSync(path.dirname(goldenFilePath), { recursive: true });
-      fs.writeFileSync(goldenFilePath, downloadedSvg);
-    }
-
     const goldenSvg = fs.readFileSync(goldenFilePath, 'utf-8').replace(/\r\n/g, '\n');
 
     expect(downloadedSvg).toBe(goldenSvg);
