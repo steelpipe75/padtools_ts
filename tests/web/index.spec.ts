@@ -113,4 +113,55 @@ test.describe('E2E tests for web', () => {
 
     expect(downloadedSvg).toBe(goldenSvg);
   });
+
+  test('should apply render options and download correct SVG', async ({ page }) => {
+    // Render Optionsを開く
+    await page.locator('summary').click();
+
+    // Render Options が表示されるのを待つ
+    await expect(page.locator('#fontSizeInput')).toBeVisible();
+
+    // フォントサイズ、背景色、ノード色を変更
+    await page.locator('#fontSizeInput').fill('20');
+    await page.locator('#baseBackgroundColorInput').fill('#cccccc');
+    // checkboxをOFFにしないと色が反映されない
+    await page.locator('#transparentBackgroundCheckbox').uncheck();
+    await page.locator('#backgroundColorInput').fill('#eeeeee');
+
+    // 変更を適用
+    await page.locator('#applyOptionsButton').click();
+
+    // 変更がSVGに反映されるのを待つ
+    await page.waitForTimeout(500); // debounce
+
+    // SVGがレンダリングされていることを確認
+    await expect(page.locator('#svgOutput svg')).toBeVisible();
+
+    // ダウンロードするSVGがGoldenFileと一致するか確かめる
+    const expectedFileName = 'render_options_test.svg';
+    page.on('dialog', dialog => dialog.accept(expectedFileName));
+
+    // ダウンロードを開始
+    const downloadPromise = page.waitForEvent('download');
+    await page.click('#downloadSvgButton');
+    const download = await downloadPromise;
+
+    expect(download.suggestedFilename()).toBe(expectedFileName);
+
+    // ダウンロードしたファイルの内容を読み込む
+    const stream = await download.createReadStream();
+    if (!stream) {
+      throw new Error('Could not create read stream for download');
+    }
+    const chunks = [];
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+    }
+    const downloadedSvg = Buffer.concat(chunks).toString('utf-8').replace(/\r\n/g, '\n');
+
+    const goldenFilePath = path.join(process.cwd(), 'tests', 'web', 'output', 'render_options_test.svg.txt');
+
+    const goldenSvg = fs.readFileSync(goldenFilePath, 'utf-8').replace(/\r\n/g, '\n');
+    expect(downloadedSvg).toBe(goldenSvg);
+  });
 });
