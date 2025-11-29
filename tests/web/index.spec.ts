@@ -13,63 +13,63 @@ test.describe('E2E tests for web', () => {
   });
 
   test('should load default sample and render SVG', async ({ page }) => {
-    // Check if input has default text
+    // 入力にデフォルトのテキストがあるか確認
     const inputValue = await page.inputValue('#spdInput');
     expect(inputValue).toContain(':terminal');
 
-    // Check if SVG is rendered
+    // SVGがレンダリングされているか確認
     await expect(page.locator('#svgOutput svg')).toBeVisible();
   });
 
   test('should convert valid SPD input to SVG', async ({ page }) => {
-    // Clear input and type simple SPD
+    // 入力をクリアし、シンプルなSPDを入力
     await page.fill('#spdInput', ':terminal start\n:terminal end');
 
-    // Check if SVG is updated
+    // SVGが更新されているか確認
     await expect(page.locator('#svgOutput svg')).toBeVisible();
-    // Verify content text exists in SVG
+    // SVGに出力テキストが存在するか検証
     await expect(page.locator('#svgOutput')).toContainText('start');
   });
 
   test('should show error message for invalid SPD input', async ({ page }) => {
-    // Input invalid SPD (unknown command)
+    // 無効なSPDを入力（不明なコマンド）
     await page.fill('#spdInput', ':unknown');
 
-    // Check for error message
-    // The app shows error in red paragraph
+    // エラーメッセージを確認
+    // アプリは赤色の段落でエラーを表示する
     await expect(page.locator('#svgOutput p')).toHaveCSS('color', 'rgb(255, 0, 0)');
     await expect(page.locator('#svgOutput')).toContainText('Error:');
   });
 
   // test('should apply render options', async ({ page }) => {
-  //   // Ensure initial SVG is rendered
+  //   // 初期SVGがレンダリングされていることを確認
   //   await expect(page.locator('#svgOutput svg')).toBeVisible();
 
-  //   // Change font size
+  //   // フォントサイズを変更
   //   await page.fill('#fontSizeInput', '24');
 
-  //   // Change input text to GUARANTEE change and verify update
+  //   // 変更を保証し、更新を検証するために入力テキストを変更
   //   await page.fill('#spdInput', ':terminal changed');
 
-  //   // Wait for potential debounce or event processing
+  //   // デバウンスまたはイベント処理を待機
   //   await page.waitForTimeout(1000);
 
   //   await page.click('#applyOptionsButton', { force: true });
 
-  //   // Check if error occurred (for debugging)
+  //   // エラーが発生したか確認（デバッグ用）
   //   if (await page.locator('#svgOutput p').isVisible()) {
   //     console.log('Error in SVG Output:', await page.textContent('#svgOutput p'));
   //   }
 
-  //   // Verify SVG has changed by checking for new text
+  //   // 新しいテキストをチェックしてSVGが変更されたことを確認
   //   await expect(page.locator('#svgOutput')).toContainText('changed');
   // });
 
   test('should download SPD file', async ({ page }) => {
-    // Setup dialog handler for prompt
+    // プロンプトのダイアログハンドラを設定
     page.on('dialog', dialog => dialog.accept('test_download.spd'));
 
-    // Start download
+    // ダウンロードを開始
     const downloadPromise = page.waitForEvent('download');
     await page.click('#downloadButton');
     const download = await downloadPromise;
@@ -81,7 +81,7 @@ test.describe('E2E tests for web', () => {
     // #spdInput 欄を ':terminal 開始\ntest\n:terminal 終了' に書き換えた後
     await page.fill('#spdInput', ':terminal 開始\ntest\n:terminal 終了');
 
-    // Wait for SVG to be rendered
+    // SVGがレンダリングされるのを待つ
     await expect(page.locator('#svgOutput svg')).toBeVisible();
 
     // #downloadButtonでダウンロードできたsvgファイルがGoldenFileと一致するか確かめる
@@ -89,7 +89,7 @@ test.describe('E2E tests for web', () => {
     const expectedFileName = 'test_output.svg';
     page.on('dialog', dialog => dialog.accept(expectedFileName));
 
-    // Start download
+    // ダウンロードを開始
     const downloadPromise = page.waitForEvent('download');
     await page.click('#downloadSvgButton');
     const download = await downloadPromise;
