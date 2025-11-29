@@ -10,17 +10,9 @@ padtools_ts はPAD図を活用することを目的として作成された、PA
 
 ## インストール
 
-### グローバルインストール
+### 依存関係のインストール
 
-`padtools_ts` をCLIツールとしてどこからでも使用できるようにするには、以下のコマンドを実行します。
-
-```shell
-npm install -g .
-```
-
-### 開発用インストール
-
-プロジェクトを開発するためにローカルにインストールするには、以下のコマンドを実行します。
+プロジェクトの開発に必要な依存関係をローカルにインストールするには、以下のコマンドを実行します。
 
 ```shell
 npm install
@@ -50,11 +42,12 @@ npm test -- --coverage
 padtools_ts -i sample_input.spd -o sample_output.svg
 ```
 
-または、グローバルインストールしていない場合は、以下のようにコマンドを実行します。
+開発環境でビルドせずに直接実行する場合は、以下のようにコマンドを実行します。
 
 ```shell
 npm run start -- -i sample_input.spd -o sample_output.svg
 ```
+上記の `npm run start` は、`package.json` のスクリプト定義に基づいて `ts-node src/cli/cli.ts` を実行します。
 
 ### コマンドラインオプション
 
@@ -63,7 +56,7 @@ npm run start -- -i sample_input.spd -o sample_output.svg
 *   `-V, --version`: バージョン番号を出力します。
 *   `-i, --input <inputFilePath>`: 入力SPDテキストファイルへのパスを指定します。
 *   `-o, --output <outputFilePath>`: 出力SVGファイルへのパスを指定します。
-*   `-p, --prettyprint`: 出力SVGを整形して出力します。
+*   `-p, --prettyprint`: 出力SVGを整形して出力します（`svgo` を使用）。
 *   `--font-size <fontSize>`: SVGのフォントサイズを指定します。
 *   `--font-family <fontFamily>`: SVGのフォントファミリーを指定します。
 *   `--stroke-width <strokeWidth>`: SVGの線の太さを指定します。
@@ -72,7 +65,7 @@ npm run start -- -i sample_input.spd -o sample_output.svg
 *   `--base-background-color <baseBackgroundColor>`: SVGのベース背景色を指定します。
 *   `--text-color <textColor>`: SVGのテキスト色を指定します。
 *   `--line-height <lineHeight>`: SVGの行の高さを指定します。
-*   `--list-render-type <listRenderType>`: SVGのリスト描画タイプを指定します (`original` or `TerminalOffset`)。
+*   `--list-render-type <listRenderType>`: SVGのリスト描画タイプを指定します (`original` または `TerminalOffset`)。
 *   `-h, --help`: コマンドのヘルプ情報を表示します。
 
 ## Webツール
@@ -103,11 +96,11 @@ npm run build:web
 
 このプロジェクトはMITライセンスです。詳細については、[LICENSE](LICENSE)ファイルをご覧ください。
 
-このプロジェクトでは、以下のオープンソースライブラリを使用しています。
+このプロジェクトでは、以下の主要なオープンソースライブラリを使用しています。
 
--   commander: [MIT License](https://github.com/tj/commander.js/blob/master/LICENSE)
--   xml-formatter: [MIT License](https://github.com/chrisbottin/xml-formatter/blob/master/LICENSE)
--   svgo: [MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
+-   commander: CLIコマンドの解析に使用。[MIT License](https://github.com/tj/commander.js/blob/master/LICENSE)
+-   xml-formatter: SVG出力の整形 (`--prettyprint` オプション) に使用。[MIT License](https://github.com/chrisbottin/xml-formatter/blob/master/LICENSE)
+-   svgo: SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。[MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
 
