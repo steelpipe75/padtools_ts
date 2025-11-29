@@ -41,30 +41,6 @@ test.describe('E2E tests for web', () => {
     await expect(page.locator('#svgOutput')).toContainText('Error:');
   });
 
-  // test('should apply render options', async ({ page }) => {
-  //   // 初期SVGがレンダリングされていることを確認
-  //   await expect(page.locator('#svgOutput svg')).toBeVisible();
-
-  //   // フォントサイズを変更
-  //   await page.fill('#fontSizeInput', '24');
-
-  //   // 変更を保証し、更新を検証するために入力テキストを変更
-  //   await page.fill('#spdInput', ':terminal changed');
-
-  //   // デバウンスまたはイベント処理を待機
-  //   await page.waitForTimeout(1000);
-
-  //   await page.click('#applyOptionsButton', { force: true });
-
-  //   // エラーが発生したか確認（デバッグ用）
-  //   if (await page.locator('#svgOutput p').isVisible()) {
-  //     console.log('Error in SVG Output:', await page.textContent('#svgOutput p'));
-  //   }
-
-  //   // 新しいテキストをチェックしてSVGが変更されたことを確認
-  //   await expect(page.locator('#svgOutput')).toContainText('changed');
-  // });
-
   test('should download SPD file', async ({ page }) => {
     // プロンプトのダイアログハンドラを設定
     page.on('dialog', dialog => dialog.accept('test_download.spd'));
@@ -111,6 +87,57 @@ test.describe('E2E tests for web', () => {
 
     const goldenSvg = fs.readFileSync(goldenFilePath, 'utf-8').replace(/\r\n/g, '\n');
 
+    expect(downloadedSvg).toBe(goldenSvg);
+  });
+
+  test('should apply render options and download correct SVG', async ({ page }) => {
+    // Render Optionsを開く
+    await page.locator('summary').click();
+
+    // Render Options が表示されるのを待つ
+    await expect(page.locator('#fontSizeInput')).toBeVisible();
+
+    // フォントサイズ、背景色、ノード色を変更
+    await page.locator('#fontSizeInput').fill('20');
+    await page.locator('#baseBackgroundColorInput').fill('#cccccc');
+    // checkboxをOFFにしないと色が反映されない
+    await page.locator('#transparentBackgroundCheckbox').uncheck();
+    await page.locator('#backgroundColorInput').fill('#eeeeee');
+
+    // 変更を適用
+    await page.locator('#applyOptionsButton').click();
+
+    // 変更がSVGに反映されるのを待つ
+    await page.waitForTimeout(500); // debounce
+
+    // SVGがレンダリングされていることを確認
+    await expect(page.locator('#svgOutput svg')).toBeVisible();
+
+    // ダウンロードするSVGがGoldenFileと一致するか確かめる
+    const expectedFileName = 'render_options_test.svg';
+    page.on('dialog', dialog => dialog.accept(expectedFileName));
+
+    // ダウンロードを開始
+    const downloadPromise = page.waitForEvent('download');
+    await page.click('#downloadSvgButton');
+    const download = await downloadPromise;
+
+    expect(download.suggestedFilename()).toBe(expectedFileName);
+
+    // ダウンロードしたファイルの内容を読み込む
+    const stream = await download.createReadStream();
+    if (!stream) {
+      throw new Error('Could not create read stream for download');
+    }
+    const chunks = [];
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+    }
+    const downloadedSvg = Buffer.concat(chunks).toString('utf-8').replace(/\r\n/g, '\n');
+
+    const goldenFilePath = path.join(process.cwd(), 'tests', 'web', 'output', 'render_options_test.svg.txt');
+
+    const goldenSvg = fs.readFileSync(goldenFilePath, 'utf-8').replace(/\r\n/g, '\n');
     expect(downloadedSvg).toBe(goldenSvg);
   });
 });
