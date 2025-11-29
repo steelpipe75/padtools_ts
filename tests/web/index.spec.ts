@@ -41,30 +41,6 @@ test.describe('E2E tests for web', () => {
     await expect(page.locator('#svgOutput')).toContainText('Error:');
   });
 
-  // test('should apply render options', async ({ page }) => {
-  //   // 初期SVGがレンダリングされていることを確認
-  //   await expect(page.locator('#svgOutput svg')).toBeVisible();
-
-  //   // フォントサイズを変更
-  //   await page.fill('#fontSizeInput', '24');
-
-  //   // 変更を保証し、更新を検証するために入力テキストを変更
-  //   await page.fill('#spdInput', ':terminal changed');
-
-  //   // デバウンスまたはイベント処理を待機
-  //   await page.waitForTimeout(1000);
-
-  //   await page.click('#applyOptionsButton', { force: true });
-
-  //   // エラーが発生したか確認（デバッグ用）
-  //   if (await page.locator('#svgOutput p').isVisible()) {
-  //     console.log('Error in SVG Output:', await page.textContent('#svgOutput p'));
-  //   }
-
-  //   // 新しいテキストをチェックしてSVGが変更されたことを確認
-  //   await expect(page.locator('#svgOutput')).toContainText('changed');
-  // });
-
   test('should download SPD file', async ({ page }) => {
     // プロンプトのダイアログハンドラを設定
     page.on('dialog', dialog => dialog.accept('test_download.spd'));
