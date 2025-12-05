@@ -4,8 +4,12 @@
   "bin": {
     "padtools_ts": "dist/cli/cli.js"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
     "build": "rimraf dist/cli dist/spd && tsc",
