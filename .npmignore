@@ -1,0 +1,17 @@
+src
+tests
+docs
+temp
+.vscode
+.git
+.github
+.gitignore
+.dprint.json
+eslint.config.js
+jest.config.js
+playwright.config.ts
+postcss.config.js
+sample_input.spd
+sample_output.svg
+tsconfig.json
+web
