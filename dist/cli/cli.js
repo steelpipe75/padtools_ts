@@ -125,7 +125,7 @@ commander_1.program
     const isTsNode = !!process[Symbol.for("ts-node.register.instance")];
     const webPath = isTsNode ? path.join(__dirname, "..", "..", "dist", "web") : path.join(__dirname, "..", "web");
     const port = options.port;
-    const command = `npx serve -s ${webPath} -l ${port}`;
+    const command = `npx serve ${webPath} -l ${port}`;
     console.log(`Serving web application from: ${webPath}`);
     console.log(`Listening on http://localhost:${port}`);
     const child = child_process.exec(command);
