@@ -4,8 +4,6 @@
   "bin": {
     "padtools_ts": "dist/cli/cli.js"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "LICENSE",
@@ -23,9 +21,9 @@
     "update-cli-golden-files": "node tests/cli/E2E/updateGoldenFile.js",
     "update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
     "lint": "eslint src/**/*.ts web/**/*.ts",
-    "start:web": "parcel web/index.html web/commands.html --dist-dir temp/",
-    "build:web": "rimraf dist/web && parcel build web/index.html web/commands.html --dist-dir dist/web",
-    "build:web:gh-pages": "rimraf docs/ && parcel build web/index.html web/commands.html --dist-dir docs/ --public-url /padtools_ts/",
+    "start:web": "parcel web/index.html --dist-dir temp/",
+    "build:web": "rimraf dist/web && parcel build web/index.html --dist-dir dist/web",
+    "build:web:gh-pages": "rimraf docs/ && parcel build web/index.html --dist-dir docs/ --public-url /padtools_ts/",
     "convert:web:commands": "ts-node web/utility/convert_commands.ts",
     "convert:web:render_options": "ts-node web/utility/convert_render_options.ts"
   },
@@ -52,6 +50,8 @@
   "devDependencies": {
     "@dprint/typescript": "^0.95.8",
     "@fullhuman/postcss-purgecss": "^7.0.2",
+    "@parcel/packager-ts": "^2.16.1",
+    "@parcel/transformer-typescript-types": "^2.16.1",
     "@playwright/test": "^1.56.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.10",
