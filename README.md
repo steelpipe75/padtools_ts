@@ -31,23 +31,33 @@ npm test
 テストカバレッジレポートを生成するには、以下のコマンドを実行します。
 
 ```shell
-npm test -- --coverage
+npm run test:cov
 ```
 
 ## CLIの使用方法
 
-`padtools_ts` CLIツールを使用するには、以下のようにコマンドを実行します。
+`padtools_ts` は、SPDファイルをSVGに変換するCLIツールを提供します。
 
 ```shell
-padtools_ts -i sample_input.spd -o sample_output.svg
+npx padtools_ts -i sample_input.spd -o sample_output.svg
 ```
 
-開発環境でビルドせずに直接実行する場合は、以下のようにコマンドを実行します。
+また、開発時には `ts-node` を使って直接ソースコードを実行することも可能です。
 
 ```shell
 npm run start -- -i sample_input.spd -o sample_output.svg
 ```
 上記の `npm run start` は、`package.json` のスクリプト定義に基づいて `ts-node src/cli/cli.ts` を実行します。
+
+### ローカルWebサーバーの起動
+
+`padtools_ts` には、Webツールをローカルで確認するためのWebサーバー機能も含まれています。
+
+```shell
+npx padtools_ts web
+```
+
+このコマンドは、ビルドされたWebツール（`dist/web`）をホスティングし、ブラウザでアクセスできるようにします。
 
 ### コマンドラインオプション
 
@@ -90,7 +100,17 @@ npm run start:web
 npm run build:web
 ```
 
-これにより、`docs` ディレクトリに GitHub Pages 用の静的ファイルが生成されます。
+これにより、`dist/web` ディレクトリに静的ファイルが生成されます。
+
+### WebツールのビルドとGitHub Pagesへのデプロイ
+
+Webツールをビルドし、GitHub Pages にデプロイするための準備を行うには、以下を実行します。
+
+```shell
+npm run build:web:gh-pages
+```
+
+このコマンドは `docs` ディレクトリに静的ファイルを生成し、`gh-pages` ブランチにプッシュします。
 
 ## ライセンス
 
@@ -99,6 +119,7 @@ npm run build:web
 このプロジェクトでは、以下の主要なオープンソースライブラリを使用しています。
 
 -   commander: CLIコマンドの解析に使用。[MIT License](https://github.com/tj/commander.js/blob/master/LICENSE)
+-   serve: Webサーバー機能（`padtools_ts web`）に使用。[MIT License](https://github.com/vercel/serve/blob/main/LICENSE)
 -   xml-formatter: SVG出力の整形 (`--prettyprint` オプション) に使用。[MIT License](https://github.com/chrisbottin/xml-formatter/blob/master/LICENSE)
 -   svgo: SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。[MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
 
