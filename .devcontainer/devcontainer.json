@@ -1,0 +1,25 @@
+{
+  "name": "padtools_ts",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/pnpm:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dprint.dprint",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  },
+  "forwardPorts": [
+    1234
+  ],
+  "postCreateCommand": "pnpm install",
+  "remoteUser": "node",
+  "runArgs": [
+    "--cap-add=SYS_ADMIN"
+  ]
+}
