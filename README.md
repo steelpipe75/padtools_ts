@@ -114,6 +114,8 @@ npm run build:web:gh-pages
 
 ## ライセンス
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 このプロジェクトはMITライセンスです。詳細については、[LICENSE](LICENSE)ファイルをご覧ください。
 
 このプロジェクトでは、以下の主要なオープンソースライブラリを使用しています。
