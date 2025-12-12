@@ -14,9 +14,9 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.render = exports.SPDParser = void 0;
+exports.render = exports.parse = void 0;
+__exportStar(require("./spd/ast"), exports);
 var parser_1 = require("./spd/parser");
-Object.defineProperty(exports, "SPDParser", { enumerable: true, get: function () { return parser_1.SPDParser; } });
+Object.defineProperty(exports, "parse", { enumerable: true, get: function () { return parser_1.parse; } });
 var svg_renderer_1 = require("./spd/svg-renderer");
 Object.defineProperty(exports, "render", { enumerable: true, get: function () { return svg_renderer_1.render; } });
-__exportStar(require("./spd/ast"), exports);

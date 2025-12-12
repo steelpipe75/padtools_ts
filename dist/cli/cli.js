@@ -37,10 +37,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const child_process = __importStar(require("node:child_process"));
+const fs = __importStar(require("node:fs"));
+const path = __importStar(require("node:path"));
 const commander_1 = require("commander");
-const child_process = __importStar(require("child_process"));
-const fs = __importStar(require("fs"));
-const path = __importStar(require("path"));
 const svgo_1 = require("svgo");
 const xml_formatter_1 = __importDefault(require("xml-formatter"));
 const parser_1 = require("../spd/parser");
@@ -71,7 +71,7 @@ commander_1.program
         else {
             spdContent = fs.readFileSync(0, "utf-8"); // Read from stdin
         }
-        const ast = parser_1.SPDParser.parse(spdContent);
+        const ast = (0, parser_1.parse)(spdContent);
         const renderOptions = {};
         if (options.fontSize !== undefined)
             renderOptions.fontSize = options.fontSize;
@@ -122,8 +122,11 @@ commander_1.program
     .option("-p, --port <port>", "Port for the web server", (value) => parseInt(value, 10), 8080)
     .action((options) => {
     var _a, _b;
+    // biome-ignore lint/suspicious/noExplicitAny: Need to check for ts-node environment
     const isTsNode = !!process[Symbol.for("ts-node.register.instance")];
-    const webPath = isTsNode ? path.join(__dirname, "..", "..", "dist", "web") : path.join(__dirname, "..", "web");
+    const webPath = isTsNode
+        ? path.join(__dirname, "..", "..", "dist", "web")
+        : path.join(__dirname, "..", "web");
     const port = options.port;
     const command = `npx serve ${webPath} -l ${port}`;
     console.log(`Serving web application from: ${webPath}`);
