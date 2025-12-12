@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SPDParser = exports.UnexpectedIOException = exports.UnexpectedInnerException = exports.CaseDuplicateException = exports.UnexpectedCaseException = exports.UnexpectedElseException = exports.UnknownCommandException = exports.IllegalIndentException = exports.NotRequireArgumentException = exports.RequireArgumentException = exports.ParseError = void 0;
+exports.parse = exports.UnexpectedIOException = exports.UnexpectedInnerException = exports.CaseDuplicateException = exports.UnexpectedCaseException = exports.UnexpectedElseException = exports.UnknownCommandException = exports.IllegalIndentException = exports.NotRequireArgumentException = exports.RequireArgumentException = exports.ParseError = void 0;
 // カスタムエラークラス群
 class ParseError extends Error {
     constructor(message) {
@@ -61,7 +61,7 @@ exports.CaseDuplicateException = CaseDuplicateException;
 // 内部で予期しないエラーが発生した場合にスローされる例外
 class UnexpectedInnerException extends ParseError {
     constructor(message) {
-        super("内部エラー:" + message);
+        super(`内部エラー:${message}`);
     }
 }
 exports.UnexpectedInnerException = UnexpectedInnerException;
@@ -92,332 +92,384 @@ class Context {
 /**
  * SPD (Simple PAD Description) フォーマットのパーサー。
  */
-class SPDParser {
-    /**
-     * 本文を処理する
-     * @param context 現在のコンテキスト
-     * @param body 本文
-     */
-    static handleBody(context, body) {
-        // 状態の制御
-        if (context.nodeList.length > 0) {
-            let lnode = context.nodeList[context.nodeList.length - 1];
-            if (context.optionArg != null && lnode.type === "switch") {
-                let node = lnode;
-                node.cases.set(context.optionArg, null);
-                context.optionArg = null;
-            }
-        }
-        if (body.startsWith(":")) {
-            const parts = body.split(/[ \t]+/);
-            // コマンド部分と引数部分を分離
-            const cmd = parts[0].substring(1); // コマンド名（例: "call", "if"）
-            const arg = parts.length > 1 ? body.substring(parts[0].length).trim() : null; // 引数
-            switch (cmd) {
-                case "call":
-                    if (!arg)
-                        throw new RequireArgumentException();
-                    context.nodeList.push({ type: "call", text: arg, childNode: null });
-                    context.optionStatus = "Default";
-                    context.optionArg = null;
-                    break;
-                case "terminal":
-                    if (!arg)
-                        throw new RequireArgumentException();
-                    context.nodeList.push({ type: "terminal", text: arg });
-                    context.optionStatus = "Default";
-                    context.optionArg = null;
-                    break;
-                case "comment":
-                    if (!arg)
-                        throw new RequireArgumentException();
-                    context.nodeList.push({ type: "comment", text: arg });
-                    context.optionStatus = "Default";
-                    context.optionArg = null;
-                    break;
-                case "while":
-                    if (!arg)
-                        throw new RequireArgumentException();
-                    context.nodeList.push({ type: "loop", isWhile: true, text: arg, childNode: null });
-                    context.optionStatus = "Default";
-                    context.optionArg = null;
-                    break;
-                case "dowhile":
-                    if (!arg)
-                        throw new RequireArgumentException();
-                    context.nodeList.push({ type: "loop", isWhile: false, text: arg, childNode: null });
-                    context.optionStatus = "Default";
-                    context.optionArg = null;
-                    break;
-                case "if":
-                    if (!arg)
-                        throw new RequireArgumentException();
-                    context.nodeList.push({ type: "if", text: arg, trueNode: null, falseNode: null });
-                    context.optionStatus = "Default";
-                    context.optionArg = null;
-                    break;
-                case "switch":
-                    if (!arg)
-                        throw new RequireArgumentException();
-                    context.nodeList.push({ type: "switch", text: arg, cases: new Map() });
-                    context.optionStatus = "Default";
-                    context.optionArg = null;
-                    break;
-                case "else":
-                    const lastIfNode = context.nodeList.length === 0 ? null : context.nodeList[context.nodeList.length - 1];
-                    if (lastIfNode === null || lastIfNode.type !== "if") {
-                        throw new UnexpectedElseException();
-                    }
-                    if (arg !== null) {
-                        throw new NotRequireArgumentException();
-                    }
-                    context.optionStatus = "Else";
-                    context.optionArg = null;
-                    break;
-                case "case":
-                    const lastSwitchNode = context.nodeList.length === 0 ? null : context.nodeList[context.nodeList.length - 1];
-                    if (lastSwitchNode === null || lastSwitchNode.type !== "switch") {
-                        throw new UnexpectedCaseException();
-                    }
-                    if (!arg)
-                        throw new RequireArgumentException();
-                    if (lastSwitchNode.cases.has(arg)) {
-                        throw new CaseDuplicateException();
-                    }
-                    context.optionStatus = "Default";
-                    context.optionArg = arg;
-                    break;
-                default:
-                    throw new UnknownCommandException();
-            }
-        }
-        else {
-            context.nodeList.push({ type: "process", text: body, childNode: null });
-            context.optionStatus = "Default";
-            context.optionArg = null;
-        }
-    }
-    /**
-     * 現在のコンテキストを確定し、親コンテキストに移動します。
-     * @param context 現在のコンテキスト。
-     * @returns 親コンテキスト。
-     */
-    static upToParent(context) {
-        if (context === null)
-            return null;
-        // 状態の制御
-        if (context.nodeList.length > 0) {
-            let lnode = context.nodeList[context.nodeList.length - 1];
-            if (context.optionArg != null && lnode.type === "switch") {
-                let node = lnode;
-                node.cases.set(context.optionArg, null);
-                context.optionArg = null;
-            }
-        }
-        if (context.parent === null)
-            return null;
-        // 追加するノードを新規作成。
-        let newNode = null;
-        if (context.nodeList.length == 0) {
-            return context.parent;
-        }
-        else if (context.nodeList.length == 1) {
-            newNode = context.nodeList[0];
-        }
-        else {
-            let nodeList = { type: "nodeList", children: [] };
-            for (let i = 0; i < context.nodeList.length; i++) {
-                nodeList.children.push(context.nodeList[i]);
-            }
-            newNode = nodeList;
-        }
-        // ノードの追加先となるノード。
-        let pnode = context.parent.nodeList[context.parent.nodeList.length - 1];
-        // ノードの種類に応じてノードの追加先に追加。
-        switch (pnode.type) {
-            case "process":
-                let processNode = pnode;
-                processNode.childNode = newNode;
-                break;
-            case "loop":
-                let loopNode = pnode;
-                loopNode.childNode = newNode;
-                break;
-            case "call":
-                let callNode = pnode;
-                callNode.childNode = newNode;
-                break;
-            case "switch":
-                let snode = pnode;
-                snode.cases.set(context.parent.optionArg, newNode);
-                break;
-            case "if":
-                let ifnode = pnode;
-                if (context.parent.optionStatus === "Default") {
-                    ifnode.trueNode = newNode;
-                }
-                else if (context.parent.optionStatus === "Else") {
-                    if (ifnode.falseNode !== null) {
-                        throw new UnexpectedElseException();
-                    }
-                    else {
-                        ifnode.falseNode = newNode;
-                    }
-                }
-                break;
-        }
-        // 親ノードの状態をリセットする。
-        context.parent.optionStatus = "Default";
-        context.parent.optionArg = null;
-        // 親ノードを返す。
-        return context.parent;
-    }
-    /**
-     * SPDフォーマットの文字列をPADモデル（AST）にパースします。
-     * @param src SPDフォーマットの文字列。
-     * @returns パースされたASTのルートノード。
-     */
-    static parse(src, exr = SPDParser.DummyParseErrorReceiver) {
-        // if(src == null) throw new IllegalArgumentException("src is null"); // # diff TypeScriptではnullチェックは不要
-        // 先頭のコンテキスト
-        const rootContext = new Context();
-        // 現在のコンテキスト
-        let context = rootContext;
-        // １行づつ読み込む
-        // ソースコードを行ごとに分割
-        const lines = src.split(/\r?\n/);
-        let lineNo = 0; // 現在の行番号
-        try {
-            while (lineNo < lines.length) {
-                let line = lines[lineNo];
-                lineNo++;
-                // コメント行は読み飛ばし
-                if (SPDParser.patternComment.test(line))
-                    continue;
-                // 先頭のタブ数を数える。
-                let tabNum = 0;
-                for (let i = 0; i < line.length; ++i) {
-                    if (line.charAt(i) === "\t") {
-                        tabNum++;
-                    }
-                    else {
-                        break;
-                    }
-                }
-                try {
-                    if (context === null) {
-                        throw new IllegalIndentException();
-                    }
-                    // 子コンテキストの作成処理を行う。
-                    if ((tabNum > 0 && context.nodeList.length == 0) || tabNum < 0) {
-                        // 最初からタブがある場合は不正。
-                        throw new IllegalIndentException();
-                    }
-                    if (tabNum > context.depth) {
-                        // タブが増加した場合の処理
-                        // 正当性をチェックする。
-                        let parentNode = context.nodeList[context.nodeList.length - 1];
-                        if (tabNum > context.depth + 1 || (parentNode && parentNode.type === "comment")) {
-                            // 親がコメントか２階層以上離れているのは不正。
-                            throw new IllegalIndentException();
-                        }
-                        if (parentNode.type === "switch" && context.optionArg == null) {
-                            // 子を持たないタイプの場合は不正。
-                            throw new IllegalIndentException();
-                        }
-                        // 子コンテキストを生成する。
-                        let newContext = new Context();
-                        newContext.parent = context;
-                        newContext.depth = context.depth + 1;
-                        context = newContext;
-                    }
-                    // タブが減少した際の処理
-                    while (tabNum < context.depth) {
-                        context = SPDParser.upToParent(context);
-                        if (context === null) {
-                            throw new IllegalIndentException();
-                        }
-                    }
-                    // 本文は行のデータをtrimしたものとする。
-                    // 行末が @ の場合は複数行扱いとする。
-                    let body = line.substring(tabNum); // タブの後の本体部分を抽出
-                    if (body.endsWith("@")) {
-                        let multiLineContent = body.substring(0, body.length - 1);
-                        while (lineNo < lines.length) {
-                            let nextLine = lines[lineNo];
-                            lineNo++;
-                            // コメント行で止まる
-                            if (SPDParser.patternComment.test(nextLine))
-                                continue;
-                            // 行末に @ が間読み込む
-                            // 行末に @ がある間読み込む
-                            let nextLineTabNum = 0;
-                            for (let i = 0; i < nextLine.length; ++i) {
-                                if (nextLine.charAt(i) === "\t") {
-                                    nextLineTabNum++;
-                                }
-                                else {
-                                    break;
-                                }
-                            }
-                            let nextLineBody = nextLine.substring(nextLineTabNum);
-                            if (nextLineBody.endsWith("@")) {
-                                multiLineContent += "\n" + nextLineBody.substring(0, nextLineBody.length - 1);
-                            }
-                            else {
-                                multiLineContent += "\n" + nextLineBody;
-                                break;
-                            }
-                        }
-                        body = multiLineContent;
-                    }
-                    body = body.replace(/@/g, "\n");
-                    // 本文を処理する。
-                    SPDParser.handleBody(context, body);
-                }
-                catch (ex) {
-                    if (ex instanceof ParseError) {
-                        if (exr(line, lineNo - 1, ex)) {
-                            continue;
-                        }
-                        else {
-                            throw ex;
-                        }
-                    }
-                    else {
-                        throw ex;
-                    }
-                }
-            }
-            // 先頭まで戻る
-            while (context != null) {
-                context = SPDParser.upToParent(context);
-            }
-        }
-        catch (ex) {
-            if (ex instanceof ParseError) {
-                throw ex; // テストと適切なエラーハンドリングのためにParseErrorを再スロー
-            }
-            else {
-                console.error(`行 ${lineNo} で予期しないエラーが発生しました: ${ex}`);
-                throw new ParseError(`予期しないエラー: ${ex}`); // その他のエラーをラップ
-            }
-        }
-        // モデルを最終化して返す
-        if (rootContext.nodeList.length === 0) {
-            return null;
-        }
-        const topNode = { type: "nodeList", children: rootContext.nodeList };
-        return topNode;
-    }
-}
-exports.SPDParser = SPDParser;
 // コメントを判定する正規表現オブジェクト
-SPDParser.patternComment = /^\s*(#.*)?$/;
-SPDParser.DummyParseErrorReceiver = (
+const patternComment = /^\s*(#.*)?$/;
+const DummyParseErrorReceiver = (
 // lineStr: string,
 // lineNo: number,
 // err: ParseError,
 ) => {
     return false;
 };
+/**
+ * 本文を処理する
+ * @param context 現在のコンテキスト
+ * @param body 本文
+ */
+const handleBody = (context, body) => {
+    // 状態の制御
+    if (context.nodeList.length > 0) {
+        const lnode = context.nodeList[context.nodeList.length - 1];
+        if (context.optionArg != null && lnode.type === "switch") {
+            const node = lnode;
+            node.cases.set(context.optionArg, null);
+            context.optionArg = null;
+        }
+    }
+    if (body.startsWith(":")) {
+        const parts = body.split(/[ \t]+/);
+        // コマンド部分と引数部分を分離
+        const cmd = parts[0].substring(1); // コマンド名（例: "call", "if"）
+        const arg = parts.length > 1 ? body.substring(parts[0].length).trim() : null; // 引数
+        switch (cmd) {
+            case "call":
+                if (!arg)
+                    throw new RequireArgumentException();
+                context.nodeList.push({
+                    type: "call",
+                    text: arg,
+                    childNode: null,
+                });
+                context.optionStatus = "Default";
+                context.optionArg = null;
+                break;
+            case "terminal":
+                if (!arg)
+                    throw new RequireArgumentException();
+                context.nodeList.push({
+                    type: "terminal",
+                    text: arg,
+                });
+                context.optionStatus = "Default";
+                context.optionArg = null;
+                break;
+            case "comment":
+                if (!arg)
+                    throw new RequireArgumentException();
+                context.nodeList.push({ type: "comment", text: arg });
+                context.optionStatus = "Default";
+                context.optionArg = null;
+                break;
+            case "while":
+                if (!arg)
+                    throw new RequireArgumentException();
+                context.nodeList.push({
+                    type: "loop",
+                    isWhile: true,
+                    text: arg,
+                    childNode: null,
+                });
+                context.optionStatus = "Default";
+                context.optionArg = null;
+                break;
+            case "dowhile":
+                if (!arg)
+                    throw new RequireArgumentException();
+                context.nodeList.push({
+                    type: "loop",
+                    isWhile: false,
+                    text: arg,
+                    childNode: null,
+                });
+                context.optionStatus = "Default";
+                context.optionArg = null;
+                break;
+            case "if":
+                if (!arg)
+                    throw new RequireArgumentException();
+                context.nodeList.push({
+                    type: "if",
+                    text: arg,
+                    trueNode: null,
+                    falseNode: null,
+                });
+                context.optionStatus = "Default";
+                context.optionArg = null;
+                break;
+            case "switch":
+                if (!arg)
+                    throw new RequireArgumentException();
+                context.nodeList.push({
+                    type: "switch",
+                    text: arg,
+                    cases: new Map(),
+                });
+                context.optionStatus = "Default";
+                context.optionArg = null;
+                break;
+            case "else": {
+                const lastIfNode = context.nodeList.length === 0
+                    ? null
+                    : context.nodeList[context.nodeList.length - 1];
+                if (lastIfNode === null || lastIfNode.type !== "if") {
+                    throw new UnexpectedElseException();
+                }
+                if (arg !== null) {
+                    throw new NotRequireArgumentException();
+                }
+                context.optionStatus = "Else";
+                context.optionArg = null;
+                break;
+            }
+            case "case": {
+                const lastSwitchNode = context.nodeList.length === 0
+                    ? null
+                    : context.nodeList[context.nodeList.length - 1];
+                if (lastSwitchNode === null || lastSwitchNode.type !== "switch") {
+                    throw new UnexpectedCaseException();
+                }
+                if (!arg)
+                    throw new RequireArgumentException();
+                if (lastSwitchNode.cases.has(arg)) {
+                    throw new CaseDuplicateException();
+                }
+                context.optionStatus = "Default";
+                context.optionArg = arg;
+                break;
+            }
+            default:
+                throw new UnknownCommandException();
+        }
+    }
+    else {
+        context.nodeList.push({
+            type: "process",
+            text: body,
+            childNode: null,
+        });
+        context.optionStatus = "Default";
+        context.optionArg = null;
+    }
+};
+/**
+ * 現在のコンテキストを確定し、親コンテキストに移動します。
+ * @param context 現在のコンテキスト。
+ * @returns 親コンテキスト。
+ */
+const upToParent = (context) => {
+    if (context === null)
+        return null;
+    // 状態の制御
+    if (context.nodeList.length > 0) {
+        const lnode = context.nodeList[context.nodeList.length - 1];
+        if (context.optionArg != null && lnode.type === "switch") {
+            const node = lnode;
+            node.cases.set(context.optionArg, null);
+            context.optionArg = null;
+        }
+    }
+    if (context.parent === null)
+        return null;
+    // 追加するノードを新規作成。
+    let newNode = null;
+    if (context.nodeList.length === 0) {
+        return context.parent;
+    }
+    else if (context.nodeList.length === 1) {
+        newNode = context.nodeList[0];
+    }
+    else {
+        const nodeList = { type: "nodeList", children: [] };
+        for (let i = 0; i < context.nodeList.length; i++) {
+            nodeList.children.push(context.nodeList[i]);
+        }
+        newNode = nodeList;
+    }
+    // ノードの追加先となるノード。
+    const pnode = context.parent.nodeList[context.parent.nodeList.length - 1];
+    // ノードの種類に応じてノードの追加先に追加。
+    switch (pnode.type) {
+        case "process": {
+            const processNode = pnode;
+            processNode.childNode = newNode;
+            break;
+        }
+        case "loop": {
+            const loopNode = pnode;
+            loopNode.childNode = newNode;
+            break;
+        }
+        case "call": {
+            const callNode = pnode;
+            callNode.childNode = newNode;
+            break;
+        }
+        case "switch": {
+            const snode = pnode;
+            if (context.parent.optionArg !== null) {
+                snode.cases.set(context.parent.optionArg, newNode);
+            }
+            else {
+                throw new UnexpectedInnerException("optionArg is null when it shouldn't be for switch node.");
+            }
+            break;
+        }
+        case "if": {
+            const ifnode = pnode;
+            if (context.parent.optionStatus === "Default") {
+                ifnode.trueNode = newNode;
+            }
+            else if (context.parent.optionStatus === "Else") {
+                if (ifnode.falseNode !== null) {
+                    throw new UnexpectedElseException();
+                }
+                else {
+                    ifnode.falseNode = newNode;
+                }
+            }
+            break;
+        }
+    }
+    // 親ノードの状態をリセットする。
+    context.parent.optionStatus = "Default";
+    context.parent.optionArg = null;
+    // 親ノードを返す。
+    return context.parent;
+};
+/**
+ * SPDフォーマットの文字列をPADモデル（AST）にパースします。
+ * @param src SPDフォーマットの文字列。
+ * @returns パースされたASTのルートノード。
+ */
+const parse = (src, exr = DummyParseErrorReceiver) => {
+    // if(src == null) throw new IllegalArgumentException("src is null"); // # diff TypeScriptではnullチェックは不要
+    // 先頭のコンテキスト
+    const rootContext = new Context();
+    // 現在のコンテキスト
+    let context = rootContext;
+    // １行づつ読み込む
+    // ソースコードを行ごとに分割
+    const lines = src.split(/\r?\n/);
+    let lineNo = 0; // 現在の行番号
+    try {
+        while (lineNo < lines.length) {
+            const line = lines[lineNo];
+            lineNo++;
+            // コメント行は読み飛ばし
+            if (patternComment.test(line))
+                continue;
+            // 先頭のタブ数を数える。
+            let tabNum = 0;
+            for (let i = 0; i < line.length; ++i) {
+                if (line.charAt(i) === "\t") {
+                    tabNum++;
+                }
+                else {
+                    break;
+                }
+            }
+            try {
+                if (context === null) {
+                    throw new IllegalIndentException();
+                }
+                // 子コンテキストの作成処理を行う。
+                if ((tabNum > 0 && context.nodeList.length === 0) || tabNum < 0) {
+                    // 最初からタブがある場合は不正。
+                    throw new IllegalIndentException();
+                }
+                if (tabNum > context.depth) {
+                    // タブが増加した場合の処理
+                    // 正当性をチェックする。
+                    const parentNode = context.nodeList[context.nodeList.length - 1];
+                    if (tabNum > context.depth + 1 ||
+                        (parentNode && parentNode.type === "comment")) {
+                        // 親がコメントか２階層以上離れているのは不正。
+                        throw new IllegalIndentException();
+                    }
+                    if (parentNode.type === "switch" && context.optionArg == null) {
+                        // 子を持たないタイプの場合は不正。
+                        throw new IllegalIndentException();
+                    }
+                    // 子コンテキストを生成する。
+                    const newContext = new Context();
+                    newContext.parent = context;
+                    newContext.depth = context.depth + 1;
+                    context = newContext;
+                }
+                // タブが減少した際の処理
+                while (tabNum < context.depth) {
+                    context = upToParent(context);
+                    if (context === null) {
+                        throw new IllegalIndentException();
+                    }
+                }
+                // 本文は行のデータをtrimしたものとする。
+                // 行末が @ の場合は複数行扱いとする。
+                let body = line.substring(tabNum); // タブの後の本体部分を抽出
+                if (body.endsWith("@")) {
+                    let multiLineContent = body.substring(0, body.length - 1);
+                    while (lineNo < lines.length) {
+                        const nextLine = lines[lineNo];
+                        lineNo++;
+                        // コメント行で止まる
+                        if (patternComment.test(nextLine))
+                            continue;
+                        // 行末に @ が間読み込む
+                        // 行末に @ がある間読み込む
+                        let nextLineTabNum = 0;
+                        for (let i = 0; i < nextLine.length; ++i) {
+                            if (nextLine.charAt(i) === "\t") {
+                                nextLineTabNum++;
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        const nextLineBody = nextLine.substring(nextLineTabNum);
+                        if (nextLineBody.endsWith("@")) {
+                            multiLineContent += `\n${nextLineBody.substring(0, nextLineBody.length - 1)}`;
+                        }
+                        else {
+                            multiLineContent += `\n${nextLineBody}`;
+                            break;
+                        }
+                    }
+                    body = multiLineContent;
+                }
+                body = body.replace(/@/g, "\n");
+                // 本文を処理する。
+                if (context !== null) {
+                    handleBody(context, body);
+                }
+                else {
+                    throw new IllegalIndentException(); // contextがnullの場合、これは不正な状態を示す
+                }
+            }
+            catch (ex) {
+                if (ex instanceof ParseError) {
+                    if (exr(line, lineNo - 1, ex)) {
+                    }
+                    else {
+                        throw ex;
+                    }
+                }
+                else {
+                    throw ex;
+                }
+            }
+        }
+        // 先頭まで戻る
+        while (context != null) {
+            context = upToParent(context);
+        }
+    }
+    catch (ex) {
+        if (ex instanceof ParseError) {
+            throw ex; // テストと適切なエラーハンドリングのためにParseErrorを再スロー
+        }
+        else {
+            console.error(`行 ${lineNo} で予期しないエラーが発生しました: ${ex}`);
+            throw new ParseError(`予期しないエラー: ${ex}`); // その他のエラーをラップ
+        }
+    }
+    // モデルを最終化して返す
+    if (rootContext.nodeList.length === 0) {
+        return null;
+    }
+    const topNode = {
+        type: "nodeList",
+        children: rootContext.nodeList,
+    };
+    return topNode;
+};
+exports.parse = parse;

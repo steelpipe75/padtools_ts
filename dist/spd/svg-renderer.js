@@ -19,7 +19,7 @@ const defaultRenderOptions = {
     connectorWidth: 2,
     nodeListSpace: 10,
     childNodeOffsetWidth: 20,
-    listRenderType: "original"
+    listRenderType: "original",
 };
 /**
  * ASTを受け取り、完全なSVG文字列を返す
@@ -124,7 +124,8 @@ function renderBoxFragment(node, options) {
         svg += renderTransformTranslateSvg(options.childNodeOffsetWidth + contentWidth, 0, childFragment.svg);
         svg += renderLineSvg(contentWidth, 0, options.childNodeOffsetWidth + contentWidth, 0, options);
     }
-    const totalWidth = contentWidth + (childFragment ? childFragment.width + options.childNodeOffsetWidth : 0);
+    const totalWidth = contentWidth +
+        (childFragment ? childFragment.width + options.childNodeOffsetWidth : 0);
     const totalHeight = Math.max(contentHeight, childFragment ? childFragment.height : 0);
     return {
         svg: svg,
@@ -139,7 +140,7 @@ function renderBoxFragment(node, options) {
 function renderCommentFragment(node, options) {
     const boxNode = {
         type: "Comment",
-        text: "(" + node.text + ")",
+        text: `(${node.text})`,
         childNode: null,
         borderType: "None",
         drawLeftBar: false,
@@ -207,8 +208,12 @@ function renderTerminalFragment(node, options) {
 function measureTextSvgForBranche(text, options) {
     const textMetrics = measureTextSvg(text, options);
     return {
-        width: textMetrics.width + options.branchePadding.left + options.branchePadding.right,
-        height: textMetrics.height + options.branchePadding.top + options.branchePadding.bottom,
+        width: textMetrics.width +
+            options.branchePadding.left +
+            options.branchePadding.right,
+        height: textMetrics.height +
+            options.branchePadding.top +
+            options.branchePadding.bottom,
     };
 }
 function renderTextSvgForBranche(text, posX, posY, options) {
@@ -244,7 +249,9 @@ function renderBrancheFragment(node, options) {
     for (const [index, branche] of node.branches.entries()) {
         const label = branche.label;
         const labelSize = measureTextSvgForBranche(label, options);
-        const brancheFragment = branche.node ? renderNode(branche.node, options) : null;
+        const brancheFragment = branche.node
+            ? renderNode(branche.node, options)
+            : null;
         // サブビューがない場合はサイズ = 0
         const subViewSize = brancheFragment
             ? { width: brancheFragment.width, height: brancheFragment.height }
@@ -276,7 +283,7 @@ function renderBrancheFragment(node, options) {
         if (lastdy < uply)
             lastdy += uply - lastdy;
         // ラベルが縦長い場合に調整
-        let minldy = lastldy > uply ? (lastldy * 2) : (uply * 2);
+        const minldy = lastldy > uply ? lastldy * 2 : uply * 2;
         lastldy = bottomly;
         if (minldy > lastdy)
             lastdy = minldy;
@@ -363,7 +370,9 @@ function renderBrancheFragment(node, options) {
     svg += renderTextSvgForBranche(node.text, x, lasty / 2 - conditionSize.height / 2, options);
     return {
         svg: svg,
-        width: boxRight + subvieww + (addChildLineWidth ? options.childNodeOffsetWidth : 0),
+        width: boxRight +
+            subvieww +
+            (addChildLineWidth ? options.childNodeOffsetWidth : 0),
         height: h,
         type: node.type,
     };
@@ -372,13 +381,16 @@ function renderBrancheFragment(node, options) {
  * SWITCH分岐ノードの描画
  */
 function renderSwitchFragment(node, options) {
-    let switchBrancheNode = {
+    const switchBrancheNode = {
         text: node.text,
         type: "Switch",
         branches: [],
     };
     for (const [label, caseNode] of node.cases.entries()) {
-        switchBrancheNode.branches.push({ label: label.toString(), node: caseNode });
+        switchBrancheNode.branches.push({
+            label: label.toString(),
+            node: caseNode,
+        });
     }
     return renderBrancheFragment(switchBrancheNode, options);
 }
@@ -386,7 +398,7 @@ function renderSwitchFragment(node, options) {
  * IF分岐ノードの描画
  */
 function renderIfFragment(node, options) {
-    let ifBrancheNode = {
+    const ifBrancheNode = {
         text: node.text,
         type: "If",
         branches: [],
@@ -446,10 +458,18 @@ function renderListFragmentOriginal(node, options) {
                 startY = currentY;
             }
             if (childFragments[i + 1].type === "Terminal") {
-                endY = currentY + childFragment.height + options.nodeListSpace + childFragments[i + 1].height / 2;
+                endY =
+                    currentY +
+                        childFragment.height +
+                        options.nodeListSpace +
+                        childFragments[i + 1].height / 2;
             }
             else {
-                endY = currentY + childFragment.height + options.nodeListSpace + childFragments[i + 1].height;
+                endY =
+                    currentY +
+                        childFragment.height +
+                        options.nodeListSpace +
+                        childFragments[i + 1].height;
             }
             childrenSvg += renderLineSvg(0, startY, 0, endY, options);
             totalHeight += options.nodeListSpace;
@@ -503,7 +523,7 @@ function renderListFragmentTerminalOffset(node, options) {
         if (i === 0) {
             childrenSvg += renderTransformTranslateSvg(topAddWidth, currentY, childFragment.svg);
         }
-        else if (i === (childFragments.length - 1)) {
+        else if (i === childFragments.length - 1) {
             childrenSvg += renderTransformTranslateSvg(bottomAddWidth, currentY, childFragment.svg);
         }
         else {
@@ -525,15 +545,23 @@ function renderListFragmentTerminalOffset(node, options) {
                 startY = currentY;
             }
             if (childFragments[i + 1].type === "Terminal") {
-                if ((i + 1) === (childFragments.length - 1)) {
+                if (i + 1 === childFragments.length - 1) {
                     endY = currentY + childFragment.height + options.nodeListSpace;
                 }
                 else {
-                    endY = currentY + childFragment.height + options.nodeListSpace + childFragments[i + 1].height / 2;
+                    endY =
+                        currentY +
+                            childFragment.height +
+                            options.nodeListSpace +
+                            childFragments[i + 1].height / 2;
                 }
             }
             else {
-                endY = currentY + childFragment.height + options.nodeListSpace + childFragments[i + 1].height;
+                endY =
+                    currentY +
+                        childFragment.height +
+                        options.nodeListSpace +
+                        childFragments[i + 1].height;
             }
             childrenSvg += renderLineSvg(offsetX, startY, offsetX, endY, options);
             totalHeight += options.nodeListSpace;
@@ -557,7 +585,7 @@ function measureTextSvg(text, options) {
     const charWidth = options.fontSize; // 全角文字の幅を概算
     const getCharWidth = (char) => {
         // 半角文字の正規表現
-        if (char.match(/^[\u0000-\u007e]*$/)) {
+        if (char.match(/^[\u0020-\u007e]*$/)) {
             return 0.6;
         }
         // 全角文字
