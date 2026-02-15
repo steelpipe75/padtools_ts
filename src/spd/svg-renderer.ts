@@ -10,6 +10,8 @@ import type {
 	TerminalNode,
 } from "./ast";
 
+import { eastAsianWidth } from 'eastasianwidth';
+
 type Branch = {
 	label: string;
 	node: Node | null;
@@ -823,25 +825,31 @@ function measureTextSvg(
 	options: RenderOptions,
 ): { width: number; height: number } {
 	const lines = text.split("\n");
-	const charWidth = options.fontSize; // 全角文字の幅を概算
+	const fullWidthCharFactor = options.fontSize; // 全角文字の幅の係数
+	const halfWidthCharFactor = options.fontSize * 0.6; // 半角文字の幅の係数
 
-	const getCharWidth = (char: string): number => {
-		// 半角文字の正規表現
-
-		if (char.match(/^[\u0020-\u007e]*$/)) {
-			return 0.6;
+	const getCharRenderWidth = (char: string): number => {
+		const eaWidth = eastAsianWidth(char);
+		switch (eaWidth) {
+			case 'F': // Fullwidth
+			case 'W': // Wide
+				return fullWidthCharFactor;
+			case 'A': // Ambiguous
+			case 'H': // Halfwidth
+			case 'Na': // Narrow
+			case 'N': // Neutral
+			default:
+				return halfWidthCharFactor;
 		}
-		// 全角文字
-		return 1.0;
 	};
 
 	const maxWidth = Math.max(
 		...lines.map((line) => {
 			let width = 0;
 			for (const char of line) {
-				width += getCharWidth(char);
+				width += getCharRenderWidth(char);
 			}
-			return width * charWidth;
+			return width;
 		}),
 	);
 

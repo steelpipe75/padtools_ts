@@ -44,6 +44,7 @@
 	"description": "Simple tool to write PAD.",
 	"dependencies": {
 		"commander": "^14.0.0",
+		"eastasianwidth": "^0.3.0",
 		"glob": "^11.0.3",
 		"serve": "^14.2.3",
 		"svgo": "^4.0.0",
