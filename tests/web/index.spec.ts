@@ -2,7 +2,16 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { expect, test } from "@playwright/test";
 
+const tempDir = path.join(process.cwd(), "tests", "web", "temp");
+
 test.describe("E2E tests for web", () => {
+	test.beforeAll(() => {
+		// Ensure the temp directory for test outputs exists.
+		if (!fs.existsSync(tempDir)) {
+			fs.mkdirSync(tempDir, { recursive: true });
+		}
+	});
+
 	test.beforeEach(async ({ page }) => {
 		test.setTimeout(60000);
 		await page.goto("/");
@@ -96,6 +105,11 @@ test.describe("E2E tests for web", () => {
 			"simple_test.svg.txt",
 		);
 
+		// Save the downloaded SVG to a temp file for inspection
+		const goldenFileName = path.basename(goldenFilePath, ".txt"); // e.g., "simple_test.svg"
+		const tempOutputPath = path.join(tempDir, goldenFileName);
+		fs.writeFileSync(tempOutputPath, downloadedSvg, "utf-8");
+
 		const goldenSvg = fs
 			.readFileSync(goldenFilePath, "utf-8")
 			.replace(/\r\n/g, "\n");
@@ -159,6 +173,11 @@ test.describe("E2E tests for web", () => {
 			"output",
 			"render_options_test.svg.txt",
 		);
+
+		// Save the downloaded SVG to a temp file for inspection
+		const goldenFileName = path.basename(goldenFilePath, ".txt");
+		const tempOutputPath = path.join(tempDir, goldenFileName);
+		fs.writeFileSync(tempOutputPath, downloadedSvg, "utf-8");
 
 		const goldenSvg = fs
 			.readFileSync(goldenFilePath, "utf-8")
