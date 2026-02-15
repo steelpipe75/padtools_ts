@@ -124,6 +124,7 @@ npm run build:web:gh-pages
 -   serve: Webサーバー機能（`padtools_ts web`）に使用。[MIT License](https://github.com/vercel/serve/blob/main/LICENSE)
 -   xml-formatter: SVG出力の整形 (`--prettyprint` オプション) に使用。[MIT License](https://github.com/chrisbottin/xml-formatter/blob/master/LICENSE)
 -   svgo: SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。[MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
+-   eastasianwidth: 文字の幅計算に使用。[MIT License](https://github.com/komagata/eastasianwidth)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
 
