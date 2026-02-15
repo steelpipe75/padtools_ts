@@ -1,5 +1,5 @@
-<svg width="506.4" height="592.0" viewBox="0 0 506.4 592.0" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="506.4" height="592.0" fill="none"/>
+<svg width="505.0" height="592.0" viewBox="0 0 505.0 592.0" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="505.0" height="592.0" fill="none"/>
     <g transform="translate(20.0, 20.0)">
         <g transform="translate(0.0, 0.0)">
             <rect x="0" y="0" width="64.8" height="36.8" rx="18.4" ry="18.4" stroke="#000000" stroke-width="1" fill="#ffffff"/>
@@ -46,7 +46,7 @@
             </g>
             <line x1="82.0" y1="0.0" x2="102.0" y2="0.0" stroke="#000000" stroke-width="1"/>
             <g transform="translate(102.0, 53.6)">
-                <rect x="0" y="0" width="232.8" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <rect x="0" y="0" width="223.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
                 <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                     偽の場合(:else以下は省略可能)
                 </text>
@@ -61,35 +61,35 @@
         </g>
         <line x1="0.0" y1="167.2" x2="0.0" y2="411.6" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 267.6)">
-            <g transform="translate(138.4, 0.0)">
-                <rect x="0" y="0" width="112.4" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <g transform="translate(137.0, 0.0)">
+                <rect x="0" y="0" width="111.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
                 <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                     ケース1の中身
                 </text>
             </g>
-            <line x1="118.4" y1="0.0" x2="138.4" y2="0.0" stroke="#000000" stroke-width="1"/>
-            <g transform="translate(138.4, 53.6)">
-                <rect x="0" y="0" width="112.4" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <line x1="117.0" y1="0.0" x2="137.0" y2="0.0" stroke="#000000" stroke-width="1"/>
+            <g transform="translate(137.0, 53.6)">
+                <rect x="0" y="0" width="111.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
                 <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                     ケース2の中身
                 </text>
             </g>
-            <line x1="118.4" y1="53.6" x2="138.4" y2="53.6" stroke="#000000" stroke-width="1"/>
-            <g transform="translate(138.4, 107.2)">
+            <line x1="117.0" y1="53.6" x2="137.0" y2="53.6" stroke="#000000" stroke-width="1"/>
+            <g transform="translate(137.0, 107.2)">
                 <rect x="0" y="0" width="328.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
                 <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                     ケース文は必要に応じていくつでも追加できます
                 </text>
             </g>
-            <line x1="118.4" y1="107.2" x2="138.4" y2="107.2" stroke="#000000" stroke-width="1"/>
-            <polygon points="0.0,0.0 118.4,0.0 98.4,26.8 118.4,53.6 98.4,80.4 118.4,107.2 0.0,107.2" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <line x1="117.0" y1="107.2" x2="137.0" y2="107.2" stroke="#000000" stroke-width="1"/>
+            <polygon points="0.0,0.0 117.0,0.0 97.0,26.8 117.0,53.6 97.0,80.4 117.0,107.2 0.0,107.2" stroke="#000000" stroke-width="1" fill="#ffffff"/>
             <text x="43.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 ケース1
             </text>
             <text x="43.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 ケース2
             </text>
-            <text x="68.2" y="99.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="71.0" y="99.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 ...
             </text>
             <text x="5.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
