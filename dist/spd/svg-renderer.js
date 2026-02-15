@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.render = render;
+const eastasianwidth_1 = require("eastasianwidth");
 // デフォルトの描画オプション
 const defaultRenderOptions = {
     fontSize: 14,
@@ -34,12 +35,12 @@ function render(node, options) {
     const svgWidth = fragment.width + mergedOptions.margin.left + mergedOptions.margin.right;
     const svgHeight = fragment.height + mergedOptions.margin.top + mergedOptions.margin.bottom;
     let svg = `<svg `;
-    svg += `width="${svgWidth}" height="${svgHeight}" `;
-    svg += `viewBox="0 0 ${svgWidth} ${svgHeight}" `;
+    svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
+    svg += `viewBox="0 0 ${svgWidth.toFixed(1)} ${svgHeight.toFixed(1)}" `;
     svg += `xmlns="http://www.w3.org/2000/svg">`;
     const baseFillColor = (_a = mergedOptions.baseBackgroundColor) !== null && _a !== void 0 ? _a : "none";
     svg += `<rect x="0" y="0" `;
-    svg += `width="${svgWidth}" height="${svgHeight}" `;
+    svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
     svg += `fill="${baseFillColor}"/>`;
     svg += renderTransformTranslateSvg(mergedOptions.margin.left, mergedOptions.margin.top, fragment.svg);
     svg += `</svg>`;
@@ -88,7 +89,7 @@ function renderBoxFragment(node, options) {
         contentHeight += options.boxPadding.top + options.boxPadding.bottom;
         textOffsetY += options.boxPadding.top;
         const fillColor = (_a = options.backgroundColor) !== null && _a !== void 0 ? _a : "none";
-        svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}" `;
+        svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
         svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
         svg += `fill="${fillColor}"/>`;
     }
@@ -100,8 +101,8 @@ function renderBoxFragment(node, options) {
         contentWidth += contentHeight;
         textOffsetX = radius;
         const fillColor = (_b = options.backgroundColor) !== null && _b !== void 0 ? _b : "none";
-        svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}" `;
-        svg += `rx="${radius}" ry="${radius}" `;
+        svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
+        svg += `rx="${radius.toFixed(1)}" ry="${radius.toFixed(1)}" `;
         svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
         svg += `fill="${fillColor}"/>`;
     }
@@ -124,9 +125,9 @@ function renderBoxFragment(node, options) {
         svg += renderTransformTranslateSvg(options.childNodeOffsetWidth + contentWidth, 0, childFragment.svg);
         svg += renderLineSvg(contentWidth, 0, options.childNodeOffsetWidth + contentWidth, 0, options);
     }
-    const totalWidth = contentWidth +
-        (childFragment ? childFragment.width + options.childNodeOffsetWidth : 0);
-    const totalHeight = Math.max(contentHeight, childFragment ? childFragment.height : 0);
+    const totalWidth = parseFloat((contentWidth +
+        (childFragment ? childFragment.width + options.childNodeOffsetWidth : 0)).toFixed(1));
+    const totalHeight = parseFloat(Math.max(contentHeight, childFragment ? childFragment.height : 0).toFixed(1));
     return {
         svg: svg,
         width: totalWidth,
@@ -277,18 +278,18 @@ function renderBrancheFragment(node, options) {
             bottomly = 0;
         }
         else {
-            uply = labelSize.height / 2;
+            uply = parseFloat((labelSize.height / 2).toFixed(1));
             bottomly = uply;
         }
         if (lastdy < uply)
-            lastdy += uply - lastdy;
+            lastdy = parseFloat((lastdy + uply - lastdy).toFixed(1));
         // ラベルが縦長い場合に調整
-        const minldy = lastldy > uply ? lastldy * 2 : uply * 2;
+        const minldy = parseFloat((lastldy > uply ? lastldy * 2 : uply * 2).toFixed(1));
         lastldy = bottomly;
         if (minldy > lastdy)
             lastdy = minldy;
         // 高さを更新
-        h += lastdy;
+        h = parseFloat((h + lastdy).toFixed(1));
         ymap.set(index, h);
         // tmp <- 高さ追記分
         if (bottomly > subViewSize.height) {
@@ -301,7 +302,7 @@ function renderBrancheFragment(node, options) {
             lastdy = minHeight;
         count += 1;
     }
-    h += lastdy;
+    h = parseFloat((h + lastdy).toFixed(1));
     // 描画
     /**
      * A-----B1
@@ -318,33 +319,33 @@ function renderBrancheFragment(node, options) {
     let addChildLineWidth = false;
     const poly = [];
     let lasty = 0;
-    const boxRight = x + conditionSize.width + labelw + options.switchNodeCaseWidth;
+    const boxRight = parseFloat((x + conditionSize.width + labelw + options.switchNodeCaseWidth).toFixed(1));
     poly.push({ x: x, y: y }); // Pos:A
     for (const [index, brancheFragment] of brancheFragments.entries()) {
         const lh_temp = ymap.get(index);
         const lh = lh_temp ? lh_temp : 0;
-        const ly = y + lh;
+        const ly = parseFloat((y + lh).toFixed(1));
         if (brancheFragment.fragment !== null) {
             // brancheFragment.fragment の描画
-            svg += renderTransformTranslateSvg(boxRight + options.childNodeOffsetWidth, ly, brancheFragment.fragment.svg);
+            svg += renderTransformTranslateSvg(parseFloat((boxRight + options.childNodeOffsetWidth).toFixed(1)), ly, brancheFragment.fragment.svg);
             // 小要素への line の描画
-            svg += renderLineSvg(boxRight, ly, boxRight + options.childNodeOffsetWidth, ly, options);
+            svg += renderLineSvg(boxRight, ly, parseFloat((boxRight + options.childNodeOffsetWidth).toFixed(1)), ly, options);
             // 小要素への line の分、最後に返す幅を増やす
             addChildLineWidth = true;
         }
         if (!first) {
             // Pos:C
             poly.push({
-                x: boxRight - options.switchNodeCaseWidth,
-                y: (lasty + ly) / 2,
+                x: parseFloat((boxRight - options.switchNodeCaseWidth).toFixed(1)),
+                y: parseFloat(((lasty + ly) / 2).toFixed(1)),
             });
         }
         poly.push({ x: boxRight, y: ly }); // Pos:B
         first = false;
         lasty = ly;
     }
-    poly.push({ x: x, y: lasty }); // Pos:E
-    const polyPoints = poly.map((p) => `${p.x},${p.y}`).join(" ");
+    poly.push({ x: x, y: parseFloat(lasty.toFixed(1)) }); // Pos:E
+    const polyPoints = poly.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
     // polyの描画
     const fillColor = (_a = options.backgroundColor) !== null && _a !== void 0 ? _a : "none";
     svg += `<polygon points="${polyPoints}" `;
@@ -355,25 +356,25 @@ function renderBrancheFragment(node, options) {
         const label = brancheFragment.label;
         const lh_temp = ymap.get(index);
         const lh = lh_temp ? lh_temp : 0;
-        let ly = y + lh;
+        let ly = parseFloat((y + lh).toFixed(1));
         const ls = measureTextSvgForBranche(label, options);
         if (index >= node.branches.length - 1) {
-            ly -= ls.height;
+            ly = parseFloat((ly - ls.height).toFixed(1));
         }
         else if (index > 0) {
-            ly -= ls.height / 2;
+            ly = parseFloat((ly - ls.height / 2).toFixed(1));
         }
         // label の描画
-        svg += renderTextSvgForBranche(label, x + conditionSize.width + labelw - ls.width, ly, options);
+        svg += renderTextSvgForBranche(label, parseFloat((x + conditionSize.width + labelw - ls.width).toFixed(1)), ly, options);
     }
     // node.text の描画
-    svg += renderTextSvgForBranche(node.text, x, lasty / 2 - conditionSize.height / 2, options);
+    svg += renderTextSvgForBranche(node.text, parseFloat(x.toFixed(1)), parseFloat((lasty / 2 - conditionSize.height / 2).toFixed(1)), options);
     return {
         svg: svg,
-        width: boxRight +
+        width: parseFloat((boxRight +
             subvieww +
-            (addChildLineWidth ? options.childNodeOffsetWidth : 0),
-        height: h,
+            (addChildLineWidth ? options.childNodeOffsetWidth : 0)).toFixed(1)),
+        height: parseFloat(h.toFixed(1)),
         type: node.type,
     };
 }
@@ -439,8 +440,8 @@ function renderListFragmentOriginal(node, options) {
     for (const child of node.children) {
         const childFragment = renderNode(child, options);
         childFragments.push(childFragment);
-        totalHeight += childFragment.height;
-        maxWidth = Math.max(maxWidth, childFragment.width);
+        totalHeight = parseFloat((totalHeight + childFragment.height).toFixed(1));
+        maxWidth = parseFloat(Math.max(maxWidth, childFragment.width).toFixed(1));
     }
     // 子ノードのSVGを配置し、接続線を描画
     for (let i = 0; i < childFragments.length; i++) {
@@ -452,29 +453,27 @@ function renderListFragmentOriginal(node, options) {
             let startY = 0;
             let endY = 0;
             if (childFragment.type === "Terminal") {
-                startY = currentY + childFragment.height / 2;
+                startY = parseFloat((currentY + childFragment.height / 2).toFixed(1));
             }
             else {
-                startY = currentY;
+                startY = parseFloat(currentY.toFixed(1));
             }
             if (childFragments[i + 1].type === "Terminal") {
-                endY =
-                    currentY +
-                        childFragment.height +
-                        options.nodeListSpace +
-                        childFragments[i + 1].height / 2;
+                endY = parseFloat((currentY +
+                    childFragment.height +
+                    options.nodeListSpace +
+                    childFragments[i + 1].height / 2).toFixed(1));
             }
             else {
-                endY =
-                    currentY +
-                        childFragment.height +
-                        options.nodeListSpace +
-                        childFragments[i + 1].height;
+                endY = parseFloat((currentY +
+                    childFragment.height +
+                    options.nodeListSpace +
+                    childFragments[i + 1].height).toFixed(1));
             }
             childrenSvg += renderLineSvg(0, startY, 0, endY, options);
-            totalHeight += options.nodeListSpace;
+            totalHeight = parseFloat((totalHeight + options.nodeListSpace).toFixed(1));
         }
-        currentY += childFragment.height + options.nodeListSpace;
+        currentY = parseFloat((currentY + childFragment.height + options.nodeListSpace).toFixed(1));
     }
     return {
         svg: childrenSvg,
@@ -496,24 +495,24 @@ function renderListFragmentTerminalOffset(node, options) {
     for (const child of node.children) {
         const childFragment = renderNode(child, options);
         childFragments.push(childFragment);
-        totalHeight += childFragment.height;
-        maxWidth = Math.max(maxWidth, childFragment.width);
+        totalHeight = parseFloat((totalHeight + childFragment.height).toFixed(1));
+        maxWidth = parseFloat(Math.max(maxWidth, childFragment.width).toFixed(1));
     }
     const topChildFragment = childFragments[0];
     if (topChildFragment.type === "Terminal") {
         const topWidth = topChildFragment.width;
-        offsetX = topWidth / 2;
+        offsetX = parseFloat((topWidth / 2).toFixed(1));
     }
     const bottomChildFragment = childFragments[childFragments.length - 1];
     if (bottomChildFragment.type === "Terminal") {
         const bottomWidth = bottomChildFragment.width;
-        const bottomOffset = bottomWidth / 2;
+        const bottomOffset = parseFloat((bottomWidth / 2).toFixed(1));
         if (bottomOffset > offsetX) {
-            topAddWidth = bottomOffset - offsetX;
+            topAddWidth = parseFloat((bottomOffset - offsetX).toFixed(1));
             offsetX = bottomOffset;
         }
         else {
-            bottomAddWidth = offsetX - bottomOffset;
+            bottomAddWidth = parseFloat((offsetX - bottomOffset).toFixed(1));
         }
     }
     // 子ノードのSVGを配置し、接続線を描画
@@ -535,42 +534,40 @@ function renderListFragmentTerminalOffset(node, options) {
             let endY = 0;
             if (childFragment.type === "Terminal") {
                 if (i === 0) {
-                    startY = currentY + childFragment.height;
+                    startY = parseFloat((currentY + childFragment.height).toFixed(1));
                 }
                 else {
-                    startY = currentY + childFragment.height / 2;
+                    startY = parseFloat((currentY + childFragment.height / 2).toFixed(1));
                 }
             }
             else {
-                startY = currentY;
+                startY = parseFloat(currentY.toFixed(1));
             }
             if (childFragments[i + 1].type === "Terminal") {
                 if (i + 1 === childFragments.length - 1) {
-                    endY = currentY + childFragment.height + options.nodeListSpace;
+                    endY = parseFloat((currentY + childFragment.height + options.nodeListSpace).toFixed(1));
                 }
                 else {
-                    endY =
-                        currentY +
-                            childFragment.height +
-                            options.nodeListSpace +
-                            childFragments[i + 1].height / 2;
+                    endY = parseFloat((currentY +
+                        childFragment.height +
+                        options.nodeListSpace +
+                        childFragments[i + 1].height / 2).toFixed(1));
                 }
             }
             else {
-                endY =
-                    currentY +
-                        childFragment.height +
-                        options.nodeListSpace +
-                        childFragments[i + 1].height;
+                endY = parseFloat((currentY +
+                    childFragment.height +
+                    options.nodeListSpace +
+                    childFragments[i + 1].height).toFixed(1));
             }
             childrenSvg += renderLineSvg(offsetX, startY, offsetX, endY, options);
-            totalHeight += options.nodeListSpace;
+            totalHeight = parseFloat((totalHeight + options.nodeListSpace).toFixed(1));
         }
-        currentY += childFragment.height + options.nodeListSpace;
+        currentY = parseFloat((currentY + childFragment.height + options.nodeListSpace).toFixed(1));
     }
     return {
         svg: childrenSvg,
-        width: maxWidth + offsetX,
+        width: parseFloat((maxWidth + offsetX).toFixed(1)),
         height: totalHeight,
         type: "NodeList",
     };
@@ -582,21 +579,28 @@ function renderListFragmentTerminalOffset(node, options) {
  */
 function measureTextSvg(text, options) {
     const lines = text.split("\n");
-    const charWidth = options.fontSize; // 全角文字の幅を概算
-    const getCharWidth = (char) => {
-        // 半角文字の正規表現
-        if (char.match(/^[\u0020-\u007e]*$/)) {
-            return 0.6;
+    const fullWidthCharFactor = options.fontSize; // 全角文字の幅の係数
+    const halfWidthCharFactor = options.fontSize * 0.6; // 半角文字の幅の係数
+    const getCharRenderWidth = (char) => {
+        const eaWidth = (0, eastasianwidth_1.eastAsianWidth)(char);
+        switch (eaWidth) {
+            case 'F': // Fullwidth
+            case 'W': // Wide
+                return fullWidthCharFactor;
+            case 'A': // Ambiguous
+            case 'H': // Halfwidth
+            case 'Na': // Narrow
+            case 'N': // Neutral
+            default:
+                return halfWidthCharFactor;
         }
-        // 全角文字
-        return 1.0;
     };
     const maxWidth = Math.max(...lines.map((line) => {
         let width = 0;
         for (const char of line) {
-            width += getCharWidth(char);
+            width += getCharRenderWidth(char);
         }
-        return width * charWidth;
+        return width;
     }));
     const textHeight = lines.length * options.fontSize * options.lineHeight;
     return { width: maxWidth, height: textHeight };
@@ -610,7 +614,7 @@ function renderTextSvg(text, posX, posY, options) {
     lines.forEach((line, index) => {
         const dy = index === 0 ? 0 : index * options.fontSize * options.lineHeight;
         svg += `<text `;
-        svg += `x="${posX}" y="${posY + options.fontSize}" dy="${dy}" `;
+        svg += `x="${posX.toFixed(1)}" y="${(posY + options.fontSize).toFixed(1)}" dy="${dy.toFixed(1)}" `;
         svg += `font-family="${options.fontFamily}" `;
         svg += `font-size="${options.fontSize}" `;
         svg += `fill="${options.textColor}">${line}</text>`;
@@ -623,8 +627,8 @@ function renderTextSvg(text, posX, posY, options) {
  */
 function renderLineSvg(x1, y1, x2, y2, options) {
     return `<line
-      x1="${x1}" y1="${y1}"
-      x2="${x2}" y2="${y2}"
+      x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
+      x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
       stroke="${options.strokeColor}"
       stroke-width="${options.strokeWidth}"
     />`;
@@ -633,5 +637,5 @@ function renderLineSvg(x1, y1, x2, y2, options) {
  * 描画位置オフセット支援
  */
 function renderTransformTranslateSvg(x, y, childSvg) {
-    return `<g transform="translate(${x}, ${y})">${childSvg}</g>`;
+    return `<g transform="translate(${x.toFixed(1)}, ${y.toFixed(1)})">${childSvg}</g>`;
 }
