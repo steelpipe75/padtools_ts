@@ -1,54 +1,54 @@
-<svg width="160.79999999999998" height="337.6" viewBox="0 0 160.79999999999998 337.6" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="160.79999999999998" height="337.6" fill="none"/>
-    <g transform="translate(20, 20)">
-        <g transform="translate(0, 0)">
-            <rect x="0" y="0" width="112.39999999999998" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+<svg width="160.8" height="337.6" viewBox="0 0 160.8 337.6" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="160.8" height="337.6" fill="none"/>
+    <g transform="translate(20.0, 20.0)">
+        <g transform="translate(0.0, 0.0)">
+            <rect x="0" y="0" width="112.4" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 Process ABC
             </text>
         </g>
-        <line x1="0" y1="0" x2="0" y2="63.599999999999994" stroke="#000000" stroke-width="1"/>
-        <g transform="translate(0, 46.8)">
-            <text x="10" y="14" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+        <line x1="0.0" y1="0.0" x2="0.0" y2="63.6" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(0.0, 46.8)">
+            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 (comment)
             </text>
         </g>
-        <line x1="0" y1="46.8" x2="0" y2="110.39999999999999" stroke="#000000" stroke-width="1"/>
-        <g transform="translate(0, 73.6)">
-            <rect x="0" y="0" width="120.79999999999998" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+        <line x1="0.0" y1="46.8" x2="0.0" y2="110.4" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(0.0, 73.6)">
+            <rect x="0" y="0" width="120.8" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 Process TEST
             </text>
         </g>
-        <line x1="0" y1="73.6" x2="0" y2="138.79999999999998" stroke="#000000" stroke-width="1"/>
-        <g transform="translate(0, 120.39999999999999)">
-            <rect x="0" y="0" width="104" height="36.8" rx="18.4" ry="18.4" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="18.4" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+        <line x1="0.0" y1="73.6" x2="0.0" y2="138.8" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(0.0, 120.4)">
+            <rect x="0" y="0" width="104.0" height="36.8" rx="18.4" ry="18.4" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="18.4" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 terminal
             </text>
         </g>
-        <line x1="0" y1="138.79999999999998" x2="0" y2="204" stroke="#000000" stroke-width="1"/>
-        <g transform="translate(0, 167.2)">
+        <line x1="0.0" y1="138.8" x2="0.0" y2="204.0" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(0.0, 167.2)">
             <rect x="0" y="0" width="53.6" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <line x1="5" y1="0" x2="5" y2="36.8" stroke="#000000" stroke-width="1"/>
-            <line x1="48.6" y1="0" x2="48.6" y2="36.8" stroke="#000000" stroke-width="1"/>
-            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+            <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <line x1="48.6" y1="0.0" x2="48.6" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 call
             </text>
         </g>
-        <line x1="0" y1="167.2" x2="0" y2="250.8" stroke="#000000" stroke-width="1"/>
-        <g transform="translate(0, 214)">
-            <rect x="0" y="0" width="62" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <line x1="5" y1="0" x2="5" y2="36.8" stroke="#000000" stroke-width="1"/>
-            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+        <line x1="0.0" y1="167.2" x2="0.0" y2="250.8" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(0.0, 214.0)">
+            <rect x="0" y="0" width="62.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 while
             </text>
         </g>
-        <line x1="0" y1="214" x2="0" y2="297.6" stroke="#000000" stroke-width="1"/>
-        <g transform="translate(0, 260.8)">
-            <rect x="0" y="0" width="78.80000000000001" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <line x1="73.80000000000001" y1="0" x2="73.80000000000001" y2="36.8" stroke="#000000" stroke-width="1"/>
-            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+        <line x1="0.0" y1="214.0" x2="0.0" y2="297.6" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(0.0, 260.8)">
+            <rect x="0" y="0" width="78.8" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <line x1="73.8" y1="0.0" x2="73.8" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 dowhile
             </text>
         </g>

@@ -111,18 +111,16 @@ export function render(
 
 	const fragment = renderNode(node, mergedOptions);
 
-	const svgWidth =
-		fragment.width + mergedOptions.margin.left + mergedOptions.margin.right;
-	const svgHeight =
-		fragment.height + mergedOptions.margin.top + mergedOptions.margin.bottom;
+	const svgWidth = fragment.width + mergedOptions.margin.left + mergedOptions.margin.right;
+	const svgHeight = fragment.height + mergedOptions.margin.top + mergedOptions.margin.bottom;
 
 	let svg = `<svg `;
-	svg += `width="${svgWidth}" height="${svgHeight}" `;
-	svg += `viewBox="0 0 ${svgWidth} ${svgHeight}" `;
+	svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
+	svg += `viewBox="0 0 ${svgWidth.toFixed(1)} ${svgHeight.toFixed(1)}" `;
 	svg += `xmlns="http://www.w3.org/2000/svg">`;
 	const baseFillColor = mergedOptions.baseBackgroundColor ?? "none";
 	svg += `<rect x="0" y="0" `;
-	svg += `width="${svgWidth}" height="${svgHeight}" `;
+	svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
 	svg += `fill="${baseFillColor}"/>`;
 	svg += renderTransformTranslateSvg(
 		mergedOptions.margin.left,
@@ -182,7 +180,7 @@ function renderBoxFragment(
 		contentHeight += options.boxPadding.top + options.boxPadding.bottom;
 		textOffsetY += options.boxPadding.top;
 		const fillColor = options.backgroundColor ?? "none";
-		svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}" `;
+		svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
 		svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
 		svg += `fill="${fillColor}"/>`;
 	} else if (node.borderType === "WRound") {
@@ -193,8 +191,8 @@ function renderBoxFragment(
 		contentWidth += contentHeight;
 		textOffsetX = radius;
 		const fillColor = options.backgroundColor ?? "none";
-		svg += `<rect x="0" y="0" width="${contentWidth}" height="${contentHeight}" `;
-		svg += `rx="${radius}" ry="${radius}" `;
+		svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
+		svg += `rx="${radius.toFixed(1)}" ry="${radius.toFixed(1)}" `;
 		svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
 		svg += `fill="${fillColor}"/>`;
 	} else {
@@ -241,12 +239,17 @@ function renderBoxFragment(
 			options,
 		);
 	}
-	const totalWidth =
-		contentWidth +
-		(childFragment ? childFragment.width + options.childNodeOffsetWidth : 0);
-	const totalHeight = Math.max(
-		contentHeight,
-		childFragment ? childFragment.height : 0,
+	const totalWidth = parseFloat(
+		(
+			contentWidth +
+			(childFragment ? childFragment.width + options.childNodeOffsetWidth : 0)
+		).toFixed(1),
+	);
+	const totalHeight = parseFloat(
+		Math.max(
+			contentHeight,
+			childFragment ? childFragment.height : 0,
+		).toFixed(1),
 	);
 
 	return {
@@ -448,18 +451,18 @@ function renderBrancheFragment(
 			uply = labelSize.height;
 			bottomly = 0;
 		} else {
-			uply = labelSize.height / 2;
+			uply = parseFloat((labelSize.height / 2).toFixed(1));
 			bottomly = uply;
 		}
-		if (lastdy < uply) lastdy += uply - lastdy;
+		if (lastdy < uply) lastdy = parseFloat((lastdy + uply - lastdy).toFixed(1));
 
 		// ラベルが縦長い場合に調整
-		const minldy = lastldy > uply ? lastldy * 2 : uply * 2;
+		const minldy = parseFloat((lastldy > uply ? lastldy * 2 : uply * 2).toFixed(1));
 		lastldy = bottomly;
 		if (minldy > lastdy) lastdy = minldy;
 
 		// 高さを更新
-		h += lastdy;
+		h = parseFloat((h + lastdy).toFixed(1));
 		ymap.set(index, h);
 
 		// tmp <- 高さ追記分
@@ -474,7 +477,7 @@ function renderBrancheFragment(
 		count += 1;
 	}
 
-	h += lastdy;
+	h = parseFloat((h + lastdy).toFixed(1));
 
 	// 描画
 
@@ -493,18 +496,19 @@ function renderBrancheFragment(
 	let addChildLineWidth = false;
 	const poly: { x: number; y: number }[] = [];
 	let lasty = 0;
-	const boxRight =
-		x + conditionSize.width + labelw + options.switchNodeCaseWidth;
+	const boxRight = parseFloat(
+		(x + conditionSize.width + labelw + options.switchNodeCaseWidth).toFixed(1),
+	);
 	poly.push({ x: x, y: y }); // Pos:A
 	for (const [index, brancheFragment] of brancheFragments.entries()) {
 		const lh_temp = ymap.get(index);
 		const lh = lh_temp ? lh_temp : 0;
-		const ly = y + lh;
+		const ly = parseFloat((y + lh).toFixed(1));
 
 		if (brancheFragment.fragment !== null) {
 			// brancheFragment.fragment の描画
 			svg += renderTransformTranslateSvg(
-				boxRight + options.childNodeOffsetWidth,
+				parseFloat((boxRight + options.childNodeOffsetWidth).toFixed(1)),
 				ly,
 				brancheFragment.fragment.svg,
 			);
@@ -512,7 +516,7 @@ function renderBrancheFragment(
 			svg += renderLineSvg(
 				boxRight,
 				ly,
-				boxRight + options.childNodeOffsetWidth,
+				parseFloat((boxRight + options.childNodeOffsetWidth).toFixed(1)),
 				ly,
 				options,
 			);
@@ -523,17 +527,17 @@ function renderBrancheFragment(
 		if (!first) {
 			// Pos:C
 			poly.push({
-				x: boxRight - options.switchNodeCaseWidth,
-				y: (lasty + ly) / 2,
+				x: parseFloat((boxRight - options.switchNodeCaseWidth).toFixed(1)),
+				y: parseFloat(((lasty + ly) / 2).toFixed(1)),
 			});
 		}
 		poly.push({ x: boxRight, y: ly }); // Pos:B
 		first = false;
 		lasty = ly;
 	}
-	poly.push({ x: x, y: lasty }); // Pos:E
+	poly.push({ x: x, y: parseFloat(lasty.toFixed(1)) }); // Pos:E
 
-	const polyPoints = poly.map((p) => `${p.x},${p.y}`).join(" ");
+	const polyPoints = poly.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
 
 	// polyの描画
 	const fillColor = options.backgroundColor ?? "none";
@@ -546,20 +550,20 @@ function renderBrancheFragment(
 		const label = brancheFragment.label;
 		const lh_temp = ymap.get(index);
 		const lh = lh_temp ? lh_temp : 0;
-		let ly = y + lh;
+		let ly = parseFloat((y + lh).toFixed(1));
 
 		const ls = measureTextSvgForBranche(label, options);
 
 		if (index >= node.branches.length - 1) {
-			ly -= ls.height;
+			ly = parseFloat((ly - ls.height).toFixed(1));
 		} else if (index > 0) {
-			ly -= ls.height / 2;
+			ly = parseFloat((ly - ls.height / 2).toFixed(1));
 		}
 
 		// label の描画
 		svg += renderTextSvgForBranche(
 			label,
-			x + conditionSize.width + labelw - ls.width,
+			parseFloat((x + conditionSize.width + labelw - ls.width).toFixed(1)),
 			ly,
 			options,
 		);
@@ -568,18 +572,21 @@ function renderBrancheFragment(
 	// node.text の描画
 	svg += renderTextSvgForBranche(
 		node.text,
-		x,
-		lasty / 2 - conditionSize.height / 2,
+		parseFloat(x.toFixed(1)),
+		parseFloat((lasty / 2 - conditionSize.height / 2).toFixed(1)),
 		options,
 	);
 
 	return {
 		svg: svg,
-		width:
-			boxRight +
-			subvieww +
-			(addChildLineWidth ? options.childNodeOffsetWidth : 0),
-		height: h,
+		width: parseFloat(
+			(
+				boxRight +
+				subvieww +
+				(addChildLineWidth ? options.childNodeOffsetWidth : 0)
+			).toFixed(1),
+		),
+		height: parseFloat(h.toFixed(1)),
 		type: node.type,
 	};
 }
@@ -662,8 +669,8 @@ function renderListFragmentOriginal(
 	for (const child of node.children) {
 		const childFragment = renderNode(child, options);
 		childFragments.push(childFragment);
-		totalHeight += childFragment.height;
-		maxWidth = Math.max(maxWidth, childFragment.width);
+		totalHeight = parseFloat((totalHeight + childFragment.height).toFixed(1));
+		maxWidth = parseFloat(Math.max(maxWidth, childFragment.width).toFixed(1));
 	}
 
 	// 子ノードのSVGを配置し、接続線を描画
@@ -677,27 +684,33 @@ function renderListFragmentOriginal(
 			let startY = 0;
 			let endY = 0;
 			if (childFragment.type === "Terminal") {
-				startY = currentY + childFragment.height / 2;
+				startY = parseFloat((currentY + childFragment.height / 2).toFixed(1));
 			} else {
-				startY = currentY;
+				startY = parseFloat(currentY.toFixed(1));
 			}
 			if (childFragments[i + 1].type === "Terminal") {
-				endY =
-					currentY +
-					childFragment.height +
-					options.nodeListSpace +
-					childFragments[i + 1].height / 2;
+				endY = parseFloat(
+					(
+						currentY +
+						childFragment.height +
+						options.nodeListSpace +
+						childFragments[i + 1].height / 2
+					).toFixed(1),
+				);
 			} else {
-				endY =
-					currentY +
-					childFragment.height +
-					options.nodeListSpace +
-					childFragments[i + 1].height;
+				endY = parseFloat(
+					(
+						currentY +
+						childFragment.height +
+						options.nodeListSpace +
+						childFragments[i + 1].height
+					).toFixed(1),
+				);
 			}
 			childrenSvg += renderLineSvg(0, startY, 0, endY, options);
-			totalHeight += options.nodeListSpace;
+			totalHeight = parseFloat((totalHeight + options.nodeListSpace).toFixed(1));
 		}
-		currentY += childFragment.height + options.nodeListSpace;
+		currentY = parseFloat((currentY + childFragment.height + options.nodeListSpace).toFixed(1));
 	}
 
 	return {
@@ -725,24 +738,24 @@ function renderListFragmentTerminalOffset(
 	for (const child of node.children) {
 		const childFragment = renderNode(child, options);
 		childFragments.push(childFragment);
-		totalHeight += childFragment.height;
-		maxWidth = Math.max(maxWidth, childFragment.width);
+		totalHeight = parseFloat((totalHeight + childFragment.height).toFixed(1));
+		maxWidth = parseFloat(Math.max(maxWidth, childFragment.width).toFixed(1));
 	}
 
 	const topChildFragment = childFragments[0];
 	if (topChildFragment.type === "Terminal") {
 		const topWidth = topChildFragment.width;
-		offsetX = topWidth / 2;
+		offsetX = parseFloat((topWidth / 2).toFixed(1));
 	}
 	const bottomChildFragment = childFragments[childFragments.length - 1];
 	if (bottomChildFragment.type === "Terminal") {
 		const bottomWidth = bottomChildFragment.width;
-		const bottomOffset = bottomWidth / 2;
+		const bottomOffset = parseFloat((bottomWidth / 2).toFixed(1));
 		if (bottomOffset > offsetX) {
-			topAddWidth = bottomOffset - offsetX;
+			topAddWidth = parseFloat((bottomOffset - offsetX).toFixed(1));
 			offsetX = bottomOffset;
 		} else {
-			bottomAddWidth = offsetX - bottomOffset;
+			bottomAddWidth = parseFloat((offsetX - bottomOffset).toFixed(1));
 		}
 	}
 
@@ -776,39 +789,45 @@ function renderListFragmentTerminalOffset(
 			let endY = 0;
 			if (childFragment.type === "Terminal") {
 				if (i === 0) {
-					startY = currentY + childFragment.height;
+					startY = parseFloat((currentY + childFragment.height).toFixed(1));
 				} else {
-					startY = currentY + childFragment.height / 2;
+					startY = parseFloat((currentY + childFragment.height / 2).toFixed(1));
 				}
 			} else {
-				startY = currentY;
+				startY = parseFloat(currentY.toFixed(1));
 			}
 			if (childFragments[i + 1].type === "Terminal") {
 				if (i + 1 === childFragments.length - 1) {
-					endY = currentY + childFragment.height + options.nodeListSpace;
+					endY = parseFloat((currentY + childFragment.height + options.nodeListSpace).toFixed(1));
 				} else {
-					endY =
+					endY = parseFloat(
+						(
+							currentY +
+							childFragment.height +
+							options.nodeListSpace +
+							childFragments[i + 1].height / 2
+						).toFixed(1),
+					);
+				}
+			} else {
+				endY = parseFloat(
+					(
 						currentY +
 						childFragment.height +
 						options.nodeListSpace +
-						childFragments[i + 1].height / 2;
-				}
-			} else {
-				endY =
-					currentY +
-					childFragment.height +
-					options.nodeListSpace +
-					childFragments[i + 1].height;
+						childFragments[i + 1].height
+					).toFixed(1),
+				);
 			}
 			childrenSvg += renderLineSvg(offsetX, startY, offsetX, endY, options);
-			totalHeight += options.nodeListSpace;
+			totalHeight = parseFloat((totalHeight + options.nodeListSpace).toFixed(1));
 		}
-		currentY += childFragment.height + options.nodeListSpace;
+		currentY = parseFloat((currentY + childFragment.height + options.nodeListSpace).toFixed(1));
 	}
 
 	return {
 		svg: childrenSvg,
-		width: maxWidth + offsetX,
+		width: parseFloat((maxWidth + offsetX).toFixed(1)),
 		height: totalHeight,
 		type: "NodeList",
 	};
@@ -871,7 +890,7 @@ function renderTextSvg(
 	lines.forEach((line, index) => {
 		const dy = index === 0 ? 0 : index * options.fontSize * options.lineHeight;
 		svg += `<text `;
-		svg += `x="${posX}" y="${posY + options.fontSize}" dy="${dy}" `;
+		svg += `x="${posX.toFixed(1)}" y="${(posY + options.fontSize).toFixed(1)}" dy="${dy.toFixed(1)}" `;
 		svg += `font-family="${options.fontFamily}" `;
 		svg += `font-size="${options.fontSize}" `;
 		svg += `fill="${options.textColor}">${line}</text>`;
@@ -892,8 +911,8 @@ function renderLineSvg(
 	options: RenderOptions,
 ): string {
 	return `<line
-      x1="${x1}" y1="${y1}"
-      x2="${x2}" y2="${y2}"
+      x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
+      x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
       stroke="${options.strokeColor}"
       stroke-width="${options.strokeWidth}"
     />`;
@@ -907,5 +926,5 @@ function renderTransformTranslateSvg(
 	y: number,
 	childSvg: string,
 ): string {
-	return `<g transform="translate(${x}, ${y})">${childSvg}</g>`;
+	return `<g transform="translate(${x.toFixed(1)}, ${y.toFixed(1)})">${childSvg}</g>`;
 }
