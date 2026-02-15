@@ -892,11 +892,11 @@ function renderLineSvg(
 	options: RenderOptions,
 ): string {
 	return `<line
-      x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
-      x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
-      stroke="${options.strokeColor}"
-      stroke-width="${options.strokeWidth}"
-    />`;
+		x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
+		x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
+		stroke="${options.strokeColor}"
+		stroke-width="${options.strokeWidth}"
+	/>`;
 }
 
 /**
