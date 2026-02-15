@@ -1,8 +1,8 @@
-<svg width="102.0" height="76.8" viewBox="0 0 102.0 76.8" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="102.0" height="76.8" fill="none"/>
+<svg width="95.0" height="76.8" viewBox="0 0 95.0 76.8" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="95.0" height="76.8" fill="none"/>
     <g transform="translate(20.0, 20.0)">
         <g transform="translate(0.0, 0.0)">
-            <rect x="0" y="0" width="62.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <rect x="0" y="0" width="55.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
             <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1"/>
             <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 value

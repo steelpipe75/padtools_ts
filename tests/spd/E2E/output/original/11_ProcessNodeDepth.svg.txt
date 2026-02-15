@@ -1,18 +1,18 @@
-<svg width="251.2" height="76.8" viewBox="0 0 251.2 76.8" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="251.2" height="76.8" fill="none"/>
+<svg width="226.0" height="76.8" viewBox="0 0 226.0 76.8" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="226.0" height="76.8" fill="none"/>
     <g transform="translate(20.0, 20.0)">
         <g transform="translate(0.0, 0.0)">
-            <rect x="0" y="0" width="95.6" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
             <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 Process A
             </text>
-            <g transform="translate(115.6, 0.0)">
-                <rect x="0" y="0" width="95.6" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <g transform="translate(103.0, 0.0)">
+                <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
                 <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                     Process B
                 </text>
             </g>
-            <line x1="95.6" y1="0.0" x2="115.6" y2="0.0" stroke="#000000" stroke-width="1"/>
+            <line x1="83.0" y1="0.0" x2="103.0" y2="0.0" stroke="#000000" stroke-width="1"/>
         </g>
     </g>
 </svg>
