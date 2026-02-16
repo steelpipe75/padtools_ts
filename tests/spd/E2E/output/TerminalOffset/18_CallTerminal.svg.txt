@@ -1,20 +1,20 @@
-<svg width="217.6" height="76.8" viewBox="0 0 217.6 76.8" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="217.6" height="76.8" fill="none"/>
-    <g transform="translate(20, 20)">
-        <g transform="translate(0, 0)">
-            <rect x="0" y="0" width="53.6" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <line x1="5" y1="0" x2="5" y2="36.8" stroke="#000000" stroke-width="1"/>
-            <line x1="48.6" y1="0" x2="48.6" y2="36.8" stroke="#000000" stroke-width="1"/>
-            <text x="10" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+<svg width="200.8" height="76.8" viewBox="0 0 200.8 76.8" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="200.8" height="76.8" fill="none"/>
+    <g transform="translate(20.0, 20.0)">
+        <g transform="translate(0.0, 0.0)">
+            <rect x="0" y="0" width="48.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <line x1="43.0" y1="0.0" x2="43.0" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                 call
             </text>
-            <g transform="translate(73.6, 0)">
-                <rect x="0" y="0" width="104" height="36.8" rx="18.4" ry="18.4" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="18.4" y="24" dy="0" font-family="sans-serif" font-size="14" fill="#000000">
+            <g transform="translate(68.0, 0.0)">
+                <rect x="0" y="0" width="92.8" height="36.8" rx="18.4" ry="18.4" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <text x="18.4" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
                     terminal
                 </text>
             </g>
-            <line x1="53.6" y1="0" x2="73.6" y2="0" stroke="#000000" stroke-width="1"/>
+            <line x1="48.0" y1="0.0" x2="68.0" y2="0.0" stroke="#000000" stroke-width="1"/>
         </g>
     </g>
 </svg>

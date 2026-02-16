@@ -20,6 +20,7 @@
 		"test:cov": "jest --coverage",
 		"update-cli-golden-files": "node tests/cli/E2E/updateGoldenFile.js",
 		"update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
+		"update-web-golden-files": "node tests/web/updateGoldenFile.js",
 		"lint": "biome lint .",
 		"check": "biome check .",
 		"check:apply": "biome check --write --unsafe .",
@@ -44,6 +45,7 @@
 	"description": "Simple tool to write PAD.",
 	"dependencies": {
 		"commander": "^14.0.0",
+		"eastasianwidth": "^0.3.0",
 		"glob": "^11.0.3",
 		"serve": "^14.2.3",
 		"svgo": "^4.0.0",
