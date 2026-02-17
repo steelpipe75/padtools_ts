@@ -110,7 +110,7 @@ Webツールをビルドし、GitHub Pages にデプロイするための準備�
 npm run build:web:gh-pages
 ```
 
-このコマンドは `docs` ディレクトリに静的ファイルを生成し、`gh-pages` ブランチにプッシュします。
+このコマンドは `gh-pages` ディレクトリに静的ファイルを生成し、GitHub Pages で Jekyll プロセスが実行されないように `.nojekyll` ファイルを作成します。このコマンドの実行後、GitHub Actions のワークフローが自動的にこれらのファイルを GitHub Pages にデプロイします。
 
 ## ライセンス
 
