@@ -1,5 +1,7 @@
 test-results
 
+/gh-pages
+
 # Dependencies
 /node_modules
 
