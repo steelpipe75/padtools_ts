@@ -26,7 +26,7 @@
 		"check:apply": "biome check --write --unsafe .",
 		"start:web": "parcel web/index.html --dist-dir temp/",
 		"build:web": "rimraf dist/web && parcel build web/index.html --dist-dir dist/web",
-		"build:web:gh-pages": "rimraf docs/ && parcel build web/index.html --dist-dir docs/ --public-url /padtools_ts/",
+		"build:web:gh-pages": "rimraf gh-pages/ && parcel build web/index.html --dist-dir gh-pages/ --public-url /padtools_ts/ && echo > gh-pages/.nojekyll",
 		"convert:web:commands": "ts-node web/utility/convert_commands.ts",
 		"convert:web:render_options": "ts-node web/utility/convert_render_options.ts"
 	},
