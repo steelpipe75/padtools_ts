@@ -1,75 +1,75 @@
 {
-	"name": "padtools_ts",
-	"version": "0.2.0",
-	"bin": {
-		"padtools_ts": "dist/cli/cli.js"
-	},
-	"files": [
-		"dist",
-		"LICENSE",
-		"README.md"
-	],
-	"scripts": {
-		"build": "rimraf dist/cli dist/spd dist/index.d.ts dist/index.js && tsc",
-		"prepublishOnly": "npm run build && npm run build:web",
-		"format": "biome format --write .",
-		"start": "ts-node src/cli/cli.ts",
-		"test": "jest",
-		"test:e2e": "playwright test",
-		"test:headed": "playwright test --headed",
-		"test:cov": "jest --coverage",
-		"update-cli-golden-files": "node tests/cli/E2E/updateGoldenFile.js",
-		"update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
-		"update-web-golden-files": "node tests/web/updateGoldenFile.js",
-		"lint": "biome lint .",
-		"check": "biome check .",
-		"check:apply": "biome check --write --unsafe .",
-		"start:web": "parcel web/index.html --dist-dir temp/",
-		"build:web": "rimraf dist/web && parcel build web/index.html --dist-dir dist/web",
-		"build:web:gh-pages": "rimraf gh-pages/ && parcel build web/index.html --dist-dir gh-pages/ --public-url /padtools_ts/ && echo > gh-pages/.nojekyll",
-		"convert:web:commands": "ts-node web/utility/convert_commands.ts",
-		"convert:web:render_options": "ts-node web/utility/convert_render_options.ts"
-	},
-	"keywords": [
-		"pad",
-		"flowchart",
-		"diagram",
-		"generator",
-		"cli",
-		"svg",
-		"typescript",
-		"PAD"
-	],
-	"author": "steelpipe",
-	"license": "MIT",
-	"description": "Simple tool to write PAD.",
-	"dependencies": {
-		"commander": "^14.0.0",
-		"eastasianwidth": "^0.3.0",
-		"glob": "^11.0.3",
-		"serve": "^14.2.3",
-		"svgo": "^4.0.0",
-		"xml-formatter": "^3.6.6"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^2.3.8",
-		"@fullhuman/postcss-purgecss": "^7.0.2",
-		"@parcel/packager-ts": "^2.16.1",
-		"@parcel/transformer-typescript-types": "^2.16.1",
-		"@playwright/test": "^1.56.1",
-		"@types/jest": "^30.0.0",
-		"@types/node": "^24.0.10",
-		"@types/svgo": "^2.6.4",
-		"@types/xml-formatter": "^1.2.0",
-		"jest": "^30.0.3",
-		"parcel": "^2.15.4",
-		"postcss": "^8.5.6",
-		"rimraf": "^6.1.0",
-		"ts-jest": "^29.4.0",
-		"ts-node": "^10.9.2",
-		"typescript": "^5.8.3"
-	},
-	"overrides": {
-		"test-exclude": "7.0.1"
-	}
+  "name": "padtools_ts",
+  "version": "0.2.0",
+  "bin": {
+    "padtools_ts": "dist/cli/cli.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rimraf dist/cli dist/spd dist/index.d.ts dist/index.js && tsc",
+    "prepublishOnly": "npm run build && npm run build:web",
+    "format": "biome format --write .",
+    "start": "ts-node src/cli/cli.ts",
+    "test": "jest",
+    "test:e2e": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:cov": "jest --coverage",
+    "update-cli-golden-files": "node tests/cli/E2E/updateGoldenFile.js",
+    "update-spd-golden-files": "node tests/spd/E2E/updateGoldenFile.js",
+    "update-web-golden-files": "node tests/web/updateGoldenFile.js",
+    "lint": "biome lint .",
+    "check": "biome check .",
+    "check:apply": "biome check --write --unsafe .",
+    "start:web": "parcel web/index.html --dist-dir temp/",
+    "build:web": "rimraf dist/web && parcel build web/index.html --dist-dir dist/web",
+    "build:web:gh-pages": "rimraf gh-pages/ && parcel build web/index.html --dist-dir gh-pages/ --public-url /padtools_ts/ && echo > gh-pages/.nojekyll",
+    "convert:web:commands": "ts-node web/utility/convert_commands.ts",
+    "convert:web:render_options": "ts-node web/utility/convert_render_options.ts"
+  },
+  "keywords": [
+    "pad",
+    "flowchart",
+    "diagram",
+    "generator",
+    "cli",
+    "svg",
+    "typescript",
+    "PAD"
+  ],
+  "author": "steelpipe",
+  "license": "MIT",
+  "description": "Simple tool to write PAD.",
+  "dependencies": {
+    "commander": "^14.0.0",
+    "eastasianwidth": "^0.3.0",
+    "glob": "^11.0.3",
+    "serve": "^14.2.3",
+    "svgo": "^4.0.0",
+    "xml-formatter": "^3.6.6"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.8",
+    "@fullhuman/postcss-purgecss": "^7.0.2",
+    "@parcel/packager-ts": "^2.16.1",
+    "@parcel/transformer-typescript-types": "^2.16.1",
+    "@playwright/test": "^1.56.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.10",
+    "@types/svgo": "^2.6.4",
+    "@types/xml-formatter": "^1.2.0",
+    "jest": "^30.0.3",
+    "parcel": "^2.15.4",
+    "postcss": "^8.5.6",
+    "rimraf": "^6.1.0",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "overrides": {
+    "test-exclude": "7.0.1"
+  }
 }
