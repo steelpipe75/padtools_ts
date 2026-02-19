@@ -1,7 +1,40 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.render = render;
-const eastasianwidth_1 = require("eastasianwidth");
+const eaw = __importStar(require("eastasianwidth"));
 // デフォルトの描画オプション
 const defaultRenderOptions = {
     fontSize: 14,
@@ -345,7 +378,9 @@ function renderBrancheFragment(node, options) {
         lasty = ly;
     }
     poly.push({ x: x, y: parseFloat(lasty.toFixed(1)) }); // Pos:E
-    const polyPoints = poly.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+    const polyPoints = poly
+        .map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`)
+        .join(" ");
     // polyの描画
     const fillColor = (_a = options.backgroundColor) !== null && _a !== void 0 ? _a : "none";
     svg += `<polygon points="${polyPoints}" `;
@@ -579,27 +614,9 @@ function renderListFragmentTerminalOffset(node, options) {
  */
 function measureTextSvg(text, options) {
     const lines = text.split("\n");
-    const fullWidthCharFactor = options.fontSize; // 全角文字の幅の係数
-    const halfWidthCharFactor = options.fontSize * 0.6; // 半角文字の幅の係数
-    const getCharRenderWidth = (char) => {
-        const eaWidth = (0, eastasianwidth_1.eastAsianWidth)(char);
-        switch (eaWidth) {
-            case 'F': // Fullwidth
-            case 'W': // Wide
-                return fullWidthCharFactor;
-            case 'A': // Ambiguous
-            case 'H': // Halfwidth
-            case 'Na': // Narrow
-            case 'N': // Neutral
-            default:
-                return halfWidthCharFactor;
-        }
-    };
     const maxWidth = Math.max(...lines.map((line) => {
         let width = 0;
-        for (const char of line) {
-            width += getCharRenderWidth(char);
-        }
+        width = (eaw.length(line) * options.fontSize) / 2;
         return width;
     }));
     const textHeight = lines.length * options.fontSize * options.lineHeight;
@@ -627,11 +644,11 @@ function renderTextSvg(text, posX, posY, options) {
  */
 function renderLineSvg(x1, y1, x2, y2, options) {
     return `<line
-      x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
-      x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
-      stroke="${options.strokeColor}"
-      stroke-width="${options.strokeWidth}"
-    />`;
+		x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
+		x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
+		stroke="${options.strokeColor}"
+		stroke-width="${options.strokeWidth}"
+	/>`;
 }
 /**
  * 描画位置オフセット支援
