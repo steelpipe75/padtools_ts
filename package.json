@@ -58,7 +58,7 @@
     "@parcel/transformer-typescript-types": "^2.16.1",
     "@playwright/test": "^1.56.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.10",
+    "@types/node": "^25.6.0",
     "@types/svgo": "^2.6.4",
     "@types/xml-formatter": "^1.2.0",
     "jest": "^30.0.3",
