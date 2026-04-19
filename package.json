@@ -44,7 +44,7 @@
   "license": "MIT",
   "description": "Simple tool to write PAD.",
   "dependencies": {
-    "commander": "^14.0.0",
+    "commander": "^14.0.3",
     "eastasianwidth": "^0.3.0",
     "glob": "^11.1.0",
     "serve": "^14.2.6",
