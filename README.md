@@ -78,6 +78,70 @@ npx padtools_ts web
 *   `--list-render-type <listRenderType>`: SVGのリスト描画タイプを指定します (`original` または `TerminalOffset`)。
 *   `-h, --help`: コマンドのヘルプ情報を表示します。
 
+## REST API
+
+`padtools_ts` は、SPDファイルをSVGに変換するREST APIを提供します。Swagger UIを使用してAPIをテストできます。
+
+### APIサーバーの起動
+
+APIサーバーを起動するには、以下のコマンドを実行します。
+
+```shell
+npm run start:api
+```
+
+これにより、通常、ローカルアドレス (例: `http://localhost:3000`) でサーバーが起動します。
+
+### Swagger UI
+
+APIのドキュメントとテストは、Swagger UIで確認できます。
+
+- URL: `http://localhost:3000/api-docs`
+
+### APIエンドポイント
+
+#### POST /api/convert
+
+SPDテキストをSVGに変換します。
+
+**リクエストボディ:**
+```json
+{
+  "spd": "process: Start\nterminal: End",
+  "options": {
+    "fontSize": 14,
+    "fontFamily": "Arial",
+    "strokeWidth": 2,
+    "strokeColor": "#000000",
+    "backgroundColor": "#ffffff",
+    "baseBackgroundColor": "#f0f0f0",
+    "textColor": "#000000",
+    "lineHeight": 1.2,
+    "listRenderType": "original",
+    "prettyprint": false
+  }
+}
+```
+
+**レスポンス:**
+```json
+{
+  "svg": "<svg>...</svg>"
+}
+```
+
+**オプション:**
+- `fontSize`: フォントサイズ (数値)
+- `fontFamily`: フォントファミリー (文字列)
+- `strokeWidth`: 線の太さ (数値)
+- `strokeColor`: 線の色 (文字列)
+- `backgroundColor`: 背景色 (文字列)
+- `baseBackgroundColor`: ベース背景色 (文字列)
+- `textColor`: テキスト色 (文字列)
+- `lineHeight`: 行の高さ (数値)
+- `listRenderType`: リスト描画タイプ (`original` または `TerminalOffset`)
+- `prettyprint`: SVGを整形して出力 (真偽値)
+
 ## Webツール
 
 このプロジェクトには、Webベースのツールも含まれています。
@@ -125,6 +189,9 @@ npm run build:web:gh-pages
 -   xml-formatter: SVG出力の整形 (`--prettyprint` オプション) に使用。[MIT License](https://github.com/chrisbottin/xml-formatter/blob/master/LICENSE)
 -   svgo: SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。[MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
 -   eastasianwidth: 文字の幅計算に使用。[MIT License](https://github.com/komagata/eastasianwidth)
+-   express: REST APIサーバーの実装に使用。[MIT License](https://github.com/expressjs/express/blob/master/LICENSE)
+-   swagger-ui-express: APIドキュメントのSwagger UI表示に使用。[MIT License](https://github.com/scottie1984/swagger-ui-express/blob/master/LICENSE)
+-   swagger-jsdoc: OpenAPI仕様の生成に使用。[MIT License](https://github.com/Surnet/swagger-jsdoc/blob/master/LICENSE)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
 
