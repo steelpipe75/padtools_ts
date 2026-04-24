@@ -216,8 +216,6 @@ describe("CLI E2E tests", () => {
         execSync(command);
         // If execSync does not throw, the test should fail.
         fail("The command should have failed but it completed successfully.");
-        // biome-ignore lint/complexity/noUselessLoneBlockStatements: This block is necessary for the catch clause
-        // biome-ignore lint/correctness/noUnusedVariables: This is a test
       } catch (_error: any) {
         // biome-ignore lint/suspicious/noExplicitAny: error type is not guaranteed
         expect((_error as any).status).toBe(1);
