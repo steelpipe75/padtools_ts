@@ -1,40 +1,40 @@
-import express from 'express';
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsdoc from 'swagger-jsdoc';
-import convertRoute from './routes/convert';
+import express from "express";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import convertRoute from "./routes/convert";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Swagger definition
 const swaggerDefinition = {
-  openapi: '3.0.0',
+  openapi: "3.0.0",
   info: {
-    title: 'PAD Tools API',
-    version: '1.0.0',
-    description: 'API for converting SPD to SVG',
+    title: "PAD Tools API",
+    version: "1.0.0",
+    description: "API for converting SPD to SVG",
   },
   servers: [
     {
       url: `http://localhost:${port}`,
-      description: 'Development server',
+      description: "Development server",
     },
   ],
 };
 
 const options = {
   swaggerDefinition,
-  apis: ['./src/api/routes/*.ts'], // Path to the API docs
+  apis: ["./src/api/routes/*.ts"], // Path to the API docs
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
 // Middleware
 app.use(express.json());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
-app.use('/api', convertRoute);
+app.use("/api", convertRoute);
 
 // Start server
 app.listen(port, () => {

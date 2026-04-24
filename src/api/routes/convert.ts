@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import { optimize } from 'svgo';
-import xmlFormat from 'xml-formatter';
-import { parse } from '../../spd/parser';
-import { render } from '../../spd/svg-renderer';
+import { Router } from "express";
+import { optimize } from "svgo";
+import xmlFormat from "xml-formatter";
+import { parse } from "../../spd/parser";
+import { render } from "../../spd/svg-renderer";
 
 const router = Router();
 
@@ -75,27 +75,38 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post('/convert', (req, res) => {
+router.post("/convert", (req, res) => {
   try {
     const { spd, options = {} } = req.body;
 
-    if (!spd || typeof spd !== 'string') {
-      return res.status(400).json({ error: 'SPD content is required and must be a string' });
+    if (!spd || typeof spd !== "string") {
+      return res
+        .status(400)
+        .json({ error: "SPD content is required and must be a string" });
     }
 
     const ast = parse(spd);
     const renderOptions: Parameters<typeof render>[1] = {};
 
     // Map options to renderOptions
-    if (options.fontSize !== undefined) renderOptions.fontSize = options.fontSize;
-    if (options.fontFamily !== undefined) renderOptions.fontFamily = options.fontFamily;
-    if (options.strokeWidth !== undefined) renderOptions.strokeWidth = options.strokeWidth;
-    if (options.strokeColor !== undefined) renderOptions.strokeColor = options.strokeColor;
-    if (options.backgroundColor !== undefined) renderOptions.backgroundColor = options.backgroundColor;
-    if (options.baseBackgroundColor !== undefined) renderOptions.baseBackgroundColor = options.baseBackgroundColor;
-    if (options.textColor !== undefined) renderOptions.textColor = options.textColor;
-    if (options.lineHeight !== undefined) renderOptions.lineHeight = options.lineHeight;
-    if (options.listRenderType !== undefined) renderOptions.listRenderType = options.listRenderType;
+    if (options.fontSize !== undefined)
+      renderOptions.fontSize = options.fontSize;
+    if (options.fontFamily !== undefined)
+      renderOptions.fontFamily = options.fontFamily;
+    if (options.strokeWidth !== undefined)
+      renderOptions.strokeWidth = options.strokeWidth;
+    if (options.strokeColor !== undefined)
+      renderOptions.strokeColor = options.strokeColor;
+    if (options.backgroundColor !== undefined)
+      renderOptions.backgroundColor = options.backgroundColor;
+    if (options.baseBackgroundColor !== undefined)
+      renderOptions.baseBackgroundColor = options.baseBackgroundColor;
+    if (options.textColor !== undefined)
+      renderOptions.textColor = options.textColor;
+    if (options.lineHeight !== undefined)
+      renderOptions.lineHeight = options.lineHeight;
+    if (options.listRenderType !== undefined)
+      renderOptions.listRenderType = options.listRenderType;
 
     const svgOutput = render(ast, renderOptions);
     const optimizedSvg = optimize(svgOutput, {
@@ -109,8 +120,8 @@ router.post('/convert', (req, res) => {
 
     res.json({ svg: outputData });
   } catch (error) {
-    console.error('Conversion error:', error);
-    res.status(500).json({ error: 'Failed to convert SPD to SVG' });
+    console.error("Conversion error:", error);
+    res.status(500).json({ error: "Failed to convert SPD to SVG" });
   }
 });
 

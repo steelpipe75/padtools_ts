@@ -1,3 +1,4 @@
+import * as eaw from "eastasianwidth";
 import type {
   CallNode,
   CommentNode,
@@ -9,8 +10,6 @@ import type {
   SwitchNode,
   TerminalNode,
 } from "./ast";
-
-import * as eaw from "eastasianwidth";
 
 type Branch = {
   label: string;
