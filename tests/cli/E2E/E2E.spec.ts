@@ -216,9 +216,12 @@ describe("CLI E2E tests", () => {
         execSync(command);
         // If execSync does not throw, the test should fail.
         fail("The command should have failed but it completed successfully.");
-      } catch (_error: any) {
-        // biome-ignore lint/suspicious/noExplicitAny: error type is not guaranteed
-        expect((_error as any).status).toBe(1);
+      } catch (_error: unknown) {
+        if (_error && typeof _error === "object" && "status" in _error) {
+          expect(_error.status).toBe(1);
+        } else {
+          throw _error;
+        }
       }
     });
   });
