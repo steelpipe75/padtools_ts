@@ -773,14 +773,22 @@ function renderListFragmentTerminalOffset(
     const childFragment = childFragments[i];
     // const xOffset = (maxWidth - childFragment.width) / 2; // 中央揃え
     if (i === 0) {
+      let topOffsetX = offsetX;
+      if (topChildFragment.type === "Terminal") {
+        topOffsetX = topAddWidth;
+      }
       childrenSvg += renderTransformTranslateSvg(
-        topAddWidth,
+        topOffsetX,
         currentY,
         childFragment.svg,
       );
     } else if (i === childFragments.length - 1) {
+      let bottomOffsetX = offsetX;
+      if (bottomChildFragment.type === "Terminal") {
+        bottomOffsetX = bottomAddWidth;
+      }
       childrenSvg += renderTransformTranslateSvg(
-        bottomAddWidth,
+        bottomOffsetX,
         currentY,
         childFragment.svg,
       );
