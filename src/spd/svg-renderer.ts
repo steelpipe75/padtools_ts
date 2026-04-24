@@ -78,7 +78,7 @@ interface ViewFragment {
 // デフォルトの描画オプション
 const defaultRenderOptions: RenderOptions = {
   fontSize: 14,
-  fontFamily: "sans-serif",
+  fontFamily: "monospace",
   margin: { top: 20, right: 20, bottom: 20, left: 20 },
   boxPadding: { top: 10, right: 10, bottom: 10, left: 10 },
   branchePadding: { top: 5, right: 5, bottom: 5, left: 5 },

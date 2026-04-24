@@ -2,7 +2,7 @@
     <rect x="0" y="0" width="417.0" height="2034.8" fill="none"/>
     <g transform="translate(20.0, 20.0)">
         <g transform="translate(0.0, 0.0)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (if-else通常パターン)
             </text>
         </g>
@@ -10,43 +10,43 @@
         <g transform="translate(0.0, 26.8)">
             <g transform="translate(67.0, 0.0)">
                 <rect x="0" y="0" width="48.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     True
                 </text>
             </g>
             <line x1="47.0" y1="0.0" x2="67.0" y2="0.0" stroke="#000000" stroke-width="1"/>
             <g transform="translate(67.0, 53.6)">
                 <rect x="0" y="0" width="55.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     False
                 </text>
             </g>
             <line x1="47.0" y1="53.6" x2="67.0" y2="53.6" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 47.0,0.0 27.0,26.8 47.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="22.0" y="45.8" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="5.0" y="32.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="22.0" y="45.8" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="5.0" y="32.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="26.8" x2="0.0" y2="144.0" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 127.2)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (if-else両方サブノードなしパターン)
             </text>
         </g>
         <line x1="0.0" y1="127.2" x2="0.0" y2="207.6" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 154.0)">
             <polygon points="0.0,0.0 47.0,0.0 27.0,26.8 47.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="22.0" y="45.8" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="5.0" y="32.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="22.0" y="45.8" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="5.0" y="32.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="154.0" x2="0.0" y2="234.4" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 217.6)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (if-else両方elseだけサブノードなしパターン)
             </text>
         </g>
@@ -54,21 +54,21 @@
         <g transform="translate(0.0, 244.4)">
             <g transform="translate(67.0, 0.0)">
                 <rect x="0" y="0" width="48.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     True
                 </text>
             </g>
             <line x1="47.0" y1="0.0" x2="67.0" y2="0.0" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 47.0,0.0 27.0,26.8 47.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="22.0" y="45.8" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="5.0" y="32.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="22.0" y="45.8" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="5.0" y="32.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="244.4" x2="0.0" y2="324.8" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 308.0)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (if-else両方ifだけサブノードなしパターン)
             </text>
         </g>
@@ -76,21 +76,21 @@
         <g transform="translate(0.0, 334.8)">
             <g transform="translate(67.0, 53.6)">
                 <rect x="0" y="0" width="55.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     False
                 </text>
             </g>
             <line x1="47.0" y1="53.6" x2="67.0" y2="53.6" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 47.0,0.0 27.0,26.8 47.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="22.0" y="45.8" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="5.0" y="32.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="22.0" y="45.8" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="5.0" y="32.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="334.8" x2="0.0" y2="452.0" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 435.2)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (switch通常パターン case2個)
             </text>
         </g>
@@ -98,32 +98,32 @@
         <g transform="translate(0.0, 462.0)">
             <g transform="translate(74.0, 0.0)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process1
                 </text>
             </g>
             <line x1="54.0" y1="0.0" x2="74.0" y2="0.0" stroke="#000000" stroke-width="1"/>
             <g transform="translate(74.0, 53.6)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process2
                 </text>
             </g>
             <line x1="54.0" y1="53.6" x2="74.0" y2="53.6" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 54.0,0.0 34.0,26.8 54.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 1
             </text>
-            <text x="22.0" y="45.8" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="45.8" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 2
             </text>
-            <text x="5.0" y="32.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="5.0" y="32.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="462.0" x2="0.0" y2="579.2" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 562.4)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (switch通常パターン case3個)
             </text>
         </g>
@@ -131,57 +131,57 @@
         <g transform="translate(0.0, 589.2)">
             <g transform="translate(74.0, 0.0)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process1
                 </text>
             </g>
             <line x1="54.0" y1="0.0" x2="74.0" y2="0.0" stroke="#000000" stroke-width="1"/>
             <g transform="translate(74.0, 53.6)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process2
                 </text>
             </g>
             <line x1="54.0" y1="53.6" x2="74.0" y2="53.6" stroke="#000000" stroke-width="1"/>
             <g transform="translate(74.0, 107.2)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process3
                 </text>
             </g>
             <line x1="54.0" y1="107.2" x2="74.0" y2="107.2" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 54.0,0.0 34.0,26.8 54.0,53.6 34.0,80.4 54.0,107.2 0.0,107.2" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 1
             </text>
-            <text x="22.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="59.2" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 2
             </text>
-            <text x="22.0" y="99.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="99.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 3
             </text>
-            <text x="5.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="5.0" y="59.2" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="589.2" x2="0.0" y2="760.0" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 743.2)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (switchだけパターン)
             </text>
         </g>
         <line x1="0.0" y1="743.2" x2="0.0" y2="823.6" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 770.0)">
             <polygon points="0.0,0.0 47.0,0.0 27.0,26.8 47.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="22.0" y="45.8" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000"></text>
-            <text x="5.0" y="32.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="22.0" y="45.8" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
+            <text x="5.0" y="32.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="770.0" x2="0.0" y2="850.4" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 833.6)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (switch case2つのうち1つ目がサブノードなしパターン)
             </text>
         </g>
@@ -189,25 +189,25 @@
         <g transform="translate(0.0, 860.4)">
             <g transform="translate(74.0, 53.6)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process2
                 </text>
             </g>
             <line x1="54.0" y1="53.6" x2="74.0" y2="53.6" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 54.0,0.0 34.0,26.8 54.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 1
             </text>
-            <text x="22.0" y="45.8" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="45.8" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 2
             </text>
-            <text x="5.0" y="32.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="5.0" y="32.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="860.4" x2="0.0" y2="977.6" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 960.8)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (switch case2つのうち2つ目がサブノードなしパターン)
             </text>
         </g>
@@ -215,25 +215,25 @@
         <g transform="translate(0.0, 987.6)">
             <g transform="translate(74.0, 0.0)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process1
                 </text>
             </g>
             <line x1="54.0" y1="0.0" x2="74.0" y2="0.0" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 54.0,0.0 34.0,26.8 54.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 1
             </text>
-            <text x="22.0" y="45.8" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="45.8" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 2
             </text>
-            <text x="5.0" y="32.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="5.0" y="32.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="987.6" x2="0.0" y2="1068.0" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 1051.2)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (switch case3つのうち2つ目がサブノードなしパターン)
             </text>
         </g>
@@ -241,35 +241,35 @@
         <g transform="translate(0.0, 1078.0)">
             <g transform="translate(74.0, 53.6)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process2
                 </text>
             </g>
             <line x1="54.0" y1="53.6" x2="74.0" y2="53.6" stroke="#000000" stroke-width="1"/>
             <g transform="translate(74.0, 107.2)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process3
                 </text>
             </g>
             <line x1="54.0" y1="107.2" x2="74.0" y2="107.2" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 54.0,0.0 34.0,26.8 54.0,53.6 34.0,80.4 54.0,107.2 0.0,107.2" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 1
             </text>
-            <text x="22.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="59.2" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 2
             </text>
-            <text x="22.0" y="99.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="99.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 3
             </text>
-            <text x="5.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="5.0" y="59.2" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="1078.0" x2="0.0" y2="1248.8" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 1232.0)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (switch case3つのうち2つ目がサブノードなしパターン)
             </text>
         </g>
@@ -277,35 +277,35 @@
         <g transform="translate(0.0, 1258.8)">
             <g transform="translate(74.0, 0.0)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process1
                 </text>
             </g>
             <line x1="54.0" y1="0.0" x2="74.0" y2="0.0" stroke="#000000" stroke-width="1"/>
             <g transform="translate(74.0, 107.2)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process3
                 </text>
             </g>
             <line x1="54.0" y1="107.2" x2="74.0" y2="107.2" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 54.0,0.0 34.0,26.8 54.0,53.6 34.0,80.4 54.0,107.2 0.0,107.2" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 1
             </text>
-            <text x="22.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="59.2" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 2
             </text>
-            <text x="22.0" y="99.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="99.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 3
             </text>
-            <text x="5.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="5.0" y="59.2" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="1258.8" x2="0.0" y2="1429.6" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 1412.8)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (switch case3つのうち3つ目がサブノードなしパターン)
             </text>
         </g>
@@ -313,35 +313,35 @@
         <g transform="translate(0.0, 1439.6)">
             <g transform="translate(74.0, 0.0)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process1
                 </text>
             </g>
             <line x1="54.0" y1="0.0" x2="74.0" y2="0.0" stroke="#000000" stroke-width="1"/>
             <g transform="translate(74.0, 53.6)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process2
                 </text>
             </g>
             <line x1="54.0" y1="53.6" x2="74.0" y2="53.6" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 54.0,0.0 34.0,26.8 54.0,53.6 34.0,80.4 54.0,107.2 0.0,107.2" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 1
             </text>
-            <text x="22.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="59.2" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 2
             </text>
-            <text x="22.0" y="99.4" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="99.4" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 3
             </text>
-            <text x="5.0" y="59.2" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="5.0" y="59.2" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
         <line x1="0.0" y1="1439.6" x2="0.0" y2="1573.6" stroke="#000000" stroke-width="1"/>
         <g transform="translate(0.0, 1556.8)">
-            <text x="10.0" y="14.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (switch caseのサブノードの高さがあるパターン)
             </text>
         </g>
@@ -350,21 +350,21 @@
             <g transform="translate(74.0, 0.0)">
                 <g transform="translate(0.0, 0.0)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                    <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                    <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                         Process11
                     </text>
                 </g>
                 <line x1="0.0" y1="0.0" x2="0.0" y2="83.6" stroke="#000000" stroke-width="1"/>
                 <g transform="translate(0.0, 46.8)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                    <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                    <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                         Process12
                     </text>
                 </g>
                 <line x1="0.0" y1="46.8" x2="0.0" y2="130.4" stroke="#000000" stroke-width="1"/>
                 <g transform="translate(0.0, 93.6)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                    <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                    <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                         Process13
                     </text>
                 </g>
@@ -373,21 +373,21 @@
             <g transform="translate(74.0, 140.4)">
                 <g transform="translate(0.0, 0.0)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                    <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                    <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                         Process21
                     </text>
                 </g>
                 <line x1="0.0" y1="0.0" x2="0.0" y2="83.6" stroke="#000000" stroke-width="1"/>
                 <g transform="translate(0.0, 46.8)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                    <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                    <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                         Process22
                     </text>
                 </g>
                 <line x1="0.0" y1="46.8" x2="0.0" y2="130.4" stroke="#000000" stroke-width="1"/>
                 <g transform="translate(0.0, 93.6)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                    <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                    <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                         Process23
                     </text>
                 </g>
@@ -396,37 +396,37 @@
             <g transform="translate(74.0, 280.8)">
                 <g transform="translate(0.0, 0.0)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                    <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                    <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                         Process31
                     </text>
                 </g>
                 <line x1="0.0" y1="0.0" x2="0.0" y2="83.6" stroke="#000000" stroke-width="1"/>
                 <g transform="translate(0.0, 46.8)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                    <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                    <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                         Process32
                     </text>
                 </g>
                 <line x1="0.0" y1="46.8" x2="0.0" y2="130.4" stroke="#000000" stroke-width="1"/>
                 <g transform="translate(0.0, 93.6)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-                    <text x="10.0" y="24.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+                    <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                         Process33
                     </text>
                 </g>
             </g>
             <line x1="54.0" y1="280.8" x2="74.0" y2="280.8" stroke="#000000" stroke-width="1"/>
             <polygon points="0.0,0.0 54.0,0.0 34.0,70.2 54.0,140.4 34.0,210.6 54.0,280.8 0.0,280.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="22.0" y="19.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 1
             </text>
-            <text x="22.0" y="146.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="146.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 2
             </text>
-            <text x="22.0" y="273.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="22.0" y="273.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 3
             </text>
-            <text x="5.0" y="146.0" dy="0.0" font-family="sans-serif" font-size="14" fill="#000000">
+            <text x="5.0" y="146.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 a
             </text>
         </g>
