@@ -17,6 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const fontSizeInput = document.getElementById(
     "fontSizeInput",
   ) as HTMLInputElement;
+  const fontFamilyInput = document.getElementById(
+    "fontFamilyInput",
+  ) as HTMLSelectElement;
   const baseBackgroundColorInput = document.getElementById(
     "baseBackgroundColorInput",
   ) as HTMLInputElement;
@@ -45,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const ast = parse(spdText);
       const options = {
         fontSize: parseInt(fontSizeInput.value, 10),
+        fontFamily: fontFamilyInput.value,
         baseBackgroundColor: transparentBackgroundCheckbox.checked
           ? null
           : baseBackgroundColorInput.value,
