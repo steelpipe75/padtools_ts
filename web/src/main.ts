@@ -17,9 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const fontSizeInput = document.getElementById(
     "fontSizeInput",
   ) as HTMLInputElement;
-  const fontFamilyInput = document.getElementById(
-    "fontFamilyInput",
+  const fontFamilySelect = document.getElementById(
+    "fontFamilySelect",
   ) as HTMLSelectElement;
+  const fontFamilyCustomInput = document.getElementById(
+    "fontFamilyCustomInput",
+  ) as HTMLInputElement;
+  const customFontCheckbox = document.getElementById(
+    "customFontCheckbox",
+  ) as HTMLInputElement;
   const baseBackgroundColorInput = document.getElementById(
     "baseBackgroundColorInput",
   ) as HTMLInputElement;
@@ -48,7 +54,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const ast = parse(spdText);
       const options = {
         fontSize: parseInt(fontSizeInput.value, 10),
-        fontFamily: fontFamilyInput.value,
+        fontFamily: customFontCheckbox.checked
+          ? fontFamilyCustomInput.value
+          : fontFamilySelect.value,
         baseBackgroundColor: transparentBackgroundCheckbox.checked
           ? null
           : baseBackgroundColorInput.value,
@@ -72,6 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   };
+
+  customFontCheckbox.addEventListener("change", () => {
+    if (customFontCheckbox.checked) {
+      fontFamilySelect.style.display = "none";
+      fontFamilyCustomInput.style.display = "inline-block";
+    } else {
+      fontFamilySelect.style.display = "inline-block";
+      fontFamilyCustomInput.style.display = "none";
+    }
+    convertAndRender();
+  });
 
   transparentBackgroundCheckbox.addEventListener("change", () => {
     baseBackgroundColorInput.disabled = transparentBackgroundCheckbox.checked;

@@ -188,11 +188,26 @@ button:hover {
   min-width: 80px;
 }
 
-.option-group input[type="number"] {
+.option-group input[type="number"],
+.option-group input[type="text"],
+.option-group select {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
+}
+
+.option-group input[type="number"] {
   width: 80px;
+}
+
+.option-group input[type="text"] {
+  flex-grow: 1;
+  max-width: 300px;
+}
+
+.option-group label.checkbox-label {
+  min-width: auto;
+  font-weight: normal;
 }
 
 .options-section button {
