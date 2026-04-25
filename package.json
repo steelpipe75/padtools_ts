@@ -68,7 +68,7 @@
     "@types/svgo": "^2.6.4",
     "@types/swagger-jsdoc": "^6.0.1",
     "@types/swagger-ui-express": "^4.1.6",
-    "@types/xml-formatter": "^1.2.0",
+    "@types/xml-formatter": "^2.1.1",
     "jest": "^30.3.0",
     "parcel": "^2.16.4",
     "postcss": "^8.5.6",
