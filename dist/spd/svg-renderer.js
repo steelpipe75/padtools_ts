@@ -38,7 +38,7 @@ const eaw = __importStar(require("eastasianwidth"));
 // デフォルトの描画オプション
 const defaultRenderOptions = {
     fontSize: 14,
-    fontFamily: "sans-serif",
+    fontFamily: "monospace",
     margin: { top: 20, right: 20, bottom: 20, left: 20 },
     boxPadding: { top: 10, right: 10, bottom: 10, left: 10 },
     branchePadding: { top: 5, right: 5, bottom: 5, left: 5 },
@@ -555,10 +555,18 @@ function renderListFragmentTerminalOffset(node, options) {
         const childFragment = childFragments[i];
         // const xOffset = (maxWidth - childFragment.width) / 2; // 中央揃え
         if (i === 0) {
-            childrenSvg += renderTransformTranslateSvg(topAddWidth, currentY, childFragment.svg);
+            let topOffsetX = offsetX;
+            if (topChildFragment.type === "Terminal") {
+                topOffsetX = topAddWidth;
+            }
+            childrenSvg += renderTransformTranslateSvg(topOffsetX, currentY, childFragment.svg);
         }
         else if (i === childFragments.length - 1) {
-            childrenSvg += renderTransformTranslateSvg(bottomAddWidth, currentY, childFragment.svg);
+            let bottomOffsetX = offsetX;
+            if (bottomChildFragment.type === "Terminal") {
+                bottomOffsetX = bottomAddWidth;
+            }
+            childrenSvg += renderTransformTranslateSvg(bottomOffsetX, currentY, childFragment.svg);
         }
         else {
             childrenSvg += renderTransformTranslateSvg(offsetX, currentY, childFragment.svg);
