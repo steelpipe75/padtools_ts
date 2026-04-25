@@ -1,11 +1,14 @@
-import { Router } from "express";
-import { optimize } from "svgo";
-import xmlFormat from "xml-formatter";
-import { parse } from "../../spd/parser";
-import { render } from "../../spd/svg-renderer";
-
-const router = Router();
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const svgo_1 = require("svgo");
+const xml_formatter_1 = __importDefault(require("xml-formatter"));
+const parser_1 = require("../../spd/parser");
+const svg_renderer_1 = require("../../spd/svg-renderer");
+const router = (0, express_1.Router)();
 /**
  * @swagger
  * /api/convert:
@@ -76,53 +79,47 @@ const router = Router();
  *         description: Internal server error
  */
 router.post("/convert", (req, res) => {
-  try {
-    const { spd, options = {} } = req.body;
-
-    if (!spd || typeof spd !== "string") {
-      return res
-        .status(400)
-        .json({ error: "SPD content is required and must be a string" });
+    try {
+        const { spd, options = {} } = req.body;
+        if (!spd || typeof spd !== "string") {
+            return res
+                .status(400)
+                .json({ error: "SPD content is required and must be a string" });
+        }
+        const ast = (0, parser_1.parse)(spd);
+        const renderOptions = {};
+        // Map options to renderOptions
+        if (options.fontSize !== undefined)
+            renderOptions.fontSize = options.fontSize;
+        if (options.fontFamily !== undefined)
+            renderOptions.fontFamily = options.fontFamily;
+        if (options.strokeWidth !== undefined)
+            renderOptions.strokeWidth = options.strokeWidth;
+        if (options.strokeColor !== undefined)
+            renderOptions.strokeColor = options.strokeColor;
+        if (options.backgroundColor !== undefined)
+            renderOptions.backgroundColor = options.backgroundColor;
+        if (options.baseBackgroundColor !== undefined)
+            renderOptions.baseBackgroundColor = options.baseBackgroundColor;
+        if (options.textColor !== undefined)
+            renderOptions.textColor = options.textColor;
+        if (options.lineHeight !== undefined)
+            renderOptions.lineHeight = options.lineHeight;
+        if (options.listRenderType !== undefined)
+            renderOptions.listRenderType = options.listRenderType;
+        const svgOutput = (0, svg_renderer_1.render)(ast, renderOptions);
+        const optimizedSvg = (0, svgo_1.optimize)(svgOutput, {
+            multipass: true,
+        });
+        let outputData = optimizedSvg.data;
+        if (options.prettyprint) {
+            outputData = (0, xml_formatter_1.default)(svgOutput);
+        }
+        res.json({ svg: outputData });
     }
-
-    const ast = parse(spd);
-    const renderOptions: Parameters<typeof render>[1] = {};
-
-    // Map options to renderOptions
-    if (options.fontSize !== undefined)
-      renderOptions.fontSize = options.fontSize;
-    if (options.fontFamily !== undefined)
-      renderOptions.fontFamily = options.fontFamily;
-    if (options.strokeWidth !== undefined)
-      renderOptions.strokeWidth = options.strokeWidth;
-    if (options.strokeColor !== undefined)
-      renderOptions.strokeColor = options.strokeColor;
-    if (options.backgroundColor !== undefined)
-      renderOptions.backgroundColor = options.backgroundColor;
-    if (options.baseBackgroundColor !== undefined)
-      renderOptions.baseBackgroundColor = options.baseBackgroundColor;
-    if (options.textColor !== undefined)
-      renderOptions.textColor = options.textColor;
-    if (options.lineHeight !== undefined)
-      renderOptions.lineHeight = options.lineHeight;
-    if (options.listRenderType !== undefined)
-      renderOptions.listRenderType = options.listRenderType;
-
-    const svgOutput = render(ast, renderOptions);
-    const optimizedSvg = optimize(svgOutput, {
-      multipass: true,
-    });
-
-    let outputData = optimizedSvg.data;
-    if (options.prettyprint) {
-      outputData = xmlFormat(svgOutput);
+    catch (error) {
+        console.error("Conversion error:", error);
+        res.status(500).json({ error: "Failed to convert SPD to SVG" });
     }
-
-    res.json({ svg: outputData });
-  } catch (error) {
-    console.error("Conversion error:", error);
-    res.status(500).json({ error: "Failed to convert SPD to SVG" });
-  }
 });
-
-export default router;
+exports.default = router;

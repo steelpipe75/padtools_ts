@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/web.504b9e40.css><body>
+<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/web.396ef2a8.css><body>
     <h1>SPD(Simple PAD Description) to SVG Converter</h1>
     <div class=link-group>
         <p class=reference-link><a href=/commands.html>SPD Commands Reference</a></p>
@@ -10,6 +10,19 @@
         <div class=option-group>
             <label for=fontSizeInput>Font Size:</label>
             <input type=number id=fontSizeInput value=14 min=8 max=72>
+        </div>
+        <div class=option-group>
+            <label for=fontFamilySelect>Font Family:</label>
+            <select id=fontFamilySelect>
+                <option value=monospace selected>monospace</option>
+                <option value=sans-serif>sans-serif</option>
+                <option value=serif>serif</option>
+                <option value=cursive>cursive</option>
+                <option value=fantasy>fantasy</option>
+            </select>
+            <input id=fontFamilyCustomInput style=display:none placeholder="e.g. 'Meiryo', sans-serif">
+            <input type=checkbox id=customFontCheckbox>
+            <label for=customFontCheckbox class=checkbox-label>Custom</label>
         </div>
         <div class=option-group>
             <label for=baseBackgroundColorInput>Base Background Color:</label>
@@ -59,5 +72,5 @@
             </div>
         </div>
     </div>
-    <script type=module src=/web.e788ba1a.js></script>
+    <script type=module src=/web.da82be1d.js></script>
 

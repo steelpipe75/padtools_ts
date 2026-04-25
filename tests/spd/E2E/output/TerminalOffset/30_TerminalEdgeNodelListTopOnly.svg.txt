@@ -14,10 +14,10 @@
                 Process
             </text>
         </g>
-        <line x1="35.9" y1="46.8" x2="35.9" y2="93.6" stroke="#000000" stroke-width="1"/>
-        <g transform="translate(7.0, 93.6)">
-            <rect x="0" y="0" width="57.8" height="36.8" rx="18.4" ry="18.4" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <text x="18.4" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
+        <line x1="35.9" y1="46.8" x2="35.9" y2="130.4" stroke="#000000" stroke-width="1"/>
+        <g transform="translate(35.9, 93.6)">
+            <rect x="0" y="0" width="41.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 END
             </text>
         </g>
