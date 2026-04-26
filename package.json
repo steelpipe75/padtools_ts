@@ -49,7 +49,6 @@
     "eastasianwidth": "^0.3.0",
     "express": "^5.2.1",
     "glob": "^13.0.6",
-    "serve": "^14.2.6",
     "svgo": "^4.0.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",

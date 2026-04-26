@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-import * as child_process from "node:child_process";
 import * as fs from "node:fs";
-import * as path from "node:path";
 import { program } from "commander";
 import { optimize } from "svgo";
 import xmlFormat from "xml-formatter";
@@ -94,44 +92,6 @@ program
       }
       process.exit(1);
     }
-  });
-
-program
-  .command("web")
-  .description("Start a web server to serve the web application")
-  .option(
-    "-p, --port <port>",
-    "Port for the web server",
-    (value) => parseInt(value, 10),
-    8080,
-  )
-  .action((options) => {
-    // biome-ignore lint/suspicious/noExplicitAny: Need to check for ts-node environment
-    const isTsNode = !!(process as any)[
-      Symbol.for("ts-node.register.instance")
-    ];
-    const webPath = isTsNode
-      ? path.join(__dirname, "..", "..", "dist", "web")
-      : path.join(__dirname, "..", "web");
-    const port = options.port;
-    const command = `npx serve ${webPath} -l ${port}`;
-
-    console.log(`Serving web application from: ${webPath}`);
-    console.log(`Listening on http://localhost:${port}`);
-
-    const child = child_process.exec(command);
-
-    child.stdout?.on("data", (data) => {
-      process.stdout.write(data);
-    });
-
-    child.stderr?.on("data", (data) => {
-      process.stderr.write(data);
-    });
-
-    child.on("close", (code) => {
-      console.log(`child process exited with code ${code}`);
-    });
   });
 
 program.parse(process.argv);
