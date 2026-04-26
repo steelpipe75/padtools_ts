@@ -34,8 +34,11 @@ app.use(express_1.default.json());
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
 // Routes
 app.use("/api", convert_1.default);
+exports.default = app;
 // Start server
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-    console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
-});
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Server is running on http://localhost:${port}`);
+        console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
+    });
+}
