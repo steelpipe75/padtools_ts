@@ -45,11 +45,18 @@ describe("API /api/convert", () => {
   });
 
   // オプション指定のテスト: レンダリングオプションが正しく適用されること
-  it("should apply rendering options (レンダリングオプションが適用されること)", async () => {
+  it("should apply all rendering options (すべてのレンダリングオプションが適用されること)", async () => {
     const spd = "process: Start";
     const options = {
       fontSize: 20,
+      fontFamily: "Arial",
+      strokeWidth: 2,
+      strokeColor: "#0000FF",
+      backgroundColor: "#FFFF00",
+      baseBackgroundColor: "#000000",
       textColor: "#FF0000",
+      lineHeight: 1.5,
+      listRenderType: "TerminalOffset",
       prettyprint: true
     };
     
@@ -59,22 +66,45 @@ describe("API /api/convert", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("svg");
-    // SVG として妥当な出力であることを確認
     expect(response.body.svg).toContain("<svg");
+    // XML フォーマットされているか（改行が含まれるか）の簡易確認
+    expect(response.body.svg).toContain("\n");
+  });
+
+  // オプション指定のテスト: prettyprint が false の場合
+  it("should return minified SVG if prettyprint is false (prettyprint が false の場合に最小化された SVG を返すこと)", async () => {
+    const spd = "process: Start";
+    const options = {
+      prettyprint: false
+    };
+    
+    const response = await request(app)
+      .post("/api/convert")
+      .send({ spd, options });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("svg");
+    // svgo によって最適化されていることを確認（通常は改行が除去される）
+    expect(response.body.svg).not.toContain("\n");
   });
 
   // 異常系のテスト: パースエラー発生時の挙動
   it("should handle parser errors with 500 status (パースエラー時に500エラーを返すこと)", async () => {
-    // 不正なコマンドを含む SPD を送信
-    const spd = "invalid_command: Something";
+    // 未知のコマンド（: で始まる）を含む SPD を送信して ParseError を誘発させる
+    const spd = ":invalid_command arg";
     const response = await request(app)
       .post("/api/convert")
       .send({ spd });
 
-    // 現状の実装では try-catch で捕捉され 500 (Internal Server Error) が返ることを確認
-    // 注: parser の実装によっては 200 が返る可能性もあるため、挙動の確認が必要
-    if (response.status === 500) {
-      expect(response.body).toHaveProperty("error", "Failed to convert SPD to SVG");
-    }
+    expect(response.status).toBe(500);
+    expect(response.body).toHaveProperty("error", "Failed to convert SPD to SVG");
+  });
+
+  // Swagger UI のテスト
+  it("should serve Swagger UI (Swagger UI が提供されていること)", async () => {
+    const response = await request(app).get("/api-docs/");
+    // Swagger UI (HTML) が返ってくることを確認
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("<html");
   });
 });
