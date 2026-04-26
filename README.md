@@ -49,15 +49,15 @@ npm run start -- -i sample_input.spd -o sample_output.svg
 ```
 上記の `npm run start` は、`package.json` のスクリプト定義に基づいて `ts-node src/cli/cli.ts` を実行します。
 
-### ローカルWebサーバーの起動
+### Webツールの起動
 
-`padtools_ts` には、Webツールをローカルで確認するためのWebサーバー機能も含まれています。
+Webブラウザ上で動作するエディタを起動するには、以下のコマンドを実行します。
 
 ```shell
-npx padtools_ts web
+npm run start:web
 ```
 
-このコマンドは、ビルドされたWebツール（`dist/web`）をホスティングし、ブラウザでアクセスできるようにします。
+このコマンドを実行すると開発用サーバーが立ち上がり、通常、`http://localhost:1234` でツールにアクセスできるようになります。
 
 ### コマンドラインオプション
 
@@ -185,7 +185,6 @@ npm run build:web:gh-pages
 このプロジェクトでは、以下の主要なオープンソースライブラリを使用しています。
 
 -   commander: CLIコマンドの解析に使用。[MIT License](https://github.com/tj/commander.js/blob/master/LICENSE)
--   serve: Webサーバー機能（`padtools_ts web`）に使用。[MIT License](https://github.com/vercel/serve/blob/main/LICENSE)
 -   xml-formatter: SVG出力の整形 (`--prettyprint` オプション) に使用。[MIT License](https://github.com/chrisbottin/xml-formatter/blob/master/LICENSE)
 -   svgo: SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。[MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
 -   eastasianwidth: 文字の幅計算に使用。[MIT License](https://github.com/komagata/eastasianwidth)
