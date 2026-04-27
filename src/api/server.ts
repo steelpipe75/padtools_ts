@@ -1,7 +1,7 @@
 import { serve } from "@hono/node-server";
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { convertHandler, convertRoute } from "./routes/convert";
+import { convertHandler, convertRoute, downloadHandler, downloadRoute } from "./routes/convert";
 import { healthHandler, healthRoute } from "./routes/health";
 
 const app = new OpenAPIHono();
@@ -25,6 +25,7 @@ app.get("/api-docs/", swaggerUI({ url: "/doc" }));
 // Routes
 app.openapi(healthRoute, healthHandler);
 app.openapi(convertRoute, convertHandler);
+app.openapi(downloadRoute, downloadHandler);
 
 // Handle base URL
 app.get("/", (c) => {
