@@ -11,7 +11,7 @@ const tempDir = path.join(__dirname, "temp");
 const testCases = fs
   .readdirSync(inputDir)
   .filter((file) => file.endsWith(".spd"));
-const listRenderTypes = ["original", "TerminalOffset"] as const;
+const listRenderTypes = ["Original", "TerminalOffset"] as const;
 
 describe("E2E tests", () => {
   listRenderTypes.forEach((listRenderType) => {

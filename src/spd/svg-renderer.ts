@@ -92,7 +92,7 @@ const defaultRenderOptions: RenderOptions = {
   connectorWidth: 2,
   nodeListSpace: 10,
   childNodeOffsetWidth: 20,
-  listRenderType: "original",
+  listRenderType: "Original",
 };
 
 /**
