@@ -6,7 +6,7 @@ const outputDir = "./web/svg/render_options";
 const outputSetting = [
   {
     file: "./web/svg/render_options/commands_diagram_Original.svg",
-    option: "original",
+    option: "Original",
   },
   {
     file: "./web/svg/render_options/commands_diagram_TerminalOffset.svg",

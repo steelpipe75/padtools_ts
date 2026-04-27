@@ -8,9 +8,9 @@ const normalizePathForGlob = (p) => p.replace(/\\/g, "/");
 // The base directory is the directory where this script is located.
 const baseDir = __dirname;
 
-const tempOriginalDir = path.join(baseDir, "temp", "original");
+const tempOriginalDir = path.join(baseDir, "temp", "Original");
 const tempTerminalOffsetDir = path.join(baseDir, "temp", "TerminalOffset");
-const outputOriginalDir = path.join(baseDir, "output", "original");
+const outputOriginalDir = path.join(baseDir, "output", "Original");
 const outputTerminalOffsetDir = path.join(baseDir, "output", "TerminalOffset");
 
 // console.log("DEBUG: __dirname:", __dirname);

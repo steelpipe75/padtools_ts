@@ -75,7 +75,7 @@ npm run start:web
 *   `--base-background-color <baseBackgroundColor>`: SVGのベース背景色を指定します。
 *   `--text-color <textColor>`: SVGのテキスト色を指定します。
 *   `--line-height <lineHeight>`: SVGの行の高さを指定します。
-*   `--list-render-type <listRenderType>`: SVGのリスト描画タイプを指定します (`original` または `TerminalOffset`)。
+*   `--list-render-type <listRenderType>`: SVGのリスト描画タイプを指定します (`Original` または `TerminalOffset`)。
 *   `-h, --help`: コマンドのヘルプ情報を表示します。
 
 ## REST API
@@ -117,7 +117,7 @@ SPDテキストをSVGに変換します。
     "baseBackgroundColor": "#f0f0f0",
     "textColor": "#000000",
     "lineHeight": 1.2,
-    "listRenderType": "original",
+    "listRenderType": "Original",
     "prettyprint": false
   }
 }
@@ -139,7 +139,7 @@ SPDテキストをSVGに変換します。
 - `baseBackgroundColor`: ベース背景色 (文字列)
 - `textColor`: テキスト色 (文字列)
 - `lineHeight`: 行の高さ (数値)
-- `listRenderType`: リスト描画タイプ (`original` または `TerminalOffset`)
+- `listRenderType`: リスト描画タイプ (`Original` または `TerminalOffset`)
 - `prettyprint`: SVGを整形して出力 (真偽値)
 
 ## Webツール

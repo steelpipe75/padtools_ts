@@ -36,8 +36,8 @@ program
   .option("--line-height <lineHeight>", "Line height for the SVG", parseFloat)
   .option(
     "--list-render-type <listRenderType>",
-    "List render type for the SVG (original, TerminalOffset)",
-    "original",
+    "List render type for the SVG (Original, TerminalOffset)",
+    "Original",
   )
   .action((options) => {
     try {

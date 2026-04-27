@@ -39,7 +39,7 @@ const ConvertRequestSchema = z.object({
       baseBackgroundColor: z.string().optional().openapi({ description: "Base background color for the SVG", example: "none" }),
       textColor: z.string().optional().openapi({ description: "Text color for the SVG", example: "#000000" }),
       lineHeight: z.number().optional().openapi({ description: "Line height for the SVG", example: 1.2 }),
-      listRenderType: z.enum(["original", "TerminalOffset"]).optional().openapi({
+      listRenderType: z.enum(["Original", "TerminalOffset"]).optional().openapi({
         description: "List render type for the SVG",
         example: "TerminalOffset",
       }),
