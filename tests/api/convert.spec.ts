@@ -123,6 +123,58 @@ describe("API /api/convert", () => {
     expect(body.svg).not.toContain("\n");
   });
 
+  // /convert/download エンドポイントのテスト
+  describe("POST /convert/download", () => {
+    it("should download SVG successfully (SVGのダウンロードが成功すること)", async () => {
+      const spd = "process: Start\nterminal: End";
+      const res = await app.request("/convert/download", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ spd }),
+      });
+
+      expect(res.status).toBe(200);
+      expect(res.headers.get("Content-Type")).toBe("image/svg+xml");
+      expect(res.headers.get("Content-Disposition")).toBe('attachment; filename="diagram.svg"');
+      
+      const text = await res.text();
+      expect(text).toContain("<svg");
+    });
+
+    it("should apply options in download (ダウンロード時にオプションが適用されること)", async () => {
+      const spd = "process: Start";
+      const options = {
+        prettyprint: true,
+      };
+
+      const res = await app.request("/convert/download", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ spd, options }),
+      });
+
+      expect(res.status).toBe(200);
+      const text = await res.text();
+      expect(text).toContain("\n"); // prettyprint
+    });
+
+    it("should return 400 if SPD is missing for download (ダウンロード時にSPDが欠落している場合に400エラーを返すこと)", async () => {
+      const res = await app.request("/convert/download", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      });
+
+      expect(res.status).toBe(400);
+    });
+  });
+
   // 異常系のテスト: パースエラー発生時の挙動
   it("should handle parser errors with 500 status (パースエラー時に500エラーを返すこと)", async () => {
     // 未知のコマンド（: で始まる）を含む SPD を送信して ParseError を誘発させる
