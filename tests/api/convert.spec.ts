@@ -40,6 +40,21 @@ describe("API /api/convert", () => {
     expect(res.status).toBe(400);
   });
 
+  // 異常系のテスト: SPD が空文字の場合 (手動バリデーションのカバー)
+  it("should return 400 if SPD is an empty string (SPDが空文字の場合に400エラーを返すこと)", async () => {
+    const res = await app.request("/convert", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ spd: "" }),
+    });
+
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body).toHaveProperty("error", "SPD content is required");
+  });
+
   // 異常系のテスト: SPD パラメータが文字列でない場合
   it("should return 400 if SPD is not a string (SPDが文字列でない場合に400エラーを返すこと)", async () => {
     const res = await app.request("/convert", {
@@ -144,6 +159,13 @@ describe("API /api/convert", () => {
     const body = await res.json();
     expect(body.openapi).toBe("3.0.0");
     expect(body.info.title).toBe("PAD Tools API");
+  });
+
+  // ルートリダイレクトのテスト
+  it("should redirect from / to /api-docs/ (ルートから/api-docs/へリダイレクトされること)", async () => {
+    const res = await app.request("/");
+    expect(res.status).toBe(302);
+    expect(res.headers.get("Location")).toBe("/api-docs/");
   });
 
   // ヘルスチェックのテスト
