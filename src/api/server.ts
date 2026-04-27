@@ -33,13 +33,18 @@ app.get("/", (c) => {
 
 export default app;
 
+export const startServer = (p: number) => {
+  const server = serve({
+    fetch: app.fetch,
+    port: p,
+  });
+  console.log(`Server is running on http://localhost:${p}`);
+  console.log(`Swagger UI available at http://localhost:${p}/api-docs`);
+  console.log(`OpenAPI spec available at http://localhost:${p}/doc`);
+  return server;
+};
+
 // Start server
 if (require.main === module) {
-  serve({
-    fetch: app.fetch,
-    port: port,
-  });
-  console.log(`Server is running on http://localhost:${port}`);
-  console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
-  console.log(`OpenAPI spec available at http://localhost:${port}/doc`);
+  startServer(port);
 }
