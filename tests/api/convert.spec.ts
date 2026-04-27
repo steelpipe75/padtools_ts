@@ -145,4 +145,12 @@ describe("API /api/convert", () => {
     expect(body.openapi).toBe("3.0.0");
     expect(body.info.title).toBe("PAD Tools API");
   });
+
+  // ヘルスチェックのテスト
+  it("should return 200 OK for health check (ヘルスチェックが200 OKを返すこと)", async () => {
+    const res = await app.request("/health");
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toEqual({ status: "ok" });
+  });
 });
