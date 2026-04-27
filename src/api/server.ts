@@ -1,47 +1,45 @@
-import express from "express";
-import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
-import convertRoute from "./routes/convert";
+import { serve } from "@hono/node-server";
+import { swaggerUI } from "@hono/swagger-ui";
+import { OpenAPIHono } from "@hono/zod-openapi";
+import { convertHandler, convertRoute } from "./routes/convert";
+import { healthHandler, healthRoute } from "./routes/health";
 
-const app = express();
-const port = process.env.PORT || 3000;
+const app = new OpenAPIHono();
 
-// Swagger definition
-const swaggerDefinition = {
+const port = Number(process.env.PORT) || 3000;
+
+// OpenAPI documentation
+app.doc("/doc", {
   openapi: "3.0.0",
   info: {
     title: "PAD Tools API",
     version: "1.0.0",
     description: "API for converting SPD to SVG",
   },
-  servers: [
-    {
-      url: `http://localhost:${port}`,
-      description: "Development server",
-    },
-  ],
-};
+});
 
-const options = {
-  swaggerDefinition,
-  apis: ["./src/api/routes/*.ts"], // Path to the API docs
-};
-
-const swaggerSpec = swaggerJsdoc(options);
-
-// Middleware
-app.use(express.json());
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Swagger UI
+app.get("/api-docs", (c) => c.redirect("/api-docs/"));
+app.get("/api-docs/", swaggerUI({ url: "/doc" }));
 
 // Routes
-app.use("/api", convertRoute);
+app.openapi(healthRoute, healthHandler);
+app.openapi(convertRoute, convertHandler);
+
+// Handle base URL
+app.get("/", (c) => {
+  return c.redirect("/api-docs/");
+});
 
 export default app;
 
 // Start server
 if (require.main === module) {
-  app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-    console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
+  serve({
+    fetch: app.fetch,
+    port: port,
   });
+  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
+  console.log(`OpenAPI spec available at http://localhost:${port}/doc`);
 }
