@@ -37,9 +37,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const child_process = __importStar(require("node:child_process"));
 const fs = __importStar(require("node:fs"));
-const path = __importStar(require("node:path"));
 const commander_1 = require("commander");
 const svgo_1 = require("svgo");
 const xml_formatter_1 = __importDefault(require("xml-formatter"));
@@ -61,7 +59,7 @@ commander_1.program
     .option("--base-background-color <baseBackgroundColor>", "Base background color for the SVG")
     .option("--text-color <textColor>", "Text color for the SVG")
     .option("--line-height <lineHeight>", "Line height for the SVG", parseFloat)
-    .option("--list-render-type <listRenderType>", "List render type for the SVG (original, TerminalOffset)", "original")
+    .option("--list-render-type <listRenderType>", "List render type for the SVG (Original, TerminalOffset)", "Original")
     .action((options) => {
     try {
         let spdContent;
@@ -115,31 +113,5 @@ commander_1.program
         }
         process.exit(1);
     }
-});
-commander_1.program
-    .command("web")
-    .description("Start a web server to serve the web application")
-    .option("-p, --port <port>", "Port for the web server", (value) => parseInt(value, 10), 8080)
-    .action((options) => {
-    var _a, _b;
-    // biome-ignore lint/suspicious/noExplicitAny: Need to check for ts-node environment
-    const isTsNode = !!process[Symbol.for("ts-node.register.instance")];
-    const webPath = isTsNode
-        ? path.join(__dirname, "..", "..", "dist", "web")
-        : path.join(__dirname, "..", "web");
-    const port = options.port;
-    const command = `npx serve ${webPath} -l ${port}`;
-    console.log(`Serving web application from: ${webPath}`);
-    console.log(`Listening on http://localhost:${port}`);
-    const child = child_process.exec(command);
-    (_a = child.stdout) === null || _a === void 0 ? void 0 : _a.on("data", (data) => {
-        process.stdout.write(data);
-    });
-    (_b = child.stderr) === null || _b === void 0 ? void 0 : _b.on("data", (data) => {
-        process.stderr.write(data);
-    });
-    child.on("close", (code) => {
-        console.log(`child process exited with code ${code}`);
-    });
 });
 commander_1.program.parse(process.argv);

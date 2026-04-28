@@ -53,7 +53,7 @@ const defaultRenderOptions = {
     connectorWidth: 2,
     nodeListSpace: 10,
     childNodeOffsetWidth: 20,
-    listRenderType: "original",
+    listRenderType: "Original",
 };
 /**
  * ASTを受け取り、完全なSVG文字列を返す
