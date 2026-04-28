@@ -8,6 +8,14 @@ padtools_ts はPAD図を活用することを目的として作成された、PA
 
 [![CI](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml/badge.svg)](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/steelpipe75/padtools_ts/branch/main/graph/badge.svg)](https://codecov.io/gh/steelpipe75/padtools_ts)
 
+## 今すぐ試す
+
+インストール不要で、ブラウザからすぐにPAD図の作成を試すことができます。
+
+**[Web版を開く (GitHub Pages)](https://steelpipe75.github.io/padtools_ts/)**
+
+![Web版スクリーンショット](screenshot.png)
+
 ## インストール
 
 ### 依存関係のインストール
