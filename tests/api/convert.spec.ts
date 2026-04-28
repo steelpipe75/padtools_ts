@@ -137,8 +137,10 @@ describe("API /api/convert", () => {
 
       expect(res.status).toBe(200);
       expect(res.headers.get("Content-Type")).toBe("image/svg+xml");
-      expect(res.headers.get("Content-Disposition")).toBe('attachment; filename="diagram.svg"');
-      
+      expect(res.headers.get("Content-Disposition")).toBe(
+        'attachment; filename="diagram.svg"',
+      );
+
       const text = await res.text();
       expect(text).toContain("<svg");
     });
@@ -189,10 +191,7 @@ describe("API /api/convert", () => {
 
     expect(res.status).toBe(500);
     const body = await res.json();
-    expect(body).toHaveProperty(
-      "error",
-      "Failed to convert SPD to SVG",
-    );
+    expect(body).toHaveProperty("error", "Failed to convert SPD to SVG");
   });
 
   // Swagger UI のテスト
