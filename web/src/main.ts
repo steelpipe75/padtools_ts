@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const downloadSvgButton = document.getElementById(
     "downloadSvgButton",
   ) as HTMLButtonElement;
+  const shareButton = document.getElementById(
+    "shareButton",
+  ) as HTMLButtonElement;
 
   // Render Options
   const fontSizeInput = document.getElementById(
@@ -195,8 +198,63 @@ document.addEventListener("DOMContentLoaded", () => {
     URL.revokeObjectURL(url);
   });
 
-  // 初期表示用のサンプルSPDテキスト
-  spdInput.value = `:terminal 開始
+  shareButton.addEventListener("click", () => {
+    const spdText = spdInput.value;
+    if (!spdText) {
+      alert("SPDが入力されていません。");
+      return;
+    }
+
+    try {
+      // UTF-8文字列をBase64にエンコード
+      const bytes = new TextEncoder().encode(spdText);
+      const binString = Array.from(bytes, (byte) =>
+        String.fromCodePoint(byte),
+      ).join("");
+      const base64 = btoa(binString);
+
+      const url = new URL(window.location.href);
+      url.searchParams.set("spd", base64);
+
+      navigator.clipboard
+        .writeText(url.toString())
+        .then(() => {
+          alert("共有用URLをクリップボードにコピーしました。");
+        })
+        .catch((err) => {
+          console.error("Failed to copy URL:", err);
+          alert("URLのコピーに失敗しました。");
+        });
+    } catch (error) {
+      console.error("Failed to encode SPD:", error);
+      alert("URLの生成に失敗しました。");
+    }
+  });
+
+  // 初期表示用のデータ取得
+  const urlParams = new URLSearchParams(window.location.search);
+  const spdParam = urlParams.get("spd");
+
+  if (spdParam) {
+    try {
+      // Base64をデコード（UTF-8対応）
+      const binString = atob(spdParam);
+      const bytes = Uint8Array.from(binString, (m) => m.codePointAt(0) ?? 0);
+      spdInput.value = new TextDecoder().decode(bytes);
+    } catch (error) {
+      console.error("Failed to decode SPD from URL parameter:", error);
+      // デコードに失敗した場合はデフォルトを表示
+      spdInput.value = getDefaultSpd();
+    }
+  } else {
+    spdInput.value = getDefaultSpd();
+  }
+
+  convertAndRender(); // ページロード時に一度変換を実行
+});
+
+function getDefaultSpd(): string {
+  return `:terminal 開始
 命令
 :comment コメント文
 :call 関数呼び出し
@@ -217,5 +275,4 @@ document.addEventListener("DOMContentLoaded", () => {
 :dowhile 繰り返し条件（後判定）
 	中身
 :terminal 終了`;
-  convertAndRender(); // ページロード時に一度変換を実行
-});
+}

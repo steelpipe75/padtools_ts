@@ -31,18 +31,45 @@ const ConvertRequestSchema = z.object({
   }),
   options: z
     .object({
-      fontSize: z.number().optional().openapi({ description: "Font size for the SVG", example: 14 }),
-      fontFamily: z.string().optional().openapi({ description: "Font family for the SVG", example: "monospace" }),
-      strokeWidth: z.number().optional().openapi({ description: "Stroke width for the SVG", example: 1 }),
-      strokeColor: z.string().optional().openapi({ description: "Stroke color for the SVG", example: "#000000" }),
-      backgroundColor: z.string().optional().openapi({ description: "Background color for the SVG", example: "#ffffff" }),
-      baseBackgroundColor: z.string().optional().openapi({ description: "Base background color for the SVG", example: "none" }),
-      textColor: z.string().optional().openapi({ description: "Text color for the SVG", example: "#000000" }),
-      lineHeight: z.number().optional().openapi({ description: "Line height for the SVG", example: 1.2 }),
-      listRenderType: z.enum(["Original", "TerminalOffset"]).optional().openapi({
-        description: "List render type for the SVG",
-        example: "TerminalOffset",
+      fontSize: z
+        .number()
+        .optional()
+        .openapi({ description: "Font size for the SVG", example: 14 }),
+      fontFamily: z.string().optional().openapi({
+        description: "Font family for the SVG",
+        example: "monospace",
       }),
+      strokeWidth: z
+        .number()
+        .optional()
+        .openapi({ description: "Stroke width for the SVG", example: 1 }),
+      strokeColor: z.string().optional().openapi({
+        description: "Stroke color for the SVG",
+        example: "#000000",
+      }),
+      backgroundColor: z.string().optional().openapi({
+        description: "Background color for the SVG",
+        example: "#ffffff",
+      }),
+      baseBackgroundColor: z.string().optional().openapi({
+        description: "Base background color for the SVG",
+        example: "none",
+      }),
+      textColor: z
+        .string()
+        .optional()
+        .openapi({ description: "Text color for the SVG", example: "#000000" }),
+      lineHeight: z
+        .number()
+        .optional()
+        .openapi({ description: "Line height for the SVG", example: 1.2 }),
+      listRenderType: z
+        .enum(["Original", "TerminalOffset"])
+        .optional()
+        .openapi({
+          description: "List render type for the SVG",
+          example: "TerminalOffset",
+        }),
       prettyprint: z.boolean().optional().openapi({
         description: "Whether to pretty print the SVG output",
         example: true,
@@ -152,14 +179,22 @@ const generateSvg = (spd: string, options: any) => {
 
   // Map options to renderOptions
   if (options.fontSize !== undefined) renderOptions.fontSize = options.fontSize;
-  if (options.fontFamily !== undefined) renderOptions.fontFamily = options.fontFamily;
-  if (options.strokeWidth !== undefined) renderOptions.strokeWidth = options.strokeWidth;
-  if (options.strokeColor !== undefined) renderOptions.strokeColor = options.strokeColor;
-  if (options.backgroundColor !== undefined) renderOptions.backgroundColor = options.backgroundColor;
-  if (options.baseBackgroundColor !== undefined) renderOptions.baseBackgroundColor = options.baseBackgroundColor;
-  if (options.textColor !== undefined) renderOptions.textColor = options.textColor;
-  if (options.lineHeight !== undefined) renderOptions.lineHeight = options.lineHeight;
-  if (options.listRenderType !== undefined) renderOptions.listRenderType = options.listRenderType as any;
+  if (options.fontFamily !== undefined)
+    renderOptions.fontFamily = options.fontFamily;
+  if (options.strokeWidth !== undefined)
+    renderOptions.strokeWidth = options.strokeWidth;
+  if (options.strokeColor !== undefined)
+    renderOptions.strokeColor = options.strokeColor;
+  if (options.backgroundColor !== undefined)
+    renderOptions.backgroundColor = options.backgroundColor;
+  if (options.baseBackgroundColor !== undefined)
+    renderOptions.baseBackgroundColor = options.baseBackgroundColor;
+  if (options.textColor !== undefined)
+    renderOptions.textColor = options.textColor;
+  if (options.lineHeight !== undefined)
+    renderOptions.lineHeight = options.lineHeight;
+  if (options.listRenderType !== undefined)
+    renderOptions.listRenderType = options.listRenderType as any;
 
   const svgOutput = render(ast, renderOptions);
 
