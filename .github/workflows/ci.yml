@@ -21,7 +21,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm run build --if-present
+    - name: Lint and Format check
+      run: npm run check
+    - name: Build CLI
+      run: npm run build --if-present
+    - name: Build Web
+      run: npm run build:web
     - run: npm run test:cov
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps

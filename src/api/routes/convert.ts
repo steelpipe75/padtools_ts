@@ -1,8 +1,53 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { createRoute, type RouteHandler, z } from "@hono/zod-openapi";
 import { optimize } from "svgo";
 import xmlFormat from "xml-formatter";
 import { parse } from "../../spd/parser";
 import { render } from "../../spd/svg-renderer";
+
+const ConvertRequestOptionsSchema = z.object({
+  fontSize: z
+    .number()
+    .optional()
+    .openapi({ description: "Font size for the SVG", example: 14 }),
+  fontFamily: z.string().optional().openapi({
+    description: "Font family for the SVG",
+    example: "monospace",
+  }),
+  strokeWidth: z
+    .number()
+    .optional()
+    .openapi({ description: "Stroke width for the SVG", example: 1 }),
+  strokeColor: z.string().optional().openapi({
+    description: "Stroke color for the SVG",
+    example: "#000000",
+  }),
+  backgroundColor: z.string().optional().openapi({
+    description: "Background color for the SVG",
+    example: "#ffffff",
+  }),
+  baseBackgroundColor: z.string().optional().openapi({
+    description: "Base background color for the SVG",
+    example: "none",
+  }),
+  textColor: z
+    .string()
+    .optional()
+    .openapi({ description: "Text color for the SVG", example: "#000000" }),
+  lineHeight: z
+    .number()
+    .optional()
+    .openapi({ description: "Line height for the SVG", example: 1.2 }),
+  listRenderType: z.enum(["Original", "TerminalOffset"]).optional().openapi({
+    description: "List render type for the SVG",
+    example: "TerminalOffset",
+  }),
+  prettyprint: z.boolean().optional().openapi({
+    description: "Whether to pretty print the SVG output",
+    example: true,
+  }),
+});
+
+type ConvertRequestOptions = z.infer<typeof ConvertRequestOptionsSchema>;
 
 const ConvertRequestSchema = z.object({
   spd: z.string().openapi({
@@ -29,53 +74,7 @@ const ConvertRequestSchema = z.object({
 :terminal 終了`,
     description: "The SPD text to convert",
   }),
-  options: z
-    .object({
-      fontSize: z
-        .number()
-        .optional()
-        .openapi({ description: "Font size for the SVG", example: 14 }),
-      fontFamily: z.string().optional().openapi({
-        description: "Font family for the SVG",
-        example: "monospace",
-      }),
-      strokeWidth: z
-        .number()
-        .optional()
-        .openapi({ description: "Stroke width for the SVG", example: 1 }),
-      strokeColor: z.string().optional().openapi({
-        description: "Stroke color for the SVG",
-        example: "#000000",
-      }),
-      backgroundColor: z.string().optional().openapi({
-        description: "Background color for the SVG",
-        example: "#ffffff",
-      }),
-      baseBackgroundColor: z.string().optional().openapi({
-        description: "Base background color for the SVG",
-        example: "none",
-      }),
-      textColor: z
-        .string()
-        .optional()
-        .openapi({ description: "Text color for the SVG", example: "#000000" }),
-      lineHeight: z
-        .number()
-        .optional()
-        .openapi({ description: "Line height for the SVG", example: 1.2 }),
-      listRenderType: z
-        .enum(["Original", "TerminalOffset"])
-        .optional()
-        .openapi({
-          description: "List render type for the SVG",
-          example: "TerminalOffset",
-        }),
-      prettyprint: z.boolean().optional().openapi({
-        description: "Whether to pretty print the SVG output",
-        example: true,
-      }),
-    })
-    .optional(),
+  options: ConvertRequestOptionsSchema.optional(),
 });
 
 const ConvertResponseSchema = z.object({
@@ -173,7 +172,7 @@ export const downloadRoute = createRoute({
   },
 });
 
-const generateSvg = (spd: string, options: any) => {
+const generateSvg = (spd: string, options: ConvertRequestOptions = {}) => {
   const ast = parse(spd);
   const renderOptions: Parameters<typeof render>[1] = {};
 
@@ -194,7 +193,7 @@ const generateSvg = (spd: string, options: any) => {
   if (options.lineHeight !== undefined)
     renderOptions.lineHeight = options.lineHeight;
   if (options.listRenderType !== undefined)
-    renderOptions.listRenderType = options.listRenderType as any;
+    renderOptions.listRenderType = options.listRenderType;
 
   const svgOutput = render(ast, renderOptions);
 
@@ -208,7 +207,7 @@ const generateSvg = (spd: string, options: any) => {
   return optimizedSvg.data;
 };
 
-export const convertHandler = async (c: any) => {
+export const convertHandler: RouteHandler<typeof convertRoute> = async (c) => {
   try {
     const { spd, options = {} } = c.req.valid("json");
 
@@ -224,7 +223,9 @@ export const convertHandler = async (c: any) => {
   }
 };
 
-export const downloadHandler = async (c: any) => {
+export const downloadHandler: RouteHandler<typeof downloadRoute> = async (
+  c,
+) => {
   try {
     const { spd, options = {} } = c.req.valid("json");
 
