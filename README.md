@@ -8,6 +8,14 @@ padtools_ts はPAD図を活用することを目的として作成された、PA
 
 [![CI](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml/badge.svg)](https://github.com/steelpipe75/padtools_ts/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/steelpipe75/padtools_ts/branch/main/graph/badge.svg)](https://codecov.io/gh/steelpipe75/padtools_ts)
 
+## 今すぐ試す
+
+インストール不要で、ブラウザからすぐにPAD図の作成を試すことができます。
+
+**[Web版を開く (GitHub Pages)](https://steelpipe75.github.io/padtools_ts/)**
+
+![Web版スクリーンショット](screenshot.png)
+
 ## インストール
 
 ### 依存関係のインストール
@@ -100,7 +108,18 @@ APIのドキュメントとテストは、Swagger UIで確認できます。
 
 ### APIエンドポイント
 
-#### POST /api/convert
+#### GET /health
+
+APIサーバーの稼働状況を確認します。
+
+**レスポンス:**
+```json
+{
+  "status": "ok"
+}
+```
+
+#### POST /convert
 
 SPDテキストをSVGに変換します。
 
@@ -130,7 +149,18 @@ SPDテキストをSVGに変換します。
 }
 ```
 
-**オプション:**
+#### POST /convert/download
+
+SPDテキストをSVGに変換し、ファイルとしてダウンロードします。
+
+**リクエストボディ:**
+`POST /convert` と同じです。
+
+**レスポンス:**
+SVGファイル (`image/svg+xml`) が返されます。
+
+### オプション詳細
+
 - `fontSize`: フォントサイズ (数値)
 - `fontFamily`: フォントファミリー (文字列)
 - `strokeWidth`: 線の太さ (数値)
@@ -188,9 +218,11 @@ npm run build:web:gh-pages
 -   xml-formatter: SVG出力の整形 (`--prettyprint` オプション) に使用。[MIT License](https://github.com/chrisbottin/xml-formatter/blob/master/LICENSE)
 -   svgo: SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。[MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
 -   eastasianwidth: 文字の幅計算に使用。[MIT License](https://github.com/komagata/eastasianwidth)
--   express: REST APIサーバーの実装に使用。[MIT License](https://github.com/expressjs/express/blob/master/LICENSE)
--   swagger-ui-express: APIドキュメントのSwagger UI表示に使用。[MIT License](https://github.com/scottie1984/swagger-ui-express/blob/master/LICENSE)
--   swagger-jsdoc: OpenAPI仕様の生成に使用。[MIT License](https://github.com/Surnet/swagger-jsdoc/blob/master/LICENSE)
+-   hono: REST APIサーバーの実装に使用。[MIT License](https://github.com/honojs/hono/blob/main/LICENSE)
+-   @hono/node-server: Node.jsでHonoを実行するために使用。[MIT License](https://github.com/honojs/node-server/blob/main/LICENSE)
+-   @hono/zod-openapi: OpenAPI仕様の生成に使用。[MIT License](https://github.com/honojs/middleware/blob/main/packages/zod-openapi/LICENSE)
+-   @hono/swagger-ui: APIドキュメントのSwagger UI表示に使用。[MIT License](https://github.com/honojs/middleware/blob/main/packages/swagger-ui/LICENSE)
+-   zod: スキーマバリデーションに使用。[MIT License](https://github.com/colinhacks/zod/blob/master/LICENSE)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
 
