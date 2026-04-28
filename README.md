@@ -126,18 +126,18 @@ SPDテキストをSVGに変換します。
 **リクエストボディ:**
 ```json
 {
-  "spd": "process: Start\nterminal: End",
+  "spd": ":terminal Start\nprocess\n:terminal End",
   "options": {
     "fontSize": 14,
-    "fontFamily": "Arial",
-    "strokeWidth": 2,
+    "fontFamily": "monospace",
+    "strokeWidth": 1,
     "strokeColor": "#000000",
     "backgroundColor": "#ffffff",
-    "baseBackgroundColor": "#f0f0f0",
+    "baseBackgroundColor": "none",
     "textColor": "#000000",
     "lineHeight": 1.2,
-    "listRenderType": "Original",
-    "prettyprint": false
+    "listRenderType": "TerminalOffset",
+    "prettyprint": true
   }
 }
 ```
