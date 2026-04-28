@@ -216,7 +216,7 @@ export const convertHandler: RouteHandler<typeof convertRoute> = async (c) => {
     }
 
     const outputData = generateSvg(spd, options);
-    return c.json({ svg: outputData });
+    return c.json({ svg: outputData }, 200);
   } catch (error) {
     console.error("Conversion error:", error);
     return c.json({ error: "Failed to convert SPD to SVG" }, 500);
