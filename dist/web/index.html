@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/web.492e97bc.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"><body>
+    <h1>SPD(Simple PAD Description) to SVG Converter</h1>
+    <div class=link-group>
+        <p class=reference-link><a href=/commands.html>SPD Commands Reference</a></p>
+        <p class=reference-link><a href=/render_options.html>Render Options Reference</a></p>
+        <p class=github-link><a href=https://github.com/steelpipe75/padtools_ts target=_blank>GitHub Repository</a></p>
+    </div>
+    <details class=options-section>
+        <summary><h2>Render Options</h2></summary>
+        <div class=option-group>
+            <label for=fontSizeInput>Font Size:</label>
+            <input type=number id=fontSizeInput value=14 min=8 max=72>
+        </div>
+        <div class=option-group>
+            <label for=fontFamilySelect>Font Family:</label>
+            <select id=fontFamilySelect>
+                <option value=monospace selected>monospace</option>
+                <option value=sans-serif>sans-serif</option>
+                <option value=serif>serif</option>
+                <option value=cursive>cursive</option>
+                <option value=fantasy>fantasy</option>
+            </select>
+            <input id=fontFamilyCustomInput style=display:none placeholder="e.g. 'Meiryo', sans-serif">
+            <input type=checkbox id=customFontCheckbox>
+            <label for=customFontCheckbox class=checkbox-label>Custom</label>
+        </div>
+        <div class=option-group>
+            <label for=baseBackgroundColorInput>Base Background Color:</label>
+            <input type=color id=baseBackgroundColorInput value=#ffffff>
+            <input type=checkbox id=transparentBackgroundCheckbox checked>
+            <label for=transparentBackgroundCheckbox>Transparent</label>
+        </div>
+        <div class=option-group>
+            <label for=backgroundColorInput>Node Background Color:</label>
+            <input type=color id=backgroundColorInput value=#ffffff>
+            <input type=checkbox id=transparentNodeBackgroundCheckbox>
+            <label for=transparentNodeBackgroundCheckbox>Transparent</label>
+        </div>
+        <div class=option-group>
+            <label for=textColorInput>Text Color:</label>
+            <input type=color id=textColorInput value=#000000>
+        </div>
+        <div class=option-group>
+            <label>List Render Type:</label>
+            <input type=radio id=listRenderTypeTerminalOffset name=listRenderType value=TerminalOffset checked>
+            <label for=listRenderTypeTerminalOffset>TerminalOffset</label>
+            <input type=radio id=listRenderTypeOriginal name=listRenderType value=Original>
+            <label for=listRenderTypeOriginal>Original</label>
+        </div>
+        <button id=applyOptionsButton>
+            <span class=material-symbols-outlined>settings</span>
+            Apply Options
+        </button>
+    </details>
+
+    <div class=container>
+        <div class=input-section>
+            <h2>SPD Input</h2>
+            <textarea id=spdInput placeholder=ここにSPD記法のテキストを入力してください...></textarea>
+            <div class=file-operations>
+                <div class=file-input-group>
+                    <label for=fileInput>
+                        <span class=material-symbols-outlined>upload_file</span>
+                        Upload SPD file:
+                    </label>
+                    <input type=file id=fileInput accept=.spd>
+                </div>
+                <div class=button-group>
+                    <button id=downloadButton>
+                        <span class=material-symbols-outlined>download</span>
+                        Download SPD
+                    </button>
+                    <button id=shareButton>
+                        <span class=material-symbols-outlined>share</span>
+                        Share Link
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class=output-section>
+            <h2>SVG Output</h2>
+            <div id=svgOutput>
+                
+            </div>
+            <div class=svg-operations>
+                <button id=downloadSvgButton>
+                    <span class=material-symbols-outlined>image</span>
+                    Download SVG
+                </button>
+            </div>
+        </div>
+    </div>
+    <script type=module src=/web.f5034a23.js></script>
+
