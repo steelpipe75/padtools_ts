@@ -1,12 +1,18 @@
-const fs = require("node:fs");
-const path = require("node:path");
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 const baseDir = "./tests/cli/E2E";
 const tempDir = path.join(baseDir, "temp");
 const outputDir = path.join(baseDir, "output");
 const outputMinifiedDir = path.join(baseDir, "output_minified");
 
-const filesToProcess = [
+interface FileProcess {
+  temp: string;
+  output: string;
+  targetDir: string;
+}
+
+const filesToProcess: FileProcess[] = [
   {
     temp: "sample_input_base_background_color_black.svg",
     output: "sample_input_base_background_color_black.svg.txt",
@@ -68,8 +74,12 @@ console.log("Copying new golden files from temp...");
 for (const file of filesToProcess) {
   const tempPath = path.join(tempDir, file.temp);
   const outputPath = path.join(file.targetDir, file.output);
-  fs.copyFileSync(tempPath, outputPath);
-  console.log(`Copied: ${tempPath} to ${outputPath}`);
+  if (fs.existsSync(tempPath)) {
+    fs.copyFileSync(tempPath, outputPath);
+    console.log(`Copied: ${tempPath} to ${outputPath}`);
+  } else {
+    console.warn(`Warning: Temp file not found: ${tempPath}`);
+  }
 }
 
 console.log("Golden files updated successfully.");
