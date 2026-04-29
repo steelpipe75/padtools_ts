@@ -6,13 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": [
-      "**",
-      "!dist",
-      "!dist-web",
-      "!temp",
-      "!coverage"
-    ]
+    "includes": ["**", "!dist", "!dist-web", "!temp", "!coverage"]
   },
   "formatter": {
     "enabled": true,
