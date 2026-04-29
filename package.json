@@ -16,6 +16,7 @@
     "format": "biome format --write .",
     "start": "tsx src/cli/cli.ts",
     "start:api": "tsx src/api/server.ts",
+    "start:api:bun": "bun src/api/server.ts",
     "test": "jest",
     "test:bun": "bun test --exclude tests/web",
     "test:web": "playwright test",
