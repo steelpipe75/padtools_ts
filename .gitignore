@@ -4,6 +4,8 @@ test-results
 
 # Dependencies
 /node_modules
+bun.lock
+bun.lockb
 
 # Transpiled/compiled code
 # /dist
