@@ -50,12 +50,12 @@ npm run test:cov
 npx padtools_ts -i sample_input.spd -o sample_output.svg
 ```
 
-また、開発時には `ts-node` を使って直接ソースコードを実行することも可能です。
+また、開発時には `tsx` を使って直接ソースコードを実行することも可能です。
 
 ```shell
 npm run start -- -i sample_input.spd -o sample_output.svg
 ```
-上記の `npm run start` は、`package.json` のスクリプト定義に基づいて `ts-node src/cli/cli.ts` を実行します。
+上記の `npm run start` は、`package.json` のスクリプト定義に基づいて `tsx src/cli/cli.ts` を実行します。
 
 ### Webツールの起動
 
