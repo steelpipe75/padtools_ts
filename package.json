@@ -19,6 +19,7 @@
     "start:api:bun": "bun src/api/server.ts",
     "test": "jest",
     "test:bun": "bun test --exclude tests/web",
+    "test:jest:bun": "bun x jest",
     "test:web": "playwright test",
     "test:web:headed": "playwright test --headed",
     "test:cov": "jest --coverage",
