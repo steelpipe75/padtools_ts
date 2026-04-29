@@ -30,8 +30,8 @@ jobs:
     - run: npm run test:cov
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Run E2E tests
-      run: npm run test:e2e
+    - name: Run Web tests
+      run: npm run test:web
     - name: Verify web utility scripts
       run: |
         npm run convert:web:commands
