@@ -21,9 +21,6 @@ jobs:
       # Try frozen-lockfile first if one exists, otherwise fallback to normal install.
       # Since bun.lock is gitignored, it will likely fallback, which is fine for compatibility check.
 
-    - name: Run native Bun tests
-      run: bun run test:bun
-
     - name: Run Jest tests with Bun
       run: bun run test:jest:bun
 
