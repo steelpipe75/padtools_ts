@@ -194,7 +194,7 @@ npm run start:web
 npm run build:web
 ```
 
-これにより、`dist/web` ディレクトリに静的ファイルが生成されます。
+これにより、`dist-web` ディレクトリに静的ファイルが生成されます。
 
 ### WebツールのビルドとGitHub Pagesへのデプロイ
 
