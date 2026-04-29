@@ -42,7 +42,7 @@ describe("CLI E2E tests", () => {
           // execSync will throw an error for non-zero exit codes.
           expect(() => {
             execSync(
-              `npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} ${option}`,
+              `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} ${option}`,
             );
           }).not.toThrow();
 
@@ -74,7 +74,7 @@ describe("CLI E2E tests", () => {
 
       expect(() => {
         execSync(
-          `npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --font-size 20`,
+          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --font-size 20`,
         );
       }).not.toThrow();
 
@@ -98,7 +98,7 @@ describe("CLI E2E tests", () => {
 
       expect(() => {
         execSync(
-          `npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#888"`,
+          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#888"`,
         );
       }).not.toThrow();
 
@@ -122,7 +122,7 @@ describe("CLI E2E tests", () => {
 
       expect(() => {
         execSync(
-          `npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#000"`,
+          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#000"`,
         );
       }).not.toThrow();
 
@@ -146,7 +146,7 @@ describe("CLI E2E tests", () => {
 
       expect(() => {
         execSync(
-          `npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#FFF"`,
+          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#FFF"`,
         );
       }).not.toThrow();
 
@@ -170,7 +170,7 @@ describe("CLI E2E tests", () => {
 
       expect(() => {
         execSync(
-          `npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "none"`,
+          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "none"`,
         );
       }).not.toThrow();
 
@@ -194,7 +194,7 @@ describe("CLI E2E tests", () => {
 
       expect(() => {
         execSync(
-          `npx ts-node src/cli/cli.ts -i ${inputPath} -o ${outputPath} --list-render-type TerminalOffset -p`,
+          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --list-render-type TerminalOffset -p`,
         );
       }).not.toThrow();
 
@@ -210,7 +210,7 @@ describe("CLI E2E tests", () => {
     it("should exit with 1 when input file does not exist", () => {
       const nonExistentInputPath = "non_existent_file.spd";
       const outputPath = path.join(tempDir, "output.svg");
-      const command = `npx ts-node src/cli/cli.ts -i ${nonExistentInputPath} -o ${outputPath}`;
+      const command = `npx tsx src/cli/cli.ts -i ${nonExistentInputPath} -o ${outputPath}`;
 
       try {
         execSync(command);
@@ -233,7 +233,7 @@ describe("CLI E2E tests", () => {
     const sampleOutputFile = sampleInputFile.replace(".spd", ".svg.txt");
 
     it("should correctly convert from stdin to stdout with --prettyprint option", () => {
-      const command = `npx ts-node src/cli/cli.ts --prettyprint < ${sampleInputPath}`;
+      const command = `npx tsx src/cli/cli.ts --prettyprint < ${sampleInputPath}`;
       const actual = execSync(command, { encoding: "utf-8" });
       const expected = fs.readFileSync(
         path.join(outputDir, sampleOutputFile),
@@ -243,7 +243,7 @@ describe("CLI E2E tests", () => {
     });
 
     it("should correctly convert from stdin to stdout with -p option", () => {
-      const command = `npx ts-node src/cli/cli.ts -p < ${sampleInputPath}`;
+      const command = `npx tsx src/cli/cli.ts -p < ${sampleInputPath}`;
       const actual = execSync(command, { encoding: "utf-8" });
       const expected = fs.readFileSync(
         path.join(outputDir, sampleOutputFile),
@@ -253,7 +253,7 @@ describe("CLI E2E tests", () => {
     });
 
     it("should correctly convert from stdin to stdout without prettyprint option", () => {
-      const command = `npx ts-node src/cli/cli.ts < ${sampleInputPath}`;
+      const command = `npx tsx src/cli/cli.ts < ${sampleInputPath}`;
       const actual = execSync(command, { encoding: "utf-8" });
       const expected = fs.readFileSync(
         path.join(minifiedOutputDir, sampleOutputFile),
@@ -270,7 +270,7 @@ describe("CLI E2E tests", () => {
     const sampleOutputFile = sampleInputFile.replace(".spd", ".svg.txt");
 
     it("Redirect standard output to update the sample output file in the project root while comparing it with the GoldenFile.", () => {
-      const command = `npx ts-node src/cli/cli.ts < ${sampleInputFile} > ${sampleOutputPath}`;
+      const command = `npx tsx src/cli/cli.ts < ${sampleInputFile} > ${sampleOutputPath}`;
       execSync(command, { encoding: "utf-8" });
       const actual = fs.readFileSync(sampleOutputPath, "utf-8");
       const expected = fs.readFileSync(

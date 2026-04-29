@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/web.396ef2a8.css><body>
+<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/web.492e97bc.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"><body>
     <h1>SPD(Simple PAD Description) to SVG Converter</h1>
     <div class=link-group>
         <p class=reference-link><a href=/commands.html>SPD Commands Reference</a></p>
@@ -47,7 +47,10 @@
             <input type=radio id=listRenderTypeOriginal name=listRenderType value=Original>
             <label for=listRenderTypeOriginal>Original</label>
         </div>
-        <button id=applyOptionsButton>Apply Options</button>
+        <button id=applyOptionsButton>
+            <span class=material-symbols-outlined>settings</span>
+            Apply Options
+        </button>
     </details>
 
     <div class=container>
@@ -56,11 +59,22 @@
             <textarea id=spdInput placeholder=ここにSPD記法のテキストを入力してください...></textarea>
             <div class=file-operations>
                 <div class=file-input-group>
-                    <label for=fileInput>Upload SPD file:</label>
+                    <label for=fileInput>
+                        <span class=material-symbols-outlined>upload_file</span>
+                        Upload SPD file:
+                    </label>
                     <input type=file id=fileInput accept=.spd>
                 </div>
-                <button id=downloadButton>Download SPD</button>
-                <button id=shareButton>Share Link</button>
+                <div class=button-group>
+                    <button id=downloadButton>
+                        <span class=material-symbols-outlined>download</span>
+                        Download SPD
+                    </button>
+                    <button id=shareButton>
+                        <span class=material-symbols-outlined>share</span>
+                        Share Link
+                    </button>
+                </div>
             </div>
         </div>
         <div class=output-section>
@@ -69,9 +83,12 @@
                 
             </div>
             <div class=svg-operations>
-                <button id=downloadSvgButton>Download SVG</button>
+                <button id=downloadSvgButton>
+                    <span class=material-symbols-outlined>image</span>
+                    Download SVG
+                </button>
             </div>
         </div>
     </div>
-    <script type=module src=/web.dabb5896.js></script>
+    <script type=module src=/web.f5034a23.js></script>
 

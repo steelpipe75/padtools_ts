@@ -21,12 +21,21 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm run build --if-present
+    - name: Lint and Format check
+      run: npm run check
+    - name: Build CLI
+      run: npm run build --if-present
+    - name: Build Web
+      run: npm run build:web
     - run: npm run test:cov
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run E2E tests
       run: npm run test:e2e
+    - name: Verify web utility scripts
+      run: |
+        npm run convert:web:commands
+        npm run convert:web:render_options
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:

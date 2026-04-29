@@ -20,15 +20,15 @@ if (!fs.existsSync(outputDir)) {
 }
 
 (async () => {
-  for (const setiing of outputSetting) {
-    const outputSvg = setiing.file;
-    const option = setiing.option;
+  for (const setting of outputSetting) {
+    const outputSvg = setting.file;
+    const option = setting.option;
 
     console.log(`Converting ${input} to ${outputSvg}...`);
 
     const command = `npm run start -- -i "${input}" --list-render-type ${option} -o "${outputSvg}"`;
 
-    exec(command, (error, stdout, stderr) => {
+    exec(command, (error: Error | null, stdout: string, stderr: string) => {
       if (error) {
         console.error(
           `Error converting ${input} to ${outputSvg}: ${error.message}`,

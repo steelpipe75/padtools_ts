@@ -1,9 +1,9 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const glob = require("glob");
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { globSync } from "glob";
 
 // Helper function to normalize path separators for glob, which prefers forward slashes.
-const normalizePathForGlob = (p) => p.replace(/\\/g, "/");
+const normalizePathForGlob = (p: string) => p.replace(/\\/g, "/");
 
 // The base directory is the directory where this script is located (tests/web).
 const baseDir = __dirname;
@@ -15,9 +15,9 @@ const outputDir = path.join(baseDir, "output");
 fs.mkdirSync(outputDir, { recursive: true });
 
 // Function to remove existing golden files from the output directory
-const removeFiles = (pattern) => {
+const removeFiles = (pattern: string) => {
   const normalizedPattern = normalizePathForGlob(pattern);
-  const files = glob.sync(normalizedPattern);
+  const files = globSync(normalizedPattern);
   files.forEach((file) => {
     if (fs.existsSync(file)) {
       fs.unlinkSync(file);
@@ -27,10 +27,10 @@ const removeFiles = (pattern) => {
 };
 
 // Function to copy new golden files from temp to output, renaming them
-const copyAndRenameFiles = (sourceDir, destinationDir) => {
+const copyAndRenameFiles = (sourceDir: string, destinationDir: string) => {
   const normalizedSourceDir = normalizePathForGlob(sourceDir);
   const sourcePattern = `${normalizedSourceDir}/*.svg`;
-  const files = glob.sync(sourcePattern);
+  const files = globSync(sourcePattern);
 
   if (files.length === 0) {
     console.log(`No .svg files found in ${sourceDir}. Skipping copy.`);
@@ -39,7 +39,7 @@ const copyAndRenameFiles = (sourceDir, destinationDir) => {
 
   files.forEach((file) => {
     const baseName = path.basename(file);
-    const newFileName = baseName.replace(/\.svg$/, ".svg.txt"); // a.svg -> a.svg.txt
+    const newFileName = baseName.replace(/\.svg$/, ".svg.txt");
     const destinationPath = path.join(destinationDir, newFileName);
     fs.copyFileSync(file, destinationPath);
     console.log(`Copied: ${file} to ${destinationPath}`);
