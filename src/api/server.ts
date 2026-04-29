@@ -51,6 +51,10 @@ export const startServer = (p: number) => {
 };
 
 // Start server
-if (require.main === module) {
+if (
+  require.main === module &&
+  // @ts-ignore: Bun is only defined in Bun environment
+  typeof Bun === "undefined"
+) {
   startServer(port);
 }
