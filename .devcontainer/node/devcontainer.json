@@ -5,10 +5,7 @@
   "postCreateCommand": "npm install && npx playwright install --with-deps",
   "customizations": {
     "vscode": {
-      "extensions": [
-        "biomejs.biome",
-        "ms-playwright.playwright"
-      ],
+      "extensions": ["biomejs.biome", "ms-playwright.playwright"],
       "settings": {
         "editor.defaultFormatter": "biomejs.biome",
         "editor.formatOnSave": true
