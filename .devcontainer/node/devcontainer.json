@@ -1,0 +1,16 @@
+{
+  "name": "Node.js (padtools_ts)",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "forwardPorts": [3000],
+  "postCreateCommand": "npm install && npx playwright install --with-deps",
+  "customizations": {
+    "vscode": {
+      "extensions": ["biomejs.biome", "ms-playwright.playwright"],
+      "settings": {
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "remoteUser": "node"
+}
