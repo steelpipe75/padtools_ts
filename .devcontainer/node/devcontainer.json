@@ -1,6 +1,6 @@
 {
   "name": "Node.js (padtools_ts)",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
   "forwardPorts": [3000],
   "postCreateCommand": "npm install && npx playwright install --with-deps",
   "customizations": {
