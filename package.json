@@ -33,7 +33,8 @@
     "build:web": "rimraf dist-web && parcel build web/index.html --dist-dir dist-web",
     "build:web:gh-pages": "rimraf gh-pages/ && parcel build web/index.html --dist-dir gh-pages/ --public-url /padtools_ts/ && echo > gh-pages/.nojekyll",
     "convert:web:commands": "tsx web/utility/convert_commands.ts",
-    "convert:web:render_options": "tsx web/utility/convert_render_options.ts"
+    "convert:web:render_options": "tsx web/utility/convert_render_options.ts",
+    "prepare": "husky"
   },
   "keywords": [
     "pad",
@@ -71,6 +72,7 @@
     "@types/svgo": "^2.6.4",
     "@types/xml-formatter": "^2.1.1",
     "baseline-browser-mapping": "^2.10.24",
+    "husky": "^9.1.7",
     "jest": "^30.3.0",
     "parcel": "^2.16.4",
     "postcss": "^8.5.6",
