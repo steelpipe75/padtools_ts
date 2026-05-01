@@ -237,9 +237,10 @@ button .material-symbols-outlined {
   margin-top: 10px;
 }
 
-.version-info {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 0.8rem;
-  color: #666;
+.version-badge {
+  font-size: 1rem;
+  color: #888;
+  vertical-align: middle;
+  font-weight: normal;
+  margin-left: 10px;
 }
