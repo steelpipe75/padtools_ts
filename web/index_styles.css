@@ -236,3 +236,10 @@ button .material-symbols-outlined {
 .options-section button {
   margin-top: 10px;
 }
+
+.version-info {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: #666;
+}
