@@ -1,8 +1,15 @@
 // web/src/main.ts
+
+import { version } from "../../package.json";
 import { parse } from "../../src/spd/parser";
 import { render as renderSvg } from "../../src/spd/svg-renderer";
 
 document.addEventListener("DOMContentLoaded", () => {
+  const appVersion = document.getElementById("appVersion") as HTMLSpanElement;
+  if (appVersion) {
+    appVersion.textContent = version;
+  }
+
   const spdInput = document.getElementById("spdInput") as HTMLTextAreaElement;
   const svgOutput = document.getElementById("svgOutput") as HTMLDivElement;
   const fileInput = document.getElementById("fileInput") as HTMLInputElement;
