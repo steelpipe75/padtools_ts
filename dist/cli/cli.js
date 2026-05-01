@@ -41,12 +41,11 @@ const fs = __importStar(require("node:fs"));
 const commander_1 = require("commander");
 const svgo_1 = require("svgo");
 const xml_formatter_1 = __importDefault(require("xml-formatter"));
+const package_json_1 = __importDefault(require("../../package.json"));
 const parser_1 = require("../spd/parser");
 const svg_renderer_1 = require("../spd/svg-renderer");
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const packageJson = require("../../package.json");
 commander_1.program
-    .version(packageJson.version)
+    .version(package_json_1.default.version)
     .description("Convert SPD(Simple PAD Description) text file to SVG image")
     .option("-i, --input <inputFilePath>", "Path to the input SPD text file")
     .option("-o, --output <outputFilePath>", "Path to the output SVG file")
