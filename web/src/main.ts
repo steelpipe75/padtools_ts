@@ -1,7 +1,8 @@
 // web/src/main.ts
+
+import { version } from "../../package.json";
 import { parse } from "../../src/spd/parser";
 import { render as renderSvg } from "../../src/spd/svg-renderer";
-import { version } from "../../package.json";
 
 document.addEventListener("DOMContentLoaded", () => {
   const appVersion = document.getElementById("appVersion") as HTMLSpanElement;
