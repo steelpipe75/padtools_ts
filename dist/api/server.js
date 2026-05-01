@@ -4,6 +4,7 @@ exports.startServer = void 0;
 const node_server_1 = require("@hono/node-server");
 const swagger_ui_1 = require("@hono/swagger-ui");
 const zod_openapi_1 = require("@hono/zod-openapi");
+const package_json_1 = require("../../package.json");
 const convert_1 = require("./routes/convert");
 const health_1 = require("./routes/health");
 const app = new zod_openapi_1.OpenAPIHono();
@@ -13,7 +14,7 @@ app.doc("/doc", {
     openapi: "3.0.0",
     info: {
         title: "PAD Tools API",
-        version: "1.0.0",
+        version: package_json_1.version,
         description: "API for converting SPD to SVG",
     },
 });
@@ -41,6 +42,8 @@ const startServer = (p) => {
 };
 exports.startServer = startServer;
 // Start server
-if (require.main === module) {
+if (require.main === module &&
+    // @ts-expect-error: Bun is only defined in Bun environment
+    typeof Bun === "undefined") {
     (0, exports.startServer)(port);
 }

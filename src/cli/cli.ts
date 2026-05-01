@@ -4,11 +4,9 @@ import * as fs from "node:fs";
 import { program } from "commander";
 import { optimize } from "svgo";
 import xmlFormat from "xml-formatter";
+import packageJson from "../../package.json";
 import { parse } from "../spd/parser";
 import { render } from "../spd/svg-renderer";
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const packageJson = require("../../package.json");
 
 program
   .version(packageJson.version)

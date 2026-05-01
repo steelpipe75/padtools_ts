@@ -1,6 +1,7 @@
 import { serve } from "@hono/node-server";
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { version } from "../../package.json";
 import {
   convertHandler,
   convertRoute,
@@ -18,7 +19,7 @@ app.doc("/doc", {
   openapi: "3.0.0",
   info: {
     title: "PAD Tools API",
-    version: "1.0.0",
+    version: version,
     description: "API for converting SPD to SVG",
   },
 });
