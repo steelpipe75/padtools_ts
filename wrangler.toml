@@ -1,4 +1,4 @@
-name = "padtools-api"
+name = "padtools-ts"
 main = "src/api/app.ts"
 compatibility_date = "2025-01-01"
 compatibility_flags = [ "nodejs_compat" ]
