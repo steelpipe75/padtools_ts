@@ -43,3 +43,6 @@ Thumbs.db
 
 # Parcel cache
 .parcel-cache
+
+# Wrangler cache
+.wrangler

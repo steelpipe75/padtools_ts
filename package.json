@@ -34,6 +34,8 @@
     "build:web:gh-pages": "rimraf gh-pages/ && parcel build web/index.html --dist-dir gh-pages/ --public-url /padtools_ts/ && echo > gh-pages/.nojekyll",
     "convert:web:commands": "tsx web/utility/convert_commands.ts",
     "convert:web:render_options": "tsx web/utility/convert_render_options.ts",
+    "deploy": "wrangler deploy",
+    "dev:worker": "wrangler dev",
     "prepare": "husky"
   },
   "keywords": [
@@ -79,7 +81,8 @@
     "rimraf": "^6.1.3",
     "ts-jest": "^29.4.9",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.87.0"
   },
   "overrides": {
     "test-exclude": "7.0.1"
