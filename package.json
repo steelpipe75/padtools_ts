@@ -71,7 +71,7 @@
     "@types/node": "^25.6.0",
     "@types/svgo": "^2.6.4",
     "@types/xml-formatter": "^2.1.1",
-    "baseline-browser-mapping": "^2.10.24",
+    "baseline-browser-mapping": "^2.10.25",
     "husky": "^9.1.7",
     "jest": "^30.3.0",
     "parcel": "^2.16.4",
