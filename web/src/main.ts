@@ -81,13 +81,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const svgString = renderSvg(ast, options);
       svgOutput.innerHTML = svgString;
     } catch (error) {
+      const errorParagraph = document.createElement("p");
+      errorParagraph.style.color = "red";
+      svgOutput.textContent = "";
+
       if (error instanceof Error) {
-        svgOutput.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        errorParagraph.textContent = `Error: ${error.message}`;
         console.error("SPD conversion error:", error);
       } else {
-        svgOutput.innerHTML = `<p style="color: red;">An unknown error occurred</p>`;
+        errorParagraph.textContent = "An unknown error occurred";
         console.error("An unknown error occurred:", error);
       }
+
+      svgOutput.appendChild(errorParagraph);
     }
   };
 
