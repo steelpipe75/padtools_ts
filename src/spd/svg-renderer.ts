@@ -882,6 +882,18 @@ function measureTextSvg(
 }
 
 /**
+ * XML/SVGで安全に利用するためのエスケープ
+ */
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/**
  * テキストをSVG形式で描画
  */
 function renderTextSvg(
@@ -896,9 +908,9 @@ function renderTextSvg(
     const dy = index === 0 ? 0 : index * options.fontSize * options.lineHeight;
     svg += `<text `;
     svg += `x="${posX.toFixed(1)}" y="${(posY + options.fontSize).toFixed(1)}" dy="${dy.toFixed(1)}" `;
-    svg += `font-family="${options.fontFamily}" `;
+    svg += `font-family="${escapeXml(options.fontFamily)}" `;
     svg += `font-size="${options.fontSize}" `;
-    svg += `fill="${options.textColor}">${line}</text>`;
+    svg += `fill="${escapeXml(options.textColor)}">${escapeXml(line)}</text>`;
   });
   return svg;
 }
