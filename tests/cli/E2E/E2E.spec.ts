@@ -1,4 +1,4 @@
-import { execFileSync } from "node:child_process";
+import { execFileSync, execSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -45,7 +45,7 @@ describe("CLI E2E tests", () => {
             if (option) {
               args.push(option);
             }
-            execFileSync("npx", args);
+            execFileSync("npx", args, { shell: true });
           }).not.toThrow();
 
           const actual = fs.readFileSync(outputPath, "utf-8");
@@ -217,7 +217,7 @@ describe("CLI E2E tests", () => {
       try {
         execSync(command);
         // If execSync does not throw, the test should fail.
-        fail("The command should have failed but it completed successfully.");
+        throw new Error("The command should have failed but it completed successfully.");
       } catch (_error: unknown) {
         if (_error && typeof _error === "object" && "status" in _error) {
           expect(_error.status).toBe(1);
