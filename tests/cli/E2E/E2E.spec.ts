@@ -41,7 +41,14 @@ describe("CLI E2E tests", () => {
           // The command should execute successfully (exit code 0).
           // execSync will throw an error for non-zero exit codes.
           expect(() => {
-            const args = ["tsx", "src/cli/cli.ts", "-i", inputPath, "-o", outputPath];
+            const args = [
+              "tsx",
+              "src/cli/cli.ts",
+              "-i",
+              inputPath,
+              "-o",
+              outputPath,
+            ];
             if (option) {
               args.push(option);
             }
@@ -217,7 +224,9 @@ describe("CLI E2E tests", () => {
       try {
         execSync(command);
         // If execSync does not throw, the test should fail.
-        throw new Error("The command should have failed but it completed successfully.");
+        throw new Error(
+          "The command should have failed but it completed successfully.",
+        );
       } catch (_error: unknown) {
         if (_error && typeof _error === "object" && "status" in _error) {
           expect(_error.status).toBe(1);
