@@ -1,4 +1,4 @@
-import { execSync } from "node:child_process";
+import { execFileSync, execSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -41,9 +41,18 @@ describe("CLI E2E tests", () => {
           // The command should execute successfully (exit code 0).
           // execSync will throw an error for non-zero exit codes.
           expect(() => {
-            execSync(
-              `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} ${option}`,
-            );
+            const args = [
+              "tsx",
+              "src/cli/cli.ts",
+              "-i",
+              inputPath,
+              "-o",
+              outputPath,
+            ];
+            if (option) {
+              args.push(option);
+            }
+            execFileSync("npx", args, { shell: true });
           }).not.toThrow();
 
           const actual = fs.readFileSync(outputPath, "utf-8");
@@ -215,7 +224,9 @@ describe("CLI E2E tests", () => {
       try {
         execSync(command);
         // If execSync does not throw, the test should fail.
-        fail("The command should have failed but it completed successfully.");
+        throw new Error(
+          "The command should have failed but it completed successfully.",
+        );
       } catch (_error: unknown) {
         if (_error && typeof _error === "object" && "status" in _error) {
           expect(_error.status).toBe(1);
