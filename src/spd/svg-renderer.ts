@@ -119,7 +119,7 @@ export function render(
   svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
   svg += `viewBox="0 0 ${svgWidth.toFixed(1)} ${svgHeight.toFixed(1)}" `;
   svg += `xmlns="http://www.w3.org/2000/svg">`;
-  const baseFillColor = mergedOptions.baseBackgroundColor ?? "none";
+  const baseFillColor = sanitizeSvgColor(mergedOptions.baseBackgroundColor);
   svg += `<rect x="0" y="0" `;
   svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
   svg += `fill="${baseFillColor}"/>`;
@@ -131,6 +131,30 @@ export function render(
   svg += `</svg>`;
 
   return svg;
+}
+
+function sanitizeSvgColor(color: string | null): string {
+  if (color == null) {
+    return "none";
+  }
+
+  const value = color.trim();
+  if (value === "none") {
+    return "none";
+  }
+
+  const isHex = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(value);
+  const isNamedColor = /^[a-zA-Z]+$/.test(value);
+  const isRgb =
+    /^rgb\(\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*\)$/.test(
+      value,
+    );
+  const isRgba =
+    /^rgba\(\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:0|0?\.\d+|1(?:\.0+)?)\s*\)$/.test(
+      value,
+    );
+
+  return isHex || isNamedColor || isRgb || isRgba ? value : "none";
 }
 
 /**
