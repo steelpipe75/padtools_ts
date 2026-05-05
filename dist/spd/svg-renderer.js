@@ -59,7 +59,6 @@ const defaultRenderOptions = {
  * ASTを受け取り、完全なSVG文字列を返す
  */
 function render(node, options) {
-    var _a;
     const mergedOptions = Object.assign(Object.assign({}, defaultRenderOptions), options);
     if (!node) {
         return "";
@@ -71,13 +70,27 @@ function render(node, options) {
     svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
     svg += `viewBox="0 0 ${svgWidth.toFixed(1)} ${svgHeight.toFixed(1)}" `;
     svg += `xmlns="http://www.w3.org/2000/svg">`;
-    const baseFillColor = (_a = mergedOptions.baseBackgroundColor) !== null && _a !== void 0 ? _a : "none";
+    const baseFillColor = sanitizeSvgColor(mergedOptions.baseBackgroundColor);
     svg += `<rect x="0" y="0" `;
     svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
     svg += `fill="${baseFillColor}"/>`;
     svg += renderTransformTranslateSvg(mergedOptions.margin.left, mergedOptions.margin.top, fragment.svg);
     svg += `</svg>`;
     return svg;
+}
+function sanitizeSvgColor(color) {
+    if (color == null) {
+        return "none";
+    }
+    const value = color.trim();
+    if (value === "none") {
+        return "none";
+    }
+    const isHex = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(value);
+    const isNamedColor = /^[a-zA-Z]+$/.test(value);
+    const isRgb = /^rgb\(\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*\)$/.test(value);
+    const isRgba = /^rgba\(\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\s*,\s*(?:0|0?\.\d+|1(?:\.0+)?)\s*\)$/.test(value);
+    return isHex || isNamedColor || isRgb || isRgba ? value : "none";
 }
 /**
  * ASTのノード種別に応じて、対応する描画関数を呼び出す
@@ -631,6 +644,17 @@ function measureTextSvg(text, options) {
     return { width: maxWidth, height: textHeight };
 }
 /**
+ * XML/SVGで安全に利用するためのエスケープ
+ */
+function escapeXml(value) {
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+/**
  * テキストをSVG形式で描画
  */
 function renderTextSvg(text, posX, posY, options) {
@@ -640,9 +664,9 @@ function renderTextSvg(text, posX, posY, options) {
         const dy = index === 0 ? 0 : index * options.fontSize * options.lineHeight;
         svg += `<text `;
         svg += `x="${posX.toFixed(1)}" y="${(posY + options.fontSize).toFixed(1)}" dy="${dy.toFixed(1)}" `;
-        svg += `font-family="${options.fontFamily}" `;
+        svg += `font-family="${escapeXml(options.fontFamily)}" `;
         svg += `font-size="${options.fontSize}" `;
-        svg += `fill="${options.textColor}">${line}</text>`;
+        svg += `fill="${escapeXml(options.textColor)}">${escapeXml(line)}</text>`;
     });
     return svg;
 }
