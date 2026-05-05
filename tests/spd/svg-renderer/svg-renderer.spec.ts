@@ -186,6 +186,36 @@ describe("SVG Renderer", () => {
     expect(svg).toContain(backgroundRectString);
   });
 
+  it("should handle 'none' as base background color", () => {
+    const node: ProcessNode = {
+      type: "process",
+      text: "test",
+      childNode: null,
+    };
+    const svg = render(node, { baseBackgroundColor: "none" });
+    expect(svg).toContain('fill="none"');
+  });
+
+  it("should handle 'none' with whitespace as base background color", () => {
+    const node: ProcessNode = {
+      type: "process",
+      text: "test",
+      childNode: null,
+    };
+    const svg = render(node, { baseBackgroundColor: "  none  " });
+    expect(svg).toContain('fill="none"');
+  });
+
+  it("should handle invalid base background color by defaulting to 'none'", () => {
+    const node: ProcessNode = {
+      type: "process",
+      text: "test",
+      childNode: null,
+    };
+    const svg = render(node, { baseBackgroundColor: "invalid-color!!!" });
+    expect(svg).toContain('fill="none"');
+  });
+
   it("should handle unknown node types gracefully", () => {
     const node = {
       type: "unknown",
