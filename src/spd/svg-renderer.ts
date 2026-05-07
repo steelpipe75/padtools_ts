@@ -122,7 +122,7 @@ export function render(
   const baseFillColor = sanitizeSvgColor(mergedOptions.baseBackgroundColor);
   svg += `<rect x="0" y="0" `;
   svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
-  svg += `fill="${baseFillColor}"/>`;
+  svg += `fill="${escapeXmlAttribute(baseFillColor)}"/>`;
   svg += renderTransformTranslateSvg(
     mergedOptions.margin.left,
     mergedOptions.margin.top,
@@ -131,6 +131,15 @@ export function render(
   svg += `</svg>`;
 
   return svg;
+}
+
+function escapeXmlAttribute(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 function sanitizeSvgColor(color: string | null): string {
