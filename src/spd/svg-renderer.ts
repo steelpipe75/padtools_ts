@@ -962,10 +962,13 @@ function renderLineSvg(
   y2: number,
   options: RenderOptions,
 ): string {
+  const safeStrokeColor = escapeXmlAttribute(
+    sanitizeSvgColor(options.strokeColor),
+  );
   return `<line
 		x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
 		x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
-		stroke="${options.strokeColor}"
+		stroke="${safeStrokeColor}"
 		stroke-width="${options.strokeWidth}"
 	/>`;
 }
