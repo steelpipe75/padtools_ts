@@ -216,9 +216,11 @@ function renderBoxFragment(
     contentHeight += options.boxPadding.top + options.boxPadding.bottom;
     textOffsetY += options.boxPadding.top;
     const fillColor = options.backgroundColor ?? "none";
+    const safeStrokeColor = escapeXmlAttribute(options.strokeColor);
+    const safeFillColor = escapeXmlAttribute(fillColor);
     svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
-    svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
-    svg += `fill="${fillColor}"/>`;
+    svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth}" `;
+    svg += `fill="${safeFillColor}"/>`;
   } else if (node.borderType === "WRound") {
     // 丸みを帯びた四角形
     contentHeight += options.boxPadding.top + options.boxPadding.bottom;
@@ -227,10 +229,12 @@ function renderBoxFragment(
     contentWidth += contentHeight;
     textOffsetX = radius;
     const fillColor = options.backgroundColor ?? "none";
+    const safeStrokeColor = escapeXmlAttribute(options.strokeColor);
+    const safeFillColor = escapeXmlAttribute(fillColor);
     svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
     svg += `rx="${radius.toFixed(1)}" ry="${radius.toFixed(1)}" `;
-    svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
-    svg += `fill="${fillColor}"/>`;
+    svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth}" `;
+    svg += `fill="${safeFillColor}"/>`;
   } else {
     // ボーダーなし
     contentWidth += options.boxPadding.left + options.boxPadding.right;
