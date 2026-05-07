@@ -3,8 +3,8 @@
     <g transform="translate(20.0, 20.0)">
         <g transform="translate(0.0, 0.0)">
             <rect x="0" y="0" width="48.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1"/>
-            <line x1="43.0" y1="0.0" x2="43.0" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1.0"/>
+            <line x1="43.0" y1="0.0" x2="43.0" y2="36.8" stroke="#000000" stroke-width="1.0"/>
             <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 call
             </text>
@@ -15,7 +15,7 @@
                         Process A
                     </text>
                 </g>
-                <line x1="0.0" y1="0.0" x2="0.0" y2="83.6" stroke="#000000" stroke-width="1"/>
+                <line x1="0.0" y1="0.0" x2="0.0" y2="83.6" stroke="#000000" stroke-width="1.0"/>
                 <g transform="translate(0.0, 46.8)">
                     <rect x="0" y="0" width="83.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
                     <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
@@ -23,7 +23,7 @@
                     </text>
                 </g>
             </g>
-            <line x1="48.0" y1="0.0" x2="68.0" y2="0.0" stroke="#000000" stroke-width="1"/>
+            <line x1="48.0" y1="0.0" x2="68.0" y2="0.0" stroke="#000000" stroke-width="1.0"/>
         </g>
     </g>
 </svg>

@@ -7,24 +7,24 @@
                 開始
             </text>
         </g>
-        <line x1="32.4" y1="36.8" x2="32.4" y2="83.6" stroke="#000000" stroke-width="1"/>
+        <line x1="32.4" y1="36.8" x2="32.4" y2="83.6" stroke="#000000" stroke-width="1.0"/>
         <g transform="translate(32.4, 46.8)">
             <rect x="0" y="0" width="48.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
             <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 命令
             </text>
         </g>
-        <line x1="32.4" y1="46.8" x2="32.4" y2="110.4" stroke="#000000" stroke-width="1"/>
+        <line x1="32.4" y1="46.8" x2="32.4" y2="110.4" stroke="#000000" stroke-width="1.0"/>
         <g transform="translate(32.4, 93.6)">
             <text x="10.0" y="14.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 (コメント文)
             </text>
         </g>
-        <line x1="32.4" y1="93.6" x2="32.4" y2="157.2" stroke="#000000" stroke-width="1"/>
+        <line x1="32.4" y1="93.6" x2="32.4" y2="157.2" stroke="#000000" stroke-width="1.0"/>
         <g transform="translate(32.4, 120.4)">
             <rect x="0" y="0" width="104.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1"/>
-            <line x1="99.0" y1="0.0" x2="99.0" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1.0"/>
+            <line x1="99.0" y1="0.0" x2="99.0" y2="36.8" stroke="#000000" stroke-width="1.0"/>
             <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 関数呼び出し
             </text>
@@ -34,9 +34,9 @@
                     中身
                 </text>
             </g>
-            <line x1="104.0" y1="0.0" x2="124.0" y2="0.0" stroke="#000000" stroke-width="1"/>
+            <line x1="104.0" y1="0.0" x2="124.0" y2="0.0" stroke="#000000" stroke-width="1.0"/>
         </g>
-        <line x1="32.4" y1="120.4" x2="32.4" y2="257.6" stroke="#000000" stroke-width="1"/>
+        <line x1="32.4" y1="120.4" x2="32.4" y2="257.6" stroke="#000000" stroke-width="1.0"/>
         <g transform="translate(32.4, 167.2)">
             <g transform="translate(102.0, 0.0)">
                 <rect x="0" y="0" width="76.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
@@ -44,14 +44,14 @@
                     真の場合
                 </text>
             </g>
-            <line x1="82.0" y1="0.0" x2="102.0" y2="0.0" stroke="#000000" stroke-width="1"/>
+            <line x1="82.0" y1="0.0" x2="102.0" y2="0.0" stroke="#000000" stroke-width="1.0"/>
             <g transform="translate(102.0, 53.6)">
                 <rect x="0" y="0" width="223.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
                 <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     偽の場合(:else以下は省略可能)
                 </text>
             </g>
-            <line x1="82.0" y1="53.6" x2="102.0" y2="53.6" stroke="#000000" stroke-width="1"/>
+            <line x1="82.0" y1="53.6" x2="102.0" y2="53.6" stroke="#000000" stroke-width="1.0"/>
             <polygon points="0.0,0.0 82.0,0.0 62.0,26.8 82.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
             <text x="57.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
             <text x="57.0" y="45.8" dy="0.0" font-family="monospace" font-size="14" fill="#000000"></text>
@@ -59,7 +59,7 @@
                 条件式
             </text>
         </g>
-        <line x1="32.4" y1="167.2" x2="32.4" y2="411.6" stroke="#000000" stroke-width="1"/>
+        <line x1="32.4" y1="167.2" x2="32.4" y2="411.6" stroke="#000000" stroke-width="1.0"/>
         <g transform="translate(32.4, 267.6)">
             <g transform="translate(137.0, 0.0)">
                 <rect x="0" y="0" width="111.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
@@ -67,21 +67,21 @@
                     ケース1の中身
                 </text>
             </g>
-            <line x1="117.0" y1="0.0" x2="137.0" y2="0.0" stroke="#000000" stroke-width="1"/>
+            <line x1="117.0" y1="0.0" x2="137.0" y2="0.0" stroke="#000000" stroke-width="1.0"/>
             <g transform="translate(137.0, 53.6)">
                 <rect x="0" y="0" width="111.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
                 <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     ケース2の中身
                 </text>
             </g>
-            <line x1="117.0" y1="53.6" x2="137.0" y2="53.6" stroke="#000000" stroke-width="1"/>
+            <line x1="117.0" y1="53.6" x2="137.0" y2="53.6" stroke="#000000" stroke-width="1.0"/>
             <g transform="translate(137.0, 107.2)">
                 <rect x="0" y="0" width="328.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
                 <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     ケース文は必要に応じていくつでも追加できます
                 </text>
             </g>
-            <line x1="117.0" y1="107.2" x2="137.0" y2="107.2" stroke="#000000" stroke-width="1"/>
+            <line x1="117.0" y1="107.2" x2="137.0" y2="107.2" stroke="#000000" stroke-width="1.0"/>
             <polygon points="0.0,0.0 117.0,0.0 97.0,26.8 117.0,53.6 97.0,80.4 117.0,107.2 0.0,107.2" stroke="#000000" stroke-width="1" fill="#ffffff"/>
             <text x="43.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 ケース1
@@ -96,10 +96,10 @@
                 条件
             </text>
         </g>
-        <line x1="32.4" y1="267.6" x2="32.4" y2="458.4" stroke="#000000" stroke-width="1"/>
+        <line x1="32.4" y1="267.6" x2="32.4" y2="458.4" stroke="#000000" stroke-width="1.0"/>
         <g transform="translate(32.4, 421.6)">
             <rect x="0" y="0" width="174.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <line x1="5.0" y1="0.0" x2="5.0" y2="36.8" stroke="#000000" stroke-width="1.0"/>
             <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 繰り返し条件（先判定）
             </text>
@@ -109,12 +109,12 @@
                     中身
                 </text>
             </g>
-            <line x1="174.0" y1="0.0" x2="194.0" y2="0.0" stroke="#000000" stroke-width="1"/>
+            <line x1="174.0" y1="0.0" x2="194.0" y2="0.0" stroke="#000000" stroke-width="1.0"/>
         </g>
-        <line x1="32.4" y1="421.6" x2="32.4" y2="505.2" stroke="#000000" stroke-width="1"/>
+        <line x1="32.4" y1="421.6" x2="32.4" y2="505.2" stroke="#000000" stroke-width="1.0"/>
         <g transform="translate(32.4, 468.4)">
             <rect x="0" y="0" width="174.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
-            <line x1="169.0" y1="0.0" x2="169.0" y2="36.8" stroke="#000000" stroke-width="1"/>
+            <line x1="169.0" y1="0.0" x2="169.0" y2="36.8" stroke="#000000" stroke-width="1.0"/>
             <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 繰り返し条件（後判定）
             </text>
@@ -124,9 +124,9 @@
                     中身
                 </text>
             </g>
-            <line x1="174.0" y1="0.0" x2="194.0" y2="0.0" stroke="#000000" stroke-width="1"/>
+            <line x1="174.0" y1="0.0" x2="194.0" y2="0.0" stroke="#000000" stroke-width="1.0"/>
         </g>
-        <line x1="32.4" y1="468.4" x2="32.4" y2="515.2" stroke="#000000" stroke-width="1"/>
+        <line x1="32.4" y1="468.4" x2="32.4" y2="515.2" stroke="#000000" stroke-width="1.0"/>
         <g transform="translate(0.0, 515.2)">
             <rect x="0" y="0" width="64.8" height="36.8" rx="18.4" ry="18.4" stroke="#000000" stroke-width="1" fill="#ffffff"/>
             <text x="18.4" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
