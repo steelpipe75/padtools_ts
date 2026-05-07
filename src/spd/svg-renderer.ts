@@ -103,17 +103,28 @@ export function render(
   options?: Partial<RenderOptions>,
 ): string {
   const mergedOptions: RenderOptions = { ...defaultRenderOptions, ...options };
+  const safeOptions: RenderOptions = {
+    ...mergedOptions,
+    strokeColor: escapeXmlAttribute(mergedOptions.strokeColor),
+    backgroundColor:
+      mergedOptions.backgroundColor == null
+        ? mergedOptions.backgroundColor
+        : escapeXmlAttribute(mergedOptions.backgroundColor),
+    strokeWidth: Number.isFinite(mergedOptions.strokeWidth)
+      ? mergedOptions.strokeWidth
+      : defaultRenderOptions.strokeWidth,
+  };
 
   if (!node) {
     return "";
   }
 
-  const fragment = renderNode(node, mergedOptions);
+  const fragment = renderNode(node, safeOptions);
 
   const svgWidth =
-    fragment.width + mergedOptions.margin.left + mergedOptions.margin.right;
+    fragment.width + safeOptions.margin.left + safeOptions.margin.right;
   const svgHeight =
-    fragment.height + mergedOptions.margin.top + mergedOptions.margin.bottom;
+    fragment.height + safeOptions.margin.top + safeOptions.margin.bottom;
 
   let svg = `<svg `;
   svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
@@ -124,8 +135,8 @@ export function render(
   svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
   svg += `fill="${escapeXmlAttribute(baseFillColor)}"/>`;
   svg += renderTransformTranslateSvg(
-    mergedOptions.margin.left,
-    mergedOptions.margin.top,
+    safeOptions.margin.left,
+    safeOptions.margin.top,
     fragment.svg,
   );
   svg += `</svg>`;
