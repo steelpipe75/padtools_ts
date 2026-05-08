@@ -1,4 +1,5 @@
 import * as eaw from "eastasianwidth";
+import sanitizeHtml from "sanitize-html";
 import type {
   CallNode,
   CommentNode,
@@ -153,7 +154,49 @@ export function render(
   );
   svg += `</svg>`;
 
-  return svg;
+  const sanitizedSvg = sanitizeHtml(svg, {
+    allowedTags: [
+      "svg",
+      "g",
+      "rect",
+      "path",
+      "line",
+      "polyline",
+      "polygon",
+      "ellipse",
+      "circle",
+      "text",
+      "tspan",
+      "defs",
+      "marker",
+    ],
+    allowedAttributes: {
+      svg: ["xmlns", "width", "height", "viewBox"],
+      g: ["transform", "stroke", "stroke-width", "fill", "class"],
+      rect: ["x", "y", "width", "height", "rx", "ry", "stroke", "stroke-width", "fill"],
+      path: ["d", "stroke", "stroke-width", "fill", "marker-end", "marker-start"],
+      line: ["x1", "y1", "x2", "y2", "stroke", "stroke-width"],
+      polyline: ["points", "stroke", "stroke-width", "fill"],
+      polygon: ["points", "stroke", "stroke-width", "fill"],
+      ellipse: ["cx", "cy", "rx", "ry", "stroke", "stroke-width", "fill"],
+      circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill"],
+      text: ["x", "y", "font-size", "font-family", "text-anchor", "dominant-baseline", "fill"],
+      tspan: ["x", "y", "dx", "dy"],
+      defs: [],
+      marker: [
+        "id",
+        "viewBox",
+        "refX",
+        "refY",
+        "markerWidth",
+        "markerHeight",
+        "orient",
+      ],
+    },
+    allowedSchemes: ["http", "https"],
+  });
+
+  return sanitizedSvg;
 }
 
 function escapeXmlAttribute(value: string): string {
