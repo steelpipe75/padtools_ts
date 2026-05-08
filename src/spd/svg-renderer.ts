@@ -101,11 +101,14 @@ const defaultRenderOptions: RenderOptions = {
 /**
  * Render AST nodes into an SVG markup string.
  *
- * Security note:
- * - This function returns raw SVG/XML markup assembled from node content and render options.
- * - If `node` text or `options` values come from untrusted input, do not insert the returned
- *   string into the DOM as HTML/SVG without sanitization.
- * - Prefer trusted inputs only, or sanitize before assigning to sinks such as `innerHTML`.
+ * @param node - The AST node to render.
+ * @param options - Optional render configurations.
+ * @returns A string representing the SVG markup.
+ *
+ * @security This function constructs an SVG string from potentially untrusted input (node text and options).
+ * The returned string should be treated as untrusted HTML/SVG content.
+ * When inserting the result into the DOM, use safe methods like `DOMParser.parseFromString()`
+ * and `appendChild()`, or use a sanitizer library. Avoid direct assignment to `innerHTML`.
  */
 export function render(
   node: Node | null,

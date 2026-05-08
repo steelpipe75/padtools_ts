@@ -79,7 +79,18 @@ document.addEventListener("DOMContentLoaded", () => {
           : "Original",
       };
       const svgString = renderSvg(ast, options);
-      svgOutput.innerHTML = svgString;
+
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
+      const svgElement = svgDoc.documentElement;
+
+      svgOutput.textContent = "";
+      if (svgElement && svgElement.tagName === "svg") {
+        svgOutput.appendChild(svgElement);
+      } else {
+        // Fallback for cases where parsing might fail (though renderSvg should return valid SVG)
+        svgOutput.innerHTML = svgString;
+      }
     } catch (error) {
       const errorParagraph = document.createElement("p");
       errorParagraph.style.color = "red";
