@@ -180,7 +180,7 @@ export function render(
       polygon: ["points", "stroke", "stroke-width", "fill"],
       ellipse: ["cx", "cy", "rx", "ry", "stroke", "stroke-width", "fill"],
       circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill"],
-      text: ["x", "y", "font-size", "font-family", "text-anchor", "dominant-baseline", "fill"],
+      text: ["x", "y", "dx", "dy", "font-size", "font-family", "text-anchor", "dominant-baseline", "fill"],
       tspan: ["x", "y", "dx", "dy"],
       defs: [],
       marker: [
@@ -194,9 +194,22 @@ export function render(
       ],
     },
     allowedSchemes: ["http", "https"],
+    selfClosing: [
+      "rect",
+      "path",
+      "line",
+      "polyline",
+      "polygon",
+      "ellipse",
+      "circle",
+    ],
+    parser: {
+      lowerCaseTags: false,
+      lowerCaseAttributeNames: false,
+    },
   });
 
-  return sanitizedSvg;
+  return sanitizedSvg.replace(/ \/>/g, "/>");
 }
 
 function escapeXmlAttribute(value: string): string {
