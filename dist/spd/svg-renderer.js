@@ -32,9 +32,13 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.render = render;
 const eaw = __importStar(require("eastasianwidth"));
+const sanitize_html_1 = __importDefault(require("sanitize-html"));
 // デフォルトの描画オプション
 const defaultRenderOptions = {
     fontSize: 14,
@@ -58,14 +62,31 @@ const defaultRenderOptions = {
 /**
  * ASTを受け取り、完全なSVG文字列を返す
  */
+/**
+ * Render AST nodes into an SVG markup string.
+ *
+ * @param node - The AST node to render.
+ * @param options - Optional render configurations.
+ * @returns A string representing the SVG markup.
+ *
+ * @security This function constructs an SVG string from potentially untrusted input (node text and options).
+ * The returned string should be treated as untrusted HTML/SVG content.
+ * When inserting the result into the DOM, use safe methods like `DOMParser.parseFromString()`
+ * and `appendChild()`, or use a sanitizer library. Avoid direct assignment to `innerHTML`.
+ */
 function render(node, options) {
     const mergedOptions = Object.assign(Object.assign({}, defaultRenderOptions), options);
+    const safeOptions = Object.assign(Object.assign({}, mergedOptions), { strokeColor: escapeXmlAttribute(mergedOptions.strokeColor), backgroundColor: mergedOptions.backgroundColor == null
+            ? mergedOptions.backgroundColor
+            : escapeXmlAttribute(mergedOptions.backgroundColor), strokeWidth: Number.isFinite(mergedOptions.strokeWidth)
+            ? mergedOptions.strokeWidth
+            : defaultRenderOptions.strokeWidth });
     if (!node) {
         return "";
     }
-    const fragment = renderNode(node, mergedOptions);
-    const svgWidth = fragment.width + mergedOptions.margin.left + mergedOptions.margin.right;
-    const svgHeight = fragment.height + mergedOptions.margin.top + mergedOptions.margin.bottom;
+    const fragment = renderNode(node, safeOptions);
+    const svgWidth = fragment.width + safeOptions.margin.left + safeOptions.margin.right;
+    const svgHeight = fragment.height + safeOptions.margin.top + safeOptions.margin.bottom;
     let svg = `<svg `;
     svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
     svg += `viewBox="0 0 ${svgWidth.toFixed(1)} ${svgHeight.toFixed(1)}" `;
@@ -73,10 +94,99 @@ function render(node, options) {
     const baseFillColor = sanitizeSvgColor(mergedOptions.baseBackgroundColor);
     svg += `<rect x="0" y="0" `;
     svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
-    svg += `fill="${baseFillColor}"/>`;
-    svg += renderTransformTranslateSvg(mergedOptions.margin.left, mergedOptions.margin.top, fragment.svg);
+    svg += `fill="${escapeXmlAttribute(baseFillColor)}"/>`;
+    svg += renderTransformTranslateSvg(safeOptions.margin.left, safeOptions.margin.top, fragment.svg);
     svg += `</svg>`;
-    return svg;
+    const sanitizedSvg = (0, sanitize_html_1.default)(svg, {
+        allowedTags: [
+            "svg",
+            "g",
+            "rect",
+            "path",
+            "line",
+            "polyline",
+            "polygon",
+            "ellipse",
+            "circle",
+            "text",
+            "tspan",
+            "defs",
+            "marker",
+        ],
+        allowedAttributes: {
+            svg: ["xmlns", "width", "height", "viewBox"],
+            g: ["transform", "stroke", "stroke-width", "fill", "class"],
+            rect: [
+                "x",
+                "y",
+                "width",
+                "height",
+                "rx",
+                "ry",
+                "stroke",
+                "stroke-width",
+                "fill",
+            ],
+            path: [
+                "d",
+                "stroke",
+                "stroke-width",
+                "fill",
+                "marker-end",
+                "marker-start",
+            ],
+            line: ["x1", "y1", "x2", "y2", "stroke", "stroke-width"],
+            polyline: ["points", "stroke", "stroke-width", "fill"],
+            polygon: ["points", "stroke", "stroke-width", "fill"],
+            ellipse: ["cx", "cy", "rx", "ry", "stroke", "stroke-width", "fill"],
+            circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill"],
+            text: [
+                "x",
+                "y",
+                "dx",
+                "dy",
+                "font-size",
+                "font-family",
+                "text-anchor",
+                "dominant-baseline",
+                "fill",
+            ],
+            tspan: ["x", "y", "dx", "dy"],
+            defs: [],
+            marker: [
+                "id",
+                "viewBox",
+                "refX",
+                "refY",
+                "markerWidth",
+                "markerHeight",
+                "orient",
+            ],
+        },
+        allowedSchemes: ["http", "https"],
+        selfClosing: [
+            "rect",
+            "path",
+            "line",
+            "polyline",
+            "polygon",
+            "ellipse",
+            "circle",
+        ],
+        parser: {
+            lowerCaseTags: false,
+            lowerCaseAttributeNames: false,
+        },
+    });
+    return sanitizedSvg.replace(/ \/>/g, "/>");
+}
+function escapeXmlAttribute(value) {
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 }
 function sanitizeSvgColor(color) {
     if (color == null) {
@@ -135,9 +245,11 @@ function renderBoxFragment(node, options) {
         contentHeight += options.boxPadding.top + options.boxPadding.bottom;
         textOffsetY += options.boxPadding.top;
         const fillColor = (_a = options.backgroundColor) !== null && _a !== void 0 ? _a : "none";
+        const safeStrokeColor = escapeXmlAttribute(options.strokeColor);
+        const safeFillColor = escapeXmlAttribute(fillColor);
         svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
-        svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
-        svg += `fill="${fillColor}"/>`;
+        svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth}" `;
+        svg += `fill="${safeFillColor}"/>`;
     }
     else if (node.borderType === "WRound") {
         // 丸みを帯びた四角形
@@ -147,10 +259,12 @@ function renderBoxFragment(node, options) {
         contentWidth += contentHeight;
         textOffsetX = radius;
         const fillColor = (_b = options.backgroundColor) !== null && _b !== void 0 ? _b : "none";
+        const safeStrokeColor = escapeXmlAttribute(options.strokeColor);
+        const safeFillColor = escapeXmlAttribute(fillColor);
         svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
         svg += `rx="${radius.toFixed(1)}" ry="${radius.toFixed(1)}" `;
-        svg += `stroke="${options.strokeColor}" stroke-width="${options.strokeWidth}" `;
-        svg += `fill="${fillColor}"/>`;
+        svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth}" `;
+        svg += `fill="${safeFillColor}"/>`;
     }
     else {
         // ボーダーなし
@@ -675,11 +789,18 @@ function renderTextSvg(text, posX, posY, options) {
  * line描画支援
  */
 function renderLineSvg(x1, y1, x2, y2, options) {
+    const safeStrokeColor = escapeXmlAttribute(sanitizeSvgColor(options.strokeColor));
+    const numericStrokeWidth = typeof options.strokeWidth === "number"
+        ? options.strokeWidth
+        : Number(options.strokeWidth);
+    const safeStrokeWidth = Number.isFinite(numericStrokeWidth)
+        ? Math.max(0, numericStrokeWidth)
+        : 0;
     return `<line
 		x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
 		x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
-		stroke="${options.strokeColor}"
-		stroke-width="${options.strokeWidth}"
+		stroke="${safeStrokeColor}"
+		stroke-width="${safeStrokeWidth.toFixed(1)}"
 	/>`;
 }
 /**
