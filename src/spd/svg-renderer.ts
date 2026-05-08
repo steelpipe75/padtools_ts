@@ -98,6 +98,15 @@ const defaultRenderOptions: RenderOptions = {
 /**
  * ASTを受け取り、完全なSVG文字列を返す
  */
+/**
+ * Render AST nodes into an SVG markup string.
+ *
+ * Security note:
+ * - This function returns raw SVG/XML markup assembled from node content and render options.
+ * - If `node` text or `options` values come from untrusted input, do not insert the returned
+ *   string into the DOM as HTML/SVG without sanitization.
+ * - Prefer trusted inputs only, or sanitize before assigning to sinks such as `innerHTML`.
+ */
 export function render(
   node: Node | null,
   options?: Partial<RenderOptions>,
