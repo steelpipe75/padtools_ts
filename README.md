@@ -257,17 +257,17 @@ npm run build:web:gh-pages
 
 このプロジェクトでは、以下の主要なオープンソースライブラリを使用しています。
 
--   commander: CLIコマンドの解析に使用。[MIT License](https://github.com/tj/commander.js/blob/master/LICENSE)
--   xml-formatter: SVG出力の整形 (`--prettyprint` オプション) に使用。[MIT License](https://github.com/chrisbottin/xml-formatter/blob/master/LICENSE)
--   svgo: SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。[MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
--   eastasianwidth: 文字の幅計算に使用。[MIT License](https://github.com/komagata/eastasianwidth)
--   hono: REST APIサーバーの実装に使用。[MIT License](https://github.com/honojs/hono/blob/main/LICENSE)
--   @hono/node-server: Node.jsでHonoを実行するために使用。[MIT License](https://github.com/honojs/node-server/blob/main/LICENSE)
--   @hono/zod-openapi: OpenAPI仕様の生成に使用。[MIT License](https://github.com/honojs/middleware/blob/main/packages/zod-openapi/LICENSE)
--   @hono/swagger-ui: APIドキュメントのSwagger UI表示に使用。[MIT License](https://github.com/honojs/middleware/blob/main/packages/swagger-ui/LICENSE)
--   zod: スキーマバリデーションに使用。[MIT License](https://github.com/colinhacks/zod/blob/master/LICENSE)
--   fastmcp: MCPサーバーの実装に使用。[MIT License](https://github.com/jlowin/fastmcp/blob/main/LICENSE)
--   sanitize-html: SVG内のテキストのサニタイズに使用。[MIT License](https://github.com/apostrophecms/sanitize-html/blob/main/LICENSE)
+-   [commander](https://github.com/tj/commander.js): CLIコマンドの解析に使用。 (MIT License)
+-   [xml-formatter](https://github.com/chrisbottin/xml-formatter): SVG出力の整形 (`--prettyprint` オプション) に使用。 (MIT License)
+-   [svgo](https://github.com/svg/svgo): SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。 (MIT License)
+-   [eastasianwidth](https://github.com/komagata/eastasianwidth): 文字の幅計算に使用。 (MIT License)
+-   [hono](https://github.com/honojs/hono): REST APIサーバーの実装に使用。 (MIT License)
+-   [@hono/node-server](https://github.com/honojs/node-server): Node.jsでHonoを実行するために使用。 (MIT License)
+-   [@hono/zod-openapi](https://github.com/honojs/middleware/tree/main/packages/zod-openapi): OpenAPI仕様の生成に使用。 (MIT License)
+-   [@hono/swagger-ui](https://github.com/honojs/middleware/tree/main/packages/swagger-ui): APIドキュメントのSwagger UI表示に使用。 (MIT License)
+-   [zod](https://github.com/colinhacks/zod): スキーマバリデーションに使用。 (MIT License)
+-   [fastmcp](https://github.com/jlowin/fastmcp): MCPサーバーの実装に使用。 (Apache License 2.0)
+-   [sanitize-html](https://github.com/apostrophecms/sanitize-html): SVG内のテキストのサニタイズに使用。 (MIT License)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
 
