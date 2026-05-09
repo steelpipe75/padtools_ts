@@ -184,6 +184,18 @@ SVGファイル (`image/svg+xml`) が返されます。
 npm run start:mcp
 ```
 
+### MCP Inspector による動作確認
+
+MCP Inspector を使用して、ブラウザ上でツールの動作やリソース、プロンプトを直接テストできます。
+
+```shell
+npx @modelcontextprotocol/inspector npx tsx src/mcp/server.ts
+```
+
+コマンドを実行すると、通常 `http://localhost:6274` で Inspector が起動し、ブラウザが自動的に開きます。
+
+※ `npm run start:mcp` を使用すると、npm の出力メッセージが JSON RPC のメッセージとして解釈されようとして通信エラーが発生する場合があるため、上記のように `npx tsx` で直接サーバーを起動することを推奨します。
+
 ### 提供されるツール
 
 #### `convert_spd_to_svg`
