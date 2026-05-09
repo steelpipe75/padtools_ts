@@ -266,6 +266,8 @@ npm run build:web:gh-pages
 -   @hono/zod-openapi: OpenAPI仕様の生成に使用。[MIT License](https://github.com/honojs/middleware/blob/main/packages/zod-openapi/LICENSE)
 -   @hono/swagger-ui: APIドキュメントのSwagger UI表示に使用。[MIT License](https://github.com/honojs/middleware/blob/main/packages/swagger-ui/LICENSE)
 -   zod: スキーマバリデーションに使用。[MIT License](https://github.com/colinhacks/zod/blob/master/LICENSE)
+-   fastmcp: MCPサーバーの実装に使用。[MIT License](https://github.com/jlowin/fastmcp/blob/main/LICENSE)
+-   sanitize-html: SVG内のテキストのサニタイズに使用。[MIT License](https://github.com/apostrophecms/sanitize-html/blob/main/LICENSE)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
 
