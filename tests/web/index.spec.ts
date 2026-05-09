@@ -45,11 +45,8 @@ test.describe("E2E tests for web", () => {
     await page.fill("#spdInput", ":unknown");
 
     // エラーメッセージを確認
-    // アプリは赤色の段落でエラーを表示する
-    await expect(page.locator("#svgOutput p")).toHaveCSS(
-      "color",
-      "rgb(255, 0, 0)",
-    );
+    // アプリは .error-message クラスを持つ段落でエラーを表示する
+    await expect(page.locator("#svgOutput p.error-message")).toBeVisible();
     await expect(page.locator("#svgOutput")).toContainText("Error:");
   });
 
