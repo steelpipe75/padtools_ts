@@ -83,7 +83,7 @@
     "ts-jest": "^29.4.9",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
-    "wrangler": "^4.87.0"
+    "wrangler": "^4.90.0"
   },
   "overrides": {
     "test-exclude": "7.0.1",
