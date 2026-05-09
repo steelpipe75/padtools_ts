@@ -76,7 +76,7 @@
     "baseline-browser-mapping": "^2.10.25",
     "buffer": "^6.0.3",
     "husky": "^9.1.7",
-    "jest": "^30.3.0",
+    "jest": "^30.4.2",
     "parcel": "^2.16.4",
     "postcss": "^8.5.13",
     "rimraf": "^6.1.3",
