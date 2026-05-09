@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch (error) {
       const errorParagraph = document.createElement("p");
-      errorParagraph.style.color = "red";
+      errorParagraph.classList.add("error-message");
       svgOutput.textContent = "";
 
       if (error instanceof Error) {

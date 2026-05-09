@@ -191,6 +191,18 @@ button .material-symbols-outlined {
   height: 100%;
 }
 
+.error-message {
+  background-color: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 0;
+  font-family: sans-serif;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
 .options-section {
   background-color: #fff;
   padding: 20px;
