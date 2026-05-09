@@ -1,7 +1,11 @@
 import { FastMCP } from "fastmcp";
 import { ConvertRequestSchema, generateSvg } from "../spd/core";
+import { version } from "../../package.json";
 
-const mcp = new FastMCP("PAD Tools");
+const mcp = new FastMCP({
+  name: "PAD Tools",
+  version: version as `${number}.${number}.${number}`,
+});
 
 mcp.addTool({
   name: "convert_spd_to_svg",
