@@ -79,7 +79,10 @@ export const ConvertRequestSchema = z.object({
 
 export type ConvertRequest = z.infer<typeof ConvertRequestSchema>;
 
-export const generateSvg = (spd: string, options: ConvertRequestOptions = {}) => {
+export const generateSvg = (
+  spd: string,
+  options: ConvertRequestOptions = {},
+) => {
   const ast = parse(spd);
   const renderOptions: Parameters<typeof render>[1] = {};
 

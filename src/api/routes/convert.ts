@@ -1,8 +1,5 @@
 import { createRoute, type RouteHandler, z } from "@hono/zod-openapi";
-import {
-  ConvertRequestSchema,
-  generateSvg,
-} from "../../spd/core";
+import { ConvertRequestSchema, generateSvg } from "../../spd/core";
 
 const ConvertResponseSchema = z.object({
   svg: z.string().openapi({
