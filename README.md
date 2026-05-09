@@ -172,6 +172,49 @@ SVGファイル (`image/svg+xml`) が返されます。
 - `listRenderType`: リスト描画タイプ (`Original` または `TerminalOffset`)
 - `prettyprint`: SVGを整形して出力 (真偽値)
 
+## MCP (Model Context Protocol) サーバー
+
+`padtools_ts` は、AIエージェント（Claudeなど）から直接利用可能な MCP サーバーを提供します。これにより、AIエージェントがプログラムのロジックを解析し、即座にPAD図として可視化できるようになります。
+
+### MCPサーバーの起動
+
+標準入出力 (stdio) モードでサーバーを起動するには、以下のコマンドを実行します。
+
+```shell
+npm run start:mcp
+```
+
+### 提供されるツール
+
+#### `convert_spd_to_svg`
+
+SPDテキストを解析し、SVG形式のPAD図を生成して返します。
+
+- **引数**:
+  - `spd` (string, 必須): 変換対象の SPD テキスト。
+  - `options` (object, 任意): フォントサイズや色などの描画オプション（REST APIと同様）。
+
+### AIエージェントへの設定例 (Claude Desktop)
+
+`claude_desktop_config.json` に以下の設定を追加することで、Claude からツールとして利用可能になります。
+
+```json
+{
+  "mcpServers": {
+    "padtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "tsx",
+        "C:/path/to/padtools_ts/src/mcp/server.ts"
+      ],
+      "cwd": "C:/path/to/padtools_ts"
+    }
+  }
+}
+```
+※ `C:/path/to/padtools_ts` は実際のインストールパスに置き換えてください。
+
 ## Webツール
 
 このプロジェクトには、Webベースのツールも含まれています。
