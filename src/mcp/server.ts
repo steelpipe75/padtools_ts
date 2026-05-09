@@ -1,10 +1,19 @@
 import { FastMCP } from "fastmcp";
 import { version } from "../../package.json";
 import { ConvertRequestSchema, generateSvg } from "../spd/core";
+import { SPD_EXPLANATION } from "../spd/docs";
 
 const mcp = new FastMCP({
   name: "PAD Tools",
   version: version as `${number}.${number}.${number}`,
+});
+
+mcp.addTool({
+  name: "get_spd_explanation",
+  description: "Get the explanation of SPD (Simple PAD Description) notation.",
+  execute: async () => {
+    return SPD_EXPLANATION;
+  },
 });
 
 mcp.addTool({
