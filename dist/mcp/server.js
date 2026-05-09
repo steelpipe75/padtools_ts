@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastmcp_1 = require("fastmcp");
-const core_1 = require("../spd/core");
 const package_json_1 = require("../../package.json");
+const core_1 = require("../spd/core");
 const mcp = new fastmcp_1.FastMCP({
     name: "PAD Tools",
     version: package_json_1.version,
