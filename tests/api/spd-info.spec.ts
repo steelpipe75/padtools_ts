@@ -9,6 +9,8 @@ describe("API /spd-info", () => {
     const body = await res.json();
     expect(body).toHaveProperty("explanation");
     expect(body.explanation).toBe(SPD_EXPLANATION);
-    expect(body.explanation).toContain("# SPD (Simple PAD Description) 記法リファレンス");
+    expect(body.explanation).toContain(
+      "# SPD (Simple PAD Description) 記法リファレンス",
+    );
   });
 });
