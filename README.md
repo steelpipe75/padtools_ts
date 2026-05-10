@@ -172,6 +172,81 @@ SVGファイル (`image/svg+xml`) が返されます。
 - `listRenderType`: リスト描画タイプ (`Original` または `TerminalOffset`)
 - `prettyprint`: SVGを整形して出力 (真偽値)
 
+## MCP (Model Context Protocol) サーバー
+
+`padtools_ts` は、AIエージェント（Claudeなど）から直接利用可能な MCP サーバーを提供します。これにより、AIエージェントがプログラムのロジックを解析し、即座にPAD図として可視化できるようになります。
+
+### MCPサーバーの起動
+
+標準入出力 (stdio) モードでサーバーを起動するには、以下のコマンドを実行します。
+
+```shell
+npm run start:mcp
+```
+
+### MCP Inspector による動作確認
+
+MCP Inspector を使用して、ブラウザ上でツールの動作やリソース、プロンプトを直接テストできます。
+
+```shell
+npx @modelcontextprotocol/inspector npx tsx src/mcp/server.ts
+```
+
+コマンドを実行すると、通常 `http://localhost:6274` で Inspector が起動し、ブラウザが自動的に開きます。
+
+※ `npm run start:mcp` を使用すると、npm の出力メッセージが JSON RPC のメッセージとして解釈されようとして通信エラーが発生する場合があるため、上記のように `npx tsx` で直接サーバーを起動することを推奨します。
+
+### 提供されるリソース
+
+#### `spd://docs/explanation`
+
+SPD (Simple PAD Description) 記法の詳細な説明と、各ノードの記述例を提供します。
+
+### 提供されるプロンプト
+
+#### `explain-spd`
+
+SPD 記法についての説明と具体的な記述例を生成するよう AI に促します。
+
+#### `generate-spd`
+
+与えられた処理内容の説明（自然言語）から、対応する SPD テキストを生成するよう AI に促します。
+
+### 提供されるツール
+
+#### `convert_spd_to_svg`
+
+SPDテキストを解析し、SVG形式のPAD図を生成して返します。
+
+- **引数**:
+  - `spd` (string, 必須): 変換対象の SPD テキスト。
+  - `options` (object, 任意): フォントサイズや色などの描画オプション（REST APIと同様）。
+
+#### `get_spd_explanation`
+
+SPD 記法の仕様とサンプルコードを取得します。
+
+### AIエージェントへの設定例 (Claude Desktop)
+
+`claude_desktop_config.json` に以下の設定を追加することで、Claude からツールとして利用可能になります。
+
+```json
+{
+  "mcpServers": {
+    "padtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "tsx",
+        "C:/path/to/padtools_ts/src/mcp/server.ts"
+      ],
+      "cwd": "C:/path/to/padtools_ts"
+    }
+  }
+}
+```
+※ `C:/path/to/padtools_ts` は実際のインストールパスに置き換えてください。
+
 ## Webツール
 
 このプロジェクトには、Webベースのツールも含まれています。
@@ -214,15 +289,17 @@ npm run build:web:gh-pages
 
 このプロジェクトでは、以下の主要なオープンソースライブラリを使用しています。
 
--   commander: CLIコマンドの解析に使用。[MIT License](https://github.com/tj/commander.js/blob/master/LICENSE)
--   xml-formatter: SVG出力の整形 (`--prettyprint` オプション) に使用。[MIT License](https://github.com/chrisbottin/xml-formatter/blob/master/LICENSE)
--   svgo: SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。[MIT License](https://github.com/svg/svgo/blob/main/LICENSE)
--   eastasianwidth: 文字の幅計算に使用。[MIT License](https://github.com/komagata/eastasianwidth)
--   hono: REST APIサーバーの実装に使用。[MIT License](https://github.com/honojs/hono/blob/main/LICENSE)
--   @hono/node-server: Node.jsでHonoを実行するために使用。[MIT License](https://github.com/honojs/node-server/blob/main/LICENSE)
--   @hono/zod-openapi: OpenAPI仕様の生成に使用。[MIT License](https://github.com/honojs/middleware/blob/main/packages/zod-openapi/LICENSE)
--   @hono/swagger-ui: APIドキュメントのSwagger UI表示に使用。[MIT License](https://github.com/honojs/middleware/blob/main/packages/swagger-ui/LICENSE)
--   zod: スキーマバリデーションに使用。[MIT License](https://github.com/colinhacks/zod/blob/master/LICENSE)
+-   [commander](https://github.com/tj/commander.js): CLIコマンドの解析に使用。 (MIT License)
+-   [xml-formatter](https://github.com/chrisbottin/xml-formatter): SVG出力の整形 (`--prettyprint` オプション) に使用。 (MIT License)
+-   [svgo](https://github.com/svg/svgo): SVGの最適化（`--prettyprint` オプションが有効な場合）に使用。 (MIT License)
+-   [eastasianwidth](https://github.com/komagata/eastasianwidth): 文字の幅計算に使用。 (MIT License)
+-   [hono](https://github.com/honojs/hono): REST APIサーバーの実装に使用。 (MIT License)
+-   [@hono/node-server](https://github.com/honojs/node-server): Node.jsでHonoを実行するために使用。 (MIT License)
+-   [@hono/zod-openapi](https://github.com/honojs/middleware/tree/main/packages/zod-openapi): OpenAPI仕様の生成に使用。 (MIT License)
+-   [@hono/swagger-ui](https://github.com/honojs/middleware/tree/main/packages/swagger-ui): APIドキュメントのSwagger UI表示に使用。 (MIT License)
+-   [zod](https://github.com/colinhacks/zod): スキーマバリデーションに使用。 (MIT License)
+-   [fastmcp](https://github.com/jlowin/fastmcp): MCPサーバーの実装に使用。 (Apache License 2.0)
+-   [sanitize-html](https://github.com/apostrophecms/sanitize-html): SVG内のテキストのサニタイズに使用。 (MIT License)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
 
