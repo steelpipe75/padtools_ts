@@ -196,6 +196,22 @@ npx @modelcontextprotocol/inspector npx tsx src/mcp/server.ts
 
 ※ `npm run start:mcp` を使用すると、npm の出力メッセージが JSON RPC のメッセージとして解釈されようとして通信エラーが発生する場合があるため、上記のように `npx tsx` で直接サーバーを起動することを推奨します。
 
+### 提供されるリソース
+
+#### `spd://docs/explanation`
+
+SPD (Simple PAD Description) 記法の詳細な説明と、各ノードの記述例を提供します。
+
+### 提供されるプロンプト
+
+#### `explain-spd`
+
+SPD 記法についての説明と具体的な記述例を生成するよう AI に促します。
+
+#### `generate-spd`
+
+与えられた処理内容の説明（自然言語）から、対応する SPD テキストを生成するよう AI に促します。
+
 ### 提供されるツール
 
 #### `convert_spd_to_svg`
@@ -205,6 +221,10 @@ SPDテキストを解析し、SVG形式のPAD図を生成して返します。
 - **引数**:
   - `spd` (string, 必須): 変換対象の SPD テキスト。
   - `options` (object, 任意): フォントサイズや色などの描画オプション（REST APIと同様）。
+
+#### `get_spd_explanation`
+
+SPD 記法の仕様とサンプルコードを取得します。
 
 ### AIエージェントへの設定例 (Claude Desktop)
 
