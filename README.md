@@ -181,7 +181,7 @@ SVGファイル (`image/svg+xml`) が返されます。
 2種類のトランスポート方式を提供しています。
 
 1.  **stdio (標準入出力) モード**: ローカルの AI エージェント（Claude Desktopなど）から直接コマンドとして実行する場合に使用します。
-2.  **HTTP (SSE) モード**: Hono API サーバーの一部として動作し、ネットワーク越しに MCP クライアントから接続する場合に使用します。
+2.  **Streamable HTTP モード**: Hono API サーバーの一部として動作し、ネットワーク越しに MCP クライアントから接続する場合に使用します。
 
 ---
 
@@ -248,7 +248,7 @@ npm run start:api
     npx @modelcontextprotocol/inspector
     ```
 3.  ブラウザで表示された画面にて以下の設定を行います：
-    - **Transport Type**: `SSE` を選択
+    - **Transport Type**: `Streamable HTTP` を選択
     - **URL**: `http://localhost:3000/mcp` を入力
 4.  **Connect** をクリックして接続します。
 
