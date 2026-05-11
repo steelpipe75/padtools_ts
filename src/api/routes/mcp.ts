@@ -12,7 +12,7 @@ const mcpServer = new McpServer({
 });
 
 // Resource
-mcpServer.resource(
+mcpServer.registerResource(
   "spd-explanation",
   "spd://docs/explanation",
   {
@@ -31,10 +31,11 @@ mcpServer.resource(
 );
 
 // Prompts
-mcpServer.prompt(
+mcpServer.registerPrompt(
   "explain-spd",
-  "Explain SPD (Simple PAD Description) notation with examples.",
-  {},
+  {
+    description: "Explain SPD (Simple PAD Description) notation with examples.",
+  },
   async () => ({
     messages: [
       {
@@ -48,13 +49,16 @@ mcpServer.prompt(
   }),
 );
 
-mcpServer.prompt(
+mcpServer.registerPrompt(
   "generate-spd",
-  "Generate SPD (Simple PAD Description) from a task description.",
   {
-    description: z
-      .string()
-      .describe("Description of the logic or task to convert to SPD"),
+    description:
+      "Generate SPD (Simple PAD Description) from a task description.",
+    argsSchema: {
+      description: z
+        .string()
+        .describe("Description of the logic or task to convert to SPD"),
+    },
   },
   async ({ description }) => ({
     messages: [
@@ -70,10 +74,12 @@ mcpServer.prompt(
 );
 
 // Tools
-mcpServer.tool(
+mcpServer.registerTool(
   "get_spd_explanation",
-  "Get the explanation of SPD (Simple PAD Description) notation.",
-  {},
+  {
+    description:
+      "Get the explanation of SPD (Simple PAD Description) notation.",
+  },
   async () => {
     return {
       content: [{ type: "text", text: SPD_EXPLANATION }],
@@ -81,10 +87,13 @@ mcpServer.tool(
   },
 );
 
-mcpServer.tool(
+mcpServer.registerTool(
   "convert_spd_to_svg",
-  "Convert SPD (Simple PAD Description) text to a PAD diagram in SVG format.",
-  ConvertRequestSchema.shape,
+  {
+    description:
+      "Convert SPD (Simple PAD Description) text to a PAD diagram in SVG format.",
+    inputSchema: ConvertRequestSchema.shape,
+  },
   async (args) => {
     try {
       const svg = generateSvg(args.spd, args.options);
