@@ -1,5 +1,6 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { cors } from "hono/cors";
 import { version } from "../../package.json";
 import {
   convertHandler,
@@ -12,6 +13,9 @@ import { mcpHandler } from "./routes/mcp";
 import { spdInfoHandler, spdInfoRoute } from "./routes/spd-info";
 
 const app = new OpenAPIHono();
+
+// CORS for MCP
+app.use("/mcp", cors());
 
 // OpenAPI documentation
 app.doc("/doc", {
