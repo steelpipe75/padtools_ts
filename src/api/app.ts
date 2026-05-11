@@ -8,6 +8,7 @@ import {
   downloadRoute,
 } from "./routes/convert";
 import { healthHandler, healthRoute } from "./routes/health";
+import { mcpHandler } from "./routes/mcp";
 import { spdInfoHandler, spdInfoRoute } from "./routes/spd-info";
 
 const app = new OpenAPIHono();
@@ -31,6 +32,9 @@ app.openapi(healthRoute, healthHandler);
 app.openapi(spdInfoRoute, spdInfoHandler);
 app.openapi(convertRoute, convertHandler);
 app.openapi(downloadRoute, downloadHandler);
+
+// MCP Route
+app.all("/mcp", mcpHandler);
 
 // Handle base URL
 app.get("/", (c) => {
