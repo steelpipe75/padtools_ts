@@ -87,7 +87,6 @@ mcpServer.tool(
   ConvertRequestSchema.shape,
   async (args) => {
     try {
-      // @ts-expect-error - options might be undefined but generateSvg handles it
       const svg = generateSvg(args.spd, args.options);
       return {
         content: [{ type: "text", text: svg }],
@@ -110,7 +109,6 @@ const transport = new StreamableHTTPTransport();
 
 export const mcpHandler = async (c: Context) => {
   if (!mcpServer.isConnected()) {
-    // @ts-expect-error - transport type mismatch in some SDK versions but should work
     await mcpServer.connect(transport);
   }
   return transport.handleRequest(c);
