@@ -21,7 +21,7 @@ const mcpServer = new mcp_js_1.McpServer({
     version: package_json_1.version,
 });
 // Resource
-mcpServer.resource("spd-explanation", "spd://docs/explanation", {
+mcpServer.registerResource("spd-explanation", "spd://docs/explanation", {
     mimeType: "text/markdown",
     description: "Explanation of SPD (Simple PAD Description) notation.",
 }, (uri) => __awaiter(void 0, void 0, void 0, function* () {
@@ -36,7 +36,9 @@ mcpServer.resource("spd-explanation", "spd://docs/explanation", {
     });
 }));
 // Prompts
-mcpServer.prompt("explain-spd", "Explain SPD (Simple PAD Description) notation with examples.", {}, () => __awaiter(void 0, void 0, void 0, function* () {
+mcpServer.registerPrompt("explain-spd", {
+    description: "Explain SPD (Simple PAD Description) notation with examples.",
+}, () => __awaiter(void 0, void 0, void 0, function* () {
     return ({
         messages: [
             {
@@ -49,10 +51,13 @@ mcpServer.prompt("explain-spd", "Explain SPD (Simple PAD Description) notation w
         ],
     });
 }));
-mcpServer.prompt("generate-spd", "Generate SPD (Simple PAD Description) from a task description.", {
-    description: zod_1.z
-        .string()
-        .describe("Description of the logic or task to convert to SPD"),
+mcpServer.registerPrompt("generate-spd", {
+    description: "Generate SPD (Simple PAD Description) from a task description.",
+    argsSchema: {
+        description: zod_1.z
+            .string()
+            .describe("Description of the logic or task to convert to SPD"),
+    },
 }, (_a) => __awaiter(void 0, [_a], void 0, function* ({ description }) {
     return ({
         messages: [
@@ -67,12 +72,17 @@ mcpServer.prompt("generate-spd", "Generate SPD (Simple PAD Description) from a t
     });
 }));
 // Tools
-mcpServer.tool("get_spd_explanation", "Get the explanation of SPD (Simple PAD Description) notation.", {}, () => __awaiter(void 0, void 0, void 0, function* () {
+mcpServer.registerTool("get_spd_explanation", {
+    description: "Get the explanation of SPD (Simple PAD Description) notation.",
+}, () => __awaiter(void 0, void 0, void 0, function* () {
     return {
         content: [{ type: "text", text: docs_1.SPD_EXPLANATION }],
     };
 }));
-mcpServer.tool("convert_spd_to_svg", "Convert SPD (Simple PAD Description) text to a PAD diagram in SVG format.", core_1.ConvertRequestSchema.shape, (args) => __awaiter(void 0, void 0, void 0, function* () {
+mcpServer.registerTool("convert_spd_to_svg", {
+    description: "Convert SPD (Simple PAD Description) text to a PAD diagram in SVG format.",
+    inputSchema: core_1.ConvertRequestSchema.shape,
+}, (args) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const svg = (0, core_1.generateSvg)(args.spd, args.options);
         return {
