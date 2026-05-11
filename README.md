@@ -174,17 +174,26 @@ SVGファイル (`image/svg+xml`) が返されます。
 
 ## MCP (Model Context Protocol) サーバー
 
-`padtools_ts` は、AIエージェント（Claudeなど）から直接利用可能な MCP サーバーを提供します。これにより、AIエージェントがプログラムのロジックを解析し、即座にPAD図として可視化できるようになります。
+`padtools_ts` は、AIエージェント（Claudeなど）から直接利用可能な MCP サーバーを提供します。これにより、AIエージェントがプログラムのロジックを解析し、即座にPAD図として可維化できるようになります。
 
-### MCPサーバーの起動
+### MCPサーバーの種類
 
-標準入出力 (stdio) モードでサーバーを起動するには、以下のコマンドを実行します。
+2種類のトランスポート方式を提供しています。
+
+1.  **stdio (標準入出力) モード**: ローカルの AI エージェント（Claude Desktopなど）から直接コマンドとして実行する場合に使用します。
+2.  **Streamable HTTP モード**: Hono API サーバーの一部として動作し、ネットワーク越しに MCP クライアントから接続する場合に使用します。
+
+---
+
+### stdio モード (ローカル実行)
+
+#### 起動コマンド
 
 ```shell
 npm run start:mcp
 ```
 
-### MCP Inspector による動作確認
+#### MCP Inspector による動作確認
 
 MCP Inspector を使用して、ブラウザ上でツールの動作やリソース、プロンプトを直接テストできます。
 
@@ -195,6 +204,55 @@ npx @modelcontextprotocol/inspector npx tsx src/mcp/server.ts
 コマンドを実行すると、通常 `http://localhost:6274` で Inspector が起動し、ブラウザが自動的に開きます。
 
 ※ `npm run start:mcp` を使用すると、npm の出力メッセージが JSON RPC のメッセージとして解釈されようとして通信エラーが発生する場合があるため、上記のように `npx tsx` で直接サーバーを起動することを推奨します。
+
+#### AIエージェントへの設定例 (Claude Desktop)
+
+`claude_desktop_config.json` に以下の設定を追加することで、Claude からツールとして利用可能になります。
+
+```json
+{
+  "mcpServers": {
+    "padtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "tsx",
+        "C:/path/to/padtools_ts/src/mcp/server.ts"
+      ],
+      "cwd": "C:/path/to/padtools_ts"
+    }
+  }
+}
+```
+※ `C:/path/to/padtools_ts` は実際のインストールパスに置き換えてください。
+
+---
+
+### HTTP モード (API経由)
+
+Hono API サーバーを起動すると、`/mcp` エンドポイントが MCP サーバーとして機能します。
+
+#### サーバーの起動
+
+```shell
+npm run start:api
+```
+
+これにより、`http://localhost:3000/mcp` で MCP サービスが提供されます。
+
+#### MCP Inspector による動作確認
+
+1.  APIサーバーを起動します (`npm run start:api`)。
+2.  別のターミナルで Inspector を起動します。
+    ```shell
+    npx @modelcontextprotocol/inspector
+    ```
+3.  ブラウザで表示された画面にて以下の設定を行います：
+    - **Transport Type**: `Streamable HTTP` を選択
+    - **URL**: `http://localhost:3000/mcp` を入力
+4.  **Connect** をクリックして接続します。
+
+---
 
 ### 提供されるリソース
 
@@ -225,27 +283,6 @@ SPDテキストを解析し、SVG形式のPAD図を生成して返します。
 #### `get_spd_explanation`
 
 SPD 記法の仕様とサンプルコードを取得します。
-
-### AIエージェントへの設定例 (Claude Desktop)
-
-`claude_desktop_config.json` に以下の設定を追加することで、Claude からツールとして利用可能になります。
-
-```json
-{
-  "mcpServers": {
-    "padtools": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "tsx",
-        "C:/path/to/padtools_ts/src/mcp/server.ts"
-      ],
-      "cwd": "C:/path/to/padtools_ts"
-    }
-  }
-}
-```
-※ `C:/path/to/padtools_ts` は実際のインストールパスに置き換えてください。
 
 ## Webツール
 
@@ -299,6 +336,8 @@ npm run build:web:gh-pages
 -   [@hono/swagger-ui](https://github.com/honojs/middleware/tree/main/packages/swagger-ui): APIドキュメントのSwagger UI表示に使用。 (MIT License)
 -   [zod](https://github.com/colinhacks/zod): スキーマバリデーションに使用。 (MIT License)
 -   [fastmcp](https://github.com/jlowin/fastmcp): MCPサーバーの実装に使用。 (Apache License 2.0)
+-   [@hono/mcp](https://github.com/honojs/mcp): HonoでのMCPサーバー実装に使用。 (MIT License)
+-   [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/typescript-sdk): MCP SDK。 (MIT License)
 -   [sanitize-html](https://github.com/apostrophecms/sanitize-html): SVG内のテキストのサニタイズに使用。 (MIT License)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
