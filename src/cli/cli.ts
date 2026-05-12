@@ -86,7 +86,18 @@ program
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.error(`Error: ${error.message}`);
+        const parseError = error as any;
+        if (
+          parseError.lineNo !== undefined &&
+          parseError.lineStr !== undefined
+        ) {
+          console.error(
+            `Error at line ${parseError.lineNo}: ${error.message}`,
+          );
+          console.error(`> ${parseError.lineStr}`);
+        } else {
+          console.error(`Error: ${error.message}`);
+        }
       }
       process.exit(1);
     }

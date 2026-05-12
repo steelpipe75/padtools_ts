@@ -203,6 +203,18 @@ button .material-symbols-outlined {
   word-break: break-all;
 }
 
+.error-line {
+  display: block;
+  background-color: #ffffff;
+  border: 1px solid #f5c2c7;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 4px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
 .options-section {
   background-color: #fff;
   padding: 20px;

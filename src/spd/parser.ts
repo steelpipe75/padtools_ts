@@ -12,6 +12,9 @@ import type {
 
 // カスタムエラークラス群
 export class ParseError extends Error {
+  lineNo?: number;
+  lineStr?: string;
+
   constructor(message: string) {
     super(message);
     this.name = this.constructor.name;
@@ -458,6 +461,8 @@ export const parse = (
         }
       } catch (ex) {
         if (ex instanceof ParseError) {
+          ex.lineNo = lineNo;
+          ex.lineStr = line;
           if (exr(line, lineNo - 1, ex)) {
           } else {
             throw ex;
@@ -474,10 +479,17 @@ export const parse = (
     }
   } catch (ex) {
     if (ex instanceof ParseError) {
+      if (ex.lineNo === undefined) {
+        ex.lineNo = lineNo;
+        ex.lineStr = lines[lineNo - 1];
+      }
       throw ex; // テストと適切なエラーハンドリングのためにParseErrorを再スロー
     } else {
       console.error(`行 ${lineNo} で予期しないエラーが発生しました: ${ex}`);
-      throw new ParseError(`予期しないエラー: ${ex}`); // その他のエラーをラップ
+      const err = new ParseError(`予期しないエラー: ${ex}`);
+      err.lineNo = lineNo;
+      err.lineStr = lines[lineNo - 1];
+      throw err; // その他のエラーをラップ
     }
   }
 

@@ -92,19 +92,35 @@ document.addEventListener("DOMContentLoaded", () => {
         svgOutput.innerHTML = svgString;
       }
     } catch (error) {
-      const errorParagraph = document.createElement("p");
-      errorParagraph.classList.add("error-message");
+      const errorDiv = document.createElement("div");
+      errorDiv.classList.add("error-message");
       svgOutput.textContent = "";
 
       if (error instanceof Error) {
-        errorParagraph.textContent = `Error: ${error.message}`;
+        const parseError = error as any;
+        const msgPara = document.createElement("div");
+        if (
+          parseError.lineNo !== undefined &&
+          parseError.lineStr !== undefined
+        ) {
+          msgPara.textContent = `Error at line ${parseError.lineNo}: ${error.message}`;
+          errorDiv.appendChild(msgPara);
+
+          const lineCode = document.createElement("code");
+          lineCode.classList.add("error-line");
+          lineCode.textContent = parseError.lineStr;
+          errorDiv.appendChild(lineCode);
+        } else {
+          msgPara.textContent = `Error: ${error.message}`;
+          errorDiv.appendChild(msgPara);
+        }
         console.error("SPD conversion error:", error);
       } else {
-        errorParagraph.textContent = "An unknown error occurred";
+        errorDiv.textContent = "An unknown error occurred";
         console.error("An unknown error occurred:", error);
       }
 
-      svgOutput.appendChild(errorParagraph);
+      svgOutput.appendChild(errorDiv);
     }
   };
 
