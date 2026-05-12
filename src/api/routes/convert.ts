@@ -27,14 +27,14 @@ interface ParseErrorLike {
   lineStr?: string;
 }
 
-function isParseErrorLike(error: any): error is ParseErrorLike {
+function isParseErrorLike(error: unknown): error is ParseErrorLike {
   return (
-    error &&
     typeof error === "object" &&
+    error !== null &&
     ("lineNo" in error ||
       "lineStr" in error ||
-      error.name === "ParseError" ||
-      error.name?.endsWith("Exception"))
+      (error as { name?: string }).name === "ParseError" ||
+      !!(error as { name?: string }).name?.endsWith("Exception"))
   );
 }
 
@@ -131,7 +131,7 @@ export const convertHandler: RouteHandler<typeof convertRoute> = async (c) => {
 
     const outputData = generateSvg(spd, options);
     return c.json({ svg: outputData }, 200);
-  } catch (error: any) {
+  } catch (error) {
     if (isParseErrorLike(error)) {
       console.error(
         "SPD parsing error:",
@@ -169,7 +169,7 @@ export const downloadHandler: RouteHandler<typeof downloadRoute> = async (
     c.header("Content-Disposition", 'attachment; filename="diagram.svg"');
 
     return c.body(outputData);
-  } catch (error: any) {
+  } catch (error) {
     if (isParseErrorLike(error)) {
       console.error(
         "SPD parsing error during download:",

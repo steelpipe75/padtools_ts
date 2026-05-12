@@ -1,4 +1,4 @@
-import { generateSvg } from "../spd/core";
+import { type ConvertRequest, generateSvg } from "../spd/core";
 import { SPD_EXPLANATION } from "../spd/docs";
 import { ParseError } from "../spd/parser";
 
@@ -22,7 +22,9 @@ export const handleExplainSpdPrompt = async () => {
 /**
  * Handler for the generate-spd prompt.
  */
-export const handleGenerateSpdPrompt = async (args: any) => {
+export const handleGenerateSpdPrompt = async (args: {
+  description: string;
+}) => {
   return `以下の処理内容を、SPD記法を使用して記述してください。\n\n処理内容:\n${args.description}\n\nSPD記法のルールと例は以下の通りです:\n${SPD_EXPLANATION}`;
 };
 
@@ -36,7 +38,7 @@ export const handleGetSpdExplanationTool = async () => {
 /**
  * Handler for the convert_spd_to_svg tool.
  */
-export const handleConvertSpdToSvgTool = async (args: any) => {
+export const handleConvertSpdToSvgTool = async (args: ConvertRequest) => {
   try {
     const svg = generateSvg(args.spd, args.options);
     return svg;

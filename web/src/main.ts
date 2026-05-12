@@ -1,7 +1,7 @@
 // web/src/main.ts
 
 import { version } from "../../package.json";
-import { parse } from "../../src/spd/parser";
+import { ParseError, parse } from "../../src/spd/parser";
 import { render as renderSvg } from "../../src/spd/svg-renderer";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -96,24 +96,25 @@ document.addEventListener("DOMContentLoaded", () => {
       errorDiv.classList.add("error-message");
       svgOutput.textContent = "";
 
-      if (error instanceof Error) {
-        const parseError = error as any;
+      if (error instanceof ParseError) {
         const msgPara = document.createElement("div");
-        if (
-          parseError.lineNo !== undefined &&
-          parseError.lineStr !== undefined
-        ) {
-          msgPara.textContent = `Error at line ${parseError.lineNo}: ${error.message}`;
+        if (error.lineNo !== undefined && error.lineStr !== undefined) {
+          msgPara.textContent = `Error at line ${error.lineNo}: ${error.message}`;
           errorDiv.appendChild(msgPara);
 
           const lineCode = document.createElement("code");
           lineCode.classList.add("error-line");
-          lineCode.textContent = parseError.lineStr;
+          lineCode.textContent = error.lineStr;
           errorDiv.appendChild(lineCode);
         } else {
           msgPara.textContent = `Error: ${error.message}`;
           errorDiv.appendChild(msgPara);
         }
+        console.error("SPD conversion error:", error);
+      } else if (error instanceof Error) {
+        const msgPara = document.createElement("div");
+        msgPara.textContent = `Error: ${error.message}`;
+        errorDiv.appendChild(msgPara);
         console.error("SPD conversion error:", error);
       } else {
         errorDiv.textContent = "An unknown error occurred";

@@ -5,7 +5,7 @@ import { program } from "commander";
 import { optimize } from "svgo";
 import xmlFormat from "xml-formatter";
 import packageJson from "../../package.json";
-import { parse } from "../spd/parser";
+import { ParseError, parse } from "../spd/parser";
 import { render } from "../spd/svg-renderer";
 
 program
@@ -85,17 +85,15 @@ program
         process.stdout.write(outputData);
       }
     } catch (error) {
-      if (error instanceof Error) {
-        const parseError = error as any;
-        if (
-          parseError.lineNo !== undefined &&
-          parseError.lineStr !== undefined
-        ) {
-          console.error(`Error at line ${parseError.lineNo}: ${error.message}`);
-          console.error(`> ${parseError.lineStr}`);
+      if (error instanceof ParseError) {
+        if (error.lineNo !== undefined && error.lineStr !== undefined) {
+          console.error(`Error at line ${error.lineNo}: ${error.message}`);
+          console.error(`> ${error.lineStr}`);
         } else {
           console.error(`Error: ${error.message}`);
         }
+      } else if (error instanceof Error) {
+        console.error(`Error: ${error.message}`);
       }
       process.exit(1);
     }
