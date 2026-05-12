@@ -10,7 +10,7 @@ describe("API /mcp", () => {
     const res = await app.request("/mcp", {
       method: "GET",
       headers: {
-        "Accept": "text/event-stream",
+        Accept: "text/event-stream",
       },
     });
 
@@ -23,7 +23,7 @@ describe("API /mcp", () => {
 
     // レスポンスボディが存在することを確認
     expect(res.body).toBeDefined();
-    
+
     // 注意: Jest 環境下での ReadableStream の継続的な読み取りはタイムアウトしやすいため、
     // 導通確認としてはステータスとヘッダーの確認を優先します。
     if (res.body) {
@@ -37,7 +37,7 @@ describe("API /mcp", () => {
     const res = await app.request("/mcp", {
       method: "OPTIONS",
       headers: {
-        "Origin": "http://localhost:3000",
+        Origin: "http://localhost:3000",
         "Access-Control-Request-Method": "GET",
       },
     });
@@ -53,7 +53,7 @@ describe("API /mcp", () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify({
         jsonrpc: "2.0",

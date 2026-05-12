@@ -91,9 +91,7 @@ program
           parseError.lineNo !== undefined &&
           parseError.lineStr !== undefined
         ) {
-          console.error(
-            `Error at line ${parseError.lineNo}: ${error.message}`,
-          );
+          console.error(`Error at line ${parseError.lineNo}: ${error.message}`);
           console.error(`> ${parseError.lineStr}`);
         } else {
           console.error(`Error: ${error.message}`);
