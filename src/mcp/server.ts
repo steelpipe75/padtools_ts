@@ -2,6 +2,7 @@ import { FastMCP } from "fastmcp";
 import { version } from "../../package.json";
 import { ConvertRequestSchema, generateSvg } from "../spd/core";
 import { SPD_EXPLANATION } from "../spd/docs";
+import { ParseError } from "../spd/parser";
 
 const mcp = new FastMCP({
   name: "PAD Tools",
@@ -62,6 +63,11 @@ mcp.addTool({
       const svg = generateSvg(args.spd, args.options);
       return svg;
     } catch (error) {
+      if (error instanceof ParseError) {
+        throw new Error(
+          `SPD Parse Error at line ${error.lineNo}: ${error.message}\nLine content: ${error.lineStr}`,
+        );
+      }
       throw new Error(
         `Error converting SPD to SVG: ${error instanceof Error ? error.message : String(error)}`,
       );
