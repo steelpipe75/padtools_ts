@@ -178,9 +178,9 @@ describe("API /api/convert", () => {
   });
 
   // 異常系のテスト: パースエラー発生時の挙動
-  it("should handle parser errors with 500 status (パースエラー時に500エラーを返すこと)", async () => {
+  it("should return 400 with detailed error information on parse error (パースエラー時に詳細情報付きの400エラーを返すこと)", async () => {
     // 未知のコマンド（: で始まる）を含む SPD を送信して ParseError を誘発させる
-    const spd = ":invalid_command arg";
+    const spd = "process: Start\n:invalid_command arg";
     const res = await app.request("/convert", {
       method: "POST",
       headers: {
@@ -189,9 +189,11 @@ describe("API /api/convert", () => {
       body: JSON.stringify({ spd }),
     });
 
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(400);
     const body = await res.json();
-    expect(body).toHaveProperty("error", "Failed to convert SPD to SVG");
+    expect(body).toHaveProperty("error");
+    expect(body).toHaveProperty("lineNo", 2);
+    expect(body).toHaveProperty("lineStr", ":invalid_command arg");
   });
 
   // Swagger UI のテスト

@@ -11,7 +11,32 @@ const ErrorResponseSchema = z.object({
   error: z.string().openapi({
     description: "Error message",
   }),
+  lineNo: z.number().optional().openapi({
+    description: "The line number where the error occurred",
+    example: 2,
+  }),
+  lineStr: z.string().optional().openapi({
+    description: "The string content of the line where the error occurred",
+    example: ":invalid_command arg",
+  }),
 });
+
+interface ParseErrorLike {
+  message: string;
+  lineNo?: number;
+  lineStr?: string;
+}
+
+function isParseErrorLike(error: any): error is ParseErrorLike {
+  return (
+    error &&
+    typeof error === "object" &&
+    ("lineNo" in error ||
+      "lineStr" in error ||
+      error.name === "ParseError" ||
+      error.name?.endsWith("Exception"))
+  );
+}
 
 export const convertRoute = createRoute({
   method: "post",
@@ -106,7 +131,23 @@ export const convertHandler: RouteHandler<typeof convertRoute> = async (c) => {
 
     const outputData = generateSvg(spd, options);
     return c.json({ svg: outputData }, 200);
-  } catch (error) {
+  } catch (error: any) {
+    if (isParseErrorLike(error)) {
+      console.error(
+        "SPD parsing error:",
+        error.message,
+        "at line:",
+        error.lineNo,
+      );
+      return c.json(
+        {
+          error: error.message || "Invalid SPD format",
+          lineNo: error.lineNo,
+          lineStr: error.lineStr,
+        },
+        400,
+      );
+    }
     console.error("Conversion error:", error);
     return c.json({ error: "Failed to convert SPD to SVG" }, 500);
   }
@@ -128,7 +169,23 @@ export const downloadHandler: RouteHandler<typeof downloadRoute> = async (
     c.header("Content-Disposition", 'attachment; filename="diagram.svg"');
 
     return c.body(outputData);
-  } catch (error) {
+  } catch (error: any) {
+    if (isParseErrorLike(error)) {
+      console.error(
+        "SPD parsing error during download:",
+        error.message,
+        "at line:",
+        error.lineNo,
+      );
+      return c.json(
+        {
+          error: error.message || "Invalid SPD format",
+          lineNo: error.lineNo,
+          lineStr: error.lineStr,
+        },
+        400,
+      );
+    }
     console.error("Download error:", error);
     return c.json({ error: "Failed to generate SVG for download" }, 500);
   }
