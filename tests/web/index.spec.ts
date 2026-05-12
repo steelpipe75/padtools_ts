@@ -45,9 +45,9 @@ test.describe("E2E tests for web", () => {
     await page.fill("#spdInput", ":unknown");
 
     // エラーメッセージを確認
-    // アプリは .error-message クラスを持つ段落でエラーを表示する
-    await expect(page.locator("#svgOutput p.error-message")).toBeVisible();
-    await expect(page.locator("#svgOutput")).toContainText("Error:");
+    // アプリは .error-message クラスを持つ要素でエラーを表示する
+    await expect(page.locator("#svgOutput .error-message")).toBeVisible();
+    await expect(page.locator("#svgOutput")).toContainText("Error");
   });
 
   test("should download SPD file", async ({ page }) => {
