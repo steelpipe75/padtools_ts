@@ -90,9 +90,15 @@ npm run start:web
 
 `padtools_ts` は、SPDファイルをSVGに変換するREST APIを提供します。Swagger UIを使用してAPIをテストできます。
 
-### APIサーバーの起動
+### 公開APIサーバー (Cloudflare Workers)
 
-APIサーバーを起動するには、以下のコマンドを実行します。
+Cloudflare Workers にデプロイされた API サーバーを利用できます。
+
+- Swagger UI: [https://padtools-api.steelpipe75.workers.dev/api-docs](https://padtools-api.steelpipe75.workers.dev/api-docs)
+
+### ローカルでのAPIサーバー起動
+
+APIサーバーをローカルで起動するには、以下のコマンドを実行します。
 
 ```shell
 npm run start:api
@@ -100,9 +106,9 @@ npm run start:api
 
 これにより、通常、ローカルアドレス (例: `http://localhost:3000`) でサーバーが起動します。
 
-### Swagger UI
+### Swagger UI (ローカル)
 
-APIのドキュメントとテストは、Swagger UIで確認できます。
+ローカルで起動したAPIのドキュメントとテストは、以下のURLで確認できます。
 
 - URL: `http://localhost:3000/api-docs`
 
@@ -230,26 +236,32 @@ npx @modelcontextprotocol/inspector npx tsx src/mcp/server.ts
 
 ### HTTP モード (API経由)
 
-Hono API サーバーを起動すると、`/mcp` エンドポイントが MCP サーバーとして機能します。
+Hono API サーバーの `/mcp` エンドポイントが MCP サーバーとして機能します。
 
-#### サーバーの起動
+#### 公開MCPサーバー (Cloudflare Workers)
+
+Cloudflare Workers にデプロイされた API サーバーを MCP サーバーとして利用できます。
+
+- URL: `https://padtools-api.steelpipe75.workers.dev/mcp`
+
+#### ローカルでのサーバー起動
 
 ```shell
 npm run start:api
 ```
 
-これにより、`http://localhost:3000/mcp` で MCP サービスが提供されます。
+これにより、ローカル環境の `http://localhost:3000/mcp` で MCP サービスが提供されます。
 
 #### MCP Inspector による動作確認
 
-1.  APIサーバーを起動します (`npm run start:api`)。
+1.  公開サーバーを使用するか、ローカルでAPIサーバーを起動します。
 2.  別のターミナルで Inspector を起動します。
     ```shell
     npx @modelcontextprotocol/inspector
     ```
 3.  ブラウザで表示された画面にて以下の設定を行います：
     - **Transport Type**: `Streamable HTTP` を選択
-    - **URL**: `http://localhost:3000/mcp` を入力
+    - **URL**: 上記の URL (`https://padtools-api.steelpipe75.workers.dev/mcp` または `http://localhost:3000/mcp`) を入力
 4.  **Connect** をクリックして接続します。
 
 ---
