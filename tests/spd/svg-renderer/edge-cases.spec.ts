@@ -1,5 +1,5 @@
 import type { NodeListNode } from "../../../src/spd/ast";
-import { render } from "../../../src/spd/svg-renderer";
+import { type RenderOptions, render } from "../../../src/spd/svg-renderer";
 
 describe("SVG Renderer - Edge Cases", () => {
   const processAst: NodeListNode = {
@@ -8,30 +8,40 @@ describe("SVG Renderer - Edge Cases", () => {
   };
 
   it("should handle null or invalid strokeColor", () => {
-    const svg = render(processAst, { strokeColor: null } as any);
+    const svg = render(processAst, {
+      strokeColor: null,
+    } as unknown as Partial<RenderOptions>);
     expect(svg).toContain('stroke="none"');
   });
 
   it("should handle string strokeWidth", () => {
-    const svg = render(processAst, { strokeWidth: "2.5" } as any);
+    const svg = render(processAst, {
+      strokeWidth: "2.5",
+    } as unknown as Partial<RenderOptions>);
     expect(svg).toContain('stroke-width="2.5"');
   });
 
   it("should handle non-finite strokeWidth", () => {
     // Should fallback to default strokeWidth (1.0)
-    const svg = render(processAst, { strokeWidth: Infinity } as any);
+    const svg = render(processAst, {
+      strokeWidth: Infinity,
+    } as unknown as Partial<RenderOptions>);
     expect(svg).toContain('stroke-width="1.0"');
   });
 
   it("should handle invalid strokeWidth (NaN)", () => {
     // Should fallback to default strokeWidth (1.0)
-    const svg = render(processAst, { strokeWidth: NaN } as any);
+    const svg = render(processAst, {
+      strokeWidth: NaN,
+    } as unknown as Partial<RenderOptions>);
     expect(svg).toContain('stroke-width="1.0"');
   });
 
   it("should handle negative strokeWidth", () => {
     // Should be clamped to 0.0
-    const svg = render(processAst, { strokeWidth: -1 } as any);
+    const svg = render(processAst, {
+      strokeWidth: -1,
+    } as unknown as Partial<RenderOptions>);
     expect(svg).toContain('stroke-width="0.0"');
   });
 
@@ -46,7 +56,9 @@ describe("SVG Renderer - Edge Cases", () => {
     ];
 
     for (const { input, expected } of testColors) {
-      const svg = render(processAst, { strokeColor: input } as any);
+      const svg = render(processAst, {
+        strokeColor: input,
+      } as unknown as Partial<RenderOptions>);
       expect(svg).toContain(`stroke="${expected}"`);
     }
   });
