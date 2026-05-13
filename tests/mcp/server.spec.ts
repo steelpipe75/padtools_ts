@@ -29,6 +29,12 @@ describe("MCP Server Handlers", () => {
       expect(result).toContain(description);
       expect(result).toContain(SPD_EXPLANATION);
     });
+
+    it("handleGenerateSpdPrompt should throw error if description is missing", async () => {
+      await expect(handleGenerateSpdPrompt({})).rejects.toThrow(
+        "description is required",
+      );
+    });
   });
 
   describe("Tools", () => {
@@ -50,6 +56,23 @@ describe("MCP Server Handlers", () => {
       await expect(handleConvertSpdToSvgTool({ spd })).rejects.toThrow(
         /SPD Parse Error/,
       );
+    });
+
+    it("handleConvertSpdToSvgTool should throw error on generic error", async () => {
+      const core = require("../../src/spd/core");
+      const originalGenerateSvg = core.generateSvg;
+      core.generateSvg = jest.fn().mockImplementation(() => {
+        throw new Error("Generic error");
+      });
+
+      try {
+        const spd = "Process: Test";
+        await expect(handleConvertSpdToSvgTool({ spd })).rejects.toThrow(
+          "Error converting SPD to SVG: Generic error",
+        );
+      } finally {
+        core.generateSvg = originalGenerateSvg;
+      }
     });
   });
 });

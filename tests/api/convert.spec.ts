@@ -221,6 +221,74 @@ describe("API /api/convert", () => {
     expect(res.headers.get("Location")).toBe("/api-docs/");
   });
 
+  // 内部エラー (500) のテスト
+  it("should return 500 if generateSvg throws a generic error (generateSvgが汎用エラーを投げた場合に500を返すこと)", async () => {
+    // generateSvg を一時的にモックしてエラーを投げさせる
+    const core = require("../../src/spd/core");
+    const originalGenerateSvg = core.generateSvg;
+    core.generateSvg = jest.fn().mockImplementation(() => {
+      throw new Error("Generic error");
+    });
+
+    try {
+      const res = await app.request("/convert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ spd: "process: Test" }),
+      });
+
+      expect(res.status).toBe(500);
+      const body = await res.json();
+      expect(body).toHaveProperty("error", "Failed to convert SPD to SVG");
+    } finally {
+      core.generateSvg = originalGenerateSvg;
+    }
+  });
+
+  // downloadHandler での ParseError のテスト
+  it("should return 400 with detailed error on parse error in download (ダウンロード時のパースエラーで400を返すこと)", async () => {
+    const spd = "process: Start\n:invalid_command arg";
+    const res = await app.request("/convert/download", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ spd }),
+    });
+
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body).toHaveProperty("error");
+    expect(body).toHaveProperty("lineNo", 2);
+  });
+
+  // downloadHandler での 500 エラーのテスト
+  it("should return 500 if generateSvg throws a generic error in download (ダウンロード時にgenerateSvgが汎用エラーを投げた場合に500を返すこと)", async () => {
+    const core = require("../../src/spd/core");
+    const originalGenerateSvg = core.generateSvg;
+    core.generateSvg = jest.fn().mockImplementation(() => {
+      throw new Error("Generic error");
+    });
+
+    try {
+      const res = await app.request("/convert/download", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ spd: "process: Test" }),
+      });
+
+      expect(res.status).toBe(500);
+      const body = await res.json();
+      expect(body).toHaveProperty("error", "Failed to generate SVG for download");
+    } finally {
+      core.generateSvg = originalGenerateSvg;
+    }
+  });
+
   // ヘルスチェックのテスト
   it("should return 200 OK for health check (ヘルスチェックが200 OKを返すこと)", async () => {
     const res = await app.request("/health");

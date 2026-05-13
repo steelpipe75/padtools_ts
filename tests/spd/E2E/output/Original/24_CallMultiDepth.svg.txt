@@ -2,7 +2,7 @@
     <rect x="0" y="0" width="212.0" height="93.6" fill="none"/>
     <g transform="translate(20.0, 20.0)">
         <g transform="translate(0.0, 0.0)">
-            <rect x="0" y="0" width="83.0" height="53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <rect x="0" y="0" width="83.0" height="53.6" stroke="#000000" stroke-width="1.0" fill="#ffffff"/>
             <line x1="5.0" y1="0.0" x2="5.0" y2="53.6" stroke="#000000" stroke-width="1.0"/>
             <line x1="78.0" y1="0.0" x2="78.0" y2="53.6" stroke="#000000" stroke-width="1.0"/>
             <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
@@ -12,7 +12,7 @@
                 MuntiLine
             </text>
             <g transform="translate(103.0, 0.0)">
-                <rect x="0" y="0" width="69.0" height="36.8" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+                <rect x="0" y="0" width="69.0" height="36.8" stroke="#000000" stroke-width="1.0" fill="#ffffff"/>
                 <text x="10.0" y="24.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                     Process
                 </text>

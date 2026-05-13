@@ -118,13 +118,12 @@ export function render(
   const mergedOptions: RenderOptions = { ...defaultRenderOptions, ...options };
   const safeOptions: RenderOptions = {
     ...mergedOptions,
-    strokeColor: escapeXmlAttribute(mergedOptions.strokeColor),
-    backgroundColor:
-      mergedOptions.backgroundColor == null
-        ? mergedOptions.backgroundColor
-        : escapeXmlAttribute(mergedOptions.backgroundColor),
-    strokeWidth: Number.isFinite(mergedOptions.strokeWidth)
-      ? mergedOptions.strokeWidth
+    strokeColor: escapeXmlAttribute(sanitizeSvgColor(mergedOptions.strokeColor)),
+    backgroundColor: escapeXmlAttribute(
+      sanitizeSvgColor(mergedOptions.backgroundColor),
+    ),
+    strokeWidth: Number.isFinite(Number(mergedOptions.strokeWidth))
+      ? Math.max(0, Number(mergedOptions.strokeWidth))
       : defaultRenderOptions.strokeWidth,
   };
 
@@ -325,7 +324,7 @@ function renderBoxFragment(
     const safeStrokeColor = escapeXmlAttribute(options.strokeColor);
     const safeFillColor = escapeXmlAttribute(fillColor);
     svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
-    svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth}" `;
+    svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth.toFixed(1)}" `;
     svg += `fill="${safeFillColor}"/>`;
   } else if (node.borderType === "WRound") {
     // 丸みを帯びた四角形
@@ -339,7 +338,7 @@ function renderBoxFragment(
     const safeFillColor = escapeXmlAttribute(fillColor);
     svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
     svg += `rx="${radius.toFixed(1)}" ry="${radius.toFixed(1)}" `;
-    svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth}" `;
+    svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth.toFixed(1)}" `;
     svg += `fill="${safeFillColor}"/>`;
   } else {
     // ボーダーなし
@@ -692,7 +691,7 @@ function renderBrancheFragment(
   const fillColor = options.backgroundColor ?? "none";
   svg += `<polygon points="${polyPoints}" `;
   svg += `stroke="${options.strokeColor}" `;
-  svg += `stroke-width="${options.strokeWidth}" `;
+  svg += `stroke-width="${options.strokeWidth.toFixed(1)}" `;
   svg += `fill="${fillColor}"/>`;
 
   for (const [index, brancheFragment] of brancheFragments.entries()) {

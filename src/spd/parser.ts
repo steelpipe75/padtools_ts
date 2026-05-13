@@ -18,60 +18,70 @@ export class ParseError extends Error {
   constructor(message: string) {
     super(message);
     this.name = this.constructor.name;
+    Object.setPrototypeOf(this, ParseError.prototype);
   }
 }
 // 引数が必要な場合にスローされる例外
 export class RequireArgumentException extends ParseError {
   constructor() {
     super("このコマンドは引数が必要です");
+    Object.setPrototypeOf(this, RequireArgumentException.prototype);
   }
 }
 // 引数が不要な場合にスローされる例外
 export class NotRequireArgumentException extends ParseError {
   constructor() {
     super("このコマンドに引数は不要です");
+    Object.setPrototypeOf(this, NotRequireArgumentException.prototype);
   }
 }
 // 不正なインデントの場合にスローされる例外
 export class IllegalIndentException extends ParseError {
   constructor() {
     super("インデントの数が不正です");
+    Object.setPrototypeOf(this, IllegalIndentException.prototype);
   }
 }
 // 未知のコマンドの場合にスローされる例外
 export class UnknownCommandException extends ParseError {
   constructor() {
     super("未知のコマンドです");
+    Object.setPrototypeOf(this, UnknownCommandException.prototype);
   }
 }
 // 予期しない:elseコマンドの場合にスローされる例外
 export class UnexpectedElseException extends ParseError {
   constructor() {
     super("不適切なelseです");
+    Object.setPrototypeOf(this, UnexpectedElseException.prototype);
   }
 }
 // 予期しない:caseコマンドの場合にスローされる例外
 export class UnexpectedCaseException extends ParseError {
   constructor() {
     super("不適切なcaseが現れました");
+    Object.setPrototypeOf(this, UnexpectedCaseException.prototype);
   }
 }
 // :caseの値が重複している場合にスローされる例外
 export class CaseDuplicateException extends ParseError {
   constructor() {
     super("既に同名のCaseが存在します");
+    Object.setPrototypeOf(this, CaseDuplicateException.prototype);
   }
 }
 // 内部で予期しないエラーが発生した場合にスローされる例外
 export class UnexpectedInnerException extends ParseError {
   constructor(message: string) {
     super(`内部エラー:${message}`);
+    Object.setPrototypeOf(this, UnexpectedInnerException.prototype);
   }
 }
 // 予期しないI/Oエラーが発生した場合にスローされる例外
 export class UnexpectedIOException extends ParseError {
   constructor() {
     super("予期しないIOエラーが発生しました");
+    Object.setPrototypeOf(this, UnexpectedIOException.prototype);
   }
 }
 
