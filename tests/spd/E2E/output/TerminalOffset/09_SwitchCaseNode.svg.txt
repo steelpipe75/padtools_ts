@@ -2,7 +2,7 @@
     <rect x="0" y="0" width="122.0" height="93.6" fill="none"/>
     <g transform="translate(20.0, 20.0)">
         <g transform="translate(0.0, 0.0)">
-            <polygon points="0.0,0.0 82.0,0.0 62.0,26.8 82.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1" fill="#ffffff"/>
+            <polygon points="0.0,0.0 82.0,0.0 62.0,26.8 82.0,53.6 0.0,53.6" stroke="#000000" stroke-width="1.0" fill="#ffffff"/>
             <text x="50.0" y="19.0" dy="0.0" font-family="monospace" font-size="14" fill="#000000">
                 A
             </text>

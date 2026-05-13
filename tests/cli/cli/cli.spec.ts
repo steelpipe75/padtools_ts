@@ -3,7 +3,13 @@ import type { Node } from "../../../src/spd/ast";
 
 // Mock modules before any imports
 jest.mock("fs");
-jest.mock("../../../src/spd/parser");
+jest.mock("../../../src/spd/parser", () => {
+  return {
+    __esModule: true,
+    ...jest.requireActual("../../../src/spd/parser"),
+    parse: jest.fn(),
+  };
+});
 jest.mock("../../../src/spd/svg-renderer");
 jest.mock("svgo");
 jest.mock("xml-formatter");
@@ -301,5 +307,65 @@ describe("CLI", () => {
     expect(fs.readFileSync).toHaveBeenCalledWith(inputPath, "utf-8");
     expect(consoleErrorSpy).not.toHaveBeenCalled();
     expect(processExitSpy).toHaveBeenCalledWith(1);
+  });
+
+  it("should handle ParseError with line information", () => {
+    const inputPath = "input.spd";
+    // Get ParseError from the same module instance that cli.ts will use
+    const { ParseError, parse } = require("../../../src/spd/parser");
+    const fs = require("node:fs");
+
+    const parseError = new ParseError("Syntax error");
+    parseError.lineNo = 5;
+    parseError.lineStr = "invalid line";
+
+    fs.readFileSync.mockReturnValue("dummy content");
+    parse.mockImplementation(() => {
+      throw parseError;
+    });
+
+    runCli(["-i", inputPath]);
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Error at line 5: Syntax error",
+    );
+    expect(consoleErrorSpy).toHaveBeenCalledWith("> invalid line");
+    expect(processExitSpy).toHaveBeenCalledWith(1);
+  });
+
+  it("should handle ParseError without line information", () => {
+    const inputPath = "input.spd";
+    // Get ParseError from the same module instance that cli.ts will use
+    const { ParseError, parse } = require("../../../src/spd/parser");
+    const fs = require("node:fs");
+
+    const parseError = new ParseError("General parse error");
+
+    fs.readFileSync.mockReturnValue("dummy content");
+    parse.mockImplementation(() => {
+      throw parseError;
+    });
+
+    runCli(["-i", inputPath]);
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith("Error: General parse error");
+    expect(processExitSpy).toHaveBeenCalledWith(1);
+  });
+
+  it("should use TerminalOffset list render type when provided", () => {
+    const inputPath = "input.spd";
+    const { parse } = require("../../../src/spd/parser");
+    const { render } = require("../../../src/spd/svg-renderer");
+    const fs = require("node:fs");
+
+    fs.readFileSync.mockReturnValue("dummy content");
+    parse.mockReturnValue({ type: "process", text: "test" });
+
+    runCli(["-i", inputPath, "--list-render-type", "TerminalOffset"]);
+
+    expect(render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ listRenderType: "TerminalOffset" }),
+    );
   });
 });

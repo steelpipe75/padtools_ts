@@ -76,10 +76,8 @@ const defaultRenderOptions = {
  */
 function render(node, options) {
     const mergedOptions = Object.assign(Object.assign({}, defaultRenderOptions), options);
-    const safeOptions = Object.assign(Object.assign({}, mergedOptions), { strokeColor: escapeXmlAttribute(mergedOptions.strokeColor), backgroundColor: mergedOptions.backgroundColor == null
-            ? mergedOptions.backgroundColor
-            : escapeXmlAttribute(mergedOptions.backgroundColor), strokeWidth: Number.isFinite(mergedOptions.strokeWidth)
-            ? mergedOptions.strokeWidth
+    const safeOptions = Object.assign(Object.assign({}, mergedOptions), { strokeColor: escapeXmlAttribute(sanitizeSvgColor(mergedOptions.strokeColor)), backgroundColor: escapeXmlAttribute(sanitizeSvgColor(mergedOptions.backgroundColor)), strokeWidth: Number.isFinite(Number(mergedOptions.strokeWidth))
+            ? Math.max(0, Number(mergedOptions.strokeWidth))
             : defaultRenderOptions.strokeWidth });
     if (!node) {
         return "";
@@ -248,7 +246,7 @@ function renderBoxFragment(node, options) {
         const safeStrokeColor = escapeXmlAttribute(options.strokeColor);
         const safeFillColor = escapeXmlAttribute(fillColor);
         svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
-        svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth}" `;
+        svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth.toFixed(1)}" `;
         svg += `fill="${safeFillColor}"/>`;
     }
     else if (node.borderType === "WRound") {
@@ -263,7 +261,7 @@ function renderBoxFragment(node, options) {
         const safeFillColor = escapeXmlAttribute(fillColor);
         svg += `<rect x="0" y="0" width="${contentWidth.toFixed(1)}" height="${contentHeight.toFixed(1)}" `;
         svg += `rx="${radius.toFixed(1)}" ry="${radius.toFixed(1)}" `;
-        svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth}" `;
+        svg += `stroke="${safeStrokeColor}" stroke-width="${options.strokeWidth.toFixed(1)}" `;
         svg += `fill="${safeFillColor}"/>`;
     }
     else {
@@ -512,7 +510,7 @@ function renderBrancheFragment(node, options) {
     const fillColor = (_a = options.backgroundColor) !== null && _a !== void 0 ? _a : "none";
     svg += `<polygon points="${polyPoints}" `;
     svg += `stroke="${options.strokeColor}" `;
-    svg += `stroke-width="${options.strokeWidth}" `;
+    svg += `stroke-width="${options.strokeWidth.toFixed(1)}" `;
     svg += `fill="${fillColor}"/>`;
     for (const [index, brancheFragment] of brancheFragments.entries()) {
         const label = brancheFragment.label;
