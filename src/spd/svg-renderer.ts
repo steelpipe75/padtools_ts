@@ -118,7 +118,9 @@ export function render(
   const mergedOptions: RenderOptions = { ...defaultRenderOptions, ...options };
   const safeOptions: RenderOptions = {
     ...mergedOptions,
-    strokeColor: escapeXmlAttribute(sanitizeSvgColor(mergedOptions.strokeColor)),
+    strokeColor: escapeXmlAttribute(
+      sanitizeSvgColor(mergedOptions.strokeColor),
+    ),
     backgroundColor: escapeXmlAttribute(
       sanitizeSvgColor(mergedOptions.backgroundColor),
     ),

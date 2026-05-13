@@ -1,5 +1,5 @@
+import type { NodeListNode } from "../../../src/spd/ast";
 import { render } from "../../../src/spd/svg-renderer";
-import { NodeListNode } from "../../../src/spd/ast";
 
 describe("SVG Renderer - Edge Cases", () => {
   const processAst: NodeListNode = {

@@ -326,7 +326,9 @@ describe("CLI", () => {
 
     runCli(["-i", inputPath]);
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith("Error at line 5: Syntax error");
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Error at line 5: Syntax error",
+    );
     expect(consoleErrorSpy).toHaveBeenCalledWith("> invalid line");
     expect(processExitSpy).toHaveBeenCalledWith(1);
   });

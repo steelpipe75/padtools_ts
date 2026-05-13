@@ -283,7 +283,10 @@ describe("API /api/convert", () => {
 
       expect(res.status).toBe(500);
       const body = await res.json();
-      expect(body).toHaveProperty("error", "Failed to generate SVG for download");
+      expect(body).toHaveProperty(
+        "error",
+        "Failed to generate SVG for download",
+      );
     } finally {
       core.generateSvg = originalGenerateSvg;
     }
