@@ -44,6 +44,8 @@ export declare const convertRoute: {
                 "application/json": {
                     schema: z.ZodObject<{
                         error: z.ZodString;
+                        lineNo: z.ZodOptional<z.ZodNumber>;
+                        lineStr: z.ZodOptional<z.ZodString>;
                     }, z.core.$strip>;
                 };
             };
@@ -54,6 +56,8 @@ export declare const convertRoute: {
                 "application/json": {
                     schema: z.ZodObject<{
                         error: z.ZodString;
+                        lineNo: z.ZodOptional<z.ZodNumber>;
+                        lineStr: z.ZodOptional<z.ZodString>;
                     }, z.core.$strip>;
                 };
             };
@@ -106,6 +110,8 @@ export declare const downloadRoute: {
                 "application/json": {
                     schema: z.ZodObject<{
                         error: z.ZodString;
+                        lineNo: z.ZodOptional<z.ZodNumber>;
+                        lineStr: z.ZodOptional<z.ZodString>;
                     }, z.core.$strip>;
                 };
             };
@@ -116,6 +122,8 @@ export declare const downloadRoute: {
                 "application/json": {
                     schema: z.ZodObject<{
                         error: z.ZodString;
+                        lineNo: z.ZodOptional<z.ZodNumber>;
+                        lineStr: z.ZodOptional<z.ZodString>;
                     }, z.core.$strip>;
                 };
             };

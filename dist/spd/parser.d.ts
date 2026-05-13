@@ -1,5 +1,7 @@
 import type { Node } from "./ast";
 export declare class ParseError extends Error {
+    lineNo?: number;
+    lineStr?: string;
     constructor(message: string);
 }
 export declare class RequireArgumentException extends ParseError {

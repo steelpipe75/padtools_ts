@@ -23,8 +23,11 @@ export const handleExplainSpdPrompt = async () => {
  * Handler for the generate-spd prompt.
  */
 export const handleGenerateSpdPrompt = async (args: {
-  description: string;
+  description?: string;
 }) => {
+  if (!args.description) {
+    throw new Error("description is required");
+  }
   return `以下の処理内容を、SPD記法を使用して記述してください。\n\n処理内容:\n${args.description}\n\nSPD記法のルールと例は以下の通りです:\n${SPD_EXPLANATION}`;
 };
 
