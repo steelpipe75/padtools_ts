@@ -16,6 +16,7 @@ const zod_1 = require("zod");
 const package_json_1 = require("../../../package.json");
 const core_1 = require("../../spd/core");
 const docs_1 = require("../../spd/docs");
+const parser_1 = require("../../spd/parser");
 const mcpServer = new mcp_js_1.McpServer({
     name: "PAD Tools",
     version: package_json_1.version,
@@ -90,12 +91,16 @@ mcpServer.registerTool("convert_spd_to_svg", {
         };
     }
     catch (error) {
+        let errorMessage = `Error converting SPD to SVG: ${error instanceof Error ? error.message : String(error)}`;
+        if (error instanceof parser_1.ParseError) {
+            errorMessage = `SPD Parse Error at line ${error.lineNo}: ${error.message}\nLine content: ${error.lineStr}`;
+        }
         return {
             isError: true,
             content: [
                 {
                     type: "text",
-                    text: `Error converting SPD to SVG: ${error instanceof Error ? error.message : String(error)}`,
+                    text: errorMessage,
                 },
             ],
         };

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { version } from "../../../package.json";
 import { ConvertRequestSchema, generateSvg } from "../../spd/core";
 import { SPD_EXPLANATION } from "../../spd/docs";
+import { ParseError } from "../../spd/parser";
 
 const mcpServer = new McpServer({
   name: "PAD Tools",
@@ -101,12 +102,16 @@ mcpServer.registerTool(
         content: [{ type: "text", text: svg }],
       };
     } catch (error) {
+      let errorMessage = `Error converting SPD to SVG: ${error instanceof Error ? error.message : String(error)}`;
+      if (error instanceof ParseError) {
+        errorMessage = `SPD Parse Error at line ${error.lineNo}: ${error.message}\nLine content: ${error.lineStr}`;
+      }
       return {
         isError: true,
         content: [
           {
             type: "text",
-            text: `Error converting SPD to SVG: ${error instanceof Error ? error.message : String(error)}`,
+            text: errorMessage,
           },
         ],
       };

@@ -1,7 +1,7 @@
 // web/src/main.ts
 
 import { version } from "../../package.json";
-import { parse } from "../../src/spd/parser";
+import { ParseError, parse } from "../../src/spd/parser";
 import { render as renderSvg } from "../../src/spd/svg-renderer";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -92,19 +92,36 @@ document.addEventListener("DOMContentLoaded", () => {
         svgOutput.innerHTML = svgString;
       }
     } catch (error) {
-      const errorParagraph = document.createElement("p");
-      errorParagraph.classList.add("error-message");
+      const errorDiv = document.createElement("div");
+      errorDiv.classList.add("error-message");
       svgOutput.textContent = "";
 
-      if (error instanceof Error) {
-        errorParagraph.textContent = `Error: ${error.message}`;
+      if (error instanceof ParseError) {
+        const msgPara = document.createElement("div");
+        if (error.lineNo !== undefined && error.lineStr !== undefined) {
+          msgPara.textContent = `Error at line ${error.lineNo}: ${error.message}`;
+          errorDiv.appendChild(msgPara);
+
+          const lineCode = document.createElement("code");
+          lineCode.classList.add("error-line");
+          lineCode.textContent = error.lineStr;
+          errorDiv.appendChild(lineCode);
+        } else {
+          msgPara.textContent = `Error: ${error.message}`;
+          errorDiv.appendChild(msgPara);
+        }
+        console.error("SPD conversion error:", error);
+      } else if (error instanceof Error) {
+        const msgPara = document.createElement("div");
+        msgPara.textContent = `Error: ${error.message}`;
+        errorDiv.appendChild(msgPara);
         console.error("SPD conversion error:", error);
       } else {
-        errorParagraph.textContent = "An unknown error occurred";
+        errorDiv.textContent = "An unknown error occurred";
         console.error("An unknown error occurred:", error);
       }
 
-      svgOutput.appendChild(errorParagraph);
+      svgOutput.appendChild(errorDiv);
     }
   };
 

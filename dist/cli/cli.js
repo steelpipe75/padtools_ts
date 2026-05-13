@@ -107,7 +107,16 @@ commander_1.program
         }
     }
     catch (error) {
-        if (error instanceof Error) {
+        if (error instanceof parser_1.ParseError) {
+            if (error.lineNo !== undefined && error.lineStr !== undefined) {
+                console.error(`Error at line ${error.lineNo}: ${error.message}`);
+                console.error(`> ${error.lineStr}`);
+            }
+            else {
+                console.error(`Error: ${error.message}`);
+            }
+        }
+        else if (error instanceof Error) {
             console.error(`Error: ${error.message}`);
         }
         process.exit(1);

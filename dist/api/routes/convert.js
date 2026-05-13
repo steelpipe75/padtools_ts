@@ -21,7 +21,24 @@ const ErrorResponseSchema = zod_openapi_1.z.object({
     error: zod_openapi_1.z.string().openapi({
         description: "Error message",
     }),
+    lineNo: zod_openapi_1.z.number().optional().openapi({
+        description: "The line number where the error occurred",
+        example: 2,
+    }),
+    lineStr: zod_openapi_1.z.string().optional().openapi({
+        description: "The string content of the line where the error occurred",
+        example: ":invalid_command arg",
+    }),
 });
+function isParseErrorLike(error) {
+    var _a;
+    return (typeof error === "object" &&
+        error !== null &&
+        ("lineNo" in error ||
+            "lineStr" in error ||
+            error.name === "ParseError" ||
+            !!((_a = error.name) === null || _a === void 0 ? void 0 : _a.endsWith("Exception"))));
+}
 exports.convertRoute = (0, zod_openapi_1.createRoute)({
     method: "post",
     path: "/convert",
@@ -113,6 +130,14 @@ const convertHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
         return c.json({ svg: outputData }, 200);
     }
     catch (error) {
+        if (isParseErrorLike(error)) {
+            console.error("SPD parsing error:", error.message, "at line:", error.lineNo);
+            return c.json({
+                error: error.message || "Invalid SPD format",
+                lineNo: error.lineNo,
+                lineStr: error.lineStr,
+            }, 400);
+        }
         console.error("Conversion error:", error);
         return c.json({ error: "Failed to convert SPD to SVG" }, 500);
     }
@@ -130,6 +155,14 @@ const downloadHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
         return c.body(outputData);
     }
     catch (error) {
+        if (isParseErrorLike(error)) {
+            console.error("SPD parsing error during download:", error.message, "at line:", error.lineNo);
+            return c.json({
+                error: error.message || "Invalid SPD format",
+                lineNo: error.lineNo,
+                lineStr: error.lineStr,
+            }, 400);
+        }
         console.error("Download error:", error);
         return c.json({ error: "Failed to generate SVG for download" }, 500);
     }
