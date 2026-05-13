@@ -2,7 +2,7 @@ import type { Node } from "./ast";
 /**
  * 描画に関する設定をまとめたオブジェクト
  */
-interface RenderOptions {
+export interface RenderOptions {
     fontSize: number;
     fontFamily: string;
     margin: {
@@ -52,4 +52,3 @@ interface RenderOptions {
  * and `appendChild()`, or use a sanitizer library. Avoid direct assignment to `innerHTML`.
  */
 export declare function render(node: Node | null, options?: Partial<RenderOptions>): string;
-export {};

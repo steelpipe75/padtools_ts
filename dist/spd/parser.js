@@ -6,6 +6,7 @@ class ParseError extends Error {
     constructor(message) {
         super(message);
         this.name = this.constructor.name;
+        Object.setPrototypeOf(this, ParseError.prototype);
     }
 }
 exports.ParseError = ParseError;
@@ -13,6 +14,7 @@ exports.ParseError = ParseError;
 class RequireArgumentException extends ParseError {
     constructor() {
         super("このコマンドは引数が必要です");
+        Object.setPrototypeOf(this, RequireArgumentException.prototype);
     }
 }
 exports.RequireArgumentException = RequireArgumentException;
@@ -20,6 +22,7 @@ exports.RequireArgumentException = RequireArgumentException;
 class NotRequireArgumentException extends ParseError {
     constructor() {
         super("このコマンドに引数は不要です");
+        Object.setPrototypeOf(this, NotRequireArgumentException.prototype);
     }
 }
 exports.NotRequireArgumentException = NotRequireArgumentException;
@@ -27,6 +30,7 @@ exports.NotRequireArgumentException = NotRequireArgumentException;
 class IllegalIndentException extends ParseError {
     constructor() {
         super("インデントの数が不正です");
+        Object.setPrototypeOf(this, IllegalIndentException.prototype);
     }
 }
 exports.IllegalIndentException = IllegalIndentException;
@@ -34,6 +38,7 @@ exports.IllegalIndentException = IllegalIndentException;
 class UnknownCommandException extends ParseError {
     constructor() {
         super("未知のコマンドです");
+        Object.setPrototypeOf(this, UnknownCommandException.prototype);
     }
 }
 exports.UnknownCommandException = UnknownCommandException;
@@ -41,6 +46,7 @@ exports.UnknownCommandException = UnknownCommandException;
 class UnexpectedElseException extends ParseError {
     constructor() {
         super("不適切なelseです");
+        Object.setPrototypeOf(this, UnexpectedElseException.prototype);
     }
 }
 exports.UnexpectedElseException = UnexpectedElseException;
@@ -48,6 +54,7 @@ exports.UnexpectedElseException = UnexpectedElseException;
 class UnexpectedCaseException extends ParseError {
     constructor() {
         super("不適切なcaseが現れました");
+        Object.setPrototypeOf(this, UnexpectedCaseException.prototype);
     }
 }
 exports.UnexpectedCaseException = UnexpectedCaseException;
@@ -55,6 +62,7 @@ exports.UnexpectedCaseException = UnexpectedCaseException;
 class CaseDuplicateException extends ParseError {
     constructor() {
         super("既に同名のCaseが存在します");
+        Object.setPrototypeOf(this, CaseDuplicateException.prototype);
     }
 }
 exports.CaseDuplicateException = CaseDuplicateException;
@@ -62,6 +70,7 @@ exports.CaseDuplicateException = CaseDuplicateException;
 class UnexpectedInnerException extends ParseError {
     constructor(message) {
         super(`内部エラー:${message}`);
+        Object.setPrototypeOf(this, UnexpectedInnerException.prototype);
     }
 }
 exports.UnexpectedInnerException = UnexpectedInnerException;
@@ -69,6 +78,7 @@ exports.UnexpectedInnerException = UnexpectedInnerException;
 class UnexpectedIOException extends ParseError {
     constructor() {
         super("予期しないIOエラーが発生しました");
+        Object.setPrototypeOf(this, UnexpectedIOException.prototype);
     }
 }
 exports.UnexpectedIOException = UnexpectedIOException;
