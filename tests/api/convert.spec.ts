@@ -164,6 +164,19 @@ describe("API /api/convert", () => {
       expect(text).toContain("\n"); // prettyprint
     });
 
+    // 異常系のテスト: SPD が空文字の場合 (手動バリデーションのカバー)
+    it("should return 400 if SPD is an empty string (SPDが空文字の場合に400エラーを返すこと)", async () => {
+      const res = await app.request("/convert/download", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ spd: "" }),
+      });
+
+      expect(res.status).toBe(400);
+    });
+
     it("should return 400 if SPD is missing for download (ダウンロード時にSPDが欠落している場合に400エラーを返すこと)", async () => {
       const res = await app.request("/convert/download", {
         method: "POST",
