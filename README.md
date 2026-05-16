@@ -12,7 +12,8 @@ padtools_ts はPAD図を活用することを目的として作成された、PA
 
 インストール不要で、ブラウザからすぐにPAD図の作成を試すことができます。
 
-**[Web版を開く (GitHub Pages)](https://steelpipe75.github.io/padtools_ts/)**
+*   **[Web版を開く (Cloudflare Pages)](https://padtools-ts.pages.dev/)** : `main` ブランチの最新状態が常に反映されます。
+*   **[Web版を開く (GitHub Pages)](https://steelpipe75.github.io/padtools_ts/)** : リリースバージョン（安定版）が反映されます。
 
 ![Web版スクリーンショット](screenshot.png)
 
@@ -383,4 +384,5 @@ npm run build:web:gh-pages
 ## リンク
 
 - GitHub : [https://github.com/steelpipe75/padtools_ts](https://github.com/steelpipe75/padtools_ts)
-- 公開サイト : [https://steelpipe75.github.io/padtools_ts/](https://steelpipe75.github.io/padtools_ts/)
+- 公開サイト (GitHub Pages) : [https://steelpipe75.github.io/padtools_ts/](https://steelpipe75.github.io/padtools_ts/)
+- 公開サイト (Cloudflare Pages) : [https://padtools-ts.pages.dev/](https://padtools-ts.pages.dev/)
