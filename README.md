@@ -386,3 +386,4 @@ npm run build:web:gh-pages
 - GitHub : [https://github.com/steelpipe75/padtools_ts](https://github.com/steelpipe75/padtools_ts)
 - 公開サイト (GitHub Pages) : [https://steelpipe75.github.io/padtools_ts/](https://steelpipe75.github.io/padtools_ts/)
 - 公開サイト (Cloudflare Pages) : [https://padtools-ts.pages.dev/](https://padtools-ts.pages.dev/)
+- 公開APIサーバー (Cloudflare Workers) : [https://padtools-api.steelpipe75.workers.dev/api-docs](https://padtools-api.steelpipe75.workers.dev/api-docs)
