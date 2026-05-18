@@ -9,8 +9,8 @@ export const startServer = (p: number) => {
     port: p,
   });
   console.log(`Server is running on http://localhost:${p}`);
-  console.log(`Swagger UI available at http://localhost:${p}/api-docs`);
-  console.log(`OpenAPI spec available at http://localhost:${p}/doc`);
+  console.log(`Swagger UI available at http://localhost:${p}/docs`);
+  console.log(`OpenAPI spec available at http://localhost:${p}/openapi.json`);
   return server;
 };
 

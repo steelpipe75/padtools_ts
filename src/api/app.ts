@@ -24,7 +24,7 @@ const app = new OpenAPIHono();
 app.use("/mcp", cors());
 
 // OpenAPI documentation
-app.doc("/doc", {
+app.doc("/openapi.json", {
   openapi: "3.0.0",
   info: {
     title: "PAD Tools API",
@@ -34,8 +34,8 @@ app.doc("/doc", {
 });
 
 // Swagger UI
-app.get("/api-docs", (c) => c.redirect("/api-docs/"));
-app.get("/api-docs/", swaggerUI({ url: "/doc" }));
+app.get("/docs", (c) => c.redirect("/docs/"));
+app.get("/docs/", swaggerUI({ url: "/openapi.json" }));
 
 // Routes
 app.openapi(healthRoute, healthHandler);
@@ -50,7 +50,7 @@ app.all("/mcp", mcpHandler);
 
 // Handle base URL
 app.get("/", (c) => {
-  return c.redirect("/api-docs/");
+  return c.redirect("/docs/");
 });
 
 export default app;

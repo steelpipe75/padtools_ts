@@ -211,7 +211,7 @@ describe("API /api/convert", () => {
 
   // Swagger UI のテスト
   it("should serve Swagger UI (Swagger UI が提供されていること)", async () => {
-    const res = await app.request("/api-docs/");
+    const res = await app.request("/docs/");
     // Swagger UI (HTML) が返ってくることを確認
     expect(res.status).toBe(200);
     const text = await res.text();
@@ -220,7 +220,7 @@ describe("API /api/convert", () => {
 
   // OpenAPI ドキュメントのテスト
   it("should serve OpenAPI doc (OpenAPI ドキュメントが提供されていること)", async () => {
-    const res = await app.request("/doc");
+    const res = await app.request("/openapi.json");
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.openapi).toBe("3.0.0");
@@ -228,10 +228,10 @@ describe("API /api/convert", () => {
   });
 
   // ルートリダイレクトのテスト
-  it("should redirect from / to /api-docs/ (ルートから/api-docs/へリダイレクトされること)", async () => {
+  it("should redirect from / to /docs/ (ルートから/docs/へリダイレクトされること)", async () => {
     const res = await app.request("/");
     expect(res.status).toBe(302);
-    expect(res.headers.get("Location")).toBe("/api-docs/");
+    expect(res.headers.get("Location")).toBe("/docs/");
   });
 
   // 内部エラー (500) のテスト
