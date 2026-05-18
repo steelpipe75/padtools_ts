@@ -41,7 +41,6 @@ program
   .option(
     "--list-render-type <listRenderType>",
     "List render type for the SVG (Original, TerminalOffset)",
-    "Original",
   )
   .action((options) => {
     try {
