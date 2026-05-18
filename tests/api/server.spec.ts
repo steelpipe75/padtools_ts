@@ -37,10 +37,10 @@ describe("Server Startup", () => {
       `Server is running on http://localhost:${testPort}`,
     );
     expect(consoleSpy).toHaveBeenCalledWith(
-      `Swagger UI available at http://localhost:${testPort}/api-docs`,
+      `Swagger UI available at http://localhost:${testPort}/docs`,
     );
     expect(consoleSpy).toHaveBeenCalledWith(
-      `OpenAPI spec available at http://localhost:${testPort}/doc`,
+      `OpenAPI spec available at http://localhost:${testPort}/openapi.json`,
     );
 
     // モックされたサーバーを閉じる（クリーンアップのシミュレーション）

@@ -97,7 +97,7 @@ npm run start:web
 
 Cloudflare Workers にデプロイされた API サーバーを利用できます。
 
-- Swagger UI: [https://padtools-api.steelpipe75.workers.dev/api-docs](https://padtools-api.steelpipe75.workers.dev/api-docs)
+- Swagger UI: [https://padtools-api.steelpipe75.workers.dev/docs](https://padtools-api.steelpipe75.workers.dev/docs)
 
 ### ローカルでのAPIサーバー起動
 
@@ -108,12 +108,13 @@ npm run start:api
 ```
 
 これにより、通常、ローカルアドレス (例: `http://localhost:3000`) でサーバーが起動します。
+**なお、開発の利便性と最新データの取得を優先するため、すべてのAPIレスポンスにおいてブラウザキャッシュが無効化されるように設定されています。**
 
 ### Swagger UI (ローカル)
 
 ローカルで起動したAPIのドキュメントとテストは、以下のURLで確認できます。
 
-- URL: `http://localhost:3000/api-docs`
+- URL: `http://localhost:3000/docs`
 
 ### APIエンドポイント
 
@@ -388,4 +389,4 @@ npm run build:web:gh-pages
 - GitHub : [https://github.com/steelpipe75/padtools_ts](https://github.com/steelpipe75/padtools_ts)
 - 公開サイト (GitHub Pages) : [https://steelpipe75.github.io/padtools_ts/](https://steelpipe75.github.io/padtools_ts/)
 - 公開サイト (Cloudflare Pages) : [https://padtools-ts.pages.dev/](https://padtools-ts.pages.dev/)
-- 公開APIサーバー (Cloudflare Workers) : [https://padtools-api.steelpipe75.workers.dev/api-docs](https://padtools-api.steelpipe75.workers.dev/api-docs)
+- 公開APIサーバー (Cloudflare Workers) : [https://padtools-api.steelpipe75.workers.dev/docs](https://padtools-api.steelpipe75.workers.dev/docs)

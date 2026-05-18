@@ -48,6 +48,53 @@ export declare const astParseRoute: {
 } & {
     getRoutingPath(): "/ast/parse";
 };
+export declare const astParseDownloadRoute: {
+    method: "post";
+    path: "/ast/parse/download";
+    request: {
+        body: {
+            content: {
+                "application/json": {
+                    schema: z.ZodObject<{
+                        spd: z.ZodString;
+                    }, z.core.$strip>;
+                };
+            };
+        };
+    };
+    responses: {
+        200: {
+            content: {
+                "application/json": {
+                    schema: z.ZodAny;
+                };
+            };
+            description: string;
+        };
+        400: {
+            content: {
+                "application/json": {
+                    schema: z.ZodObject<{
+                        error: z.ZodString;
+                    }, z.core.$strip>;
+                };
+            };
+            description: string;
+        };
+        500: {
+            content: {
+                "application/json": {
+                    schema: z.ZodObject<{
+                        error: z.ZodString;
+                    }, z.core.$strip>;
+                };
+            };
+            description: string;
+        };
+    };
+} & {
+    getRoutingPath(): "/ast/parse/download";
+};
 export declare const astRenderRoute: {
     method: "post";
     path: "/ast/render";
@@ -112,5 +159,69 @@ export declare const astRenderRoute: {
 } & {
     getRoutingPath(): "/ast/render";
 };
+export declare const astRenderDownloadRoute: {
+    method: "post";
+    path: "/ast/render/download";
+    request: {
+        body: {
+            content: {
+                "application/json": {
+                    schema: z.ZodObject<{
+                        ast: z.ZodAny;
+                        options: z.ZodOptional<z.ZodObject<{
+                            fontSize: z.ZodOptional<z.ZodNumber>;
+                            fontFamily: z.ZodOptional<z.ZodString>;
+                            strokeWidth: z.ZodOptional<z.ZodNumber>;
+                            strokeColor: z.ZodOptional<z.ZodString>;
+                            backgroundColor: z.ZodOptional<z.ZodString>;
+                            baseBackgroundColor: z.ZodOptional<z.ZodString>;
+                            textColor: z.ZodOptional<z.ZodString>;
+                            lineHeight: z.ZodOptional<z.ZodNumber>;
+                            listRenderType: z.ZodOptional<z.ZodEnum<{
+                                Original: "Original";
+                                TerminalOffset: "TerminalOffset";
+                            }>>;
+                            prettyprint: z.ZodOptional<z.ZodBoolean>;
+                        }, z.core.$strip>>;
+                    }, z.core.$strip>;
+                };
+            };
+        };
+    };
+    responses: {
+        200: {
+            content: {
+                "image/svg+xml": {
+                    schema: z.ZodString;
+                };
+            };
+            description: string;
+        };
+        400: {
+            content: {
+                "application/json": {
+                    schema: z.ZodObject<{
+                        error: z.ZodString;
+                    }, z.core.$strip>;
+                };
+            };
+            description: string;
+        };
+        500: {
+            content: {
+                "application/json": {
+                    schema: z.ZodObject<{
+                        error: z.ZodString;
+                    }, z.core.$strip>;
+                };
+            };
+            description: string;
+        };
+    };
+} & {
+    getRoutingPath(): "/ast/render/download";
+};
 export declare const astParseHandler: RouteHandler<typeof astParseRoute>;
+export declare const astParseDownloadHandler: RouteHandler<typeof astParseDownloadRoute>;
 export declare const astRenderHandler: RouteHandler<typeof astRenderRoute>;
+export declare const astRenderDownloadHandler: RouteHandler<typeof astRenderDownloadRoute>;
