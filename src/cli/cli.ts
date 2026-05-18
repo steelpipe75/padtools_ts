@@ -12,11 +12,11 @@ import { render } from "../spd/svg-renderer";
 program
   .version(packageJson.version)
   .description("Convert SPD(Simple PAD Description) text file to SVG image")
-  .option("-i, --input <inputFilePath>", "Path to the input SPD text file")
+  .option("-i, --input <inputFilePath>", "Path to the input file (SPD or AST JSON)")
   .option("-o, --output <outputFilePath>", "Path to the output SVG file")
   .option("-p, --prettyprint", "Pretty print the output SVG")
   .option("--export-ast <astFilePath>", "Path to export the parsed AST as JSON")
-  .option("--import-ast <astFilePath>", "Path to import an AST from a JSON file")
+  .option("--import-ast", "Treat input as an AST JSON file")
   .option("--font-size <fontSize>", "Font size for the SVG", parseFloat)
   .option("--font-family <fontFamily>", "Font family for the SVG")
   .option(
@@ -42,23 +42,23 @@ program
   )
   .action((options) => {
     try {
+      let inputContent: string;
+      if (options.input) {
+        inputContent = fs.readFileSync(options.input, "utf-8");
+      } else if (process.stdin.isTTY && !options.input) {
+        // No input provided and no stdin redirect
+        program.help();
+        return;
+      } else {
+        inputContent = fs.readFileSync(0, "utf-8"); // Read from stdin
+      }
+
       let ast: ReturnType<typeof parse>;
 
       if (options.importAst) {
-        const astJson = fs.readFileSync(options.importAst, "utf-8");
-        ast = deserializeAST(astJson);
+        ast = deserializeAST(inputContent);
       } else {
-        let spdContent: string;
-        if (options.input) {
-          spdContent = fs.readFileSync(options.input, "utf-8");
-        } else if (process.stdin.isTTY && !options.input) {
-          // No input provided and no stdin redirect
-          program.help();
-          return;
-        } else {
-          spdContent = fs.readFileSync(0, "utf-8"); // Read from stdin
-        }
-        ast = parse(spdContent);
+        ast = parse(inputContent);
       }
 
       if (!ast) {
