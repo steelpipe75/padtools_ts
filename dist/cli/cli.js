@@ -61,7 +61,7 @@ commander_1.program
     .option("--base-background-color <baseBackgroundColor>", "Base background color for the SVG")
     .option("--text-color <textColor>", "Text color for the SVG")
     .option("--line-height <lineHeight>", "Line height for the SVG", parseFloat)
-    .option("--list-render-type <listRenderType>", "List render type for the SVG (Original, TerminalOffset)", "Original")
+    .option("--list-render-type <listRenderType>", "List render type for the SVG (Original, TerminalOffset)")
     .action((options) => {
     try {
         let inputContent;

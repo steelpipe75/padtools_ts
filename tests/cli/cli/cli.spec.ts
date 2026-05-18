@@ -83,7 +83,7 @@ describe("CLI", () => {
     // Assertions
     expect(fs.readFileSync).toHaveBeenCalledWith(inputPath, "utf-8");
     expect(parse).toHaveBeenCalledWith(spdContent);
-    expect(render).toHaveBeenCalledWith(ast, { listRenderType: "Original" });
+    expect(render).toHaveBeenCalledWith(ast, {});
     expect(optimize).toHaveBeenCalledWith(svgOutput, expect.any(Object));
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       outputPath,
@@ -120,7 +120,7 @@ describe("CLI", () => {
     runCli(["-i", inputPath, "-o", outputPath, "--prettyprint"]);
 
     // Assertions
-    expect(render).toHaveBeenCalledWith(ast, { listRenderType: "Original" });
+    expect(render).toHaveBeenCalledWith(ast, {});
     expect(xmlFormat).toHaveBeenCalledWith(svgOutput);
     expect(fs.writeFileSync).toHaveBeenCalledWith(outputPath, formattedSvg);
   });
@@ -151,7 +151,7 @@ describe("CLI", () => {
     runCli(["-i", inputPath, "-o", outputPath, "-p"]);
 
     // Assertions
-    expect(render).toHaveBeenCalledWith(ast, { listRenderType: "Original" });
+    expect(render).toHaveBeenCalledWith(ast, {});
     expect(xmlFormat).toHaveBeenCalledWith(svgOutput);
     expect(fs.writeFileSync).toHaveBeenCalledWith(outputPath, formattedSvg);
   });
@@ -219,7 +219,7 @@ describe("CLI", () => {
     // Assertions
     expect(fs.readFileSync).toHaveBeenCalledWith(0, "utf-8");
     expect(parse).toHaveBeenCalledWith(spdContent);
-    expect(render).toHaveBeenCalledWith(ast, { listRenderType: "Original" });
+    expect(render).toHaveBeenCalledWith(ast, {});
     expect(optimize).toHaveBeenCalledWith(svgOutput, expect.any(Object));
     expect(writeSpy).toHaveBeenCalledWith(optimizedSvg.data);
     expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -288,7 +288,6 @@ describe("CLI", () => {
       baseBackgroundColor: "green",
       textColor: "yellow",
       lineHeight: 1.5,
-      listRenderType: "Original",
     };
 
     // Run CLI
@@ -498,5 +497,49 @@ describe("CLI", () => {
       exportPath,
       JSON.stringify(ast),
     );
+  });
+
+  it("should show help and exit when no input is provided and stdin is a TTY", () => {
+    const process = require("node:process");
+    const { program } = require("commander");
+    const helpSpy = jest.spyOn(program, "help").mockImplementation(() => {
+      return undefined as never;
+    });
+
+    const isTTYDescriptor = Object.getOwnPropertyDescriptor(
+      process.stdin,
+      "isTTY",
+    );
+    Object.defineProperty(process.stdin, "isTTY", {
+      value: true,
+      configurable: true,
+    });
+
+    runCli([]);
+
+    expect(helpSpy).toHaveBeenCalled();
+
+    helpSpy.mockRestore();
+    if (isTTYDescriptor) {
+      Object.defineProperty(process.stdin, "isTTY", isTTYDescriptor);
+    } else {
+      delete process.stdin.isTTY;
+    }
+  });
+
+  it("should exit with error if AST could not be obtained", () => {
+    const inputPath = "input.spd";
+    const { parse } = require("../../../src/spd/parser");
+    const fs = require("node:fs");
+
+    fs.readFileSync.mockReturnValue("dummy content");
+    parse.mockReturnValue(null);
+
+    runCli(["-i", inputPath]);
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Error: Could not obtain AST.",
+    );
+    expect(processExitSpy).toHaveBeenCalledWith(1);
   });
 });
