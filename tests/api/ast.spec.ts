@@ -1,7 +1,7 @@
 import app from "../../src/api/app";
 import type { Node } from "../../src/spd/ast";
-import * as parser from "../../src/spd/parser";
 import * as ast_utils from "../../src/spd/ast";
+import * as parser from "../../src/spd/parser";
 
 /**
  * /ast/parse および /ast/render エンドポイントのテスト
@@ -100,7 +100,9 @@ describe("API AST Endpoints", () => {
     it("should return 400 if parse fails in /ast/parse", async () => {
       // Mock parse to return null
       const originalParse = parser.parse;
-      (parser as any).parse = jest.fn().mockReturnValue(null);
+      (parser as unknown as { parse: jest.Mock }).parse = jest
+        .fn()
+        .mockReturnValue(null);
 
       try {
         const res = await app.request("/ast/parse", {
@@ -115,15 +117,18 @@ describe("API AST Endpoints", () => {
         const body = await res.json();
         expect(body.error).toBe("Failed to parse SPD");
       } finally {
-        (parser as any).parse = originalParse;
+        (parser as unknown as { parse: typeof originalParse }).parse =
+          originalParse;
       }
     });
 
     it("should return 400 if exception occurs in /ast/parse", async () => {
       const originalParse = parser.parse;
-      (parser as any).parse = jest.fn().mockImplementation(() => {
-        throw new Error("Custom parse error");
-      });
+      (parser as unknown as { parse: jest.Mock }).parse = jest
+        .fn()
+        .mockImplementation(() => {
+          throw new Error("Custom parse error");
+        });
 
       try {
         const res = await app.request("/ast/parse", {
@@ -138,13 +143,15 @@ describe("API AST Endpoints", () => {
         const body = await res.json();
         expect(body.error).toBe("Custom parse error");
       } finally {
-        (parser as any).parse = originalParse;
+        (parser as unknown as { parse: typeof originalParse }).parse =
+          originalParse;
       }
     });
 
     it("should return 400 if deserializeAST fails in /ast/render", async () => {
       const originalDeserialize = ast_utils.deserializeAST;
-      (ast_utils as any).deserializeAST = jest.fn().mockReturnValue(null);
+      (ast_utils as unknown as { deserializeAST: jest.Mock }).deserializeAST =
+        jest.fn().mockReturnValue(null);
 
       try {
         const res = await app.request("/ast/render", {
@@ -159,15 +166,18 @@ describe("API AST Endpoints", () => {
         const body = await res.json();
         expect(body.error).toBe("Invalid AST format");
       } finally {
-        (ast_utils as any).deserializeAST = originalDeserialize;
+        (
+          ast_utils as unknown as { deserializeAST: typeof originalDeserialize }
+        ).deserializeAST = originalDeserialize;
       }
     });
 
     it("should return 500 if exception occurs in /ast/render", async () => {
       const originalDeserialize = ast_utils.deserializeAST;
-      (ast_utils as any).deserializeAST = jest.fn().mockImplementation(() => {
-        throw new Error("Custom render error");
-      });
+      (ast_utils as unknown as { deserializeAST: jest.Mock }).deserializeAST =
+        jest.fn().mockImplementation(() => {
+          throw new Error("Custom render error");
+        });
 
       try {
         const res = await app.request("/ast/render", {
@@ -182,7 +192,9 @@ describe("API AST Endpoints", () => {
         const body = await res.json();
         expect(body.error).toBe("Custom render error");
       } finally {
-        (ast_utils as any).deserializeAST = originalDeserialize;
+        (
+          ast_utils as unknown as { deserializeAST: typeof originalDeserialize }
+        ).deserializeAST = originalDeserialize;
       }
     });
   });

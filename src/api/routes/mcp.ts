@@ -3,12 +3,6 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Context } from "hono";
 import { version } from "../../../package.json";
 import {
-  ConvertAstToSvgRequestSchema,
-  ConvertRequestSchema,
-  ConvertSpdToAstRequestSchema,
-} from "../../spd/core";
-import { SPD_EXPLANATION } from "../../spd/docs";
-import {
   handleConvertAstToSvgTool,
   handleConvertSpdToAstTool,
   handleConvertSpdToSvgTool,
@@ -17,6 +11,11 @@ import {
   handleGetSpdExplanationResource,
   handleGetSpdExplanationTool,
 } from "../../mcp/handlers";
+import {
+  ConvertAstToSvgRequestSchema,
+  ConvertRequestSchema,
+  ConvertSpdToAstRequestSchema,
+} from "../../spd/core";
 
 const mcpServer = new McpServer({
   name: "PAD Tools",
@@ -73,6 +72,7 @@ mcpServer.registerPrompt(
     description:
       "Generate SPD (Simple PAD Description) from a task description.",
     argsSchema: {
+      // biome-ignore lint/suspicious/noExplicitAny: Required for dynamic access to Zod schema shape in MCP argsSchema
       description: (ConvertSpdToAstRequestSchema.shape as any).spd.describe(
         "Description of the logic or task to convert to SPD",
       ),
@@ -118,7 +118,9 @@ mcpServer.registerTool(
   },
   async (args) => {
     try {
-      const svg = await handleConvertSpdToSvgTool(args as any);
+      const svg = await handleConvertSpdToSvgTool(
+        args as unknown as Parameters<typeof handleConvertSpdToSvgTool>[0],
+      );
       return {
         content: [{ type: "text", text: svg }],
       };
@@ -145,7 +147,9 @@ mcpServer.registerTool(
   },
   async (args) => {
     try {
-      const astJson = await handleConvertSpdToAstTool(args as any);
+      const astJson = await handleConvertSpdToAstTool(
+        args as unknown as Parameters<typeof handleConvertSpdToAstTool>[0],
+      );
       return {
         content: [{ type: "text", text: JSON.stringify(astJson) }],
       };
@@ -172,7 +176,9 @@ mcpServer.registerTool(
   },
   async (args) => {
     try {
-      const svgOutput = await handleConvertAstToSvgTool(args as any);
+      const svgOutput = await handleConvertAstToSvgTool(
+        args as unknown as Parameters<typeof handleConvertAstToSvgTool>[0],
+      );
       return {
         content: [{ type: "text", text: svgOutput }],
       };
@@ -189,7 +195,6 @@ mcpServer.registerTool(
     }
   },
 );
-
 
 const transport = new StreamableHTTPTransport();
 

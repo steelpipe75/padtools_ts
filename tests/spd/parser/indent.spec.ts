@@ -14,7 +14,7 @@ describe("SPDParser Indentation Scenarios", () => {
     // tabNum (0) < context.depth (0) is false.
     // tabNum (0) > context.depth (0) is false.
     // So it treats it as same level but with body " \tSubprocess".
-    const ast = parse(spd) as any;
+    const ast = parse(spd) as unknown as { children: { type: string }[] };
     expect(ast?.children[1].type).toBe("process");
   });
 
