@@ -17,8 +17,10 @@ describe("API AST Download Endpoints", () => {
 
     expect(res.status).toBe(200);
     expect(res.headers.get("Content-Type")).toBe("application/json");
-    expect(res.headers.get("Content-Disposition")).toBe('attachment; filename="diagram.json"');
-    
+    expect(res.headers.get("Content-Disposition")).toBe(
+      'attachment; filename="diagram.json"',
+    );
+
     const body = await res.json();
     expect(body.type).toBe("nodeList");
     sharedAst = body;
@@ -35,8 +37,10 @@ describe("API AST Download Endpoints", () => {
 
     expect(res.status).toBe(200);
     expect(res.headers.get("Content-Type")).toBe("image/svg+xml");
-    expect(res.headers.get("Content-Disposition")).toBe('attachment; filename="diagram.svg"');
-    
+    expect(res.headers.get("Content-Disposition")).toBe(
+      'attachment; filename="diagram.svg"',
+    );
+
     const body = await res.text();
     expect(body).toContain("<svg");
   });
@@ -68,7 +72,9 @@ describe("API AST Download Endpoints", () => {
 
   it("should return 400 if parse fails in /ast/parse/download", async () => {
     const originalParse = parser.parse;
-    (parser as unknown as { parse: jest.Mock }).parse = jest.fn().mockReturnValue(null);
+    (parser as unknown as { parse: jest.Mock }).parse = jest
+      .fn()
+      .mockReturnValue(null);
 
     try {
       const res = await app.request("/ast/parse/download", {
@@ -83,7 +89,8 @@ describe("API AST Download Endpoints", () => {
       const body = await res.json();
       expect(body.error).toBe("Failed to parse SPD");
     } finally {
-      (parser as unknown as { parse: typeof originalParse }).parse = originalParse;
+      (parser as unknown as { parse: typeof originalParse }).parse =
+        originalParse;
     }
   });
 

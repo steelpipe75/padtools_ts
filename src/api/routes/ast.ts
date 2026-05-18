@@ -230,7 +230,9 @@ export const astParseHandler: RouteHandler<typeof astParseRoute> = async (
   }
 };
 
-export const astParseDownloadHandler = (async (c: any) => {
+export const astParseDownloadHandler: RouteHandler<
+  typeof astParseDownloadRoute
+> = async (c) => {
   try {
     const { spd } = c.req.valid("json");
     if (!spd) {
@@ -243,21 +245,25 @@ export const astParseDownloadHandler = (async (c: any) => {
     }
 
     const astString = serializeAST(ast);
+    const astJson = JSON.parse(astString);
+
     c.header("Content-Type", "application/json");
     c.header("Content-Disposition", 'attachment; filename="diagram.json"');
 
-    return c.body(astString, 200);
+    return c.json(astJson, 200);
   } catch (error) {
     console.error("AST parse download error:", error);
     return c.json(
       {
         error:
-          error instanceof Error ? error.message : "Failed to parse AST download",
+          error instanceof Error
+            ? error.message
+            : "Failed to parse AST download",
       },
       400,
     );
   }
-}) as any;
+};
 
 export const astRenderHandler: RouteHandler<typeof astRenderRoute> = async (
   c,
@@ -289,7 +295,9 @@ export const astRenderHandler: RouteHandler<typeof astRenderRoute> = async (
   }
 };
 
-export const astRenderDownloadHandler = (async (c: any) => {
+export const astRenderDownloadHandler: RouteHandler<
+  typeof astRenderDownloadRoute
+> = async (c) => {
   try {
     const { ast, options = {} } = c.req.valid("json");
     if (!ast) {
@@ -322,4 +330,4 @@ export const astRenderDownloadHandler = (async (c: any) => {
       500,
     );
   }
-}) as any;
+};
