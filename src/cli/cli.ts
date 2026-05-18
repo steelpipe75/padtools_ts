@@ -5,14 +5,17 @@ import { program } from "commander";
 import { optimize } from "svgo";
 import xmlFormat from "xml-formatter";
 import packageJson from "../../package.json";
-import { serializeAST, deserializeAST } from "../spd/ast";
+import { deserializeAST, serializeAST } from "../spd/ast";
 import { ParseError, parse } from "../spd/parser";
 import { render } from "../spd/svg-renderer";
 
 program
   .version(packageJson.version)
   .description("Convert SPD(Simple PAD Description) text file to SVG image")
-  .option("-i, --input <inputFilePath>", "Path to the input file (SPD or AST JSON)")
+  .option(
+    "-i, --input <inputFilePath>",
+    "Path to the input file (SPD or AST JSON)",
+  )
   .option("-o, --output <outputFilePath>", "Path to the output SVG file")
   .option("-p, --prettyprint", "Pretty print the output SVG")
   .option("--export-ast <astFilePath>", "Path to export the parsed AST as JSON")

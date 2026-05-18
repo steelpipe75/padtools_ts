@@ -1,3 +1,4 @@
+import { deserializeAST, serializeAST } from "../spd/ast";
 import {
   type ConvertAstToSvgRequest,
   type ConvertRequest,
@@ -7,7 +8,6 @@ import {
 } from "../spd/core";
 import { SPD_EXPLANATION } from "../spd/docs";
 import { ParseError, parse } from "../spd/parser";
-import { deserializeAST, serializeAST } from "../spd/ast";
 
 /**
  * Handler for the SPD notation explanation resource.

@@ -86,7 +86,9 @@ export const ConvertSpdToAstRequestSchema = z.object({
   }),
 });
 
-export type ConvertSpdToAstRequest = z.infer<typeof ConvertSpdToAstRequestSchema>;
+export type ConvertSpdToAstRequest = z.infer<
+  typeof ConvertSpdToAstRequestSchema
+>;
 
 export const ConvertAstToSvgRequestSchema = z.object({
   ast: z.any().openapi({
@@ -95,7 +97,9 @@ export const ConvertAstToSvgRequestSchema = z.object({
   options: ConvertRequestOptionsSchema.optional(),
 });
 
-export type ConvertAstToSvgRequest = z.infer<typeof ConvertAstToSvgRequestSchema>;
+export type ConvertAstToSvgRequest = z.infer<
+  typeof ConvertAstToSvgRequestSchema
+>;
 
 export const generateSvg = (
   spd: string,

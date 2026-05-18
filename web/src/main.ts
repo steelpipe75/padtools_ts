@@ -1,6 +1,7 @@
 // web/src/main.ts
 
 import { version } from "../../package.json";
+import { deserializeAST, serializeAST } from "../../src/spd/ast";
 import { ParseError, parse } from "../../src/spd/parser";
 import { render as renderSvg } from "../../src/spd/svg-renderer";
 
@@ -11,10 +12,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const spdInput = document.getElementById("spdInput") as HTMLTextAreaElement;
+  const importAstCheckbox = document.getElementById(
+    "importAstCheckbox",
+  ) as HTMLInputElement;
   const svgOutput = document.getElementById("svgOutput") as HTMLDivElement;
   const fileInput = document.getElementById("fileInput") as HTMLInputElement;
   const downloadButton = document.getElementById(
     "downloadButton",
+  ) as HTMLButtonElement;
+  const downloadAstButton = document.getElementById(
+    "downloadAstButton",
   ) as HTMLButtonElement;
   const downloadSvgButton = document.getElementById(
     "downloadSvgButton",
@@ -61,7 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertAndRender = () => {
     const spdText = spdInput.value;
     try {
-      const ast = parse(spdText);
+      const ast = importAstCheckbox.checked
+        ? deserializeAST(spdText)
+        : parse(spdText);
+
+      if (!ast) {
+        throw new Error("Could not obtain AST.");
+      }
+
       const options = {
         fontSize: parseInt(fontSizeInput.value, 10),
         fontFamily: customFontCheckbox.checked
@@ -145,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   spdInput.addEventListener("input", convertAndRender);
+  importAstCheckbox.addEventListener("change", convertAndRender);
   applyOptionsButton.addEventListener("click", convertAndRender);
 
   spdInput.addEventListener("keydown", (event) => {
@@ -172,6 +187,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         spdInput.value = e.target?.result as string;
+        // .jsonファイルの場合は自動的に「ASTとしてインポート」をオンにする
+        if (file.name.endsWith(".json")) {
+          importAstCheckbox.checked = true;
+        } else if (file.name.endsWith(".spd")) {
+          importAstCheckbox.checked = false;
+        }
         convertAndRender(); // ファイル読み込み後も変換を実行
       };
       reader.readAsText(file);
@@ -204,6 +225,49 @@ document.addEventListener("DOMContentLoaded", () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  });
+
+  downloadAstButton.addEventListener("click", () => {
+    const spdText = spdInput.value;
+    try {
+      const ast = importAstCheckbox.checked
+        ? deserializeAST(spdText)
+        : parse(spdText);
+
+      if (!ast) {
+        alert("ASTを取得できませんでした。内容を確認してください。");
+        return;
+      }
+
+      const astJson = serializeAST(ast);
+
+      let fileName = prompt(
+        "ダウンロードするASTファイル名を入力してください:",
+        "ast.json",
+      );
+
+      if (fileName === null) {
+        return;
+      }
+
+      if (!fileName.endsWith(".json")) {
+        fileName += ".json";
+      }
+
+      const blob = new Blob([astJson], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      alert(
+        `ASTの生成に失敗しました: ${error instanceof Error ? error.message : error}`,
+      );
+    }
   });
 
   downloadSvgButton.addEventListener("click", () => {

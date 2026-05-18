@@ -50,7 +50,7 @@ describe("API AST Endpoints", () => {
 
     expect(parseRes.status).toBe(200);
     const parseBody = await parseRes.json();
-    
+
     // SwitchNodeのcasesが__type: "Map"としてシリアライズされていることを確認
     const switchNode = parseBody.ast.children[0];
     expect(switchNode.type).toBe("switch");

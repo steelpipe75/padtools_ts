@@ -191,7 +191,10 @@ describe("CLI", () => {
     const process = require("node:process");
 
     // Mock isTTY to false to allow reading from stdin in test environment
-    const isTTYDescriptor = Object.getOwnPropertyDescriptor(process.stdin, "isTTY");
+    const isTTYDescriptor = Object.getOwnPropertyDescriptor(
+      process.stdin,
+      "isTTY",
+    );
     Object.defineProperty(process.stdin, "isTTY", {
       value: false,
       configurable: true,
@@ -228,7 +231,7 @@ describe("CLI", () => {
     if (isTTYDescriptor) {
       Object.defineProperty(process.stdin, "isTTY", isTTYDescriptor);
     } else {
-      // @ts-ignore
+      // @ts-expect-error
       delete process.stdin.isTTY;
     }
   });
@@ -385,7 +388,11 @@ describe("CLI", () => {
 
   it("should import AST from a file when --import-ast and -i are provided", () => {
     const inputPath = "ast.json";
-    const ast: Node = { type: "process", text: "imported ast", childNode: null };
+    const ast: Node = {
+      type: "process",
+      text: "imported ast",
+      childNode: null,
+    };
     const astJson = JSON.stringify(ast);
     const svgOutput = "<svg/>";
     const optimizedSvg = { data: "<svg/>" };
@@ -415,7 +422,11 @@ describe("CLI", () => {
   });
 
   it("should import AST from stdin when --import-ast is provided without -i", () => {
-    const ast: Node = { type: "process", text: "imported from stdin", childNode: null };
+    const ast: Node = {
+      type: "process",
+      text: "imported from stdin",
+      childNode: null,
+    };
     const astJson = JSON.stringify(ast);
     const svgOutput = "<svg/>";
     const optimizedSvg = { data: "<svg/>" };
@@ -427,7 +438,10 @@ describe("CLI", () => {
     const process = require("node:process");
 
     // Mock isTTY to false to allow reading from stdin in test environment
-    const isTTYDescriptor = Object.getOwnPropertyDescriptor(process.stdin, "isTTY");
+    const isTTYDescriptor = Object.getOwnPropertyDescriptor(
+      process.stdin,
+      "isTTY",
+    );
     Object.defineProperty(process.stdin, "isTTY", {
       value: false,
       configurable: true,
@@ -456,7 +470,7 @@ describe("CLI", () => {
     if (isTTYDescriptor) {
       Object.defineProperty(process.stdin, "isTTY", isTTYDescriptor);
     } else {
-      // @ts-ignore
+      // @ts-expect-error
       delete process.stdin.isTTY;
     }
   });
@@ -482,6 +496,9 @@ describe("CLI", () => {
     runCli(["-i", inputPath, "--export-ast", exportPath]);
 
     // Assertions
-    expect(fs.writeFileSync).toHaveBeenCalledWith(exportPath, JSON.stringify(ast));
+    expect(fs.writeFileSync).toHaveBeenCalledWith(
+      exportPath,
+      JSON.stringify(ast),
+    );
   });
 });

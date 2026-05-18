@@ -3,6 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Context } from "hono";
 import { z } from "zod";
 import { version } from "../../../package.json";
+import { deserializeAST, serializeAST } from "../../spd/ast";
 import {
   ConvertAstToSvgRequestSchema,
   ConvertRequestSchema,
@@ -12,7 +13,6 @@ import {
 } from "../../spd/core";
 import { SPD_EXPLANATION } from "../../spd/docs";
 import { ParseError, parse } from "../../spd/parser";
-import { deserializeAST, serializeAST } from "../../spd/ast";
 
 const mcpServer = new McpServer({
   name: "PAD Tools",

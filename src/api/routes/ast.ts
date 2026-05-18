@@ -1,7 +1,10 @@
 import { createRoute, type RouteHandler, z } from "@hono/zod-openapi";
-import { serializeAST, deserializeAST } from "../../spd/ast";
+import { deserializeAST, serializeAST } from "../../spd/ast";
+import {
+  ConvertRequestOptionsSchema,
+  generateSvgFromAst,
+} from "../../spd/core";
 import { parse } from "../../spd/parser";
-import { ConvertRequestOptionsSchema, generateSvgFromAst } from "../../spd/core";
 
 const ErrorResponseSchema = z.object({
   error: z.string().openapi({
@@ -115,7 +118,9 @@ export const astRenderRoute = createRoute({
   },
 });
 
-export const astParseHandler: RouteHandler<typeof astParseRoute> = async (c) => {
+export const astParseHandler: RouteHandler<typeof astParseRoute> = async (
+  c,
+) => {
   try {
     const { spd } = c.req.valid("json");
     if (!spd) {
@@ -124,19 +129,24 @@ export const astParseHandler: RouteHandler<typeof astParseRoute> = async (c) => 
 
     const ast = parse(spd);
     if (!ast) {
-        return c.json({ error: "Failed to parse SPD" }, 400);
+      return c.json({ error: "Failed to parse SPD" }, 400);
     }
-    
+
     // serialize to handle Map and then parse back to object for JSON response
     const astJson = JSON.parse(serializeAST(ast));
     return c.json({ ast: astJson }, 200);
   } catch (error) {
     console.error("AST parse error:", error);
-    return c.json({ error: error instanceof Error ? error.message : "Failed to parse AST" }, 400);
+    return c.json(
+      { error: error instanceof Error ? error.message : "Failed to parse AST" },
+      400,
+    );
   }
 };
 
-export const astRenderHandler: RouteHandler<typeof astRenderRoute> = async (c) => {
+export const astRenderHandler: RouteHandler<typeof astRenderRoute> = async (
+  c,
+) => {
   try {
     const { ast, options = {} } = c.req.valid("json");
     if (!ast) {
@@ -146,15 +156,20 @@ export const astRenderHandler: RouteHandler<typeof astRenderRoute> = async (c) =
     // Convert AST object to string and then deserialize to handle Map restoration
     const astString = JSON.stringify(ast);
     const deserializedAst = deserializeAST(astString);
-    
+
     if (!deserializedAst) {
-        return c.json({ error: "Invalid AST format" }, 400);
+      return c.json({ error: "Invalid AST format" }, 400);
     }
 
     const svgOutput = generateSvgFromAst(deserializedAst, options);
     return c.json({ svg: svgOutput }, 200);
   } catch (error) {
     console.error("AST render error:", error);
-    return c.json({ error: error instanceof Error ? error.message : "Failed to render AST" }, 500);
+    return c.json(
+      {
+        error: error instanceof Error ? error.message : "Failed to render AST",
+      },
+      500,
+    );
   }
 };
