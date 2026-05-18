@@ -199,18 +199,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const getFileName = (message: string, defaultName: string): string | null => {
+    try {
+      return prompt(message, defaultName);
+    } catch (error) {
+      console.warn("prompt() is not supported, using default filename.", error);
+      return defaultName;
+    }
+  };
+
   downloadButton.addEventListener("click", () => {
     const spdText = spdInput.value;
-    let fileName = prompt(
+    const fileNameInput = getFileName(
       "ダウンロードするファイル名を入力してください:",
       "edited_spd.spd",
     );
 
-    if (fileName === null) {
+    if (fileNameInput === null) {
       // ユーザーがキャンセルした場合
       return;
     }
 
+    let fileName = fileNameInput;
     // 拡張子がない場合は.spdを追加
     if (!fileName.endsWith(".spd")) {
       fileName += ".spd";
@@ -241,15 +251,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const astJson = serializeAST(ast);
 
-      let fileName = prompt(
+      const fileNameInput = getFileName(
         "ダウンロードするASTファイル名を入力してください:",
         "ast.json",
       );
 
-      if (fileName === null) {
+      if (fileNameInput === null) {
         return;
       }
 
+      let fileName = fileNameInput;
       if (!fileName.endsWith(".json")) {
         fileName += ".json";
       }
@@ -277,16 +288,17 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    let fileName = prompt(
+    const fileNameInput = getFileName(
       "ダウンロードするSVGファイル名を入力してください:",
       "output.svg",
     );
 
-    if (fileName === null) {
+    if (fileNameInput === null) {
       // ユーザーがキャンセルした場合
       return;
     }
 
+    let fileName = fileNameInput;
     // 拡張子がない場合は.svgを追加
     if (!fileName.endsWith(".svg")) {
       fileName += ".svg";
