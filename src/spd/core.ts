@@ -84,6 +84,17 @@ export const generateSvg = (
   options: ConvertRequestOptions = {},
 ) => {
   const ast = parse(spd);
+  return generateSvgFromAst(ast, options);
+};
+
+export const generateSvgFromAst = (
+  ast: ReturnType<typeof parse>,
+  options: ConvertRequestOptions = {},
+) => {
+  if (!ast) {
+    throw new Error("AST is null or undefined");
+  }
+
   const renderOptions: Parameters<typeof render>[1] = {};
 
   // Map options to renderOptions

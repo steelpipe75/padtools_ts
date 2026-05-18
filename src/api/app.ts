@@ -8,6 +8,12 @@ import {
   downloadHandler,
   downloadRoute,
 } from "./routes/convert";
+import {
+  astParseHandler,
+  astParseRoute,
+  astRenderHandler,
+  astRenderRoute,
+} from "./routes/ast";
 import { healthHandler, healthRoute } from "./routes/health";
 import { mcpHandler } from "./routes/mcp";
 import { spdInfoHandler, spdInfoRoute } from "./routes/spd-info";
@@ -36,6 +42,9 @@ app.openapi(healthRoute, healthHandler);
 app.openapi(spdInfoRoute, spdInfoHandler);
 app.openapi(convertRoute, convertHandler);
 app.openapi(downloadRoute, downloadHandler);
+app.openapi(astParseRoute, astParseHandler);
+app.openapi(astRenderRoute, astRenderHandler);
+
 
 // MCP Route
 app.all("/mcp", mcpHandler);
