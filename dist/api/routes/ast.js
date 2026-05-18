@@ -234,9 +234,10 @@ const astParseDownloadHandler = (c) => __awaiter(void 0, void 0, void 0, functio
             return c.json({ error: "Failed to parse SPD" }, 400);
         }
         const astString = (0, ast_1.serializeAST)(ast);
+        const astJson = JSON.parse(astString);
         c.header("Content-Type", "application/json");
         c.header("Content-Disposition", 'attachment; filename="diagram.json"');
-        return c.body(astString, 200);
+        return c.json(astJson, 200);
     }
     catch (error) {
         console.error("AST parse download error:", error);
