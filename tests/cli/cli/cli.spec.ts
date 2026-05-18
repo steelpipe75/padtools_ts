@@ -231,7 +231,6 @@ describe("CLI", () => {
     if (isTTYDescriptor) {
       Object.defineProperty(process.stdin, "isTTY", isTTYDescriptor);
     } else {
-      // @ts-expect-error
       delete process.stdin.isTTY;
     }
   });
@@ -470,7 +469,6 @@ describe("CLI", () => {
     if (isTTYDescriptor) {
       Object.defineProperty(process.stdin, "isTTY", isTTYDescriptor);
     } else {
-      // @ts-expect-error
       delete process.stdin.isTTY;
     }
   });
