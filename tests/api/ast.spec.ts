@@ -148,6 +148,46 @@ describe("API AST Endpoints", () => {
       }
     });
 
+    it("should return 400 if exception occurs in /ast/parse (Errorオブジェクト以外がスローされた場合)", async () => {
+      const originalParse = parser.parse;
+      (parser as unknown as { parse: jest.Mock }).parse = jest
+        .fn()
+        .mockImplementation(() => {
+          throw "Non-Error object";
+        });
+
+      try {
+        const res = await app.request("/ast/parse", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ spd: "test" }),
+        });
+
+        expect(res.status).toBe(400);
+        const body = await res.json();
+        expect(body.error).toBe("Failed to parse AST");
+      } finally {
+        (parser as unknown as { parse: typeof originalParse }).parse =
+          originalParse;
+      }
+    });
+
+    it("should return 400 if SPD is an empty string in /ast/parse", async () => {
+      const res = await app.request("/ast/parse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ spd: "" }),
+      });
+
+      expect(res.status).toBe(400);
+      const body = await res.json();
+      expect(body.error).toBe("SPD content is required");
+    });
+
     it("should return 400 if deserializeAST fails in /ast/render", async () => {
       const originalDeserialize = ast_utils.deserializeAST;
       (ast_utils as unknown as { deserializeAST: jest.Mock }).deserializeAST =
@@ -196,6 +236,63 @@ describe("API AST Endpoints", () => {
           ast_utils as unknown as { deserializeAST: typeof originalDeserialize }
         ).deserializeAST = originalDeserialize;
       }
+    });
+
+    it("should return 500 if exception occurs in /ast/render (Errorオブジェクト以外がスローされた場合)", async () => {
+      const originalDeserialize = ast_utils.deserializeAST;
+      (ast_utils as unknown as { deserializeAST: jest.Mock }).deserializeAST =
+        jest.fn().mockImplementation(() => {
+          throw "Non-Error object";
+        });
+
+      try {
+        const res = await app.request("/ast/render", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ast: { type: "nodeList", children: [] } }),
+        });
+
+        expect(res.status).toBe(500);
+        const body = await res.json();
+        expect(body.error).toBe("Failed to render AST");
+      } finally {
+        (
+          ast_utils as unknown as { deserializeAST: typeof originalDeserialize }
+        ).deserializeAST = originalDeserialize;
+      }
+    });
+
+    it("should return 400 if AST is an empty string in /ast/render", async () => {
+      const res = await app.request("/ast/render", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ast: "" }),
+      });
+
+      expect(res.status).toBe(400);
+      const body = await res.json();
+      expect(body.error).toBe("AST is required");
+    });
+
+    it("should render AST JSON with options successfully", async () => {
+      const res = await app.request("/ast/render", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ast: { type: "nodeList", children: [] },
+          options: { fontSize: 20 },
+        }),
+      });
+
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body).toHaveProperty("svg");
     });
   });
 });
