@@ -1,18 +1,21 @@
 import { StreamableHTTPTransport } from "@hono/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Context } from "hono";
-import { z } from "zod";
 import { version } from "../../../package.json";
-import { deserializeAST, serializeAST } from "../../spd/ast";
+import {
+  handleConvertAstToSvgTool,
+  handleConvertSpdToAstTool,
+  handleConvertSpdToSvgTool,
+  handleExplainSpdPrompt,
+  handleGenerateSpdPrompt,
+  handleGetSpdExplanationResource,
+  handleGetSpdExplanationTool,
+} from "../../mcp/handlers";
 import {
   ConvertAstToSvgRequestSchema,
   ConvertRequestSchema,
   ConvertSpdToAstRequestSchema,
-  generateSvg,
-  generateSvgFromAst,
 } from "../../spd/core";
-import { SPD_EXPLANATION } from "../../spd/docs";
-import { ParseError, parse } from "../../spd/parser";
 
 const mcpServer = new McpServer({
   name: "PAD Tools",
@@ -27,15 +30,18 @@ mcpServer.registerResource(
     mimeType: "text/markdown",
     description: "Explanation of SPD (Simple PAD Description) notation.",
   },
-  async (uri) => ({
-    contents: [
-      {
-        uri: uri.href,
-        text: SPD_EXPLANATION,
-        mimeType: "text/markdown",
-      },
-    ],
-  }),
+  async (uri) => {
+    const result = await handleGetSpdExplanationResource();
+    return {
+      contents: [
+        {
+          uri: uri.href,
+          text: result.text,
+          mimeType: result.mimeType,
+        },
+      ],
+    };
+  },
 );
 
 // Prompts
@@ -44,17 +50,20 @@ mcpServer.registerPrompt(
   {
     description: "Explain SPD (Simple PAD Description) notation with examples.",
   },
-  async () => ({
-    messages: [
-      {
-        role: "user",
-        content: {
-          type: "text",
-          text: `SPD (Simple PAD Description) 記法について説明し、いくつか具体的な記述例を提示してください。\n\nリファレンス:\n${SPD_EXPLANATION}`,
+  async () => {
+    const text = await handleExplainSpdPrompt();
+    return {
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: text,
+          },
         },
-      },
-    ],
-  }),
+      ],
+    };
+  },
 );
 
 mcpServer.registerPrompt(
@@ -63,22 +72,26 @@ mcpServer.registerPrompt(
     description:
       "Generate SPD (Simple PAD Description) from a task description.",
     argsSchema: {
-      description: z
-        .string()
-        .describe("Description of the logic or task to convert to SPD"),
+      // biome-ignore lint/suspicious/noExplicitAny: Required for dynamic access to Zod schema shape in MCP argsSchema
+      description: (ConvertSpdToAstRequestSchema.shape as any).spd.describe(
+        "Description of the logic or task to convert to SPD",
+      ),
     },
   },
-  async ({ description }) => ({
-    messages: [
-      {
-        role: "user",
-        content: {
-          type: "text",
-          text: `以下の処理内容を、SPD記法を使用して記述してください。\n\n処理内容:\n${description}\n\nSPD記法のルールと例は以下の通りです:\n${SPD_EXPLANATION}`,
+  async (args) => {
+    const text = await handleGenerateSpdPrompt(args as { description: string });
+    return {
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: text,
+          },
         },
-      },
-    ],
-  }),
+      ],
+    };
+  },
 );
 
 // Tools
@@ -89,8 +102,9 @@ mcpServer.registerTool(
       "Get the explanation of SPD (Simple PAD Description) notation.",
   },
   async () => {
+    const text = await handleGetSpdExplanationTool();
     return {
-      content: [{ type: "text", text: SPD_EXPLANATION }],
+      content: [{ type: "text", text: text }],
     };
   },
 );
@@ -104,21 +118,19 @@ mcpServer.registerTool(
   },
   async (args) => {
     try {
-      const svg = generateSvg(args.spd, args.options);
+      const svg = await handleConvertSpdToSvgTool(
+        args as unknown as Parameters<typeof handleConvertSpdToSvgTool>[0],
+      );
       return {
         content: [{ type: "text", text: svg }],
       };
     } catch (error) {
-      let errorMessage = `Error converting SPD to SVG: ${error instanceof Error ? error.message : String(error)}`;
-      if (error instanceof ParseError) {
-        errorMessage = `SPD Parse Error at line ${error.lineNo}: ${error.message}\nLine content: ${error.lineStr}`;
-      }
       return {
         isError: true,
         content: [
           {
             type: "text",
-            text: errorMessage,
+            text: error instanceof Error ? error.message : String(error),
           },
         ],
       };
@@ -135,26 +147,19 @@ mcpServer.registerTool(
   },
   async (args) => {
     try {
-      const ast = parse(args.spd);
-      if (!ast) {
-        throw new Error("Failed to parse SPD");
-      }
-      // serialize to handle Map and then parse back to object for JSON response
-      const astJson = JSON.parse(serializeAST(ast));
+      const astJson = await handleConvertSpdToAstTool(
+        args as unknown as Parameters<typeof handleConvertSpdToAstTool>[0],
+      );
       return {
         content: [{ type: "text", text: JSON.stringify(astJson) }],
       };
     } catch (error) {
-      let errorMessage = `Error converting SPD to AST: ${error instanceof Error ? error.message : String(error)}`;
-      if (error instanceof ParseError) {
-        errorMessage = `SPD Parse Error at line ${error.lineNo}: ${error.message}\nLine content: ${error.lineStr}`;
-      }
       return {
         isError: true,
         content: [
           {
             type: "text",
-            text: errorMessage,
+            text: error instanceof Error ? error.message : String(error),
           },
         ],
       };
@@ -171,15 +176,9 @@ mcpServer.registerTool(
   },
   async (args) => {
     try {
-      // Convert AST object to string and then deserialize to handle Map restoration
-      const astString = JSON.stringify(args.ast);
-      const deserializedAst = deserializeAST(astString);
-
-      if (!deserializedAst) {
-        throw new Error("Invalid AST format");
-      }
-
-      const svgOutput = generateSvgFromAst(deserializedAst, args.options);
+      const svgOutput = await handleConvertAstToSvgTool(
+        args as unknown as Parameters<typeof handleConvertAstToSvgTool>[0],
+      );
       return {
         content: [{ type: "text", text: svgOutput }],
       };
@@ -189,7 +188,7 @@ mcpServer.registerTool(
         content: [
           {
             type: "text",
-            text: `Error converting AST to SVG: ${error instanceof Error ? error.message : String(error)}`,
+            text: error instanceof Error ? error.message : String(error),
           },
         ],
       };
