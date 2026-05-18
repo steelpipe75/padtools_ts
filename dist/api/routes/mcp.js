@@ -12,12 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.mcpHandler = void 0;
 const mcp_1 = require("@hono/mcp");
 const mcp_js_1 = require("@modelcontextprotocol/sdk/server/mcp.js");
-const zod_1 = require("zod");
 const package_json_1 = require("../../../package.json");
-const ast_1 = require("../../spd/ast");
+const handlers_1 = require("../../mcp/handlers");
 const core_1 = require("../../spd/core");
-const docs_1 = require("../../spd/docs");
-const parser_1 = require("../../spd/parser");
 const mcpServer = new mcp_js_1.McpServer({
     name: "PAD Tools",
     version: package_json_1.version,
@@ -27,58 +24,61 @@ mcpServer.registerResource("spd-explanation", "spd://docs/explanation", {
     mimeType: "text/markdown",
     description: "Explanation of SPD (Simple PAD Description) notation.",
 }, (uri) => __awaiter(void 0, void 0, void 0, function* () {
-    return ({
+    const result = yield (0, handlers_1.handleGetSpdExplanationResource)();
+    return {
         contents: [
             {
                 uri: uri.href,
-                text: docs_1.SPD_EXPLANATION,
-                mimeType: "text/markdown",
+                text: result.text,
+                mimeType: result.mimeType,
             },
         ],
-    });
+    };
 }));
 // Prompts
 mcpServer.registerPrompt("explain-spd", {
     description: "Explain SPD (Simple PAD Description) notation with examples.",
 }, () => __awaiter(void 0, void 0, void 0, function* () {
-    return ({
+    const text = yield (0, handlers_1.handleExplainSpdPrompt)();
+    return {
         messages: [
             {
                 role: "user",
                 content: {
                     type: "text",
-                    text: `SPD (Simple PAD Description) 記法について説明し、いくつか具体的な記述例を提示してください。\n\nリファレンス:\n${docs_1.SPD_EXPLANATION}`,
+                    text: text,
                 },
             },
         ],
-    });
+    };
 }));
 mcpServer.registerPrompt("generate-spd", {
     description: "Generate SPD (Simple PAD Description) from a task description.",
     argsSchema: {
-        description: zod_1.z
-            .string()
-            .describe("Description of the logic or task to convert to SPD"),
+        // biome-ignore lint/suspicious/noExplicitAny: Required for dynamic access to Zod schema shape in MCP argsSchema
+        description: core_1.ConvertSpdToAstRequestSchema.shape.spd.describe("Description of the logic or task to convert to SPD"),
     },
-}, (_a) => __awaiter(void 0, [_a], void 0, function* ({ description }) {
-    return ({
+}, (args) => __awaiter(void 0, void 0, void 0, function* () {
+    const text = yield (0, handlers_1.handleGenerateSpdPrompt)(args);
+    return {
         messages: [
             {
                 role: "user",
                 content: {
                     type: "text",
-                    text: `以下の処理内容を、SPD記法を使用して記述してください。\n\n処理内容:\n${description}\n\nSPD記法のルールと例は以下の通りです:\n${docs_1.SPD_EXPLANATION}`,
+                    text: text,
                 },
             },
         ],
-    });
+    };
 }));
 // Tools
 mcpServer.registerTool("get_spd_explanation", {
     description: "Get the explanation of SPD (Simple PAD Description) notation.",
 }, () => __awaiter(void 0, void 0, void 0, function* () {
+    const text = yield (0, handlers_1.handleGetSpdExplanationTool)();
     return {
-        content: [{ type: "text", text: docs_1.SPD_EXPLANATION }],
+        content: [{ type: "text", text: text }],
     };
 }));
 mcpServer.registerTool("convert_spd_to_svg", {
@@ -86,22 +86,18 @@ mcpServer.registerTool("convert_spd_to_svg", {
     inputSchema: core_1.ConvertRequestSchema.shape,
 }, (args) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const svg = (0, core_1.generateSvg)(args.spd, args.options);
+        const svg = yield (0, handlers_1.handleConvertSpdToSvgTool)(args);
         return {
             content: [{ type: "text", text: svg }],
         };
     }
     catch (error) {
-        let errorMessage = `Error converting SPD to SVG: ${error instanceof Error ? error.message : String(error)}`;
-        if (error instanceof parser_1.ParseError) {
-            errorMessage = `SPD Parse Error at line ${error.lineNo}: ${error.message}\nLine content: ${error.lineStr}`;
-        }
         return {
             isError: true,
             content: [
                 {
                     type: "text",
-                    text: errorMessage,
+                    text: error instanceof Error ? error.message : String(error),
                 },
             ],
         };
@@ -112,27 +108,18 @@ mcpServer.registerTool("convert_spd_to_ast", {
     inputSchema: core_1.ConvertSpdToAstRequestSchema.shape,
 }, (args) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const ast = (0, parser_1.parse)(args.spd);
-        if (!ast) {
-            throw new Error("Failed to parse SPD");
-        }
-        // serialize to handle Map and then parse back to object for JSON response
-        const astJson = JSON.parse((0, ast_1.serializeAST)(ast));
+        const astJson = yield (0, handlers_1.handleConvertSpdToAstTool)(args);
         return {
             content: [{ type: "text", text: JSON.stringify(astJson) }],
         };
     }
     catch (error) {
-        let errorMessage = `Error converting SPD to AST: ${error instanceof Error ? error.message : String(error)}`;
-        if (error instanceof parser_1.ParseError) {
-            errorMessage = `SPD Parse Error at line ${error.lineNo}: ${error.message}\nLine content: ${error.lineStr}`;
-        }
         return {
             isError: true,
             content: [
                 {
                     type: "text",
-                    text: errorMessage,
+                    text: error instanceof Error ? error.message : String(error),
                 },
             ],
         };
@@ -143,13 +130,7 @@ mcpServer.registerTool("convert_ast_to_svg", {
     inputSchema: core_1.ConvertAstToSvgRequestSchema.shape,
 }, (args) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Convert AST object to string and then deserialize to handle Map restoration
-        const astString = JSON.stringify(args.ast);
-        const deserializedAst = (0, ast_1.deserializeAST)(astString);
-        if (!deserializedAst) {
-            throw new Error("Invalid AST format");
-        }
-        const svgOutput = (0, core_1.generateSvgFromAst)(deserializedAst, args.options);
+        const svgOutput = yield (0, handlers_1.handleConvertAstToSvgTool)(args);
         return {
             content: [{ type: "text", text: svgOutput }],
         };
@@ -160,7 +141,7 @@ mcpServer.registerTool("convert_ast_to_svg", {
             content: [
                 {
                     type: "text",
-                    text: `Error converting AST to SVG: ${error instanceof Error ? error.message : String(error)}`,
+                    text: error instanceof Error ? error.message : String(error),
                 },
             ],
         };
