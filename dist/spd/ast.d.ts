@@ -69,3 +69,13 @@ export interface NodeListNode {
     type: "nodeList";
     children: Node[];
 }
+/**
+ * ASTをJSON文字列にシリアライズします。
+ * SwitchNodeのMapをオブジェクトまたは配列に変換して保存できるようにします。
+ */
+export declare function serializeAST(ast: Node | null): string;
+/**
+ * JSON文字列からASTをデシリアライズします。
+ * シリアライズ時に変換されたMapを復元します。
+ */
+export declare function deserializeAST(json: string): Node | null;

@@ -190,6 +190,16 @@ describe("CLI", () => {
     const { optimize } = require("svgo");
     const process = require("node:process");
 
+    // Mock isTTY to false to allow reading from stdin in test environment
+    const isTTYDescriptor = Object.getOwnPropertyDescriptor(
+      process.stdin,
+      "isTTY",
+    );
+    Object.defineProperty(process.stdin, "isTTY", {
+      value: false,
+      configurable: true,
+    });
+
     fs.readFileSync.mockImplementation((path: string | number) => {
       if (path === 0) {
         return spdContent;
@@ -217,6 +227,12 @@ describe("CLI", () => {
     expect(processExitSpy).not.toHaveBeenCalled();
 
     writeSpy.mockRestore();
+    // Restore isTTY
+    if (isTTYDescriptor) {
+      Object.defineProperty(process.stdin, "isTTY", isTTYDescriptor);
+    } else {
+      delete process.stdin.isTTY;
+    }
   });
 
   it("should pass all render options to the render function", () => {
@@ -366,6 +382,121 @@ describe("CLI", () => {
     expect(render).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({ listRenderType: "TerminalOffset" }),
+    );
+  });
+
+  it("should import AST from a file when --import-ast and -i are provided", () => {
+    const inputPath = "ast.json";
+    const ast: Node = {
+      type: "process",
+      text: "imported ast",
+      childNode: null,
+    };
+    const astJson = JSON.stringify(ast);
+    const svgOutput = "<svg/>";
+    const optimizedSvg = { data: "<svg/>" };
+
+    // Setup mocks
+    const fs = require("node:fs");
+    const { render } = require("../../../src/spd/svg-renderer");
+    const { optimize } = require("svgo");
+    const process = require("node:process");
+
+    fs.readFileSync.mockReturnValue(astJson);
+    render.mockReturnValue(svgOutput);
+    optimize.mockReturnValue(optimizedSvg);
+    const writeSpy = jest
+      .spyOn(process.stdout, "write")
+      .mockImplementation(() => true);
+
+    // Run CLI
+    runCli(["-i", inputPath, "--import-ast"]);
+
+    // Assertions
+    expect(fs.readFileSync).toHaveBeenCalledWith(inputPath, "utf-8");
+    expect(render).toHaveBeenCalledWith(ast, expect.any(Object));
+    expect(writeSpy).toHaveBeenCalledWith(optimizedSvg.data);
+
+    writeSpy.mockRestore();
+  });
+
+  it("should import AST from stdin when --import-ast is provided without -i", () => {
+    const ast: Node = {
+      type: "process",
+      text: "imported from stdin",
+      childNode: null,
+    };
+    const astJson = JSON.stringify(ast);
+    const svgOutput = "<svg/>";
+    const optimizedSvg = { data: "<svg/>" };
+
+    // Setup mocks
+    const fs = require("node:fs");
+    const { render } = require("../../../src/spd/svg-renderer");
+    const { optimize } = require("svgo");
+    const process = require("node:process");
+
+    // Mock isTTY to false to allow reading from stdin in test environment
+    const isTTYDescriptor = Object.getOwnPropertyDescriptor(
+      process.stdin,
+      "isTTY",
+    );
+    Object.defineProperty(process.stdin, "isTTY", {
+      value: false,
+      configurable: true,
+    });
+
+    fs.readFileSync.mockImplementation((path: string | number) => {
+      if (path === 0) return astJson;
+      return "";
+    });
+    render.mockReturnValue(svgOutput);
+    optimize.mockReturnValue(optimizedSvg);
+    const writeSpy = jest
+      .spyOn(process.stdout, "write")
+      .mockImplementation(() => true);
+
+    // Run CLI
+    runCli(["--import-ast"]);
+
+    // Assertions
+    expect(fs.readFileSync).toHaveBeenCalledWith(0, "utf-8");
+    expect(render).toHaveBeenCalledWith(ast, expect.any(Object));
+    expect(writeSpy).toHaveBeenCalledWith(optimizedSvg.data);
+
+    writeSpy.mockRestore();
+    // Restore isTTY
+    if (isTTYDescriptor) {
+      Object.defineProperty(process.stdin, "isTTY", isTTYDescriptor);
+    } else {
+      delete process.stdin.isTTY;
+    }
+  });
+
+  it("should export AST to a file when --export-ast is provided", () => {
+    const inputPath = "input.spd";
+    const exportPath = "exported.json";
+    const spdContent = "dummy spd";
+    const ast: Node = { type: "process", text: "test", childNode: null };
+
+    // Setup mocks
+    const fs = require("node:fs");
+    const { parse } = require("../../../src/spd/parser");
+    const { render } = require("../../../src/spd/svg-renderer");
+    const { optimize } = require("svgo");
+
+    fs.readFileSync.mockReturnValue(spdContent);
+    parse.mockReturnValue(ast);
+    render.mockReturnValue("<svg/>");
+    optimize.mockReturnValue({ data: "<svg/>" });
+
+    // Run CLI
+    runCli(["-i", inputPath, "--export-ast", exportPath]);
+
+    // Assertions
+    expect(fs.writeFileSync).toHaveBeenCalledWith(
+      exportPath,
+      JSON.stringify(ast),
     );
   });
 });

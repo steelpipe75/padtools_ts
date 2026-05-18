@@ -79,11 +79,44 @@ export const ConvertRequestSchema = z.object({
 
 export type ConvertRequest = z.infer<typeof ConvertRequestSchema>;
 
+export const ConvertSpdToAstRequestSchema = z.object({
+  spd: z.string().openapi({
+    example: ":terminal Start\nProcess\n:terminal End",
+    description: "The SPD text to convert to AST",
+  }),
+});
+
+export type ConvertSpdToAstRequest = z.infer<
+  typeof ConvertSpdToAstRequestSchema
+>;
+
+export const ConvertAstToSvgRequestSchema = z.object({
+  ast: z.any().openapi({
+    description: "The AST JSON object to convert to SVG",
+  }),
+  options: ConvertRequestOptionsSchema.optional(),
+});
+
+export type ConvertAstToSvgRequest = z.infer<
+  typeof ConvertAstToSvgRequestSchema
+>;
+
 export const generateSvg = (
   spd: string,
   options: ConvertRequestOptions = {},
 ) => {
   const ast = parse(spd);
+  return generateSvgFromAst(ast, options);
+};
+
+export const generateSvgFromAst = (
+  ast: ReturnType<typeof parse>,
+  options: ConvertRequestOptions = {},
+) => {
+  if (!ast) {
+    throw new Error("AST is null or undefined");
+  }
+
   const renderOptions: Parameters<typeof render>[1] = {};
 
   // Map options to renderOptions

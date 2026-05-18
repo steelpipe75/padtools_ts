@@ -181,4 +181,82 @@ test.describe("E2E tests for web", () => {
       .replace(/\r\n/g, "\n");
     expect(downloadedSvg).toBe(goldenSvg);
   });
+
+  test("should download AST file", async ({ page }) => {
+    await page.fill("#spdInput", ":terminal start\n:terminal end");
+
+    const expectedFileName = "test_ast.json";
+    page.on("dialog", (dialog) => dialog.accept(expectedFileName));
+
+    // ダウンロードを開始
+    const downloadPromise = page.waitForEvent("download");
+    await page.click("#downloadAstButton");
+    const download = await downloadPromise;
+
+    expect(download.suggestedFilename()).toBe(expectedFileName);
+
+    const stream = await download.createReadStream();
+    if (!stream) {
+      throw new Error("Could not create read stream for AST download");
+    }
+    const chunks = [];
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+    }
+    const downloadedAst = JSON.parse(Buffer.concat(chunks).toString("utf-8"));
+
+    expect(downloadedAst.type).toBe("nodeList");
+    expect(downloadedAst.children[0].text).toBe("start");
+  });
+
+  test("should render from AST input when checkbox is checked", async ({
+    page,
+  }) => {
+    const astJson = JSON.stringify({
+      type: "nodeList",
+      children: [
+        { type: "terminal", text: "AST Start" },
+        { type: "terminal", text: "AST End" },
+      ],
+    });
+
+    // チェックボックスをオンにする
+    await page.check("#importAstCheckbox");
+
+    // ASTを入力
+    await page.fill("#spdInput", astJson);
+
+    // SVGがレンダリングされているか確認
+    await expect(page.locator("#svgOutput svg")).toBeVisible();
+    await expect(page.locator("#svgOutput")).toContainText("AST Start");
+  });
+
+  test("should include AST flag in share link and restore it", async ({
+    page,
+  }) => {
+    const spdText = JSON.stringify({
+      type: "nodeList",
+      children: [{ type: "terminal", text: "Shared AST" }],
+    });
+    await page.fill("#spdInput", spdText);
+    await page.check("#importAstCheckbox");
+
+    // クリップボードのモックはPlaywrightでは難しい場合があるが、URLを取得して検証する
+    await page.click("#shareButton");
+
+    // クリップボードにコピーされた内容を直接検証する代わりに、URLパラメータでの復元を検証する
+    const bytes = new TextEncoder().encode(spdText);
+    const binString = Array.from(bytes, (byte) =>
+      String.fromCodePoint(byte),
+    ).join("");
+    const base64 = btoa(binString);
+
+    await page.goto(`/?spd=${base64}&ast=1`);
+
+    // 復元を確認
+    expect(await page.inputValue("#spdInput")).toBe(spdText);
+    expect(await page.isChecked("#importAstCheckbox")).toBe(true);
+    await expect(page.locator("#svgOutput svg")).toBeVisible();
+    await expect(page.locator("#svgOutput")).toContainText("Shared AST");
+  });
 });

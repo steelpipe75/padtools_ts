@@ -42,14 +42,17 @@ const commander_1 = require("commander");
 const svgo_1 = require("svgo");
 const xml_formatter_1 = __importDefault(require("xml-formatter"));
 const package_json_1 = __importDefault(require("../../package.json"));
+const ast_1 = require("../spd/ast");
 const parser_1 = require("../spd/parser");
 const svg_renderer_1 = require("../spd/svg-renderer");
 commander_1.program
     .version(package_json_1.default.version)
     .description("Convert SPD(Simple PAD Description) text file to SVG image")
-    .option("-i, --input <inputFilePath>", "Path to the input SPD text file")
+    .option("-i, --input <inputFilePath>", "Path to the input file (SPD or AST JSON)")
     .option("-o, --output <outputFilePath>", "Path to the output SVG file")
     .option("-p, --prettyprint", "Pretty print the output SVG")
+    .option("--export-ast <astFilePath>", "Path to export the parsed AST as JSON")
+    .option("--import-ast", "Treat input as an AST JSON file")
     .option("--font-size <fontSize>", "Font size for the SVG", parseFloat)
     .option("--font-family <fontFamily>", "Font family for the SVG")
     .option("--stroke-width <strokeWidth>", "Stroke width for the SVG", parseFloat)
@@ -61,14 +64,33 @@ commander_1.program
     .option("--list-render-type <listRenderType>", "List render type for the SVG (Original, TerminalOffset)", "Original")
     .action((options) => {
     try {
-        let spdContent;
+        let inputContent;
         if (options.input) {
-            spdContent = fs.readFileSync(options.input, "utf-8");
+            inputContent = fs.readFileSync(options.input, "utf-8");
+        }
+        else if (process.stdin.isTTY && !options.input) {
+            // No input provided and no stdin redirect
+            commander_1.program.help();
+            return;
         }
         else {
-            spdContent = fs.readFileSync(0, "utf-8"); // Read from stdin
+            inputContent = fs.readFileSync(0, "utf-8"); // Read from stdin
         }
-        const ast = (0, parser_1.parse)(spdContent);
+        let ast;
+        if (options.importAst) {
+            ast = (0, ast_1.deserializeAST)(inputContent);
+        }
+        else {
+            ast = (0, parser_1.parse)(inputContent);
+        }
+        if (!ast) {
+            console.error("Error: Could not obtain AST.");
+            process.exit(1);
+        }
+        if (options.exportAst) {
+            const astJson = (0, ast_1.serializeAST)(ast);
+            fs.writeFileSync(options.exportAst, astJson);
+        }
         const renderOptions = {};
         if (options.fontSize !== undefined)
             renderOptions.fontSize = options.fontSize;

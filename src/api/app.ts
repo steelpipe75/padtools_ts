@@ -3,6 +3,12 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { cors } from "hono/cors";
 import { version } from "../../package.json";
 import {
+  astParseHandler,
+  astParseRoute,
+  astRenderHandler,
+  astRenderRoute,
+} from "./routes/ast";
+import {
   convertHandler,
   convertRoute,
   downloadHandler,
@@ -36,6 +42,8 @@ app.openapi(healthRoute, healthHandler);
 app.openapi(spdInfoRoute, spdInfoHandler);
 app.openapi(convertRoute, convertHandler);
 app.openapi(downloadRoute, downloadHandler);
+app.openapi(astParseRoute, astParseHandler);
+app.openapi(astRenderRoute, astRenderHandler);
 
 // MCP Route
 app.all("/mcp", mcpHandler);

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateSvg = exports.ConvertRequestSchema = exports.ConvertRequestOptionsSchema = void 0;
+exports.generateSvgFromAst = exports.generateSvg = exports.ConvertAstToSvgRequestSchema = exports.ConvertSpdToAstRequestSchema = exports.ConvertRequestSchema = exports.ConvertRequestOptionsSchema = void 0;
 const zod_openapi_1 = require("@hono/zod-openapi");
 const svgo_1 = require("svgo");
 const xml_formatter_1 = __importDefault(require("xml-formatter"));
@@ -78,8 +78,27 @@ exports.ConvertRequestSchema = zod_openapi_1.z.object({
     }),
     options: exports.ConvertRequestOptionsSchema.optional(),
 });
+exports.ConvertSpdToAstRequestSchema = zod_openapi_1.z.object({
+    spd: zod_openapi_1.z.string().openapi({
+        example: ":terminal Start\nProcess\n:terminal End",
+        description: "The SPD text to convert to AST",
+    }),
+});
+exports.ConvertAstToSvgRequestSchema = zod_openapi_1.z.object({
+    ast: zod_openapi_1.z.any().openapi({
+        description: "The AST JSON object to convert to SVG",
+    }),
+    options: exports.ConvertRequestOptionsSchema.optional(),
+});
 const generateSvg = (spd, options = {}) => {
     const ast = (0, parser_1.parse)(spd);
+    return (0, exports.generateSvgFromAst)(ast, options);
+};
+exports.generateSvg = generateSvg;
+const generateSvgFromAst = (ast, options = {}) => {
+    if (!ast) {
+        throw new Error("AST is null or undefined");
+    }
     const renderOptions = {};
     // Map options to renderOptions
     if (options.fontSize !== undefined)
@@ -109,4 +128,4 @@ const generateSvg = (spd, options = {}) => {
     });
     return optimizedSvg.data;
 };
-exports.generateSvg = generateSvg;
+exports.generateSvgFromAst = generateSvgFromAst;

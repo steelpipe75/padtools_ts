@@ -65,19 +65,27 @@
     <div class="container">
         <div class="input-section">
             <h2>SPD Input</h2>
+            <div class="import-ast-group">
+                <input type="checkbox" id="importAstCheckbox">
+                <label for="importAstCheckbox">Treat input as AST (JSON)</label>
+            </div>
             <textarea id="spdInput" placeholder="ここにSPD記法のテキストを入力してください..."></textarea>
             <div class="file-operations">
                 <div class="file-input-group">
                     <label for="fileInput">
                         <span class="material-symbols-outlined">upload_file</span>
-                        Upload SPD file:
+                        Upload file:
                     </label>
-                    <input type="file" id="fileInput" accept=".spd">
+                    <input type="file" id="fileInput" accept=".spd,.json">
                 </div>
                 <div class="button-group">
                     <button id="downloadButton" type="button">
                         <span class="material-symbols-outlined">download</span>
                         Download SPD
+                    </button>
+                    <button id="downloadAstButton" type="button">
+                        <span class="material-symbols-outlined">data_object</span>
+                        Download AST
                     </button>
                     <button id="shareButton" type="button">
                         <span class="material-symbols-outlined">share</span>

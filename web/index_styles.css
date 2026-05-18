@@ -73,6 +73,18 @@ h2 {
   margin-bottom: 10px;
 }
 
+.import-ast-group {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.import-ast-group input {
+  margin: 0;
+}
+
 summary {
   cursor: pointer;
   display: flex;

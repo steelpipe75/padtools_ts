@@ -1,4 +1,6 @@
 import {
+  handleConvertAstToSvgTool,
+  handleConvertSpdToAstTool,
   handleConvertSpdToSvgTool,
   handleExplainSpdPrompt,
   handleGenerateSpdPrompt,
@@ -73,6 +75,38 @@ describe("MCP Server Handlers", () => {
       } finally {
         core.generateSvg = originalGenerateSvg;
       }
+    });
+
+    it("handleConvertSpdToAstTool should convert SPD to AST", async () => {
+      const spd = ":terminal Start\nProcess\n:terminal End";
+      const result = await handleConvertSpdToAstTool({ spd });
+      expect(typeof result).toBe("object");
+      expect(result).toHaveProperty("type", "nodeList");
+      expect(result).toHaveProperty("children");
+    });
+
+    it("handleConvertSpdToAstTool should throw error on parse error", async () => {
+      const spd = ":if";
+      await expect(handleConvertSpdToAstTool({ spd })).rejects.toThrow(
+        /SPD Parse Error/,
+      );
+    });
+
+    it("handleConvertAstToSvgTool should convert AST to SVG", async () => {
+      const spd = ":terminal Start\nProcess\n:terminal End";
+      const ast = await handleConvertSpdToAstTool({ spd });
+      const result = await handleConvertAstToSvgTool({ ast });
+      expect(typeof result).toBe("string");
+      expect(result).toContain("<svg");
+      expect(result).toContain("Start");
+      expect(result).toContain("Process");
+      expect(result).toContain("End");
+    });
+
+    it("handleConvertAstToSvgTool should throw error on null AST", async () => {
+      await expect(
+        handleConvertAstToSvgTool({ ast: null as unknown }),
+      ).rejects.toThrow(/Error converting AST to SVG/);
     });
   });
 });

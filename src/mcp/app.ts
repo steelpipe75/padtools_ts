@@ -1,7 +1,13 @@
 import { FastMCP } from "fastmcp";
 import { version } from "../../package.json";
-import { ConvertRequestSchema } from "../spd/core";
 import {
+  ConvertAstToSvgRequestSchema,
+  ConvertRequestSchema,
+  ConvertSpdToAstRequestSchema,
+} from "../spd/core";
+import {
+  handleConvertAstToSvgTool,
+  handleConvertSpdToAstTool,
   handleConvertSpdToSvgTool,
   handleExplainSpdPrompt,
   handleGenerateSpdPrompt,
@@ -53,4 +59,20 @@ mcp.addTool({
     "Convert SPD (Simple PAD Description) text to a PAD diagram in SVG format.",
   parameters: ConvertRequestSchema,
   execute: handleConvertSpdToSvgTool,
+});
+
+mcp.addTool({
+  name: "convert_spd_to_ast",
+  description:
+    "Convert SPD (Simple PAD Description) text to its Abstract Syntax Tree (AST) in JSON format.",
+  parameters: ConvertSpdToAstRequestSchema,
+  execute: handleConvertSpdToAstTool,
+});
+
+mcp.addTool({
+  name: "convert_ast_to_svg",
+  description:
+    "Convert an Abstract Syntax Tree (AST) in JSON format to a PAD diagram in SVG format.",
+  parameters: ConvertAstToSvgRequestSchema,
+  execute: handleConvertAstToSvgTool,
 });
