@@ -332,6 +332,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const url = new URL(window.location.href);
       url.searchParams.set("spd", base64);
+      if (importAstCheckbox.checked) {
+        url.searchParams.set("ast", "1");
+      }
 
       navigator.clipboard
         .writeText(url.toString())
@@ -351,6 +354,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 初期表示用のデータ取得
   const urlParams = new URLSearchParams(window.location.search);
   const spdParam = urlParams.get("spd");
+  const astParam = urlParams.get("ast");
 
   if (spdParam) {
     try {
@@ -358,6 +362,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const binString = atob(spdParam);
       const bytes = Uint8Array.from(binString, (m) => m.codePointAt(0) ?? 0);
       spdInput.value = new TextDecoder().decode(bytes);
+
+      if (astParam === "1") {
+        importAstCheckbox.checked = true;
+      }
     } catch (error) {
       console.error("Failed to decode SPD from URL parameter:", error);
       // デコードに失敗した場合はデフォルトを表示
