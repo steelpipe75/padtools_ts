@@ -14,6 +14,7 @@ const mcp_1 = require("@hono/mcp");
 const mcp_js_1 = require("@modelcontextprotocol/sdk/server/mcp.js");
 const zod_1 = require("zod");
 const package_json_1 = require("../../../package.json");
+const ast_1 = require("../../spd/ast");
 const core_1 = require("../../spd/core");
 const docs_1 = require("../../spd/docs");
 const parser_1 = require("../../spd/parser");
@@ -101,6 +102,65 @@ mcpServer.registerTool("convert_spd_to_svg", {
                 {
                     type: "text",
                     text: errorMessage,
+                },
+            ],
+        };
+    }
+}));
+mcpServer.registerTool("convert_spd_to_ast", {
+    description: "Convert SPD (Simple PAD Description) text to its Abstract Syntax Tree (AST) in JSON format.",
+    inputSchema: core_1.ConvertSpdToAstRequestSchema.shape,
+}, (args) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ast = (0, parser_1.parse)(args.spd);
+        if (!ast) {
+            throw new Error("Failed to parse SPD");
+        }
+        // serialize to handle Map and then parse back to object for JSON response
+        const astJson = JSON.parse((0, ast_1.serializeAST)(ast));
+        return {
+            content: [{ type: "text", text: JSON.stringify(astJson) }],
+        };
+    }
+    catch (error) {
+        let errorMessage = `Error converting SPD to AST: ${error instanceof Error ? error.message : String(error)}`;
+        if (error instanceof parser_1.ParseError) {
+            errorMessage = `SPD Parse Error at line ${error.lineNo}: ${error.message}\nLine content: ${error.lineStr}`;
+        }
+        return {
+            isError: true,
+            content: [
+                {
+                    type: "text",
+                    text: errorMessage,
+                },
+            ],
+        };
+    }
+}));
+mcpServer.registerTool("convert_ast_to_svg", {
+    description: "Convert an Abstract Syntax Tree (AST) in JSON format to a PAD diagram in SVG format.",
+    inputSchema: core_1.ConvertAstToSvgRequestSchema.shape,
+}, (args) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Convert AST object to string and then deserialize to handle Map restoration
+        const astString = JSON.stringify(args.ast);
+        const deserializedAst = (0, ast_1.deserializeAST)(astString);
+        if (!deserializedAst) {
+            throw new Error("Invalid AST format");
+        }
+        const svgOutput = (0, core_1.generateSvgFromAst)(deserializedAst, args.options);
+        return {
+            content: [{ type: "text", text: svgOutput }],
+        };
+    }
+    catch (error) {
+        return {
+            isError: true,
+            content: [
+                {
+                    type: "text",
+                    text: `Error converting AST to SVG: ${error instanceof Error ? error.message : String(error)}`,
                 },
             ],
         };

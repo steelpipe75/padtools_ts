@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleConvertSpdToSvgTool = exports.handleGetSpdExplanationTool = exports.handleGenerateSpdPrompt = exports.handleExplainSpdPrompt = exports.handleGetSpdExplanationResource = void 0;
+exports.handleConvertAstToSvgTool = exports.handleConvertSpdToAstTool = exports.handleConvertSpdToSvgTool = exports.handleGetSpdExplanationTool = exports.handleGenerateSpdPrompt = exports.handleExplainSpdPrompt = exports.handleGetSpdExplanationResource = void 0;
+const ast_1 = require("../spd/ast");
 const core_1 = require("../spd/core");
 const docs_1 = require("../spd/docs");
 const parser_1 = require("../spd/parser");
@@ -63,3 +64,43 @@ const handleConvertSpdToSvgTool = (args) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.handleConvertSpdToSvgTool = handleConvertSpdToSvgTool;
+/**
+ * Handler for the convert_spd_to_ast tool.
+ */
+const handleConvertSpdToAstTool = (args) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ast = (0, parser_1.parse)(args.spd);
+        if (!ast) {
+            throw new Error("Failed to parse SPD");
+        }
+        // serialize to handle Map and then parse back to object for JSON response
+        const astJson = JSON.parse((0, ast_1.serializeAST)(ast));
+        return astJson;
+    }
+    catch (error) {
+        if (error instanceof parser_1.ParseError) {
+            throw new Error(`SPD Parse Error at line ${error.lineNo}: ${error.message}\nLine content: ${error.lineStr}`);
+        }
+        throw new Error(`Error converting SPD to AST: ${error instanceof Error ? error.message : String(error)}`);
+    }
+});
+exports.handleConvertSpdToAstTool = handleConvertSpdToAstTool;
+/**
+ * Handler for the convert_ast_to_svg tool.
+ */
+const handleConvertAstToSvgTool = (args) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Convert AST object to string and then deserialize to handle Map restoration
+        const astString = JSON.stringify(args.ast);
+        const deserializedAst = (0, ast_1.deserializeAST)(astString);
+        if (!deserializedAst) {
+            throw new Error("Invalid AST format");
+        }
+        const svgOutput = (0, core_1.generateSvgFromAst)(deserializedAst, args.options);
+        return svgOutput;
+    }
+    catch (error) {
+        throw new Error(`Error converting AST to SVG: ${error instanceof Error ? error.message : String(error)}`);
+    }
+});
+exports.handleConvertAstToSvgTool = handleConvertAstToSvgTool;

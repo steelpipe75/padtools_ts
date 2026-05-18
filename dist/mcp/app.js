@@ -44,3 +44,15 @@ exports.mcp.addTool({
     parameters: core_1.ConvertRequestSchema,
     execute: handlers_1.handleConvertSpdToSvgTool,
 });
+exports.mcp.addTool({
+    name: "convert_spd_to_ast",
+    description: "Convert SPD (Simple PAD Description) text to its Abstract Syntax Tree (AST) in JSON format.",
+    parameters: core_1.ConvertSpdToAstRequestSchema,
+    execute: handlers_1.handleConvertSpdToAstTool,
+});
+exports.mcp.addTool({
+    name: "convert_ast_to_svg",
+    description: "Convert an Abstract Syntax Tree (AST) in JSON format to a PAD diagram in SVG format.",
+    parameters: core_1.ConvertAstToSvgRequestSchema,
+    execute: handlers_1.handleConvertAstToSvgTool,
+});

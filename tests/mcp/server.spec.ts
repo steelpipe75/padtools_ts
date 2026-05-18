@@ -105,7 +105,7 @@ describe("MCP Server Handlers", () => {
 
     it("handleConvertAstToSvgTool should throw error on null AST", async () => {
       await expect(
-        handleConvertAstToSvgTool({ ast: null as any }),
+        handleConvertAstToSvgTool({ ast: null as unknown }),
       ).rejects.toThrow(/Error converting AST to SVG/);
     });
   });

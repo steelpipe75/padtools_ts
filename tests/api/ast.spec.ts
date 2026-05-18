@@ -1,10 +1,11 @@
 import app from "../../src/api/app";
+import type { Node } from "../../src/spd/ast";
 
 /**
  * /ast/parse および /ast/render エンドポイントのテスト
  */
 describe("API AST Endpoints", () => {
-  let sharedAst: any;
+  let sharedAst: Node;
 
   it("should parse SPD to AST JSON successfully (SPDからAST JSONへのパースが成功すること)", async () => {
     const spd = ":terminal Start\nProcess\n:terminal End";
