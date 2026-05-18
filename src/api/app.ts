@@ -5,8 +5,12 @@ import { version } from "../../package.json";
 import {
   astParseHandler,
   astParseRoute,
+  astParseDownloadHandler,
+  astParseDownloadRoute,
   astRenderHandler,
   astRenderRoute,
+  astRenderDownloadHandler,
+  astRenderDownloadRoute,
 } from "./routes/ast";
 import {
   convertHandler,
@@ -54,7 +58,9 @@ app.openapi(spdInfoRoute, spdInfoHandler);
 app.openapi(convertRoute, convertHandler);
 app.openapi(downloadRoute, downloadHandler);
 app.openapi(astParseRoute, astParseHandler);
+app.openapi(astParseDownloadRoute, astParseDownloadHandler);
 app.openapi(astRenderRoute, astRenderHandler);
+app.openapi(astRenderDownloadRoute, astRenderDownloadHandler);
 
 // MCP Route
 app.all("/mcp", mcpHandler);

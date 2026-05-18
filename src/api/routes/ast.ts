@@ -78,6 +78,49 @@ export const astParseRoute = createRoute({
   },
 });
 
+export const astParseDownloadRoute = createRoute({
+  method: "post",
+  path: "/ast/parse/download",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: AstParseRequestSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: z.any().openapi({
+            format: "binary",
+            description: "The parsed AST as JSON file",
+          }),
+        },
+      },
+      description: "Successful parsing and download",
+    },
+    400: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Bad request - invalid SPD",
+    },
+    500: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Internal server error",
+    },
+  },
+});
+
 export const astRenderRoute = createRoute({
   method: "post",
   path: "/ast/render",
@@ -98,6 +141,49 @@ export const astRenderRoute = createRoute({
         },
       },
       description: "Successful rendering",
+    },
+    400: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Bad request - invalid AST or options",
+    },
+    500: {
+      content: {
+        "application/json": {
+          schema: ErrorResponseSchema,
+        },
+      },
+      description: "Internal server error",
+    },
+  },
+});
+
+export const astRenderDownloadRoute = createRoute({
+  method: "post",
+  path: "/ast/render/download",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: AstRenderRequestSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        "image/svg+xml": {
+          schema: z.string().openapi({
+            format: "binary",
+            description: "The generated SVG file from AST",
+          }),
+        },
+      },
+      description: "Successful rendering and download",
     },
     400: {
       content: {
@@ -144,6 +230,35 @@ export const astParseHandler: RouteHandler<typeof astParseRoute> = async (
   }
 };
 
+export const astParseDownloadHandler = (async (c: any) => {
+  try {
+    const { spd } = c.req.valid("json");
+    if (!spd) {
+      return c.json({ error: "SPD content is required" }, 400);
+    }
+
+    const ast = parse(spd);
+    if (!ast) {
+      return c.json({ error: "Failed to parse SPD" }, 400);
+    }
+
+    const astString = serializeAST(ast);
+    c.header("Content-Type", "application/json");
+    c.header("Content-Disposition", 'attachment; filename="diagram.json"');
+
+    return c.body(astString, 200);
+  } catch (error) {
+    console.error("AST parse download error:", error);
+    return c.json(
+      {
+        error:
+          error instanceof Error ? error.message : "Failed to parse AST download",
+      },
+      400,
+    );
+  }
+}) as any;
+
 export const astRenderHandler: RouteHandler<typeof astRenderRoute> = async (
   c,
 ) => {
@@ -173,3 +288,38 @@ export const astRenderHandler: RouteHandler<typeof astRenderRoute> = async (
     );
   }
 };
+
+export const astRenderDownloadHandler = (async (c: any) => {
+  try {
+    const { ast, options = {} } = c.req.valid("json");
+    if (!ast) {
+      return c.json({ error: "AST is required" }, 400);
+    }
+
+    // Convert AST object to string and then deserialize to handle Map restoration
+    const astString = JSON.stringify(ast);
+    const deserializedAst = deserializeAST(astString);
+
+    if (!deserializedAst) {
+      return c.json({ error: "Invalid AST format" }, 400);
+    }
+
+    const svgOutput = generateSvgFromAst(deserializedAst, options);
+
+    c.header("Content-Type", "image/svg+xml");
+    c.header("Content-Disposition", 'attachment; filename="diagram.svg"');
+
+    return c.body(svgOutput, 200);
+  } catch (error) {
+    console.error("AST render download error:", error);
+    return c.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to render AST download",
+      },
+      500,
+    );
+  }
+}) as any;
