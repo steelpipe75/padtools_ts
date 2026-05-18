@@ -537,7 +537,9 @@ describe("CLI", () => {
 
     runCli(["-i", inputPath]);
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith("Error: Could not obtain AST.");
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Error: Could not obtain AST.",
+    );
     expect(processExitSpy).toHaveBeenCalledWith(1);
   });
 });
