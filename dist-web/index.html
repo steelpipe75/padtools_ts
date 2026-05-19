@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/web.60d3eedf.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"><body>
+<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/web.0e14e5fa.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"><body>
     <h1>SPD(Simple PAD Description) to SVG Converter <span class=version-badge>v<span id=appVersion></span></span></h1>
     <div class=link-group>
         <p class=reference-link><a href=/commands.html>SPD Commands Reference</a></p>
@@ -55,10 +55,12 @@
 
     <div class=container>
         <div class=input-section>
-            <h2>SPD Input</h2>
-            <div class=import-ast-group>
-                <input type=checkbox id=importAstCheckbox>
-                <label for=importAstCheckbox>Treat input as AST (JSON)</label>
+            <h2>Input</h2>
+            <div class=input-mode-group>
+                <input type=radio id=inputModeSpd name=inputMode value=spd checked>
+                <label for=inputModeSpd>入力をSPDとして解釈</label>
+                <input type=radio id=inputModeAst name=inputMode value=ast>
+                <label for=inputModeAst>入力をAST(JSON)として解釈</label>
             </div>
             <textarea id=spdInput placeholder=ここにSPD記法のテキストを入力してください...></textarea>
             <div class=file-operations>
@@ -72,11 +74,7 @@
                 <div class=button-group>
                     <button id=downloadButton type=button>
                         <span class=material-symbols-outlined>download</span>
-                        Download SPD
-                    </button>
-                    <button id=downloadAstButton type=button>
-                        <span class=material-symbols-outlined>data_object</span>
-                        Download AST
+                        Export Input Data
                     </button>
                     <button id=shareButton type=button>
                         <span class=material-symbols-outlined>share</span>
@@ -86,17 +84,65 @@
             </div>
         </div>
         <div class=output-section>
-            <h2>SVG Output</h2>
-            <div id=svgOutput>
-                
+            <div class=output-header>
+                <h2>Output</h2>
+                <div class=display-mode-group>
+                    <input type=radio id=displayModeSvg name=displayMode value=svg checked>
+                    <label for=displayModeSvg>SVG</label>
+                    <input type=radio id=displayModeAst name=displayMode value=ast>
+                    <label for=displayModeAst>AST (JSON)</label>
+                    <input type=radio id=displayModeAstPretty name=displayMode value=astPretty>
+                    <label for=displayModeAstPretty>AST (JSON pretty)</label>
+                    <input type=radio id=displayModeError name=displayMode value=error disabled>
+                    <label for=displayModeError id=displayModeErrorLabel>Error</label>
+                </div>
+            </div>
+            <div class=output-container>
+                <div id=svgViewer class=output-view>
+                    <div class=viewer-toolbar>
+                        <div class=zoom-controls>
+                            <button id=zoomOutButton type=button title="Zoom Out">
+                                <span class=material-symbols-outlined>zoom_out</span>
+                            </button>
+                            <span class=toolbar-text-divider>:</span>
+                            <div class=zoom-input-group>
+                                <input type=number id=zoomLevelInput value=100 min=10 max=500 step=10>%
+                            </div>
+                            <button id=resetZoomButton type=button title="Reset Zoom">
+                                <span class=material-symbols-outlined>frame_inspect</span>
+                            </button>
+                            <span class=toolbar-text-divider>:</span>
+                            <button id=zoomInButton type=button title="Zoom In">
+                                <span class=material-symbols-outlined>zoom_in</span>
+                            </button>
+                        </div>
+                        <div class=toolbar-divider></div>
+                        <button id=checkerboardButton type=button title="Toggle Checkerboard">
+                            <span class=material-symbols-outlined id=checkerboardIcon>grid_on</span>
+                        </button>
+                        <div class=toolbar-divider></div>
+                        <button id=fullscreenButton type=button title=Fullscreen>
+                            <span class=material-symbols-outlined>fullscreen</span>
+                        </button>
+                    </div>
+                    <div id=svgOutput>
+                        
+                    </div>
+                </div>
+                <textarea id=astOutput readonly style=display:none placeholder=AST(JSON)がここに表示されます...></textarea>
+                <div id=errorOutput style=display:none></div>
             </div>
             <div class=svg-operations>
                 <button id=downloadSvgButton type=button>
                     <span class=material-symbols-outlined>image</span>
                     Download SVG
                 </button>
+                <button id=downloadAstButton type=button style=display:none>
+                    <span class=material-symbols-outlined>data_object</span>
+                    Download AST
+                </button>
             </div>
         </div>
     </div>
-    <script type=module src=/web.104d1c7d.js></script>
+    <script type=module src=/web.00a4f9be.js></script>
 
