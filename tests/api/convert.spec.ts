@@ -1,3 +1,4 @@
+import { version } from "../../package.json";
 import app from "../../src/api/app";
 
 /**
@@ -310,6 +311,6 @@ describe("API /api/convert", () => {
     const res = await app.request("/health");
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body).toEqual({ status: "ok" });
+    expect(body).toEqual({ status: "ok", version });
   });
 });
