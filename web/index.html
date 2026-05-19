@@ -107,16 +107,23 @@
             <div class="output-container">
                 <div id="svgViewer" class="output-view">
                     <div class="viewer-toolbar">
-                        <button id="zoomOutButton" type="button" title="Zoom Out">
-                            <span class="material-symbols-outlined">zoom_out</span>
-                        </button>
-                        <span id="zoomLevelDisplay">100%</span>
-                        <button id="zoomInButton" type="button" title="Zoom In">
-                            <span class="material-symbols-outlined">zoom_in</span>
-                        </button>
-                        <button id="resetZoomButton" type="button" title="Reset Zoom">
-                            <span class="material-symbols-outlined">frame_inspect</span>
-                        </button>
+                        <div class="zoom-controls">
+                            <button id="zoomOutButton" type="button" title="Zoom Out">
+                                <span class="material-symbols-outlined">zoom_out</span>
+                            </button>
+                            <span class="toolbar-text-divider">:</span>
+                            <div class="zoom-input-group">
+                                <input type="number" id="zoomLevelInput" value="100" min="10" max="500" step="10">%
+                            </div>
+                            <button id="resetZoomButton" type="button" title="Reset Zoom">
+                                <span class="material-symbols-outlined">frame_inspect</span>
+                            </button>
+                            <span class="toolbar-text-divider">:</span>
+                            <button id="zoomInButton" type="button" title="Zoom In">
+                                <span class="material-symbols-outlined">zoom_in</span>
+                            </button>
+                        </div>
+                        <div class="toolbar-divider"></div>
                         <button id="fullscreenButton" type="button" title="Fullscreen">
                             <span class="material-symbols-outlined">fullscreen</span>
                         </button>

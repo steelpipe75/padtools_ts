@@ -25,34 +25,51 @@ document.addEventListener("DOMContentLoaded", () => {
   const zoomInButton = document.getElementById("zoomInButton") as HTMLButtonElement;
   const zoomOutButton = document.getElementById("zoomOutButton") as HTMLButtonElement;
   const resetZoomButton = document.getElementById("resetZoomButton") as HTMLButtonElement;
-  const zoomLevelDisplay = document.getElementById("zoomLevelDisplay") as HTMLSpanElement;
+  const zoomLevelInput = document.getElementById("zoomLevelInput") as HTMLInputElement;
   const fullscreenButton = document.getElementById("fullscreenButton") as HTMLButtonElement;
 
   let zoomLevel = 1.0;
 
-  const updateZoom = () => {
+  const updateZoom = (newLevel?: number) => {
+    if (newLevel !== undefined) {
+      // 10% から 500% の間にクリップ
+      zoomLevel = Math.max(0.1, Math.min(newLevel, 5.0));
+    }
+
     const svgElement = svgOutput.querySelector("svg");
     if (svgElement) {
       svgElement.style.transform = `scale(${zoomLevel})`;
     }
-    if (zoomLevelDisplay) {
-      zoomLevelDisplay.textContent = `${Math.round(zoomLevel * 100)}%`;
+    if (zoomLevelInput) {
+      zoomLevelInput.value = Math.round(zoomLevel * 100).toString();
     }
   };
 
   zoomInButton.addEventListener("click", () => {
-    zoomLevel = Math.min(zoomLevel + 0.1, 3.0);
-    updateZoom();
+    updateZoom(zoomLevel + 0.1);
   });
 
   zoomOutButton.addEventListener("click", () => {
-    zoomLevel = Math.max(zoomLevel - 0.1, 0.1);
-    updateZoom();
+    updateZoom(zoomLevel - 0.1);
   });
 
   resetZoomButton.addEventListener("click", () => {
-    zoomLevel = 1.0;
-    updateZoom();
+    updateZoom(1.0);
+  });
+
+  zoomLevelInput.addEventListener("change", () => {
+    const value = parseInt(zoomLevelInput.value, 10);
+    if (!isNaN(value)) {
+      updateZoom(value / 100);
+    } else {
+      updateZoom(); // 無効な入力の場合は現在の値にリセット
+    }
+  });
+
+  zoomLevelInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      zoomLevelInput.blur();
+    }
   });
 
   fullscreenButton.addEventListener("click", () => {

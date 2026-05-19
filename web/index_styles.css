@@ -206,11 +206,31 @@ button .material-symbols-outlined {
 .viewer-toolbar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px 8px;
+  gap: 12px;
+  padding: 4px 12px;
   background-color: #f0f0f0;
   border-bottom: 1px solid #ddd;
   font-size: 14px;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #ccc;
+  margin: 0 4px;
+}
+
+.toolbar-text-divider {
+  color: #999;
+  font-weight: bold;
+  user-select: none;
+  padding: 0 2px;
 }
 
 .viewer-toolbar button {
@@ -229,11 +249,36 @@ button .material-symbols-outlined {
   font-size: 20px;
 }
 
-#zoomLevelDisplay {
-  min-width: 45px;
-  text-align: center;
+.zoom-input-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
   font-weight: bold;
   color: #666;
+  font-size: 13px;
+}
+
+#zoomLevelInput {
+  width: 50px;
+  padding: 2px 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: right;
+  font-family: inherit;
+  font-size: 13px;
+  background-color: #fff;
+}
+
+/* Chrome, Safari, Edge, Opera */
+#zoomLevelInput::-webkit-outer-spin-button,
+#zoomLevelInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#zoomLevelInput[type=number] {
+  -moz-appearance: textfield;
 }
 
 #svgOutput {
