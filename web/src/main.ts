@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const astOutput = document.getElementById("astOutput") as HTMLTextAreaElement;
   const displayModeSvg = document.getElementById("displayModeSvg") as HTMLInputElement;
   const displayModeAst = document.getElementById("displayModeAst") as HTMLInputElement;
+  const displayModeAstPretty = document.getElementById("displayModeAstPretty") as HTMLInputElement;
 
   const fileInput = document.getElementById("fileInput") as HTMLInputElement;
   const downloadButton = document.getElementById(
@@ -72,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertAndRender = () => {
     const spdText = spdInput.value;
     const isSvgMode = displayModeSvg.checked;
+    const isAstPrettyMode = displayModeAstPretty.checked;
 
     try {
       const ast = inputModeAst.checked
@@ -120,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         svgOutput.style.display = "none";
         astOutput.style.display = "block";
-        astOutput.value = serializeAST(ast);
+        astOutput.value = isAstPrettyMode ? serializeAST(ast, 2) : serializeAST(ast);
         downloadSvgButton.style.display = "none";
         downloadAstButton.style.display = "inline-flex";
       }
@@ -188,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
   inputModeAst.addEventListener("change", convertAndRender);
   displayModeSvg.addEventListener("change", convertAndRender);
   displayModeAst.addEventListener("change", convertAndRender);
+  displayModeAstPretty.addEventListener("change", convertAndRender);
   applyOptionsButton.addEventListener("click", convertAndRender);
 
   spdInput.addEventListener("keydown", (event) => {
@@ -286,7 +289,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const astJson = serializeAST(ast);
+      const isAstPrettyMode = displayModeAstPretty.checked;
+      const astJson = isAstPrettyMode ? serializeAST(ast, 2) : serializeAST(ast);
 
       const fileNameInput = getFileName(
         "ダウンロードするASTファイル名を入力してください:",
