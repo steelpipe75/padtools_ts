@@ -16,8 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputModeAst = document.getElementById("inputModeAst") as HTMLInputElement;
 
   const svgOutput = document.getElementById("svgOutput") as HTMLDivElement;
-  const astOutput = document.getElementById("astOutput") as HTMLPreElement;
-  const outputTitle = document.getElementById("outputTitle") as HTMLHeadingElement;
+  const astOutput = document.getElementById("astOutput") as HTMLTextAreaElement;
   const displayModeSvg = document.getElementById("displayModeSvg") as HTMLInputElement;
   const displayModeAst = document.getElementById("displayModeAst") as HTMLInputElement;
 
@@ -84,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (isSvgMode) {
-        outputTitle.textContent = "SVG Output";
         svgOutput.style.display = "block";
         astOutput.style.display = "none";
         downloadSvgButton.style.display = "inline-flex";
@@ -120,10 +118,9 @@ document.addEventListener("DOMContentLoaded", () => {
           svgOutput.innerHTML = svgString;
         }
       } else {
-        outputTitle.textContent = "AST Output";
         svgOutput.style.display = "none";
         astOutput.style.display = "block";
-        astOutput.textContent = serializeAST(ast);
+        astOutput.value = serializeAST(ast);
         downloadSvgButton.style.display = "none";
         downloadAstButton.style.display = "inline-flex";
       }
@@ -131,11 +128,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const errorDiv = document.createElement("div");
       errorDiv.classList.add("error-message");
       svgOutput.textContent = "";
-      astOutput.textContent = "";
+      astOutput.value = "";
       // エラー時はSVGモードの表示に戻してエラーを表示する
       svgOutput.style.display = "block";
       astOutput.style.display = "none";
-      outputTitle.textContent = "Error Output";
       downloadSvgButton.style.display = "none";
       downloadAstButton.style.display = "none";
 

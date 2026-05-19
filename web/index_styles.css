@@ -203,6 +203,20 @@ button .material-symbols-outlined {
   height: 100%;
 }
 
+#astOutput {
+  border: 1px solid #ddd;
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-family: monospace;
+  white-space: pre;
+  margin: 0;
+  height: 100%;
+  resize: none;
+  box-sizing: border-box;
+}
+
 .error-message {
   background-color: #f8d7da;
   color: #842029;
