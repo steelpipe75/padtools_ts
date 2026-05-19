@@ -26,6 +26,30 @@ describe("API AST Endpoints", () => {
     sharedAst = body.ast;
   });
 
+  it("should parse SPD to pretty printed AST JSON successfully", async () => {
+    const spd = ":terminal Start\nProcess\n:terminal End";
+    // We need to capture the raw response to check formatting, but Hono's c.json()
+    // might re-stringify it. However, our handler does JSON.parse(serializeAST(ast, 2)),
+    // so the object itself will be the same.
+    // Wait, if we return it as an object, Hono will stringify it again.
+    // Let's check if we can verify that serializeAST was called with space=2.
+
+    const serializeSpy = jest.spyOn(ast_utils, "serializeAST");
+
+    const res = await app.request("/ast/parse", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ spd, options: { prettyprint: true } }),
+    });
+
+    expect(res.status).toBe(200);
+    expect(serializeSpy).toHaveBeenCalledWith(expect.anything(), 2);
+
+    serializeSpy.mockRestore();
+  });
+
   it("should render AST JSON to SVG successfully (AST JSONからSVGへのレンダリングが成功すること)", async () => {
     const res = await app.request("/ast/render", {
       method: "POST",
