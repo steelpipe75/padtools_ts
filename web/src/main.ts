@@ -12,26 +12,54 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const spdInput = document.getElementById("spdInput") as HTMLTextAreaElement;
-  const inputModeSpd = document.getElementById("inputModeSpd") as HTMLInputElement;
-  const inputModeAst = document.getElementById("inputModeAst") as HTMLInputElement;
+  const inputModeSpd = document.getElementById(
+    "inputModeSpd",
+  ) as HTMLInputElement;
+  const inputModeAst = document.getElementById(
+    "inputModeAst",
+  ) as HTMLInputElement;
 
   const svgOutput = document.getElementById("svgOutput") as HTMLDivElement;
   const svgViewer = document.getElementById("svgViewer") as HTMLDivElement;
   const astOutput = document.getElementById("astOutput") as HTMLTextAreaElement;
   const errorOutput = document.getElementById("errorOutput") as HTMLDivElement;
-  const displayModeSvg = document.getElementById("displayModeSvg") as HTMLInputElement;
-  const displayModeAst = document.getElementById("displayModeAst") as HTMLInputElement;
-  const displayModeAstPretty = document.getElementById("displayModeAstPretty") as HTMLInputElement;
-  const displayModeError = document.getElementById("displayModeError") as HTMLInputElement;
-  const displayModeErrorLabel = document.getElementById("displayModeErrorLabel") as HTMLLabelElement;
+  const displayModeSvg = document.getElementById(
+    "displayModeSvg",
+  ) as HTMLInputElement;
+  const displayModeAst = document.getElementById(
+    "displayModeAst",
+  ) as HTMLInputElement;
+  const displayModeAstPretty = document.getElementById(
+    "displayModeAstPretty",
+  ) as HTMLInputElement;
+  const displayModeError = document.getElementById(
+    "displayModeError",
+  ) as HTMLInputElement;
+  const _displayModeErrorLabel = document.getElementById(
+    "displayModeErrorLabel",
+  ) as HTMLLabelElement;
 
-  const zoomInButton = document.getElementById("zoomInButton") as HTMLButtonElement;
-  const zoomOutButton = document.getElementById("zoomOutButton") as HTMLButtonElement;
-  const resetZoomButton = document.getElementById("resetZoomButton") as HTMLButtonElement;
-  const zoomLevelInput = document.getElementById("zoomLevelInput") as HTMLInputElement;
-  const fullscreenButton = document.getElementById("fullscreenButton") as HTMLButtonElement;
-  const checkerboardButton = document.getElementById("checkerboardButton") as HTMLButtonElement;
-  const checkerboardIcon = document.getElementById("checkerboardIcon") as HTMLSpanElement;
+  const zoomInButton = document.getElementById(
+    "zoomInButton",
+  ) as HTMLButtonElement;
+  const zoomOutButton = document.getElementById(
+    "zoomOutButton",
+  ) as HTMLButtonElement;
+  const resetZoomButton = document.getElementById(
+    "resetZoomButton",
+  ) as HTMLButtonElement;
+  const zoomLevelInput = document.getElementById(
+    "zoomLevelInput",
+  ) as HTMLInputElement;
+  const fullscreenButton = document.getElementById(
+    "fullscreenButton",
+  ) as HTMLButtonElement;
+  const checkerboardButton = document.getElementById(
+    "checkerboardButton",
+  ) as HTMLButtonElement;
+  const checkerboardIcon = document.getElementById(
+    "checkerboardIcon",
+  ) as HTMLSpanElement;
 
   let zoomLevel = 1.0;
   let showCheckerboard = true;
@@ -85,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   zoomLevelInput.addEventListener("change", () => {
     const value = parseInt(zoomLevelInput.value, 10);
-    if (!isNaN(value)) {
+    if (!Number.isNaN(value)) {
       updateZoom(value / 100);
     } else {
       updateZoom(); // 無効な入力の場合は現在の値にリセット
@@ -101,7 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
   fullscreenButton.addEventListener("click", () => {
     if (!document.fullscreenElement) {
       svgViewer.requestFullscreen().catch((err) => {
-        alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+        alert(
+          `Error attempting to enable full-screen mode: ${err.message} (${err.name})`,
+        );
       });
     } else {
       document.exitFullscreen();
@@ -159,14 +189,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const convertAndRender = () => {
     const spdText = spdInput.value;
-    const isSvgMode = displayModeSvg.checked;
+    const _isSvgMode = displayModeSvg.checked;
     const isAstPrettyMode = displayModeAstPretty.checked;
 
     // 現在の選択がErrorでない場合は、最後の成功したモードを更新
     if (!displayModeError.checked) {
       if (displayModeSvg.checked) lastSuccessfulDisplayMode = "svg";
       else if (displayModeAst.checked) lastSuccessfulDisplayMode = "ast";
-      else if (displayModeAstPretty.checked) lastSuccessfulDisplayMode = "astPretty";
+      else if (displayModeAstPretty.checked)
+        lastSuccessfulDisplayMode = "astPretty";
     }
 
     try {
@@ -188,8 +219,10 @@ document.addEventListener("DOMContentLoaded", () => {
       // 最後の成功したモードに戻す（もしErrorモードだった場合）
       if (displayModeError.checked) {
         if (lastSuccessfulDisplayMode === "svg") displayModeSvg.checked = true;
-        else if (lastSuccessfulDisplayMode === "ast") displayModeAst.checked = true;
-        else if (lastSuccessfulDisplayMode === "astPretty") displayModeAstPretty.checked = true;
+        else if (lastSuccessfulDisplayMode === "ast")
+          displayModeAst.checked = true;
+        else if (lastSuccessfulDisplayMode === "astPretty")
+          displayModeAstPretty.checked = true;
       }
 
       if (displayModeSvg.checked) {
@@ -232,7 +265,9 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         svgViewer.style.display = "none";
         astOutput.style.display = "block";
-        astOutput.value = isAstPrettyMode ? serializeAST(ast, 2) : serializeAST(ast);
+        astOutput.value = isAstPrettyMode
+          ? serializeAST(ast, 2)
+          : serializeAST(ast);
         downloadSvgButton.style.display = "none";
         downloadAstButton.style.display = "inline-flex";
       }
@@ -248,12 +283,12 @@ document.addEventListener("DOMContentLoaded", () => {
       errorDiv.classList.add("error-message");
       svgOutput.textContent = "";
       astOutput.value = "";
-      
+
       svgViewer.style.display = "none";
       astOutput.style.display = "none";
       errorOutput.style.display = "block";
       errorOutput.textContent = "";
-      
+
       downloadSvgButton.style.display = "none";
       downloadAstButton.style.display = "none";
 
@@ -410,7 +445,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const isAstPrettyMode = displayModeAstPretty.checked;
-      const astJson = isAstPrettyMode ? serializeAST(ast, 2) : serializeAST(ast);
+      const astJson = isAstPrettyMode
+        ? serializeAST(ast, 2)
+        : serializeAST(ast);
 
       const fileNameInput = getFileName(
         "ダウンロードするASTファイル名を入力してください:",
