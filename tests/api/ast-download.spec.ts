@@ -111,6 +111,20 @@ describe("API AST Download Endpoints", () => {
     expect(res.status).toBe(400);
   });
 
+  it("should return 400 if AST is an empty string in /ast/render/download", async () => {
+    const res = await app.request("/ast/render/download", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ast: "" }),
+    });
+
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toBe("AST is required");
+  });
+
   it("should return 400 if parse fails in /ast/parse/download", async () => {
     const originalParse = parser.parse;
     (parser as unknown as { parse: jest.Mock }).parse = jest
