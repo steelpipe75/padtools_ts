@@ -17,7 +17,7 @@ program
     "Path to the input file (SPD or AST JSON)",
   )
   .option("-o, --output <outputFilePath>", "Path to the output SVG file")
-  .option("-p, --prettyprint", "Pretty print the output SVG")
+  .option("-p, --prettyprint", "Pretty print the output SVG or AST JSON")
   .option("--export-ast <astFilePath>", "Path to export the parsed AST as JSON")
   .option("--import-ast", "Treat input as an AST JSON file")
   .option("--font-size <fontSize>", "Font size for the SVG", parseFloat)
@@ -69,7 +69,7 @@ program
       }
 
       if (options.exportAst) {
-        const astJson = serializeAST(ast);
+        const astJson = serializeAST(ast, options.prettyprint ? 2 : undefined);
         fs.writeFileSync(options.exportAst, astJson);
       }
 
