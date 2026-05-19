@@ -27,8 +27,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const resetZoomButton = document.getElementById("resetZoomButton") as HTMLButtonElement;
   const zoomLevelInput = document.getElementById("zoomLevelInput") as HTMLInputElement;
   const fullscreenButton = document.getElementById("fullscreenButton") as HTMLButtonElement;
+  const checkerboardButton = document.getElementById("checkerboardButton") as HTMLButtonElement;
+  const checkerboardIcon = document.getElementById("checkerboardIcon") as HTMLSpanElement;
 
   let zoomLevel = 1.0;
+  let showCheckerboard = true;
+
+  const updateViewerBackground = () => {
+    if (showCheckerboard) {
+      svgOutput.classList.add("show-checkerboard");
+      svgOutput.style.backgroundColor = "";
+      checkerboardButton.classList.add("active");
+      checkerboardIcon.textContent = "grid_on";
+    } else {
+      svgOutput.classList.remove("show-checkerboard");
+      svgOutput.style.backgroundColor = baseBackgroundColorInput.value;
+      checkerboardButton.classList.remove("active");
+      checkerboardIcon.textContent = "grid_off";
+    }
+  };
+
+  checkerboardButton.addEventListener("click", () => {
+    showCheckerboard = !showCheckerboard;
+    updateViewerBackground();
+  });
 
   const updateZoom = (newLevel?: number) => {
     if (newLevel !== undefined) {
@@ -479,7 +501,12 @@ document.addEventListener("DOMContentLoaded", () => {
     spdInput.value = getDefaultSpd();
   }
 
+  baseBackgroundColorInput.addEventListener("input", () => {
+    updateViewerBackground();
+  });
+
   convertAndRender(); // ページロード時に一度変換を実行
+  updateViewerBackground(); // 初期背景設定
 });
 
 function getDefaultSpd(): string {
