@@ -301,12 +301,6 @@ button .material-symbols-outlined {
   background-color: #eee !important;
 }
 
-#checkerboardButton.active {
-  color: #007bff;
-  background-color: #e7f1ff;
-  border-color: #b3d7ff;
-}
-
 #svgOutput svg {
   transform-origin: top left;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
