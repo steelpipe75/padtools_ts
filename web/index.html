@@ -95,10 +95,21 @@
             </div>
         </div>
         <div class="output-section">
-            <h2>SVG Output</h2>
+            <div class="output-header">
+                <h2 id="outputTitle">SVG Output</h2>
+                <div class="display-mode-group">
+                    <input type="radio" id="displayModeSvg" name="displayMode" value="svg" checked>
+                    <label for="displayModeSvg">SVG</label>
+                    <input type="radio" id="displayModeAst" name="displayMode" value="ast">
+                    <label for="displayModeAst">AST (JSON)</label>
+                </div>
+            </div>
             <div id="svgOutput">
                 <!-- 変換されたSVGがここに表示されます -->
             </div>
+            <pre id="astOutput" style="display: none;">
+                <!-- 変換されたAST(JSON)がここに表示されます -->
+            </pre>
             <div class="svg-operations">
                 <button id="downloadSvgButton" type="button">
                     <span class="material-symbols-outlined">image</span>

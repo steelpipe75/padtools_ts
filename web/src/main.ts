@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
     "importAstCheckbox",
   ) as HTMLInputElement;
   const svgOutput = document.getElementById("svgOutput") as HTMLDivElement;
+  const astOutput = document.getElementById("astOutput") as HTMLPreElement;
+  const outputTitle = document.getElementById("outputTitle") as HTMLHeadingElement;
+  const displayModeSvg = document.getElementById("displayModeSvg") as HTMLInputElement;
+  const displayModeAst = document.getElementById("displayModeAst") as HTMLInputElement;
+
   const fileInput = document.getElementById("fileInput") as HTMLInputElement;
   const downloadButton = document.getElementById(
     "downloadButton",
@@ -67,6 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const convertAndRender = () => {
     const spdText = spdInput.value;
+    const isSvgMode = displayModeSvg.checked;
+
     try {
       const ast = importAstCheckbox.checked
         ? deserializeAST(spdText)
@@ -76,39 +83,58 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Could not obtain AST.");
       }
 
-      const options = {
-        fontSize: parseInt(fontSizeInput.value, 10),
-        fontFamily: customFontCheckbox.checked
-          ? fontFamilyCustomInput.value
-          : fontFamilySelect.value,
-        baseBackgroundColor: transparentBackgroundCheckbox.checked
-          ? null
-          : baseBackgroundColorInput.value,
-        backgroundColor: transparentNodeBackgroundCheckbox.checked
-          ? null
-          : backgroundColorInput.value,
-        textColor: textColorInput.value,
-        listRenderType: listRenderTypeTerminalOffset.checked
-          ? "TerminalOffset"
-          : "Original",
-      };
-      const svgString = renderSvg(ast, options);
+      if (isSvgMode) {
+        outputTitle.textContent = "SVG Output";
+        svgOutput.style.display = "block";
+        astOutput.style.display = "none";
+        downloadSvgButton.style.display = "inline-flex";
 
-      const parser = new DOMParser();
-      const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
-      const svgElement = svgDoc.documentElement;
+        const options = {
+          fontSize: parseInt(fontSizeInput.value, 10),
+          fontFamily: customFontCheckbox.checked
+            ? fontFamilyCustomInput.value
+            : fontFamilySelect.value,
+          baseBackgroundColor: transparentBackgroundCheckbox.checked
+            ? null
+            : baseBackgroundColorInput.value,
+          backgroundColor: transparentNodeBackgroundCheckbox.checked
+            ? null
+            : backgroundColorInput.value,
+          textColor: textColorInput.value,
+          listRenderType: listRenderTypeTerminalOffset.checked
+            ? "TerminalOffset"
+            : "Original",
+        };
+        const svgString = renderSvg(ast, options);
 
-      svgOutput.textContent = "";
-      if (svgElement && svgElement.tagName === "svg") {
-        svgOutput.appendChild(svgElement);
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
+        const svgElement = svgDoc.documentElement;
+
+        svgOutput.textContent = "";
+        if (svgElement && svgElement.tagName === "svg") {
+          svgOutput.appendChild(svgElement);
+        } else {
+          // Fallback for cases where parsing might fail (though renderSvg should return valid SVG)
+          svgOutput.innerHTML = svgString;
+        }
       } else {
-        // Fallback for cases where parsing might fail (though renderSvg should return valid SVG)
-        svgOutput.innerHTML = svgString;
+        outputTitle.textContent = "AST Output";
+        svgOutput.style.display = "none";
+        astOutput.style.display = "block";
+        astOutput.textContent = serializeAST(ast);
+        downloadSvgButton.style.display = "none";
       }
     } catch (error) {
       const errorDiv = document.createElement("div");
       errorDiv.classList.add("error-message");
       svgOutput.textContent = "";
+      astOutput.textContent = "";
+      // エラー時はSVGモードの表示に戻してエラーを表示する
+      svgOutput.style.display = "block";
+      astOutput.style.display = "none";
+      outputTitle.textContent = "Error Output";
+      downloadSvgButton.style.display = "none";
 
       if (error instanceof ParseError) {
         const msgPara = document.createElement("div");
@@ -160,6 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   spdInput.addEventListener("input", convertAndRender);
   importAstCheckbox.addEventListener("change", convertAndRender);
+  displayModeSvg.addEventListener("change", convertAndRender);
+  displayModeAst.addEventListener("change", convertAndRender);
   applyOptionsButton.addEventListener("click", convertAndRender);
 
   spdInput.addEventListener("keydown", (event) => {
