@@ -92,18 +92,25 @@ export interface NodeListNode {
  * ASTをJSON文字列にシリアライズします。
  * SwitchNodeのMapをオブジェクトまたは配列に変換して保存できるようにします。
  */
-export function serializeAST(ast: Node | null): string {
+export function serializeAST(
+  ast: Node | null,
+  space?: string | number,
+): string {
   if (ast === null) return "null";
 
-  return JSON.stringify(ast, (_key, value) => {
-    if (value instanceof Map) {
-      return {
-        __type: "Map",
-        value: Array.from(value.entries()),
-      };
-    }
-    return value;
-  });
+  return JSON.stringify(
+    ast,
+    (_key, value) => {
+      if (value instanceof Map) {
+        return {
+          __type: "Map",
+          value: Array.from(value.entries()),
+        };
+      }
+      return value;
+    },
+    space,
+  );
 }
 
 /**

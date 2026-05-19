@@ -46,8 +46,8 @@ test.describe("E2E tests for web", () => {
 
     // エラーメッセージを確認
     // アプリは .error-message クラスを持つ要素でエラーを表示する
-    await expect(page.locator("#svgOutput .error-message")).toBeVisible();
-    await expect(page.locator("#svgOutput")).toContainText("Error");
+    await expect(page.locator("#errorOutput .error-message")).toBeVisible();
+    await expect(page.locator("#errorOutput")).toContainText("Error");
   });
 
   test("should download SPD file", async ({ page }) => {
@@ -185,6 +185,9 @@ test.describe("E2E tests for web", () => {
   test("should download AST file", async ({ page }) => {
     await page.fill("#spdInput", ":terminal start\n:terminal end");
 
+    // AST表示モードに切り替える
+    await page.check("#displayModeAst");
+
     const expectedFileName = "test_ast.json";
     page.on("dialog", (dialog) => dialog.accept(expectedFileName));
 
@@ -220,8 +223,8 @@ test.describe("E2E tests for web", () => {
       ],
     });
 
-    // チェックボックスをオンにする
-    await page.check("#importAstCheckbox");
+    // 入力モードをASTに切り替える
+    await page.check("#inputModeAst");
 
     // ASTを入力
     await page.fill("#spdInput", astJson);
@@ -239,7 +242,8 @@ test.describe("E2E tests for web", () => {
       children: [{ type: "terminal", text: "Shared AST" }],
     });
     await page.fill("#spdInput", spdText);
-    await page.check("#importAstCheckbox");
+    // 入力モードをASTに切り替える
+    await page.check("#inputModeAst");
 
     // クリップボードのモックはPlaywrightでは難しい場合があるが、URLを取得して検証する
     await page.click("#shareButton");
@@ -255,7 +259,7 @@ test.describe("E2E tests for web", () => {
 
     // 復元を確認
     expect(await page.inputValue("#spdInput")).toBe(spdText);
-    expect(await page.isChecked("#importAstCheckbox")).toBe(true);
+    expect(await page.isChecked("#inputModeAst")).toBe(true);
     await expect(page.locator("#svgOutput svg")).toBeVisible();
     await expect(page.locator("#svgOutput")).toContainText("Shared AST");
   });

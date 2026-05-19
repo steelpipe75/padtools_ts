@@ -12,10 +12,132 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const spdInput = document.getElementById("spdInput") as HTMLTextAreaElement;
-  const importAstCheckbox = document.getElementById(
-    "importAstCheckbox",
+  const inputModeSpd = document.getElementById(
+    "inputModeSpd",
   ) as HTMLInputElement;
+  const inputModeAst = document.getElementById(
+    "inputModeAst",
+  ) as HTMLInputElement;
+
   const svgOutput = document.getElementById("svgOutput") as HTMLDivElement;
+  const svgViewer = document.getElementById("svgViewer") as HTMLDivElement;
+  const astOutput = document.getElementById("astOutput") as HTMLTextAreaElement;
+  const errorOutput = document.getElementById("errorOutput") as HTMLDivElement;
+  const displayModeSvg = document.getElementById(
+    "displayModeSvg",
+  ) as HTMLInputElement;
+  const displayModeAst = document.getElementById(
+    "displayModeAst",
+  ) as HTMLInputElement;
+  const displayModeAstPretty = document.getElementById(
+    "displayModeAstPretty",
+  ) as HTMLInputElement;
+  const displayModeError = document.getElementById(
+    "displayModeError",
+  ) as HTMLInputElement;
+  const _displayModeErrorLabel = document.getElementById(
+    "displayModeErrorLabel",
+  ) as HTMLLabelElement;
+
+  const zoomInButton = document.getElementById(
+    "zoomInButton",
+  ) as HTMLButtonElement;
+  const zoomOutButton = document.getElementById(
+    "zoomOutButton",
+  ) as HTMLButtonElement;
+  const resetZoomButton = document.getElementById(
+    "resetZoomButton",
+  ) as HTMLButtonElement;
+  const zoomLevelInput = document.getElementById(
+    "zoomLevelInput",
+  ) as HTMLInputElement;
+  const fullscreenButton = document.getElementById(
+    "fullscreenButton",
+  ) as HTMLButtonElement;
+  const checkerboardButton = document.getElementById(
+    "checkerboardButton",
+  ) as HTMLButtonElement;
+  const checkerboardIcon = document.getElementById(
+    "checkerboardIcon",
+  ) as HTMLSpanElement;
+
+  let zoomLevel = 1.0;
+  let showCheckerboard = true;
+  let lastSuccessfulDisplayMode: "svg" | "ast" | "astPretty" = "svg";
+
+  const updateViewerBackground = () => {
+    if (showCheckerboard) {
+      svgOutput.classList.add("show-checkerboard");
+      svgOutput.style.backgroundColor = "";
+      checkerboardButton.classList.add("active");
+      checkerboardIcon.textContent = "grid_on";
+    } else {
+      svgOutput.classList.remove("show-checkerboard");
+      svgOutput.style.backgroundColor = baseBackgroundColorInput.value;
+      checkerboardButton.classList.remove("active");
+      checkerboardIcon.textContent = "grid_off";
+    }
+  };
+
+  checkerboardButton.addEventListener("click", () => {
+    showCheckerboard = !showCheckerboard;
+    updateViewerBackground();
+  });
+
+  const updateZoom = (newLevel?: number) => {
+    if (newLevel !== undefined) {
+      // 10% から 500% の間にクリップ
+      zoomLevel = Math.max(0.1, Math.min(newLevel, 5.0));
+    }
+
+    const svgElement = svgOutput.querySelector("svg");
+    if (svgElement) {
+      svgElement.style.transform = `scale(${zoomLevel})`;
+    }
+    if (zoomLevelInput) {
+      zoomLevelInput.value = Math.round(zoomLevel * 100).toString();
+    }
+  };
+
+  zoomInButton.addEventListener("click", () => {
+    updateZoom(zoomLevel + 0.1);
+  });
+
+  zoomOutButton.addEventListener("click", () => {
+    updateZoom(zoomLevel - 0.1);
+  });
+
+  resetZoomButton.addEventListener("click", () => {
+    updateZoom(1.0);
+  });
+
+  zoomLevelInput.addEventListener("change", () => {
+    const value = parseInt(zoomLevelInput.value, 10);
+    if (!Number.isNaN(value)) {
+      updateZoom(value / 100);
+    } else {
+      updateZoom(); // 無効な入力の場合は現在の値にリセット
+    }
+  });
+
+  zoomLevelInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      zoomLevelInput.blur();
+    }
+  });
+
+  fullscreenButton.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+      svgViewer.requestFullscreen().catch((err) => {
+        alert(
+          `Error attempting to enable full-screen mode: ${err.message} (${err.name})`,
+        );
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
   const fileInput = document.getElementById("fileInput") as HTMLInputElement;
   const downloadButton = document.getElementById(
     "downloadButton",
@@ -67,8 +189,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const convertAndRender = () => {
     const spdText = spdInput.value;
+    const _isSvgMode = displayModeSvg.checked;
+    const isAstPrettyMode = displayModeAstPretty.checked;
+
+    // 現在の選択がErrorでない場合は、最後の成功したモードを更新
+    if (!displayModeError.checked) {
+      if (displayModeSvg.checked) lastSuccessfulDisplayMode = "svg";
+      else if (displayModeAst.checked) lastSuccessfulDisplayMode = "ast";
+      else if (displayModeAstPretty.checked)
+        lastSuccessfulDisplayMode = "astPretty";
+    }
+
     try {
-      const ast = importAstCheckbox.checked
+      const ast = inputModeAst.checked
         ? deserializeAST(spdText)
         : parse(spdText);
 
@@ -76,39 +209,88 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Could not obtain AST.");
       }
 
-      const options = {
-        fontSize: parseInt(fontSizeInput.value, 10),
-        fontFamily: customFontCheckbox.checked
-          ? fontFamilyCustomInput.value
-          : fontFamilySelect.value,
-        baseBackgroundColor: transparentBackgroundCheckbox.checked
-          ? null
-          : baseBackgroundColorInput.value,
-        backgroundColor: transparentNodeBackgroundCheckbox.checked
-          ? null
-          : backgroundColorInput.value,
-        textColor: textColorInput.value,
-        listRenderType: listRenderTypeTerminalOffset.checked
-          ? "TerminalOffset"
-          : "Original",
-      };
-      const svgString = renderSvg(ast, options);
+      // 成功時はラジオボタンを有効化し、Error表示を隠す
+      displayModeSvg.disabled = false;
+      displayModeAst.disabled = false;
+      displayModeAstPretty.disabled = false;
+      displayModeError.disabled = true;
+      errorOutput.style.display = "none";
 
-      const parser = new DOMParser();
-      const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
-      const svgElement = svgDoc.documentElement;
+      // 最後の成功したモードに戻す（もしErrorモードだった場合）
+      if (displayModeError.checked) {
+        if (lastSuccessfulDisplayMode === "svg") displayModeSvg.checked = true;
+        else if (lastSuccessfulDisplayMode === "ast")
+          displayModeAst.checked = true;
+        else if (lastSuccessfulDisplayMode === "astPretty")
+          displayModeAstPretty.checked = true;
+      }
 
-      svgOutput.textContent = "";
-      if (svgElement && svgElement.tagName === "svg") {
-        svgOutput.appendChild(svgElement);
+      if (displayModeSvg.checked) {
+        svgViewer.style.display = "flex";
+        astOutput.style.display = "none";
+        downloadSvgButton.style.display = "inline-flex";
+        downloadAstButton.style.display = "none";
+
+        const options = {
+          fontSize: parseInt(fontSizeInput.value, 10),
+          fontFamily: customFontCheckbox.checked
+            ? fontFamilyCustomInput.value
+            : fontFamilySelect.value,
+          baseBackgroundColor: transparentBackgroundCheckbox.checked
+            ? null
+            : baseBackgroundColorInput.value,
+          backgroundColor: transparentNodeBackgroundCheckbox.checked
+            ? null
+            : backgroundColorInput.value,
+          textColor: textColorInput.value,
+          listRenderType: listRenderTypeTerminalOffset.checked
+            ? "TerminalOffset"
+            : "Original",
+        };
+        const svgString = renderSvg(ast, options);
+
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
+        const svgElement = svgDoc.documentElement;
+
+        svgOutput.textContent = "";
+        if (svgElement && svgElement.tagName === "svg") {
+          svgOutput.appendChild(svgElement);
+          updateZoom();
+        } else {
+          // Fallback for cases where parsing might fail (though renderSvg should return valid SVG)
+          svgOutput.innerHTML = svgString;
+          updateZoom();
+        }
       } else {
-        // Fallback for cases where parsing might fail (though renderSvg should return valid SVG)
-        svgOutput.innerHTML = svgString;
+        svgViewer.style.display = "none";
+        astOutput.style.display = "block";
+        astOutput.value = isAstPrettyMode
+          ? serializeAST(ast, 2)
+          : serializeAST(ast);
+        downloadSvgButton.style.display = "none";
+        downloadAstButton.style.display = "inline-flex";
       }
     } catch (error) {
+      // エラー時はラジオボタンを無効化し、Error表示に切り替える
+      displayModeSvg.disabled = true;
+      displayModeAst.disabled = true;
+      displayModeAstPretty.disabled = true;
+      displayModeError.disabled = false;
+      displayModeError.checked = true;
+
       const errorDiv = document.createElement("div");
       errorDiv.classList.add("error-message");
       svgOutput.textContent = "";
+      astOutput.value = "";
+
+      svgViewer.style.display = "none";
+      astOutput.style.display = "none";
+      errorOutput.style.display = "block";
+      errorOutput.textContent = "";
+
+      downloadSvgButton.style.display = "none";
+      downloadAstButton.style.display = "none";
 
       if (error instanceof ParseError) {
         const msgPara = document.createElement("div");
@@ -135,7 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("An unknown error occurred:", error);
       }
 
-      svgOutput.appendChild(errorDiv);
+      errorOutput.appendChild(errorDiv);
     }
   };
 
@@ -159,7 +341,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   spdInput.addEventListener("input", convertAndRender);
-  importAstCheckbox.addEventListener("change", convertAndRender);
+  inputModeSpd.addEventListener("change", convertAndRender);
+  inputModeAst.addEventListener("change", convertAndRender);
+  displayModeSvg.addEventListener("change", convertAndRender);
+  displayModeAst.addEventListener("change", convertAndRender);
+  displayModeAstPretty.addEventListener("change", convertAndRender);
   applyOptionsButton.addEventListener("click", convertAndRender);
 
   spdInput.addEventListener("keydown", (event) => {
@@ -189,9 +375,9 @@ document.addEventListener("DOMContentLoaded", () => {
         spdInput.value = e.target?.result as string;
         // .jsonファイルの場合は自動的に「ASTとしてインポート」をオンにする
         if (file.name.endsWith(".json")) {
-          importAstCheckbox.checked = true;
+          inputModeAst.checked = true;
         } else if (file.name.endsWith(".spd")) {
-          importAstCheckbox.checked = false;
+          inputModeSpd.checked = true;
         }
         convertAndRender(); // ファイル読み込み後も変換を実行
       };
@@ -210,9 +396,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   downloadButton.addEventListener("click", () => {
     const spdText = spdInput.value;
+    const isAst = inputModeAst.checked;
+    const defaultFileName = isAst ? "input_ast.json" : "edited_spd.spd";
     const fileNameInput = getFileName(
       "ダウンロードするファイル名を入力してください:",
-      "edited_spd.spd",
+      defaultFileName,
     );
 
     if (fileNameInput === null) {
@@ -221,12 +409,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let fileName = fileNameInput;
-    // 拡張子がない場合は.spdを追加
-    if (!fileName.endsWith(".spd")) {
-      fileName += ".spd";
+    // 拡張子がない場合は適切に追加
+    if (isAst) {
+      if (!fileName.endsWith(".json")) {
+        fileName += ".json";
+      }
+    } else {
+      if (!fileName.endsWith(".spd")) {
+        fileName += ".spd";
+      }
     }
 
-    const blob = new Blob([spdText], { type: "text/plain" });
+    const mimeType = isAst ? "application/json" : "text/plain";
+    const blob = new Blob([spdText], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -240,7 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
   downloadAstButton.addEventListener("click", () => {
     const spdText = spdInput.value;
     try {
-      const ast = importAstCheckbox.checked
+      const ast = inputModeAst.checked
         ? deserializeAST(spdText)
         : parse(spdText);
 
@@ -249,7 +444,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const astJson = serializeAST(ast);
+      const isAstPrettyMode = displayModeAstPretty.checked;
+      const astJson = isAstPrettyMode
+        ? serializeAST(ast, 2)
+        : serializeAST(ast);
 
       const fileNameInput = getFileName(
         "ダウンロードするASTファイル名を入力してください:",
@@ -332,7 +530,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const url = new URL(window.location.href);
       url.searchParams.set("spd", base64);
-      if (importAstCheckbox.checked) {
+      if (inputModeAst.checked) {
         url.searchParams.set("ast", "1");
       }
 
@@ -364,7 +562,7 @@ document.addEventListener("DOMContentLoaded", () => {
       spdInput.value = new TextDecoder().decode(bytes);
 
       if (astParam === "1") {
-        importAstCheckbox.checked = true;
+        inputModeAst.checked = true;
       }
     } catch (error) {
       console.error("Failed to decode SPD from URL parameter:", error);
@@ -375,7 +573,12 @@ document.addEventListener("DOMContentLoaded", () => {
     spdInput.value = getDefaultSpd();
   }
 
+  baseBackgroundColorInput.addEventListener("input", () => {
+    updateViewerBackground();
+  });
+
   convertAndRender(); // ページロード時に一度変換を実行
+  updateViewerBackground(); // 初期背景設定
 });
 
 function getDefaultSpd(): string {
