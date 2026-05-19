@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         svgOutput.style.display = "block";
         astOutput.style.display = "none";
         downloadSvgButton.style.display = "inline-flex";
+        downloadAstButton.style.display = "none";
 
         const options = {
           fontSize: parseInt(fontSizeInput.value, 10),
@@ -124,6 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
         astOutput.style.display = "block";
         astOutput.textContent = serializeAST(ast);
         downloadSvgButton.style.display = "none";
+        downloadAstButton.style.display = "inline-flex";
       }
     } catch (error) {
       const errorDiv = document.createElement("div");
@@ -135,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
       astOutput.style.display = "none";
       outputTitle.textContent = "Error Output";
       downloadSvgButton.style.display = "none";
+      downloadAstButton.style.display = "none";
 
       if (error instanceof ParseError) {
         const msgPara = document.createElement("div");
