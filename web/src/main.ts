@@ -12,9 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const spdInput = document.getElementById("spdInput") as HTMLTextAreaElement;
-  const importAstCheckbox = document.getElementById(
-    "importAstCheckbox",
-  ) as HTMLInputElement;
+  const inputModeSpd = document.getElementById("inputModeSpd") as HTMLInputElement;
+  const inputModeAst = document.getElementById("inputModeAst") as HTMLInputElement;
+
   const svgOutput = document.getElementById("svgOutput") as HTMLDivElement;
   const astOutput = document.getElementById("astOutput") as HTMLPreElement;
   const outputTitle = document.getElementById("outputTitle") as HTMLHeadingElement;
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const isSvgMode = displayModeSvg.checked;
 
     try {
-      const ast = importAstCheckbox.checked
+      const ast = inputModeAst.checked
         ? deserializeAST(spdText)
         : parse(spdText);
 
@@ -188,7 +188,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   spdInput.addEventListener("input", convertAndRender);
-  importAstCheckbox.addEventListener("change", convertAndRender);
+  inputModeSpd.addEventListener("change", convertAndRender);
+  inputModeAst.addEventListener("change", convertAndRender);
   displayModeSvg.addEventListener("change", convertAndRender);
   displayModeAst.addEventListener("change", convertAndRender);
   applyOptionsButton.addEventListener("click", convertAndRender);
@@ -220,9 +221,9 @@ document.addEventListener("DOMContentLoaded", () => {
         spdInput.value = e.target?.result as string;
         // .jsonファイルの場合は自動的に「ASTとしてインポート」をオンにする
         if (file.name.endsWith(".json")) {
-          importAstCheckbox.checked = true;
+          inputModeAst.checked = true;
         } else if (file.name.endsWith(".spd")) {
-          importAstCheckbox.checked = false;
+          inputModeSpd.checked = true;
         }
         convertAndRender(); // ファイル読み込み後も変換を実行
       };
@@ -241,9 +242,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   downloadButton.addEventListener("click", () => {
     const spdText = spdInput.value;
+    const isAst = inputModeAst.checked;
+    const defaultFileName = isAst ? "input_ast.json" : "edited_spd.spd";
     const fileNameInput = getFileName(
       "ダウンロードするファイル名を入力してください:",
-      "edited_spd.spd",
+      defaultFileName,
     );
 
     if (fileNameInput === null) {
@@ -252,12 +255,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let fileName = fileNameInput;
-    // 拡張子がない場合は.spdを追加
-    if (!fileName.endsWith(".spd")) {
-      fileName += ".spd";
+    // 拡張子がない場合は適切に追加
+    if (isAst) {
+      if (!fileName.endsWith(".json")) {
+        fileName += ".json";
+      }
+    } else {
+      if (!fileName.endsWith(".spd")) {
+        fileName += ".spd";
+      }
     }
 
-    const blob = new Blob([spdText], { type: "text/plain" });
+    const mimeType = isAst ? "application/json" : "text/plain";
+    const blob = new Blob([spdText], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -271,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
   downloadAstButton.addEventListener("click", () => {
     const spdText = spdInput.value;
     try {
-      const ast = importAstCheckbox.checked
+      const ast = inputModeAst.checked
         ? deserializeAST(spdText)
         : parse(spdText);
 
@@ -363,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const url = new URL(window.location.href);
       url.searchParams.set("spd", base64);
-      if (importAstCheckbox.checked) {
+      if (inputModeAst.checked) {
         url.searchParams.set("ast", "1");
       }
 
@@ -395,7 +405,7 @@ document.addEventListener("DOMContentLoaded", () => {
       spdInput.value = new TextDecoder().decode(bytes);
 
       if (astParam === "1") {
-        importAstCheckbox.checked = true;
+        inputModeAst.checked = true;
       }
     } catch (error) {
       console.error("Failed to decode SPD from URL parameter:", error);

@@ -64,10 +64,12 @@
 
     <div class="container">
         <div class="input-section">
-            <h2>SPD Input</h2>
-            <div class="import-ast-group">
-                <input type="checkbox" id="importAstCheckbox">
-                <label for="importAstCheckbox">Treat input as AST (JSON)</label>
+            <h2>Input</h2>
+            <div class="input-mode-group">
+                <input type="radio" id="inputModeSpd" name="inputMode" value="spd" checked>
+                <label for="inputModeSpd">入力をSPDとして解釈</label>
+                <input type="radio" id="inputModeAst" name="inputMode" value="ast">
+                <label for="inputModeAst">入力をAST(JSON)として解釈</label>
             </div>
             <textarea id="spdInput" placeholder="ここにSPD記法のテキストを入力してください..."></textarea>
             <div class="file-operations">
@@ -81,7 +83,7 @@
                 <div class="button-group">
                     <button id="downloadButton" type="button">
                         <span class="material-symbols-outlined">download</span>
-                        Download SPD
+                        Export Input Data
                     </button>
                     <button id="shareButton" type="button">
                         <span class="material-symbols-outlined">share</span>
