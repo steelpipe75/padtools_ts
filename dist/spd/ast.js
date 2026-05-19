@@ -6,7 +6,7 @@ exports.deserializeAST = deserializeAST;
  * ASTをJSON文字列にシリアライズします。
  * SwitchNodeのMapをオブジェクトまたは配列に変換して保存できるようにします。
  */
-function serializeAST(ast) {
+function serializeAST(ast, space) {
     if (ast === null)
         return "null";
     return JSON.stringify(ast, (_key, value) => {
@@ -17,7 +17,7 @@ function serializeAST(ast) {
             };
         }
         return value;
-    });
+    }, space);
 }
 /**
  * JSON文字列からASTをデシリアライズします。

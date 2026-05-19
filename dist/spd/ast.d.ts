@@ -73,7 +73,7 @@ export interface NodeListNode {
  * ASTをJSON文字列にシリアライズします。
  * SwitchNodeのMapをオブジェクトまたは配列に変換して保存できるようにします。
  */
-export declare function serializeAST(ast: Node | null): string;
+export declare function serializeAST(ast: Node | null, space?: string | number): string;
 /**
  * JSON文字列からASTをデシリアライズします。
  * シリアライズ時に変換されたMapを復元します。
