@@ -8,6 +8,7 @@ export declare const healthRoute: {
                 "application/json": {
                     schema: z.ZodObject<{
                         status: z.ZodString;
+                        version: z.ZodString;
                     }, z.core.$strip>;
                 };
             };
