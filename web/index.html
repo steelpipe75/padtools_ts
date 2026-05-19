@@ -104,10 +104,29 @@
                     <label for="displayModeAstPretty">AST (JSON pretty)</label>
                 </div>
             </div>
-            <div id="svgOutput">
-                <!-- 変換されたSVGがここに表示されます -->
+            <div class="output-container">
+                <div id="svgViewer" class="output-view">
+                    <div class="viewer-toolbar">
+                        <button id="zoomOutButton" type="button" title="Zoom Out">
+                            <span class="material-symbols-outlined">zoom_out</span>
+                        </button>
+                        <span id="zoomLevelDisplay">100%</span>
+                        <button id="zoomInButton" type="button" title="Zoom In">
+                            <span class="material-symbols-outlined">zoom_in</span>
+                        </button>
+                        <button id="resetZoomButton" type="button" title="Reset Zoom">
+                            <span class="material-symbols-outlined">restart_alt</span>
+                        </button>
+                        <button id="fullscreenButton" type="button" title="Fullscreen">
+                            <span class="material-symbols-outlined">fullscreen</span>
+                        </button>
+                    </div>
+                    <div id="svgOutput">
+                        <!-- 変換されたSVGがここに表示されます -->
+                    </div>
+                </div>
+                <textarea id="astOutput" readonly style="display: none;" placeholder="AST(JSON)がここに表示されます..."></textarea>
             </div>
-            <textarea id="astOutput" readonly style="display: none;" placeholder="AST(JSON)がここに表示されます..."></textarea>
             <div class="svg-operations">
                 <button id="downloadSvgButton" type="button">
                     <span class="material-symbols-outlined">image</span>

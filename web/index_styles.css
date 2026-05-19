@@ -184,23 +184,79 @@ button .material-symbols-outlined {
   text-align: right;
 }
 
-#svgOutput {
-  border: 1px solid #ddd;
+.output-container {
   flex-grow: 1;
-  padding: 10px;
-  border-radius: 4px;
-
-  /* 市松模様の背景設定 https://qiita.com/7note/items/328761825801b82ef585 を参考に対応 */
-  background-image:
-    linear-gradient(45deg, #999 25%, transparent 25%, transparent 75%, #999 75%),
-    linear-gradient(45deg, #999 25%, transparent 25%, transparent 75%, #999 75%); /* 市松模様になるようグラデーションで単色を入れる */
-  background-position:
-    0 0,
-    10px 10px; /* 「0 0」と1マス（1色）の大きさ「10px 10px」をそれぞれ指定 */
-  background-size: 20px 20px; /* 1マス分の倍の大きさを指定「20px 20px」 */
-  background-color: #bbb; /* もう一つの単色を入れる */
-
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin-bottom: 10px;
   height: 100%;
+}
+
+.output-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.viewer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.viewer-toolbar button {
+  padding: 4px;
+  background-color: transparent;
+  color: #555;
+  border: 1px solid transparent;
+}
+
+.viewer-toolbar button:hover {
+  background-color: #e0e0e0;
+  border-color: #ccc;
+}
+
+.viewer-toolbar button .material-symbols-outlined {
+  font-size: 20px;
+}
+
+#zoomLevelDisplay {
+  min-width: 45px;
+  text-align: center;
+  font-weight: bold;
+  color: #666;
+}
+
+#svgOutput {
+  flex-grow: 1;
+  overflow: auto;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  /* 市松模様の背景設定 */
+  background-image:
+    linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%),
+    linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%);
+  background-position: 0 0, 10px 10px;
+  background-size: 20px 20px;
+  background-color: #fff;
+}
+
+#svgOutput svg {
+  transform-origin: top left;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background-color: white; /* 背景色がない場合でも見やすく */
 }
 
 #astOutput {
@@ -215,6 +271,20 @@ button .material-symbols-outlined {
   height: 100%;
   resize: none;
   box-sizing: border-box;
+}
+
+/* フルスクリーン時のスタイル */
+#svgViewer:fullscreen {
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+#svgViewer:fullscreen .viewer-toolbar {
+  padding: 10px 20px;
+}
+
+#svgViewer:fullscreen #svgOutput {
+  padding: 40px;
 }
 
 .error-message {

@@ -16,10 +16,54 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputModeAst = document.getElementById("inputModeAst") as HTMLInputElement;
 
   const svgOutput = document.getElementById("svgOutput") as HTMLDivElement;
+  const svgViewer = document.getElementById("svgViewer") as HTMLDivElement;
   const astOutput = document.getElementById("astOutput") as HTMLTextAreaElement;
   const displayModeSvg = document.getElementById("displayModeSvg") as HTMLInputElement;
   const displayModeAst = document.getElementById("displayModeAst") as HTMLInputElement;
   const displayModeAstPretty = document.getElementById("displayModeAstPretty") as HTMLInputElement;
+
+  const zoomInButton = document.getElementById("zoomInButton") as HTMLButtonElement;
+  const zoomOutButton = document.getElementById("zoomOutButton") as HTMLButtonElement;
+  const resetZoomButton = document.getElementById("resetZoomButton") as HTMLButtonElement;
+  const zoomLevelDisplay = document.getElementById("zoomLevelDisplay") as HTMLSpanElement;
+  const fullscreenButton = document.getElementById("fullscreenButton") as HTMLButtonElement;
+
+  let zoomLevel = 1.0;
+
+  const updateZoom = () => {
+    const svgElement = svgOutput.querySelector("svg");
+    if (svgElement) {
+      svgElement.style.transform = `scale(${zoomLevel})`;
+    }
+    if (zoomLevelDisplay) {
+      zoomLevelDisplay.textContent = `${Math.round(zoomLevel * 100)}%`;
+    }
+  };
+
+  zoomInButton.addEventListener("click", () => {
+    zoomLevel = Math.min(zoomLevel + 0.1, 3.0);
+    updateZoom();
+  });
+
+  zoomOutButton.addEventListener("click", () => {
+    zoomLevel = Math.max(zoomLevel - 0.1, 0.1);
+    updateZoom();
+  });
+
+  resetZoomButton.addEventListener("click", () => {
+    zoomLevel = 1.0;
+    updateZoom();
+  });
+
+  fullscreenButton.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+      svgViewer.requestFullscreen().catch((err) => {
+        alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  });
 
   const fileInput = document.getElementById("fileInput") as HTMLInputElement;
   const downloadButton = document.getElementById(
@@ -85,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (isSvgMode) {
-        svgOutput.style.display = "block";
+        svgViewer.style.display = "flex";
         astOutput.style.display = "none";
         downloadSvgButton.style.display = "inline-flex";
         downloadAstButton.style.display = "none";
@@ -115,12 +159,14 @@ document.addEventListener("DOMContentLoaded", () => {
         svgOutput.textContent = "";
         if (svgElement && svgElement.tagName === "svg") {
           svgOutput.appendChild(svgElement);
+          updateZoom();
         } else {
           // Fallback for cases where parsing might fail (though renderSvg should return valid SVG)
           svgOutput.innerHTML = svgString;
+          updateZoom();
         }
       } else {
-        svgOutput.style.display = "none";
+        svgViewer.style.display = "none";
         astOutput.style.display = "block";
         astOutput.value = isAstPrettyMode ? serializeAST(ast, 2) : serializeAST(ast);
         downloadSvgButton.style.display = "none";
@@ -132,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
       svgOutput.textContent = "";
       astOutput.value = "";
       // エラー時はSVGモードの表示に戻してエラーを表示する
-      svgOutput.style.display = "block";
+      svgViewer.style.display = "flex";
       astOutput.style.display = "none";
       downloadSvgButton.style.display = "none";
       downloadAstButton.style.display = "none";
