@@ -320,6 +320,36 @@ button .material-symbols-outlined {
   box-sizing: border-box;
 }
 
+#errorOutput {
+  flex-grow: 1;
+  overflow: auto;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.display-mode-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.display-mode-group input[type="radio"] {
+  margin: 0;
+}
+
+.display-mode-group label {
+  cursor: pointer;
+}
+
+.display-mode-group input[type="radio"]:disabled + label {
+  cursor: not-allowed;
+  color: #999;
+}
+
 /* フルスクリーン時のスタイル */
 #svgViewer:fullscreen {
   padding: 0;

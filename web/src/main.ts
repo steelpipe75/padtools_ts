@@ -18,9 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const svgOutput = document.getElementById("svgOutput") as HTMLDivElement;
   const svgViewer = document.getElementById("svgViewer") as HTMLDivElement;
   const astOutput = document.getElementById("astOutput") as HTMLTextAreaElement;
+  const errorOutput = document.getElementById("errorOutput") as HTMLDivElement;
   const displayModeSvg = document.getElementById("displayModeSvg") as HTMLInputElement;
   const displayModeAst = document.getElementById("displayModeAst") as HTMLInputElement;
   const displayModeAstPretty = document.getElementById("displayModeAstPretty") as HTMLInputElement;
+  const displayModeError = document.getElementById("displayModeError") as HTMLInputElement;
+  const displayModeErrorLabel = document.getElementById("displayModeErrorLabel") as HTMLLabelElement;
 
   const zoomInButton = document.getElementById("zoomInButton") as HTMLButtonElement;
   const zoomOutButton = document.getElementById("zoomOutButton") as HTMLButtonElement;
@@ -32,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let zoomLevel = 1.0;
   let showCheckerboard = true;
+  let lastSuccessfulDisplayMode: "svg" | "ast" | "astPretty" = "svg";
 
   const updateViewerBackground = () => {
     if (showCheckerboard) {
@@ -158,6 +162,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const isSvgMode = displayModeSvg.checked;
     const isAstPrettyMode = displayModeAstPretty.checked;
 
+    // 現在の選択がErrorでない場合は、最後の成功したモードを更新
+    if (!displayModeError.checked) {
+      if (displayModeSvg.checked) lastSuccessfulDisplayMode = "svg";
+      else if (displayModeAst.checked) lastSuccessfulDisplayMode = "ast";
+      else if (displayModeAstPretty.checked) lastSuccessfulDisplayMode = "astPretty";
+    }
+
     try {
       const ast = inputModeAst.checked
         ? deserializeAST(spdText)
@@ -167,7 +178,21 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Could not obtain AST.");
       }
 
-      if (isSvgMode) {
+      // 成功時はラジオボタンを有効化し、Error表示を隠す
+      displayModeSvg.disabled = false;
+      displayModeAst.disabled = false;
+      displayModeAstPretty.disabled = false;
+      displayModeError.disabled = true;
+      errorOutput.style.display = "none";
+
+      // 最後の成功したモードに戻す（もしErrorモードだった場合）
+      if (displayModeError.checked) {
+        if (lastSuccessfulDisplayMode === "svg") displayModeSvg.checked = true;
+        else if (lastSuccessfulDisplayMode === "ast") displayModeAst.checked = true;
+        else if (lastSuccessfulDisplayMode === "astPretty") displayModeAstPretty.checked = true;
+      }
+
+      if (displayModeSvg.checked) {
         svgViewer.style.display = "flex";
         astOutput.style.display = "none";
         downloadSvgButton.style.display = "inline-flex";
@@ -212,13 +237,23 @@ document.addEventListener("DOMContentLoaded", () => {
         downloadAstButton.style.display = "inline-flex";
       }
     } catch (error) {
+      // エラー時はラジオボタンを無効化し、Error表示に切り替える
+      displayModeSvg.disabled = true;
+      displayModeAst.disabled = true;
+      displayModeAstPretty.disabled = true;
+      displayModeError.disabled = false;
+      displayModeError.checked = true;
+
       const errorDiv = document.createElement("div");
       errorDiv.classList.add("error-message");
       svgOutput.textContent = "";
       astOutput.value = "";
-      // エラー時はSVGモードの表示に戻してエラーを表示する
-      svgViewer.style.display = "flex";
+      
+      svgViewer.style.display = "none";
       astOutput.style.display = "none";
+      errorOutput.style.display = "block";
+      errorOutput.textContent = "";
+      
       downloadSvgButton.style.display = "none";
       downloadAstButton.style.display = "none";
 
@@ -247,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("An unknown error occurred:", error);
       }
 
-      svgOutput.appendChild(errorDiv);
+      errorOutput.appendChild(errorDiv);
     }
   };
 

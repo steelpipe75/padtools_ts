@@ -102,6 +102,8 @@
                     <label for="displayModeAst">AST (JSON)</label>
                     <input type="radio" id="displayModeAstPretty" name="displayMode" value="astPretty">
                     <label for="displayModeAstPretty">AST (JSON pretty)</label>
+                    <input type="radio" id="displayModeError" name="displayMode" value="error" disabled>
+                    <label for="displayModeError" id="displayModeErrorLabel">Error</label>
                 </div>
             </div>
             <div class="output-container">
@@ -137,6 +139,7 @@
                     </div>
                 </div>
                 <textarea id="astOutput" readonly style="display: none;" placeholder="AST(JSON)がここに表示されます..."></textarea>
+                <div id="errorOutput" style="display: none;"></div>
             </div>
             <div class="svg-operations">
                 <button id="downloadSvgButton" type="button">
