@@ -27,6 +27,24 @@ describe("API AST Download Endpoints", () => {
     sharedAst = body;
   });
 
+  it("should download pretty printed AST JSON successfully via /ast/parse/download", async () => {
+    const spd = ":terminal Start\nProcess\n:terminal End";
+    const serializeSpy = jest.spyOn(ast_utils, "serializeAST");
+
+    const res = await app.request("/ast/parse/download", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ spd, options: { prettyprint: true } }),
+    });
+
+    expect(res.status).toBe(200);
+    expect(serializeSpy).toHaveBeenCalledWith(expect.anything(), 2);
+
+    serializeSpy.mockRestore();
+  });
+
   it("should download SVG successfully via /ast/render/download", async () => {
     const res = await app.request("/ast/render/download", {
       method: "POST",

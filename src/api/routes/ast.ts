@@ -17,6 +17,7 @@ const AstParseRequestSchema = z.object({
     description: "The SPD text to parse",
     example: ":terminal Start\nProcess\n:terminal End",
   }),
+  options: ConvertRequestOptionsSchema.optional(),
 });
 
 const AstParseResponseSchema = z.object({
@@ -208,7 +209,7 @@ export const astParseHandler: RouteHandler<typeof astParseRoute> = async (
   c,
 ) => {
   try {
-    const { spd } = c.req.valid("json");
+    const { spd, options = {} } = c.req.valid("json");
     if (!spd) {
       return c.json({ error: "SPD content is required" }, 400);
     }
@@ -219,7 +220,9 @@ export const astParseHandler: RouteHandler<typeof astParseRoute> = async (
     }
 
     // serialize to handle Map and then parse back to object for JSON response
-    const astJson = JSON.parse(serializeAST(ast));
+    const astJson = JSON.parse(
+      serializeAST(ast, options.prettyprint ? 2 : undefined),
+    );
     return c.json({ ast: astJson }, 200);
   } catch (error) {
     console.error("AST parse error:", error);
@@ -234,7 +237,7 @@ export const astParseDownloadHandler: RouteHandler<
   typeof astParseDownloadRoute
 > = async (c) => {
   try {
-    const { spd } = c.req.valid("json");
+    const { spd, options = {} } = c.req.valid("json");
     if (!spd) {
       return c.json({ error: "SPD content is required" }, 400);
     }
@@ -244,7 +247,7 @@ export const astParseDownloadHandler: RouteHandler<
       return c.json({ error: "Failed to parse SPD" }, 400);
     }
 
-    const astString = serializeAST(ast);
+    const astString = serializeAST(ast, options.prettyprint ? 2 : undefined);
     const astJson = JSON.parse(astString);
 
     c.header("Content-Type", "application/json");

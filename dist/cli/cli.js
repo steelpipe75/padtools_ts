@@ -50,7 +50,7 @@ commander_1.program
     .description("Convert SPD(Simple PAD Description) text file to SVG image")
     .option("-i, --input <inputFilePath>", "Path to the input file (SPD or AST JSON)")
     .option("-o, --output <outputFilePath>", "Path to the output SVG file")
-    .option("-p, --prettyprint", "Pretty print the output SVG")
+    .option("-p, --prettyprint", "Pretty print the output SVG or AST JSON")
     .option("--export-ast <astFilePath>", "Path to export the parsed AST as JSON")
     .option("--import-ast", "Treat input as an AST JSON file")
     .option("--font-size <fontSize>", "Font size for the SVG", parseFloat)
@@ -88,7 +88,7 @@ commander_1.program
             process.exit(1);
         }
         if (options.exportAst) {
-            const astJson = (0, ast_1.serializeAST)(ast);
+            const astJson = (0, ast_1.serializeAST)(ast, options.prettyprint ? 2 : undefined);
             fs.writeFileSync(options.exportAst, astJson);
         }
         const renderOptions = {};

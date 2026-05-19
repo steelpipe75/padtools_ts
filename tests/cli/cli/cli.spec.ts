@@ -499,6 +499,33 @@ describe("CLI", () => {
     );
   });
 
+  it("should pretty print exported AST when --prettyprint is provided", () => {
+    const inputPath = "input.spd";
+    const exportPath = "exported.json";
+    const spdContent = "dummy spd";
+    const ast: Node = { type: "process", text: "test", childNode: null };
+
+    // Setup mocks
+    const fs = require("node:fs");
+    const { parse } = require("../../../src/spd/parser");
+    const { render } = require("../../../src/spd/svg-renderer");
+    const { optimize } = require("svgo");
+
+    fs.readFileSync.mockReturnValue(spdContent);
+    parse.mockReturnValue(ast);
+    render.mockReturnValue("<svg/>");
+    optimize.mockReturnValue({ data: "<svg/>" });
+
+    // Run CLI with prettyprint
+    runCli(["-i", inputPath, "--export-ast", exportPath, "--prettyprint"]);
+
+    // Assertions
+    expect(fs.writeFileSync).toHaveBeenCalledWith(
+      exportPath,
+      JSON.stringify(ast, null, 2),
+    );
+  });
+
   it("should show help and exit when no input is provided and stdin is a TTY", () => {
     const process = require("node:process");
     const { program } = require("commander");

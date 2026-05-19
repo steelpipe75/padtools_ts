@@ -8,6 +8,21 @@ export declare const astParseRoute: {
                 "application/json": {
                     schema: z.ZodObject<{
                         spd: z.ZodString;
+                        options: z.ZodOptional<z.ZodObject<{
+                            fontSize: z.ZodOptional<z.ZodNumber>;
+                            fontFamily: z.ZodOptional<z.ZodString>;
+                            strokeWidth: z.ZodOptional<z.ZodNumber>;
+                            strokeColor: z.ZodOptional<z.ZodString>;
+                            backgroundColor: z.ZodOptional<z.ZodString>;
+                            baseBackgroundColor: z.ZodOptional<z.ZodString>;
+                            textColor: z.ZodOptional<z.ZodString>;
+                            lineHeight: z.ZodOptional<z.ZodNumber>;
+                            listRenderType: z.ZodOptional<z.ZodEnum<{
+                                Original: "Original";
+                                TerminalOffset: "TerminalOffset";
+                            }>>;
+                            prettyprint: z.ZodOptional<z.ZodBoolean>;
+                        }, z.core.$strip>>;
                     }, z.core.$strip>;
                 };
             };
@@ -57,6 +72,21 @@ export declare const astParseDownloadRoute: {
                 "application/json": {
                     schema: z.ZodObject<{
                         spd: z.ZodString;
+                        options: z.ZodOptional<z.ZodObject<{
+                            fontSize: z.ZodOptional<z.ZodNumber>;
+                            fontFamily: z.ZodOptional<z.ZodString>;
+                            strokeWidth: z.ZodOptional<z.ZodNumber>;
+                            strokeColor: z.ZodOptional<z.ZodString>;
+                            backgroundColor: z.ZodOptional<z.ZodString>;
+                            baseBackgroundColor: z.ZodOptional<z.ZodString>;
+                            textColor: z.ZodOptional<z.ZodString>;
+                            lineHeight: z.ZodOptional<z.ZodNumber>;
+                            listRenderType: z.ZodOptional<z.ZodEnum<{
+                                Original: "Original";
+                                TerminalOffset: "TerminalOffset";
+                            }>>;
+                            prettyprint: z.ZodOptional<z.ZodBoolean>;
+                        }, z.core.$strip>>;
                     }, z.core.$strip>;
                 };
             };

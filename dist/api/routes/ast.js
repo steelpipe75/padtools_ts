@@ -24,6 +24,7 @@ const AstParseRequestSchema = zod_openapi_1.z.object({
         description: "The SPD text to parse",
         example: ":terminal Start\nProcess\n:terminal End",
     }),
+    options: core_1.ConvertRequestOptionsSchema.optional(),
 });
 const AstParseResponseSchema = zod_openapi_1.z.object({
     ast: zod_openapi_1.z.any().openapi({
@@ -205,7 +206,7 @@ exports.astRenderDownloadRoute = (0, zod_openapi_1.createRoute)({
 });
 const astParseHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { spd } = c.req.valid("json");
+        const { spd, options = {} } = c.req.valid("json");
         if (!spd) {
             return c.json({ error: "SPD content is required" }, 400);
         }
@@ -214,7 +215,7 @@ const astParseHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
             return c.json({ error: "Failed to parse SPD" }, 400);
         }
         // serialize to handle Map and then parse back to object for JSON response
-        const astJson = JSON.parse((0, ast_1.serializeAST)(ast));
+        const astJson = JSON.parse((0, ast_1.serializeAST)(ast, options.prettyprint ? 2 : undefined));
         return c.json({ ast: astJson }, 200);
     }
     catch (error) {
@@ -225,7 +226,7 @@ const astParseHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
 exports.astParseHandler = astParseHandler;
 const astParseDownloadHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { spd } = c.req.valid("json");
+        const { spd, options = {} } = c.req.valid("json");
         if (!spd) {
             return c.json({ error: "SPD content is required" }, 400);
         }
@@ -233,7 +234,7 @@ const astParseDownloadHandler = (c) => __awaiter(void 0, void 0, void 0, functio
         if (!ast) {
             return c.json({ error: "Failed to parse SPD" }, 400);
         }
-        const astString = (0, ast_1.serializeAST)(ast);
+        const astString = (0, ast_1.serializeAST)(ast, options.prettyprint ? 2 : undefined);
         const astJson = JSON.parse(astString);
         c.header("Content-Type", "application/json");
         c.header("Content-Disposition", 'attachment; filename="diagram.json"');

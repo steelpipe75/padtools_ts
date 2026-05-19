@@ -75,7 +75,7 @@ npm run start:web
 *   `-V, --version`: バージョン番号を出力します。
 *   `-i, --input <inputFilePath>`: 入力ファイル（SPDテキストまたはAST JSON）へのパスを指定します。指定がない場合は標準入力から読み込みます。
 *   `-o, --output <outputFilePath>`: 出力SVGファイルへのパスを指定します。指定がない場合は標準出力へ書き出します。
-*   `-p, --prettyprint`: 出力SVGを整形して出力します（`svgo` を使用）。
+*   `-p, --prettyprint`: 出力SVGまたはAST JSONを整形して出力します。
 *   `--export-ast <astFilePath>`: 解析されたASTをJSON形式でファイルに書き出します。
 *   `--import-ast`: 入力ファイルをAST JSONとして扱います。
 *   `--font-size <fontSize>`: SVGのフォントサイズを指定します。
