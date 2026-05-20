@@ -286,7 +286,7 @@ button .material-symbols-outlined {
   overflow: auto;
   padding: 20px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   background-color: #fff;
 }
