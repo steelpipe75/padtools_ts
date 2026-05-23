@@ -78,7 +78,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^25.6.2",
     "@types/sanitize-html": "^2.16.1",
-    "baseline-browser-mapping": "^2.10.29",
+    "baseline-browser-mapping": "^2.10.32",
     "buffer": "^6.0.3",
     "husky": "^9.1.7",
     "jest": "^30.4.2",
