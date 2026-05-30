@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { describeRoute, resolver } from "hono-openapi";
 import type { Context } from "hono";
-import { ConvertRequestSchema, type ConvertRequest, core } from "../../spd/core.js";
+import { describeRoute, resolver } from "hono-openapi";
+import { z } from "zod";
+import { type ConvertRequest, core } from "../../spd/core.js";
 
 const ConvertResponseSchema = z.object({
   svg: z.string().describe("The generated SVG content"),
@@ -9,12 +9,20 @@ const ConvertResponseSchema = z.object({
 
 const ErrorResponseSchema = z.object({
   error: z.string().describe("Error message"),
-  lineNo: z.number().optional().describe("The line number where the error occurred").meta({
-    example: 2,
-  }),
-  lineStr: z.string().optional().describe("The string content of the line where the error occurred").meta({
-    example: ":invalid_command arg",
-  }),
+  lineNo: z
+    .number()
+    .optional()
+    .describe("The line number where the error occurred")
+    .meta({
+      example: 2,
+    }),
+  lineStr: z
+    .string()
+    .optional()
+    .describe("The string content of the line where the error occurred")
+    .meta({
+      example: ":invalid_command arg",
+    }),
 });
 
 interface ParseErrorLike {
@@ -71,7 +79,7 @@ export const downloadRoute = describeRoute({
           schema: resolver(
             z.string().describe("The generated SVG file").meta({
               format: "binary",
-            })
+            }),
           ),
         },
       },
@@ -98,7 +106,9 @@ export const downloadRoute = describeRoute({
 
 export const convertHandler = async (c: Context) => {
   try {
-    const { spd, options = {} } = c.req.valid("json" as never) as ConvertRequest;
+    const { spd, options = {} } = c.req.valid(
+      "json" as never,
+    ) as ConvertRequest;
 
     if (!spd) {
       return c.json({ error: "SPD content is required" }, 400);
@@ -130,7 +140,9 @@ export const convertHandler = async (c: Context) => {
 
 export const downloadHandler = async (c: Context) => {
   try {
-    const { spd, options = {} } = c.req.valid("json" as never) as ConvertRequest;
+    const { spd, options = {} } = c.req.valid(
+      "json" as never,
+    ) as ConvertRequest;
 
     if (!spd) {
       return c.json({ error: "SPD content is required" }, 400);

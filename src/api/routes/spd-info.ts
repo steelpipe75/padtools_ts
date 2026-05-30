@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { describeRoute, resolver } from "hono-openapi";
 import type { Context } from "hono";
+import { describeRoute, resolver } from "hono-openapi";
+import { z } from "zod";
 import { SPD_EXPLANATION } from "../../spd/docs.js";
 
 const SpdInfoResponseSchema = z.object({

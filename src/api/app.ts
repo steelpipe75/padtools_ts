@@ -1,9 +1,9 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { Hono } from "hono";
-import { openAPIRouteHandler, validator as zValidator } from "hono-openapi";
 import { cors } from "hono/cors";
-import { getRequire } from "../utils/compat.js";
+import { openAPIRouteHandler, validator as zValidator } from "hono-openapi";
 import { ConvertRequestSchema } from "../spd/core.js";
+import { getRequire } from "../utils/compat.js";
 
 const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../package.json");
@@ -59,7 +59,7 @@ app.get(
         description: "API for converting SPD to SVG",
       },
     },
-  })
+  }),
 );
 
 // Swagger UI
@@ -69,12 +69,42 @@ app.get("/docs/", swaggerUI({ url: "/openapi.json" }));
 // Routes
 app.get("/health", healthRoute, healthHandler);
 app.get("/spd-info", spdInfoRoute, spdInfoHandler);
-app.post("/convert", convertRoute, zValidator("json", ConvertRequestSchema), convertHandler);
-app.post("/convert/download", downloadRoute, zValidator("json", ConvertRequestSchema), downloadHandler);
-app.post("/ast/parse", astParseRoute, zValidator("json", AstParseRequestSchema), astParseHandler);
-app.post("/ast/parse/download", astParseDownloadRoute, zValidator("json", AstParseRequestSchema), astParseDownloadHandler);
-app.post("/ast/render", astRenderRoute, zValidator("json", AstRenderRequestSchema), astRenderHandler);
-app.post("/ast/render/download", astRenderDownloadRoute, zValidator("json", AstRenderRequestSchema), astRenderDownloadHandler);
+app.post(
+  "/convert",
+  convertRoute,
+  zValidator("json", ConvertRequestSchema),
+  convertHandler,
+);
+app.post(
+  "/convert/download",
+  downloadRoute,
+  zValidator("json", ConvertRequestSchema),
+  downloadHandler,
+);
+app.post(
+  "/ast/parse",
+  astParseRoute,
+  zValidator("json", AstParseRequestSchema),
+  astParseHandler,
+);
+app.post(
+  "/ast/parse/download",
+  astParseDownloadRoute,
+  zValidator("json", AstParseRequestSchema),
+  astParseDownloadHandler,
+);
+app.post(
+  "/ast/render",
+  astRenderRoute,
+  zValidator("json", AstRenderRequestSchema),
+  astRenderHandler,
+);
+app.post(
+  "/ast/render/download",
+  astRenderDownloadRoute,
+  zValidator("json", AstRenderRequestSchema),
+  astRenderDownloadHandler,
+);
 
 // MCP Route
 app.all("/mcp", mcpHandler);

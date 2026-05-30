@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { describeRoute, resolver } from "hono-openapi";
 import type { Context } from "hono";
+import { describeRoute, resolver } from "hono-openapi";
+import { z } from "zod";
 import { getRequire } from "../../utils/compat.js";
 
 const cjsRequire = getRequire();
@@ -8,18 +8,12 @@ const packageJson = cjsRequire("../../../package.json");
 const { version } = packageJson;
 
 const HealthResponseSchema = z.object({
-  status: z
-    .string()
-    .describe("The status of the API server")
-    .meta({
-      example: "ok",
-    }),
-  version: z
-    .string()
-    .describe("The version of the API server")
-    .meta({
-      example: "0.1.0",
-    }),
+  status: z.string().describe("The status of the API server").meta({
+    example: "ok",
+  }),
+  version: z.string().describe("The version of the API server").meta({
+    example: "0.1.0",
+  }),
 });
 
 export const healthRoute = describeRoute({

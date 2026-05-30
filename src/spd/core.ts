@@ -7,8 +7,8 @@ const xmlFormat =
         xml: string,
       ) => string);
 
-import { z } from "zod";
 import { optimize } from "svgo";
+import { z } from "zod";
 import { parse } from "./parser.js";
 import { render } from "./svg-renderer.js";
 
@@ -18,25 +18,17 @@ export const ConvertRequestOptionsSchema = z.object({
     .describe("SVGのフォントサイズ (px)")
     .optional()
     .meta({ example: 14 }),
-  fontFamily: z
-    .string()
-    .describe("SVGのフォントファミリー")
-    .optional()
-    .meta({
-      example: "monospace",
-    }),
+  fontFamily: z.string().describe("SVGのフォントファミリー").optional().meta({
+    example: "monospace",
+  }),
   strokeWidth: z
     .number()
     .describe("線の太さ (px)")
     .optional()
     .meta({ example: 1 }),
-  strokeColor: z
-    .string()
-    .describe("線の色 (カラーコード等)")
-    .optional()
-    .meta({
-      example: "#000000",
-    }),
+  strokeColor: z.string().describe("線の色 (カラーコード等)").optional().meta({
+    example: "#000000",
+  }),
   backgroundColor: z
     .string()
     .describe("図全体の背景色 (カラーコード等)")
@@ -116,12 +108,9 @@ export const ConvertRequestSchema = z.object({
 export type ConvertRequest = z.infer<typeof ConvertRequestSchema>;
 
 export const ConvertSpdToAstRequestSchema = z.object({
-  spd: z
-    .string()
-    .describe("ASTに変換するSPDテキスト")
-    .meta({
-      example: ":terminal Start\nProcess\n:terminal End",
-    }),
+  spd: z.string().describe("ASTに変換するSPDテキスト").meta({
+    example: ":terminal Start\nProcess\n:terminal End",
+  }),
 });
 
 export type ConvertSpdToAstRequest = z.infer<
@@ -129,9 +118,7 @@ export type ConvertSpdToAstRequest = z.infer<
 >;
 
 export const ConvertAstToSvgRequestSchema = z.object({
-  ast: z
-    .any()
-    .describe("SVGに変換するAST JSONオブジェクト"),
+  ast: z.any().describe("SVGに変換するAST JSONオブジェクト"),
   options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 

@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { describeRoute, resolver } from "hono-openapi";
 import type { Context } from "hono";
+import { describeRoute, resolver } from "hono-openapi";
+import { z } from "zod";
 import { astUtils } from "../../spd/ast.js";
 import {
   ConvertRequestOptionsSchema,
@@ -13,12 +13,9 @@ const ErrorResponseSchema = z.object({
 });
 
 export const AstParseRequestSchema = z.object({
-  spd: z
-    .string()
-    .describe("The SPD text to parse")
-    .meta({
-      example: ":terminal Start\nProcess\n:terminal End",
-    }),
+  spd: z.string().describe("The SPD text to parse").meta({
+    example: ":terminal Start\nProcess\n:terminal End",
+  }),
   options: ConvertRequestOptionsSchema.optional(),
 });
 
@@ -72,7 +69,7 @@ export const astParseDownloadRoute = describeRoute({
           schema: resolver(
             z.any().describe("The parsed AST as JSON file").meta({
               format: "binary",
-            })
+            }),
           ),
         },
       },
@@ -134,7 +131,7 @@ export const astRenderDownloadRoute = describeRoute({
           schema: resolver(
             z.string().describe("The generated SVG file from AST").meta({
               format: "binary",
-            })
+            }),
           ),
         },
       },
@@ -161,7 +158,9 @@ export const astRenderDownloadRoute = describeRoute({
 
 export const astParseHandler = async (c: Context) => {
   try {
-    const { spd, options = {} } = c.req.valid("json" as never) as z.infer<typeof AstParseRequestSchema>;
+    const { spd, options = {} } = c.req.valid("json" as never) as z.infer<
+      typeof AstParseRequestSchema
+    >;
     if (!spd) {
       return c.json({ error: "SPD content is required" }, 400);
     }
@@ -187,7 +186,9 @@ export const astParseHandler = async (c: Context) => {
 
 export const astParseDownloadHandler = async (c: Context) => {
   try {
-    const { spd, options = {} } = c.req.valid("json" as never) as z.infer<typeof AstParseRequestSchema>;
+    const { spd, options = {} } = c.req.valid("json" as never) as z.infer<
+      typeof AstParseRequestSchema
+    >;
     if (!spd) {
       return c.json({ error: "SPD content is required" }, 400);
     }
@@ -223,7 +224,9 @@ export const astParseDownloadHandler = async (c: Context) => {
 
 export const astRenderHandler = async (c: Context) => {
   try {
-    const { ast, options = {} } = c.req.valid("json" as never) as z.infer<typeof AstRenderRequestSchema>;
+    const { ast, options = {} } = c.req.valid("json" as never) as z.infer<
+      typeof AstRenderRequestSchema
+    >;
     if (!ast) {
       return c.json({ error: "AST is required" }, 400);
     }
@@ -251,7 +254,9 @@ export const astRenderHandler = async (c: Context) => {
 
 export const astRenderDownloadHandler = async (c: Context) => {
   try {
-    const { ast, options = {} } = c.req.valid("json" as never) as z.infer<typeof AstRenderRequestSchema>;
+    const { ast, options = {} } = c.req.valid("json" as never) as z.infer<
+      typeof AstRenderRequestSchema
+    >;
     if (!ast) {
       return c.json({ error: "AST is required" }, 400);
     }
