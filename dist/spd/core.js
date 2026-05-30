@@ -1,5 +1,7 @@
 import _xmlFormat from "xml-formatter";
-const xmlFormat = _xmlFormat;
+const xmlFormat = typeof _xmlFormat === "function"
+    ? _xmlFormat
+    : _xmlFormat.default;
 import { z } from "@hono/zod-openapi";
 import { optimize } from "svgo";
 import { parse } from "./parser.js";

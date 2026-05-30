@@ -58,9 +58,9 @@ export declare const ConvertAstToSvgRequestSchema: z.ZodObject<{
     }, z.core.$strip>>;
 }, z.core.$strip>;
 export type ConvertAstToSvgRequest = z.infer<typeof ConvertAstToSvgRequestSchema>;
-export declare const generateSvg: (spd: string, options?: ConvertRequestOptions) => any;
-export declare const generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => any;
+export declare const generateSvg: (spd: string, options?: ConvertRequestOptions) => string;
+export declare const generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => string;
 export declare const core: {
-    generateSvg: (spd: string, options?: ConvertRequestOptions) => any;
-    generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => any;
+    generateSvg: (spd: string, options?: ConvertRequestOptions) => string;
+    generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => string;
 };

@@ -2,8 +2,10 @@ import _xmlFormat from "xml-formatter";
 
 const xmlFormat =
   typeof _xmlFormat === "function"
-    ? _xmlFormat
-    : ((_xmlFormat as Record<string, unknown>).default as typeof _xmlFormat);
+    ? (_xmlFormat as (xml: string) => string)
+    : ((_xmlFormat as Record<string, unknown>).default as (
+        xml: string,
+      ) => string);
 
 import { z } from "@hono/zod-openapi";
 import { optimize } from "svgo";
