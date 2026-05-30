@@ -15,51 +15,81 @@ import { render } from "./svg-renderer.js";
 export const ConvertRequestOptionsSchema = z.object({
   fontSize: z
     .number()
+    .describe("SVGのフォントサイズ (px)")
     .optional()
     .openapi({ description: "SVGのフォントサイズ (px)", example: 14 }),
-  fontFamily: z.string().optional().openapi({
-    description: "SVGのフォントファミリー",
-    example: "monospace",
-  }),
+  fontFamily: z
+    .string()
+    .describe("SVGのフォントファミリー")
+    .optional()
+    .openapi({
+      description: "SVGのフォントファミリー",
+      example: "monospace",
+    }),
   strokeWidth: z
     .number()
+    .describe("線の太さ (px)")
     .optional()
     .openapi({ description: "線の太さ (px)", example: 1 }),
-  strokeColor: z.string().optional().openapi({
-    description: "線の色 (カラーコード等)",
-    example: "#000000",
-  }),
-  backgroundColor: z.string().optional().openapi({
-    description: "図全体の背景色 (カラーコード等)",
-    example: "#ffffff",
-  }),
-  baseBackgroundColor: z.string().optional().openapi({
-    description: "ベース背景色 (none またはカラーコード等)",
-    example: "none",
-  }),
+  strokeColor: z
+    .string()
+    .describe("線の色 (カラーコード等)")
+    .optional()
+    .openapi({
+      description: "線の色 (カラーコード等)",
+      example: "#000000",
+    }),
+  backgroundColor: z
+    .string()
+    .describe("図全体の背景色 (カラーコード等)")
+    .optional()
+    .openapi({
+      description: "図全体の背景色 (カラーコード等)",
+      example: "#ffffff",
+    }),
+  baseBackgroundColor: z
+    .string()
+    .describe("ベース背景色 (none またはカラーコード等)")
+    .optional()
+    .openapi({
+      description: "ベース背景色 (none またはカラーコード等)",
+      example: "none",
+    }),
   textColor: z
     .string()
+    .describe("テキストの色 (カラーコード等)")
     .optional()
     .openapi({ description: "テキストの色 (カラーコード等)", example: "#000000" }),
   lineHeight: z
     .number()
+    .describe("行高さの倍率")
     .optional()
     .openapi({ description: "行高さの倍率", example: 1.2 }),
-  listRenderType: z.enum(["Original", "TerminalOffset"]).optional().openapi({
-    description: "リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)",
-    example: "TerminalOffset",
-  }),
-  prettyprint: z.boolean().optional().openapi({
-    description: "出力されるSVGを整形（インデント等）するかどうか",
-    example: true,
-  }),
+  listRenderType: z
+    .enum(["Original", "TerminalOffset"])
+    .describe("リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)")
+    .optional()
+    .openapi({
+      description: "リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)",
+      example: "TerminalOffset",
+    }),
+  prettyprint: z
+    .boolean()
+    .describe("出力されるSVGを整形（インデント等）するかどうか")
+    .optional()
+    .openapi({
+      description: "出力されるSVGを整形（インデント等）するかどうか",
+      example: true,
+    }),
 });
 
 export type ConvertRequestOptions = z.infer<typeof ConvertRequestOptionsSchema>;
 
 export const ConvertRequestSchema = z.object({
-  spd: z.string().openapi({
-    example: `:terminal 開始
+  spd: z
+    .string()
+    .openapi({
+      example: `:terminal 開始
 命令
 :comment コメント文
 :call 関数呼び出し
@@ -80,18 +110,22 @@ export const ConvertRequestSchema = z.object({
 :dowhile 繰り返し条件（後判定）
 	中身
 :terminal 終了`,
-    description: "変換対象のSPDテキスト",
-  }),
-  options: ConvertRequestOptionsSchema.optional(),
+      description: "変換対象のSPDテキスト",
+    })
+    .describe("変換対象のSPDテキスト"),
+  options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 
 export type ConvertRequest = z.infer<typeof ConvertRequestSchema>;
 
 export const ConvertSpdToAstRequestSchema = z.object({
-  spd: z.string().openapi({
-    example: ":terminal Start\nProcess\n:terminal End",
-    description: "ASTに変換するSPDテキスト",
-  }),
+  spd: z
+    .string()
+    .openapi({
+      example: ":terminal Start\nProcess\n:terminal End",
+      description: "ASTに変換するSPDテキスト",
+    })
+    .describe("ASTに変換するSPDテキスト"),
 });
 
 export type ConvertSpdToAstRequest = z.infer<
@@ -99,10 +133,13 @@ export type ConvertSpdToAstRequest = z.infer<
 >;
 
 export const ConvertAstToSvgRequestSchema = z.object({
-  ast: z.any().openapi({
-    description: "SVGに変換するAST JSONオブジェクト",
-  }),
-  options: ConvertRequestOptionsSchema.optional(),
+  ast: z
+    .any()
+    .openapi({
+      description: "SVGに変換するAST JSONオブジェクト",
+    })
+    .describe("SVGに変換するAST JSONオブジェクト"),
+  options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 
 export type ConvertAstToSvgRequest = z.infer<
