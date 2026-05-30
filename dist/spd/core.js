@@ -1,6 +1,5 @@
-import { getRequire } from "../utils/compat.js";
-const cjsRequire = getRequire();
-const xmlFormat = cjsRequire("xml-formatter");
+import _xmlFormat from "xml-formatter";
+const xmlFormat = _xmlFormat;
 import { z } from "@hono/zod-openapi";
 import { optimize } from "svgo";
 import { parse } from "./parser.js";
