@@ -1,52 +1,33 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { describeRoute, resolver } from "hono-openapi";
+import { z } from "zod";
 import { astUtils } from "../../spd/ast.js";
 import { ConvertRequestOptionsSchema, generateSvgFromAst, } from "../../spd/core.js";
 import { parser } from "../../spd/parser.js";
 const ErrorResponseSchema = z.object({
-    error: z.string().openapi({
-        description: "Error message",
-    }),
+    error: z.string().describe("Error message"),
 });
-const AstParseRequestSchema = z.object({
-    spd: z.string().openapi({
-        description: "The SPD text to parse",
+export const AstParseRequestSchema = z.object({
+    spd: z.string().describe("The SPD text to parse").meta({
         example: ":terminal Start\nProcess\n:terminal End",
     }),
     options: ConvertRequestOptionsSchema.optional(),
 });
 const AstParseResponseSchema = z.object({
-    ast: z.any().openapi({
-        description: "The parsed AST as JSON object",
-    }),
+    ast: z.any().describe("The parsed AST as JSON object"),
 });
-const AstRenderRequestSchema = z.object({
-    ast: z.any().openapi({
-        description: "The AST JSON object to render",
-    }),
+export const AstRenderRequestSchema = z.object({
+    ast: z.any().describe("The AST JSON object to render"),
     options: ConvertRequestOptionsSchema.optional(),
 });
 const AstRenderResponseSchema = z.object({
-    svg: z.string().openapi({
-        description: "The generated SVG content",
-    }),
+    svg: z.string().describe("The generated SVG content"),
 });
-export const astParseRoute = createRoute({
-    method: "post",
-    path: "/ast/parse",
-    request: {
-        body: {
-            content: {
-                "application/json": {
-                    schema: AstParseRequestSchema,
-                },
-            },
-        },
-    },
+export const astParseRoute = describeRoute({
     responses: {
         200: {
             content: {
                 "application/json": {
-                    schema: AstParseResponseSchema,
+                    schema: resolver(AstParseResponseSchema),
                 },
             },
             description: "Successful parsing",
@@ -54,7 +35,7 @@ export const astParseRoute = createRoute({
         400: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Bad request - invalid SPD",
@@ -62,33 +43,21 @@ export const astParseRoute = createRoute({
         500: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Internal server error",
         },
     },
 });
-export const astParseDownloadRoute = createRoute({
-    method: "post",
-    path: "/ast/parse/download",
-    request: {
-        body: {
-            content: {
-                "application/json": {
-                    schema: AstParseRequestSchema,
-                },
-            },
-        },
-    },
+export const astParseDownloadRoute = describeRoute({
     responses: {
         200: {
             content: {
                 "application/json": {
-                    schema: z.any().openapi({
+                    schema: resolver(z.any().describe("The parsed AST as JSON file").meta({
                         format: "binary",
-                        description: "The parsed AST as JSON file",
-                    }),
+                    })),
                 },
             },
             description: "Successful parsing and download",
@@ -96,7 +65,7 @@ export const astParseDownloadRoute = createRoute({
         400: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Bad request - invalid SPD",
@@ -104,30 +73,19 @@ export const astParseDownloadRoute = createRoute({
         500: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Internal server error",
         },
     },
 });
-export const astRenderRoute = createRoute({
-    method: "post",
-    path: "/ast/render",
-    request: {
-        body: {
-            content: {
-                "application/json": {
-                    schema: AstRenderRequestSchema,
-                },
-            },
-        },
-    },
+export const astRenderRoute = describeRoute({
     responses: {
         200: {
             content: {
                 "application/json": {
-                    schema: AstRenderResponseSchema,
+                    schema: resolver(AstRenderResponseSchema),
                 },
             },
             description: "Successful rendering",
@@ -135,7 +93,7 @@ export const astRenderRoute = createRoute({
         400: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Bad request - invalid AST or options",
@@ -143,33 +101,21 @@ export const astRenderRoute = createRoute({
         500: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Internal server error",
         },
     },
 });
-export const astRenderDownloadRoute = createRoute({
-    method: "post",
-    path: "/ast/render/download",
-    request: {
-        body: {
-            content: {
-                "application/json": {
-                    schema: AstRenderRequestSchema,
-                },
-            },
-        },
-    },
+export const astRenderDownloadRoute = describeRoute({
     responses: {
         200: {
             content: {
                 "image/svg+xml": {
-                    schema: z.string().openapi({
+                    schema: resolver(z.string().describe("The generated SVG file from AST").meta({
                         format: "binary",
-                        description: "The generated SVG file from AST",
-                    }),
+                    })),
                 },
             },
             description: "Successful rendering and download",
@@ -177,7 +123,7 @@ export const astRenderDownloadRoute = createRoute({
         400: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Bad request - invalid AST or options",
@@ -185,7 +131,7 @@ export const astRenderDownloadRoute = createRoute({
         500: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Internal server error",

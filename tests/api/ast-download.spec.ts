@@ -75,7 +75,7 @@ describe("API AST Download Endpoints", () => {
     });
 
     expect(res.status).toBe(400);
-    // When using zod-openapi, missing required fields result in a ZodError response with status 400
+    // When using hono-openapi and validator, missing required fields result in a validation error response with status 400
   });
 
   it("should return 400 if SPD is an empty string in /ast/parse/download", async () => {

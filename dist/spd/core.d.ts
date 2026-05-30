@@ -1,4 +1,4 @@
-import { z } from "@hono/zod-openapi";
+import { z } from "zod";
 import { parse } from "./parser.js";
 export declare const ConvertRequestOptionsSchema: z.ZodObject<{
     fontSize: z.ZodOptional<z.ZodNumber>;

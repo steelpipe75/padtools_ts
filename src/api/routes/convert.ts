@@ -1,24 +1,28 @@
-import { createRoute, type RouteHandler, z } from "@hono/zod-openapi";
-import { ConvertRequestSchema, core } from "../../spd/core.js";
+import type { Context } from "hono";
+import { describeRoute, resolver } from "hono-openapi";
+import { z } from "zod";
+import { type ConvertRequest, core } from "../../spd/core.js";
 
 const ConvertResponseSchema = z.object({
-  svg: z.string().openapi({
-    description: "The generated SVG content",
-  }),
+  svg: z.string().describe("The generated SVG content"),
 });
 
 const ErrorResponseSchema = z.object({
-  error: z.string().openapi({
-    description: "Error message",
-  }),
-  lineNo: z.number().optional().openapi({
-    description: "The line number where the error occurred",
-    example: 2,
-  }),
-  lineStr: z.string().optional().openapi({
-    description: "The string content of the line where the error occurred",
-    example: ":invalid_command arg",
-  }),
+  error: z.string().describe("Error message"),
+  lineNo: z
+    .number()
+    .optional()
+    .describe("The line number where the error occurred")
+    .meta({
+      example: 2,
+    }),
+  lineStr: z
+    .string()
+    .optional()
+    .describe("The string content of the line where the error occurred")
+    .meta({
+      example: ":invalid_command arg",
+    }),
 });
 
 interface ParseErrorLike {
@@ -38,23 +42,12 @@ function isParseErrorLike(error: unknown): error is ParseErrorLike {
   );
 }
 
-export const convertRoute = createRoute({
-  method: "post",
-  path: "/convert",
-  request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: ConvertRequestSchema,
-        },
-      },
-    },
-  },
+export const convertRoute = describeRoute({
   responses: {
     200: {
       content: {
         "application/json": {
-          schema: ConvertResponseSchema,
+          schema: resolver(ConvertResponseSchema),
         },
       },
       description: "Successful conversion",
@@ -62,7 +55,7 @@ export const convertRoute = createRoute({
     400: {
       content: {
         "application/json": {
-          schema: ErrorResponseSchema,
+          schema: resolver(ErrorResponseSchema),
         },
       },
       description: "Bad request - invalid SPD or options",
@@ -70,7 +63,7 @@ export const convertRoute = createRoute({
     500: {
       content: {
         "application/json": {
-          schema: ErrorResponseSchema,
+          schema: resolver(ErrorResponseSchema),
         },
       },
       description: "Internal server error",
@@ -78,26 +71,16 @@ export const convertRoute = createRoute({
   },
 });
 
-export const downloadRoute = createRoute({
-  method: "post",
-  path: "/convert/download",
-  request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: ConvertRequestSchema,
-        },
-      },
-    },
-  },
+export const downloadRoute = describeRoute({
   responses: {
     200: {
       content: {
         "image/svg+xml": {
-          schema: z.string().openapi({
-            format: "binary",
-            description: "The generated SVG file",
-          }),
+          schema: resolver(
+            z.string().describe("The generated SVG file").meta({
+              format: "binary",
+            }),
+          ),
         },
       },
       description: "Successful conversion and download",
@@ -105,7 +88,7 @@ export const downloadRoute = createRoute({
     400: {
       content: {
         "application/json": {
-          schema: ErrorResponseSchema,
+          schema: resolver(ErrorResponseSchema),
         },
       },
       description: "Bad request - invalid SPD or options",
@@ -113,7 +96,7 @@ export const downloadRoute = createRoute({
     500: {
       content: {
         "application/json": {
-          schema: ErrorResponseSchema,
+          schema: resolver(ErrorResponseSchema),
         },
       },
       description: "Internal server error",
@@ -121,9 +104,11 @@ export const downloadRoute = createRoute({
   },
 });
 
-export const convertHandler: RouteHandler<typeof convertRoute> = async (c) => {
+export const convertHandler = async (c: Context) => {
   try {
-    const { spd, options = {} } = c.req.valid("json");
+    const { spd, options = {} } = c.req.valid(
+      "json" as never,
+    ) as ConvertRequest;
 
     if (!spd) {
       return c.json({ error: "SPD content is required" }, 400);
@@ -153,11 +138,11 @@ export const convertHandler: RouteHandler<typeof convertRoute> = async (c) => {
   }
 };
 
-export const downloadHandler: RouteHandler<typeof downloadRoute> = async (
-  c,
-) => {
+export const downloadHandler = async (c: Context) => {
   try {
-    const { spd, options = {} } = c.req.valid("json");
+    const { spd, options = {} } = c.req.valid(
+      "json" as never,
+    ) as ConvertRequest;
 
     if (!spd) {
       return c.json({ error: "SPD content is required" }, 400);

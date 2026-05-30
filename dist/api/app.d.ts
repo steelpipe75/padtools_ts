@@ -1,3 +1,3 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-declare const app: OpenAPIHono<import("hono").Env, {}, "/">;
+import { Hono } from "hono";
+declare const app: Hono<import("hono/types").BlankEnv, import("hono/types").BlankSchema, "/">;
 export default app;
