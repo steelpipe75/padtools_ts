@@ -1,4 +1,4 @@
-import { type ConvertAstToSvgRequest, type ConvertRequest, type ConvertSpdToAstRequest } from "../spd/core";
+import { type ConvertAstToSvgRequest, type ConvertRequest, type ConvertSpdToAstRequest } from "../spd/core.js";
 /**
  * Handler for the SPD notation explanation resource.
  */

@@ -1,52 +1,16 @@
 #!/usr/bin/env node
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const fs = __importStar(require("node:fs"));
-const commander_1 = require("commander");
-const svgo_1 = require("svgo");
-const xml_formatter_1 = __importDefault(require("xml-formatter"));
-const package_json_1 = __importDefault(require("../../package.json"));
-const ast_1 = require("../spd/ast");
-const parser_1 = require("../spd/parser");
-const svg_renderer_1 = require("../spd/svg-renderer");
-commander_1.program
-    .version(package_json_1.default.version)
+import { getRequire } from "../utils/compat.js";
+const cjsRequire = getRequire();
+const xmlFormat = cjsRequire("xml-formatter");
+import * as fs from "node:fs";
+import { program } from "commander";
+import { optimize } from "svgo";
+const packageJson = cjsRequire("../../package.json");
+import { deserializeAST, serializeAST } from "../spd/ast.js";
+import { ParseError, parse } from "../spd/parser.js";
+import { render } from "../spd/svg-renderer.js";
+program
+    .version(packageJson.version)
     .description("Convert SPD(Simple PAD Description) text file to SVG image")
     .option("-i, --input <inputFilePath>", "Path to the input file (SPD or AST JSON)")
     .option("-o, --output <outputFilePath>", "Path to the output SVG file")
@@ -70,7 +34,7 @@ commander_1.program
         }
         else if (process.stdin.isTTY && !options.input) {
             // No input provided and no stdin redirect
-            commander_1.program.help();
+            program.help();
             return;
         }
         else {
@@ -78,17 +42,17 @@ commander_1.program
         }
         let ast;
         if (options.importAst) {
-            ast = (0, ast_1.deserializeAST)(inputContent);
+            ast = deserializeAST(inputContent);
         }
         else {
-            ast = (0, parser_1.parse)(inputContent);
+            ast = parse(inputContent);
         }
         if (!ast) {
             console.error("Error: Could not obtain AST.");
             process.exit(1);
         }
         if (options.exportAst) {
-            const astJson = (0, ast_1.serializeAST)(ast, options.prettyprint ? 2 : undefined);
+            const astJson = serializeAST(ast, options.prettyprint ? 2 : undefined);
             fs.writeFileSync(options.exportAst, astJson);
         }
         const renderOptions = {};
@@ -110,8 +74,8 @@ commander_1.program
             renderOptions.lineHeight = options.lineHeight;
         if (options.listRenderType !== undefined)
             renderOptions.listRenderType = options.listRenderType;
-        const svgOutput = (0, svg_renderer_1.render)(ast, renderOptions);
-        const optimizedSvg = (0, svgo_1.optimize)(svgOutput, {
+        const svgOutput = render(ast, renderOptions);
+        const optimizedSvg = optimize(svgOutput, {
             // optional but recommended
             path: options.output || "output.svg", // Provide a dummy path for svgo if no output file
             // all config fields are also available here
@@ -119,7 +83,7 @@ commander_1.program
         });
         let outputData = optimizedSvg.data;
         if (options.prettyprint) {
-            outputData = (0, xml_formatter_1.default)(svgOutput);
+            outputData = xmlFormat(svgOutput);
         }
         if (options.output) {
             fs.writeFileSync(options.output, outputData);
@@ -129,7 +93,7 @@ commander_1.program
         }
     }
     catch (error) {
-        if (error instanceof parser_1.ParseError) {
+        if (error instanceof ParseError) {
             if (error.lineNo !== undefined && error.lineStr !== undefined) {
                 console.error(`Error at line ${error.lineNo}: ${error.message}`);
                 console.error(`> ${error.lineStr}`);
@@ -144,4 +108,4 @@ commander_1.program
         process.exit(1);
     }
 });
-commander_1.program.parse(process.argv);
+program.parse(process.argv);

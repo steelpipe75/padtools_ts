@@ -1,11 +1,11 @@
-import type { Node, NodeListNode } from "../../../src/spd/ast";
+import type { Node, NodeListNode } from "../../../src/spd/ast.js";
 import {
   CaseDuplicateException,
   IllegalIndentException,
   parse,
   RequireArgumentException,
   UnexpectedCaseException,
-} from "../../../src/spd/parser";
+} from "../../../src/spd/parser.js";
 
 describe("SPDParser - Switch", () => {
   it("ケースを持つswitch文をパースすること", () => {

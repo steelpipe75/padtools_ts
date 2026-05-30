@@ -79,3 +79,7 @@ export declare function serializeAST(ast: Node | null, space?: string | number):
  * シリアライズ時に変換されたMapを復元します。
  */
 export declare function deserializeAST(json: string): Node | null;
+export declare const astUtils: {
+    serializeAST: typeof serializeAST;
+    deserializeAST: typeof deserializeAST;
+};

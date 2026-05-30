@@ -1,5 +1,5 @@
 import { createRoute, type RouteHandler, z } from "@hono/zod-openapi";
-import { ConvertRequestSchema, generateSvg } from "../../spd/core";
+import { ConvertRequestSchema, core } from "../../spd/core.js";
 
 const ConvertResponseSchema = z.object({
   svg: z.string().openapi({
@@ -129,7 +129,7 @@ export const convertHandler: RouteHandler<typeof convertRoute> = async (c) => {
       return c.json({ error: "SPD content is required" }, 400);
     }
 
-    const outputData = generateSvg(spd, options);
+    const outputData = core.generateSvg(spd, options);
     return c.json({ svg: outputData }, 200);
   } catch (error) {
     if (isParseErrorLike(error)) {
@@ -163,7 +163,7 @@ export const downloadHandler: RouteHandler<typeof downloadRoute> = async (
       return c.json({ error: "SPD content is required" }, 400);
     }
 
-    const outputData = generateSvg(spd, options);
+    const outputData = core.generateSvg(spd, options);
 
     c.header("Content-Type", "image/svg+xml");
     c.header("Content-Disposition", 'attachment; filename="diagram.svg"');

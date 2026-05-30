@@ -1,5 +1,5 @@
-import app from "../../src/api/app";
-import { SPD_EXPLANATION } from "../../src/spd/docs";
+import app from "../../src/api/app.js";
+import { SPD_EXPLANATION } from "../../src/spd/docs.js";
 
 describe("API /spd-info", () => {
   it("should return SPD explanation (SPD記法の説明を返すこと)", async () => {

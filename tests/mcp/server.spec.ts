@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import {
   handleConvertAstToSvgTool,
   handleConvertSpdToAstTool,
@@ -6,8 +7,9 @@ import {
   handleGenerateSpdPrompt,
   handleGetSpdExplanationResource,
   handleGetSpdExplanationTool,
-} from "../../src/mcp/handlers";
-import { SPD_EXPLANATION } from "../../src/spd/docs";
+} from "../../src/mcp/handlers.js";
+import * as core from "../../src/spd/core.js";
+import { SPD_EXPLANATION } from "../../src/spd/docs.js";
 
 describe("MCP Server Handlers", () => {
   describe("Resources", () => {
@@ -61,11 +63,11 @@ describe("MCP Server Handlers", () => {
     });
 
     it("handleConvertSpdToSvgTool should throw error on generic error", async () => {
-      const core = require("../../src/spd/core");
-      const originalGenerateSvg = core.generateSvg;
-      core.generateSvg = jest.fn().mockImplementation(() => {
-        throw new Error("Generic error");
-      });
+      const generateSvgSpy = jest
+        .spyOn(core.core, "generateSvg")
+        .mockImplementation(() => {
+          throw new Error("Generic error");
+        });
 
       try {
         const spd = "Process: Test";
@@ -73,7 +75,7 @@ describe("MCP Server Handlers", () => {
           "Error converting SPD to SVG: Generic error",
         );
       } finally {
-        core.generateSvg = originalGenerateSvg;
+        generateSvgSpy.mockRestore();
       }
     });
 

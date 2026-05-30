@@ -1,5 +1,9 @@
 import { createRoute, type RouteHandler, z } from "@hono/zod-openapi";
-import { version } from "../../../package.json";
+import { getRequire } from "../../utils/compat.js";
+
+const cjsRequire = getRequire();
+const packageJson = cjsRequire("../../../package.json");
+const { version } = packageJson;
 
 const HealthResponseSchema = z.object({
   status: z.string().openapi({

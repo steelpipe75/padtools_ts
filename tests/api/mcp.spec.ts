@@ -1,4 +1,4 @@
-import app from "../../src/api/app";
+import app from "../../src/api/app.js";
 
 /**
  * /mcp エンドポイントのテスト

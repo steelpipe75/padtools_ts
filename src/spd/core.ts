@@ -1,8 +1,16 @@
+import _xmlFormat from "xml-formatter";
+
+const xmlFormat =
+  typeof _xmlFormat === "function"
+    ? (_xmlFormat as (xml: string) => string)
+    : ((_xmlFormat as Record<string, unknown>).default as (
+        xml: string,
+      ) => string);
+
 import { z } from "@hono/zod-openapi";
 import { optimize } from "svgo";
-import xmlFormat from "xml-formatter";
-import { parse } from "./parser";
-import { render } from "./svg-renderer";
+import { parse } from "./parser.js";
+import { render } from "./svg-renderer.js";
 
 export const ConvertRequestOptionsSchema = z.object({
   fontSize: z
@@ -148,4 +156,9 @@ export const generateSvgFromAst = (
     multipass: true,
   });
   return optimizedSvg.data;
+};
+
+export const core = {
+  generateSvg,
+  generateSvgFromAst,
 };

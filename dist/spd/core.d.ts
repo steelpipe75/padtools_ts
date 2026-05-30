@@ -1,5 +1,5 @@
 import { z } from "@hono/zod-openapi";
-import { parse } from "./parser";
+import { parse } from "./parser.js";
 export declare const ConvertRequestOptionsSchema: z.ZodObject<{
     fontSize: z.ZodOptional<z.ZodNumber>;
     fontFamily: z.ZodOptional<z.ZodString>;
@@ -60,3 +60,7 @@ export declare const ConvertAstToSvgRequestSchema: z.ZodObject<{
 export type ConvertAstToSvgRequest = z.infer<typeof ConvertAstToSvgRequestSchema>;
 export declare const generateSvg: (spd: string, options?: ConvertRequestOptions) => string;
 export declare const generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => string;
+export declare const core: {
+    generateSvg: (spd: string, options?: ConvertRequestOptions) => string;
+    generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => string;
+};

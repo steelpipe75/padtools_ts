@@ -1,5 +1,5 @@
 // tests/spd/parser/indent.spec.ts
-import { IllegalIndentException, parse } from "../../../src/spd/parser";
+import { IllegalIndentException, parse } from "../../../src/spd/parser.js";
 
 describe("SPDParser Indentation Scenarios", () => {
   it("should throw IllegalIndentException if there is a massive jump in indentation", () => {

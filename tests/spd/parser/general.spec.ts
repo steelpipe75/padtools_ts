@@ -1,5 +1,6 @@
-import type { Node, NodeListNode } from "../../../src/spd/ast";
-import { parse, UnknownCommandException } from "../../../src/spd/parser";
+import { jest } from "@jest/globals";
+import type { Node, NodeListNode } from "../../../src/spd/ast.js";
+import { parse, UnknownCommandException } from "../../../src/spd/parser.js";
 
 describe("SPDParser - General", () => {
   it("コメント行を無視すること", () => {

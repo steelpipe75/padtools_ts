@@ -1,5 +1,18 @@
-import { version } from "../../package.json";
-import app from "../../src/api/app";
+import { createRequire } from "node:module";
+import { jest } from "@jest/globals";
+
+let cjsRequire: NodeRequire;
+try {
+  const metaUrl = new Function("return import.meta.url")();
+  cjsRequire = createRequire(metaUrl);
+} catch {
+  cjsRequire = require;
+}
+const packageJson = cjsRequire("../../package.json");
+const { version } = packageJson;
+
+import app from "../../src/api/app.js";
+import * as core from "../../src/spd/core.js";
 
 /**
  * /api/convert エンドポイントのテスト
@@ -238,11 +251,11 @@ describe("API /api/convert", () => {
   // 内部エラー (500) のテスト
   it("should return 500 if generateSvg throws a generic error (generateSvgが汎用エラーを投げた場合に500を返すこと)", async () => {
     // generateSvg を一時的にモックしてエラーを投げさせる
-    const core = require("../../src/spd/core");
-    const originalGenerateSvg = core.generateSvg;
-    core.generateSvg = jest.fn().mockImplementation(() => {
-      throw new Error("Generic error");
-    });
+    const generateSvgSpy = jest
+      .spyOn(core.core, "generateSvg")
+      .mockImplementation(() => {
+        throw new Error("Generic error");
+      });
 
     try {
       const res = await app.request("/convert", {
@@ -257,7 +270,7 @@ describe("API /api/convert", () => {
       const body = await res.json();
       expect(body).toHaveProperty("error", "Failed to convert SPD to SVG");
     } finally {
-      core.generateSvg = originalGenerateSvg;
+      generateSvgSpy.mockRestore();
     }
   });
 
@@ -280,11 +293,11 @@ describe("API /api/convert", () => {
 
   // downloadHandler での 500 エラーのテスト
   it("should return 500 if generateSvg throws a generic error in download (ダウンロード時にgenerateSvgが汎用エラーを投げた場合に500を返すこと)", async () => {
-    const core = require("../../src/spd/core");
-    const originalGenerateSvg = core.generateSvg;
-    core.generateSvg = jest.fn().mockImplementation(() => {
-      throw new Error("Generic error");
-    });
+    const generateSvgSpy = jest
+      .spyOn(core.core, "generateSvg")
+      .mockImplementation(() => {
+        throw new Error("Generic error");
+      });
 
     try {
       const res = await app.request("/convert/download", {
@@ -302,7 +315,7 @@ describe("API /api/convert", () => {
         "Failed to generate SVG for download",
       );
     } finally {
-      core.generateSvg = originalGenerateSvg;
+      generateSvgSpy.mockRestore();
     }
   });
 
