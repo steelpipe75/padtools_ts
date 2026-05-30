@@ -45,7 +45,9 @@ export function getRequire(callerFilename?: string): NodeRequire {
     if (path.endsWith("package.json")) {
       return { version: "0.4.0" };
     }
-    const globalRequire = (globalThis as any).require;
+    const globalRequire = (
+      globalThis as typeof globalThis & { require?: unknown }
+    ).require;
     if (typeof globalRequire === "function") {
       return globalRequire(path);
     }
