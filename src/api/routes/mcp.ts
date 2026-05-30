@@ -2,9 +2,11 @@ import { StreamableHTTPTransport } from "@hono/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Context } from "hono";
 import { getRequire } from "../../utils/compat.js";
+
 const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../../package.json");
 const { version } = packageJson;
+
 import {
   handleConvertAstToSvgTool,
   handleConvertSpdToAstTool,

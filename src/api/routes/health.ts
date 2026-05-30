@@ -1,5 +1,6 @@
 import { createRoute, type RouteHandler, z } from "@hono/zod-openapi";
 import { getRequire } from "../../utils/compat.js";
+
 const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../../package.json");
 const { version } = packageJson;

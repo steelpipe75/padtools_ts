@@ -10,7 +10,7 @@ if (typeof __filename !== "undefined") {
   filename = __filename;
   dirname = __dirname;
 } else {
-  // @ts-ignore
+  // @ts-expect-error
   const metaUrl = new Function("return import.meta.url")();
   filename = fileURLToPath(metaUrl);
   dirname = path.dirname(filename);

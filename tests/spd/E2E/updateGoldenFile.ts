@@ -6,7 +6,7 @@ import { globSync } from "glob";
 // Helper function to normalize path separators for glob, which prefers forward slashes.
 const normalizePathForGlob = (p: string) => p.replace(/\\/g, "/");
 
-// @ts-ignore
+// @ts-expect-error
 const metaUrl = new Function("return import.meta.url")();
 const __filename = fileURLToPath(metaUrl);
 const __dirname = path.dirname(__filename);

@@ -1,6 +1,8 @@
 import { getRequire } from "../utils/compat.js";
+
 const cjsRequire = getRequire();
 const xmlFormat = cjsRequire("xml-formatter");
+
 import { z } from "@hono/zod-openapi";
 import { optimize } from "svgo";
 import { parse } from "./parser.js";
@@ -150,7 +152,7 @@ export const generateSvgFromAst = (
     multipass: true,
   });
   return optimizedSvg.data;
-}
+};
 
 export const core = {
   generateSvg,

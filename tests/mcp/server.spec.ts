@@ -8,8 +8,8 @@ import {
   handleGetSpdExplanationResource,
   handleGetSpdExplanationTool,
 } from "../../src/mcp/handlers.js";
-import { SPD_EXPLANATION } from "../../src/spd/docs.js";
 import * as core from "../../src/spd/core.js";
+import { SPD_EXPLANATION } from "../../src/spd/docs.js";
 
 describe("MCP Server Handlers", () => {
   describe("Resources", () => {
@@ -63,9 +63,11 @@ describe("MCP Server Handlers", () => {
     });
 
     it("handleConvertSpdToSvgTool should throw error on generic error", async () => {
-      const generateSvgSpy = jest.spyOn(core.core, "generateSvg").mockImplementation(() => {
-        throw new Error("Generic error");
-      });
+      const generateSvgSpy = jest
+        .spyOn(core.core, "generateSvg")
+        .mockImplementation(() => {
+          throw new Error("Generic error");
+        });
 
       try {
         const spd = "Process: Test";

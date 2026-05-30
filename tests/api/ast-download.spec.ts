@@ -188,8 +188,9 @@ describe("API AST Download Endpoints", () => {
 
   it("should return 400 if deserializeAST fails in /ast/render/download", async () => {
     const originalDeserialize = ast_utils.astUtils.deserializeAST;
-    (ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }).deserializeAST =
-      jest.fn().mockReturnValue(null);
+    (
+      ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }
+    ).deserializeAST = jest.fn().mockReturnValue(null);
 
     try {
       const res = await app.request("/ast/render/download", {
@@ -205,17 +206,20 @@ describe("API AST Download Endpoints", () => {
       expect(body.error).toBe("Invalid AST format");
     } finally {
       (
-        ast_utils.astUtils as unknown as { deserializeAST: typeof originalDeserialize }
+        ast_utils.astUtils as unknown as {
+          deserializeAST: typeof originalDeserialize;
+        }
       ).deserializeAST = originalDeserialize;
     }
   });
 
   it("should return 500 if exception occurs in /ast/render/download", async () => {
     const originalDeserialize = ast_utils.astUtils.deserializeAST;
-    (ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }).deserializeAST =
-      jest.fn().mockImplementation(() => {
-        throw new Error("Custom render error");
-      });
+    (
+      ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }
+    ).deserializeAST = jest.fn().mockImplementation(() => {
+      throw new Error("Custom render error");
+    });
 
     try {
       const res = await app.request("/ast/render/download", {
@@ -231,7 +235,9 @@ describe("API AST Download Endpoints", () => {
       expect(body.error).toBe("Custom render error");
     } finally {
       (
-        ast_utils.astUtils as unknown as { deserializeAST: typeof originalDeserialize }
+        ast_utils.astUtils as unknown as {
+          deserializeAST: typeof originalDeserialize;
+        }
       ).deserializeAST = originalDeserialize;
     }
   });

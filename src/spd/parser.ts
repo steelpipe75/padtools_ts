@@ -512,7 +512,7 @@ export const parse = (
     children: rootContext.nodeList,
   };
   return topNode;
-}
+};
 
 export const parser = {
   parse,

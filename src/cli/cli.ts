@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 
 import { getRequire } from "../utils/compat.js";
+
 const cjsRequire = getRequire();
 const xmlFormat = cjsRequire("xml-formatter");
+
 import * as fs from "node:fs";
 import { program } from "commander";
 import { optimize } from "svgo";
+
 const packageJson = cjsRequire("../../package.json");
+
 import { deserializeAST, serializeAST } from "../spd/ast.js";
 import { ParseError, parse } from "../spd/parser.js";
 import { render } from "../spd/svg-renderer.js";

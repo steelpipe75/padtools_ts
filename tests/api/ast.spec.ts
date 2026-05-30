@@ -215,8 +215,9 @@ describe("API AST Endpoints", () => {
 
     it("should return 400 if deserializeAST fails in /ast/render", async () => {
       const originalDeserialize = ast_utils.astUtils.deserializeAST;
-      (ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }).deserializeAST =
-        jest.fn().mockReturnValue(null);
+      (
+        ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }
+      ).deserializeAST = jest.fn().mockReturnValue(null);
 
       try {
         const res = await app.request("/ast/render", {
@@ -232,17 +233,20 @@ describe("API AST Endpoints", () => {
         expect(body.error).toBe("Invalid AST format");
       } finally {
         (
-          ast_utils.astUtils as unknown as { deserializeAST: typeof originalDeserialize }
+          ast_utils.astUtils as unknown as {
+            deserializeAST: typeof originalDeserialize;
+          }
         ).deserializeAST = originalDeserialize;
       }
     });
 
     it("should return 500 if exception occurs in /ast/render", async () => {
       const originalDeserialize = ast_utils.astUtils.deserializeAST;
-      (ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }).deserializeAST =
-        jest.fn().mockImplementation(() => {
-          throw new Error("Custom render error");
-        });
+      (
+        ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }
+      ).deserializeAST = jest.fn().mockImplementation(() => {
+        throw new Error("Custom render error");
+      });
 
       try {
         const res = await app.request("/ast/render", {
@@ -258,17 +262,20 @@ describe("API AST Endpoints", () => {
         expect(body.error).toBe("Custom render error");
       } finally {
         (
-          ast_utils.astUtils as unknown as { deserializeAST: typeof originalDeserialize }
+          ast_utils.astUtils as unknown as {
+            deserializeAST: typeof originalDeserialize;
+          }
         ).deserializeAST = originalDeserialize;
       }
     });
 
     it("should return 500 if exception occurs in /ast/render (Errorオブジェクト以外がスローされた場合)", async () => {
       const originalDeserialize = ast_utils.astUtils.deserializeAST;
-      (ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }).deserializeAST =
-        jest.fn().mockImplementation(() => {
-          throw "Non-Error object";
-        });
+      (
+        ast_utils.astUtils as unknown as { deserializeAST: jest.Mock }
+      ).deserializeAST = jest.fn().mockImplementation(() => {
+        throw "Non-Error object";
+      });
 
       try {
         const res = await app.request("/ast/render", {
@@ -284,7 +291,9 @@ describe("API AST Endpoints", () => {
         expect(body.error).toBe("Failed to render AST");
       } finally {
         (
-          ast_utils.astUtils as unknown as { deserializeAST: typeof originalDeserialize }
+          ast_utils.astUtils as unknown as {
+            deserializeAST: typeof originalDeserialize;
+          }
         ).deserializeAST = originalDeserialize;
       }
     });

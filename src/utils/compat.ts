@@ -19,7 +19,9 @@ export function getRequire(callerFilename?: string): NodeRequire {
   }
 
   if (!filename) {
-    throw new Error("Could not determine caller filename to create require context");
+    throw new Error(
+      "Could not determine caller filename to create require context",
+    );
   }
 
   return createRequire(filename);

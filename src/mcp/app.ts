@@ -1,8 +1,10 @@
 import { FastMCP } from "fastmcp";
 import { getRequire } from "../utils/compat.js";
+
 const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../package.json");
 const { version } = packageJson;
+
 import {
   ConvertAstToSvgRequestSchema,
   ConvertRequestSchema,

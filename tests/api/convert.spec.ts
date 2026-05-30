@@ -1,8 +1,9 @@
-import { jest } from "@jest/globals";
 import { createRequire } from "node:module";
+import { jest } from "@jest/globals";
+
 let cjsRequire: any;
 try {
-  // @ts-ignore
+  // @ts-expect-error
   const metaUrl = new Function("return import.meta.url")();
   cjsRequire = createRequire(metaUrl);
 } catch {
@@ -10,6 +11,7 @@ try {
 }
 const packageJson = cjsRequire("../../package.json");
 const { version } = packageJson;
+
 import app from "../../src/api/app.js";
 import * as core from "../../src/spd/core.js";
 
@@ -250,9 +252,11 @@ describe("API /api/convert", () => {
   // 内部エラー (500) のテスト
   it("should return 500 if generateSvg throws a generic error (generateSvgが汎用エラーを投げた場合に500を返すこと)", async () => {
     // generateSvg を一時的にモックしてエラーを投げさせる
-    const generateSvgSpy = jest.spyOn(core.core, "generateSvg").mockImplementation(() => {
-      throw new Error("Generic error");
-    });
+    const generateSvgSpy = jest
+      .spyOn(core.core, "generateSvg")
+      .mockImplementation(() => {
+        throw new Error("Generic error");
+      });
 
     try {
       const res = await app.request("/convert", {
@@ -290,9 +294,11 @@ describe("API /api/convert", () => {
 
   // downloadHandler での 500 エラーのテスト
   it("should return 500 if generateSvg throws a generic error in download (ダウンロード時にgenerateSvgが汎用エラーを投げた場合に500を返すこと)", async () => {
-    const generateSvgSpy = jest.spyOn(core.core, "generateSvg").mockImplementation(() => {
-      throw new Error("Generic error");
-    });
+    const generateSvgSpy = jest
+      .spyOn(core.core, "generateSvg")
+      .mockImplementation(() => {
+        throw new Error("Generic error");
+      });
 
     try {
       const res = await app.request("/convert/download", {

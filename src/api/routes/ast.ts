@@ -247,7 +247,10 @@ export const astParseDownloadHandler: RouteHandler<
       return c.json({ error: "Failed to parse SPD" }, 400);
     }
 
-    const astString = astUtils.serializeAST(ast, options.prettyprint ? 2 : undefined);
+    const astString = astUtils.serializeAST(
+      ast,
+      options.prettyprint ? 2 : undefined,
+    );
     const astJson = JSON.parse(astString);
 
     c.header("Content-Type", "application/json");
