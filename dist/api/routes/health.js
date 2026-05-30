@@ -1,26 +1,29 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { z } from "zod";
+import { describeRoute, resolver } from "hono-openapi";
 import { getRequire } from "../../utils/compat.js";
 const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../../package.json");
 const { version } = packageJson;
 const HealthResponseSchema = z.object({
-    status: z.string().openapi({
+    status: z
+        .string()
+        .describe("The status of the API server")
+        .meta({
         example: "ok",
-        description: "The status of the API server",
     }),
-    version: z.string().openapi({
+    version: z
+        .string()
+        .describe("The version of the API server")
+        .meta({
         example: "0.1.0",
-        description: "The version of the API server",
     }),
 });
-export const healthRoute = createRoute({
-    method: "get",
-    path: "/health",
+export const healthRoute = describeRoute({
     responses: {
         200: {
             content: {
                 "application/json": {
-                    schema: HealthResponseSchema,
+                    schema: resolver(HealthResponseSchema),
                 },
             },
             description: "API server is healthy",

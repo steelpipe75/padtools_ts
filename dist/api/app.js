@@ -1,16 +1,18 @@
 import { swaggerUI } from "@hono/swagger-ui";
-import { OpenAPIHono } from "@hono/zod-openapi";
+import { Hono } from "hono";
+import { openAPIRouteHandler, validator as zValidator } from "hono-openapi";
 import { cors } from "hono/cors";
 import { getRequire } from "../utils/compat.js";
+import { ConvertRequestSchema } from "../spd/core.js";
 const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../package.json");
 const { version } = packageJson;
-import { astParseDownloadHandler, astParseDownloadRoute, astParseHandler, astParseRoute, astRenderDownloadHandler, astRenderDownloadRoute, astRenderHandler, astRenderRoute, } from "./routes/ast.js";
+import { AstParseRequestSchema, AstRenderRequestSchema, astParseDownloadHandler, astParseDownloadRoute, astParseHandler, astParseRoute, astRenderDownloadHandler, astRenderDownloadRoute, astRenderHandler, astRenderRoute, } from "./routes/ast.js";
 import { convertHandler, convertRoute, downloadHandler, downloadRoute, } from "./routes/convert.js";
 import { healthHandler, healthRoute } from "./routes/health.js";
 import { mcpHandler } from "./routes/mcp.js";
 import { spdInfoHandler, spdInfoRoute } from "./routes/spd-info.js";
-const app = new OpenAPIHono();
+const app = new Hono();
 // Disable caching for all routes
 app.use("*", async (c, next) => {
     await next();
@@ -21,26 +23,28 @@ app.use("*", async (c, next) => {
 // CORS for MCP
 app.use("/mcp", cors());
 // OpenAPI documentation
-app.doc("/openapi.json", {
-    openapi: "3.0.0",
-    info: {
-        title: "PAD Tools API",
-        version: version,
-        description: "API for converting SPD to SVG",
+app.get("/openapi.json", openAPIRouteHandler(app, {
+    documentation: {
+        openapi: "3.0.0",
+        info: {
+            title: "PAD Tools API",
+            version: version,
+            description: "API for converting SPD to SVG",
+        },
     },
-});
+}));
 // Swagger UI
 app.get("/docs", (c) => c.redirect("/docs/"));
 app.get("/docs/", swaggerUI({ url: "/openapi.json" }));
 // Routes
-app.openapi(healthRoute, healthHandler);
-app.openapi(spdInfoRoute, spdInfoHandler);
-app.openapi(convertRoute, convertHandler);
-app.openapi(downloadRoute, downloadHandler);
-app.openapi(astParseRoute, astParseHandler);
-app.openapi(astParseDownloadRoute, astParseDownloadHandler);
-app.openapi(astRenderRoute, astRenderHandler);
-app.openapi(astRenderDownloadRoute, astRenderDownloadHandler);
+app.get("/health", healthRoute, healthHandler);
+app.get("/spd-info", spdInfoRoute, spdInfoHandler);
+app.post("/convert", convertRoute, zValidator("json", ConvertRequestSchema), convertHandler);
+app.post("/convert/download", downloadRoute, zValidator("json", ConvertRequestSchema), downloadHandler);
+app.post("/ast/parse", astParseRoute, zValidator("json", AstParseRequestSchema), astParseHandler);
+app.post("/ast/parse/download", astParseDownloadRoute, zValidator("json", AstParseRequestSchema), astParseDownloadHandler);
+app.post("/ast/render", astRenderRoute, zValidator("json", AstRenderRequestSchema), astRenderHandler);
+app.post("/ast/render/download", astRenderDownloadRoute, zValidator("json", AstRenderRequestSchema), astRenderDownloadHandler);
 // MCP Route
 app.all("/mcp", mcpHandler);
 // Handle base URL

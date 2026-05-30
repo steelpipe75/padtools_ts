@@ -1,20 +1,15 @@
-import { createRoute, z } from "@hono/zod-openapi";
-import { ConvertRequestSchema, core } from "../../spd/core.js";
+import { z } from "zod";
+import { describeRoute, resolver } from "hono-openapi";
+import { core } from "../../spd/core.js";
 const ConvertResponseSchema = z.object({
-    svg: z.string().openapi({
-        description: "The generated SVG content",
-    }),
+    svg: z.string().describe("The generated SVG content"),
 });
 const ErrorResponseSchema = z.object({
-    error: z.string().openapi({
-        description: "Error message",
-    }),
-    lineNo: z.number().optional().openapi({
-        description: "The line number where the error occurred",
+    error: z.string().describe("Error message"),
+    lineNo: z.number().optional().describe("The line number where the error occurred").meta({
         example: 2,
     }),
-    lineStr: z.string().optional().openapi({
-        description: "The string content of the line where the error occurred",
+    lineStr: z.string().optional().describe("The string content of the line where the error occurred").meta({
         example: ":invalid_command arg",
     }),
 });
@@ -26,23 +21,12 @@ function isParseErrorLike(error) {
             error.name === "ParseError" ||
             !!error.name?.endsWith("Exception")));
 }
-export const convertRoute = createRoute({
-    method: "post",
-    path: "/convert",
-    request: {
-        body: {
-            content: {
-                "application/json": {
-                    schema: ConvertRequestSchema,
-                },
-            },
-        },
-    },
+export const convertRoute = describeRoute({
     responses: {
         200: {
             content: {
                 "application/json": {
-                    schema: ConvertResponseSchema,
+                    schema: resolver(ConvertResponseSchema),
                 },
             },
             description: "Successful conversion",
@@ -50,7 +34,7 @@ export const convertRoute = createRoute({
         400: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Bad request - invalid SPD or options",
@@ -58,33 +42,21 @@ export const convertRoute = createRoute({
         500: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Internal server error",
         },
     },
 });
-export const downloadRoute = createRoute({
-    method: "post",
-    path: "/convert/download",
-    request: {
-        body: {
-            content: {
-                "application/json": {
-                    schema: ConvertRequestSchema,
-                },
-            },
-        },
-    },
+export const downloadRoute = describeRoute({
     responses: {
         200: {
             content: {
                 "image/svg+xml": {
-                    schema: z.string().openapi({
+                    schema: resolver(z.string().describe("The generated SVG file").meta({
                         format: "binary",
-                        description: "The generated SVG file",
-                    }),
+                    })),
                 },
             },
             description: "Successful conversion and download",
@@ -92,7 +64,7 @@ export const downloadRoute = createRoute({
         400: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Bad request - invalid SPD or options",
@@ -100,7 +72,7 @@ export const downloadRoute = createRoute({
         500: {
             content: {
                 "application/json": {
-                    schema: ErrorResponseSchema,
+                    schema: resolver(ErrorResponseSchema),
                 },
             },
             description: "Internal server error",

@@ -17,7 +17,7 @@ module.exports = {
   transform: {
     ...tsJestTransformCfg,
     // Transpile JS files in node_modules (like commander)
-    "^.+\\.jsx?$": [
+    "^.+\\.[cm]?jsx?$": [
       "ts-jest",
       {
         tsconfig: {
@@ -30,10 +30,11 @@ module.exports = {
     ],
   },
   transformIgnorePatterns: [
-    // Transpile commander from node_modules, ignore other node_modules
-    "/node_modules/(?!(commander)/)",
+    // Transpile commander and standard-community from node_modules, ignore other node_modules
+    "/node_modules/(?!(commander|@standard-community)/)",
   ],
   moduleNameMapper: {
+    "^zod/v4/core$": "<rootDir>/node_modules/zod/v4/core/index.cjs",
     // Map .js imports to the original source files for TypeScript in jest environment
     "^(\\.\\.?/.*)\\.js$": "$1",
   },

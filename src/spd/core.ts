@@ -7,7 +7,7 @@ const xmlFormat =
         xml: string,
       ) => string);
 
-import { z } from "@hono/zod-openapi";
+import { z } from "zod";
 import { optimize } from "svgo";
 import { parse } from "./parser.js";
 import { render } from "./svg-renderer.js";
@@ -17,74 +17,66 @@ export const ConvertRequestOptionsSchema = z.object({
     .number()
     .describe("SVGのフォントサイズ (px)")
     .optional()
-    .openapi({ description: "SVGのフォントサイズ (px)", example: 14 }),
+    .meta({ example: 14 }),
   fontFamily: z
     .string()
     .describe("SVGのフォントファミリー")
     .optional()
-    .openapi({
-      description: "SVGのフォントファミリー",
+    .meta({
       example: "monospace",
     }),
   strokeWidth: z
     .number()
     .describe("線の太さ (px)")
     .optional()
-    .openapi({ description: "線の太さ (px)", example: 1 }),
+    .meta({ example: 1 }),
   strokeColor: z
     .string()
     .describe("線の色 (カラーコード等)")
     .optional()
-    .openapi({
-      description: "線の色 (カラーコード等)",
+    .meta({
       example: "#000000",
     }),
   backgroundColor: z
     .string()
     .describe("図全体の背景色 (カラーコード等)")
     .optional()
-    .openapi({
-      description: "図全体の背景色 (カラーコード等)",
+    .meta({
       example: "#ffffff",
     }),
   baseBackgroundColor: z
     .string()
     .describe("ベース背景色 (none またはカラーコード等)")
     .optional()
-    .openapi({
-      description: "ベース背景色 (none またはカラーコード等)",
+    .meta({
       example: "none",
     }),
   textColor: z
     .string()
     .describe("テキストの色 (カラーコード等)")
     .optional()
-    .openapi({
-      description: "テキストの色 (カラーコード等)",
+    .meta({
       example: "#000000",
     }),
   lineHeight: z
     .number()
     .describe("行高さの倍率")
     .optional()
-    .openapi({ description: "行高さの倍率", example: 1.2 }),
+    .meta({ example: 1.2 }),
   listRenderType: z
     .enum(["Original", "TerminalOffset"])
     .describe(
       "リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)",
     )
     .optional()
-    .openapi({
-      description:
-        "リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)",
+    .meta({
       example: "TerminalOffset",
     }),
   prettyprint: z
     .boolean()
     .describe("出力されるSVGを整形（インデント等）するかどうか")
     .optional()
-    .openapi({
-      description: "出力されるSVGを整形（インデント等）するかどうか",
+    .meta({
       example: true,
     }),
 });
@@ -94,7 +86,8 @@ export type ConvertRequestOptions = z.infer<typeof ConvertRequestOptionsSchema>;
 export const ConvertRequestSchema = z.object({
   spd: z
     .string()
-    .openapi({
+    .describe("変換対象のSPDテキスト")
+    .meta({
       example: `:terminal 開始
 命令
 :comment コメント文
@@ -116,9 +109,7 @@ export const ConvertRequestSchema = z.object({
 :dowhile 繰り返し条件（後判定）
 	中身
 :terminal 終了`,
-      description: "変換対象のSPDテキスト",
-    })
-    .describe("変換対象のSPDテキスト"),
+    }),
   options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 
@@ -127,11 +118,10 @@ export type ConvertRequest = z.infer<typeof ConvertRequestSchema>;
 export const ConvertSpdToAstRequestSchema = z.object({
   spd: z
     .string()
-    .openapi({
+    .describe("ASTに変換するSPDテキスト")
+    .meta({
       example: ":terminal Start\nProcess\n:terminal End",
-      description: "ASTに変換するSPDテキスト",
-    })
-    .describe("ASTに変換するSPDテキスト"),
+    }),
 });
 
 export type ConvertSpdToAstRequest = z.infer<
@@ -141,9 +131,6 @@ export type ConvertSpdToAstRequest = z.infer<
 export const ConvertAstToSvgRequestSchema = z.object({
   ast: z
     .any()
-    .openapi({
-      description: "SVGに変換するAST JSONオブジェクト",
-    })
     .describe("SVGに変換するAST JSONオブジェクト"),
   options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
