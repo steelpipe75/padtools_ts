@@ -9,47 +9,80 @@ import { render } from "./svg-renderer.js";
 export const ConvertRequestOptionsSchema = z.object({
     fontSize: z
         .number()
+        .describe("SVGのフォントサイズ (px)")
         .optional()
-        .openapi({ description: "Font size for the SVG", example: 14 }),
-    fontFamily: z.string().optional().openapi({
-        description: "Font family for the SVG",
+        .openapi({ description: "SVGのフォントサイズ (px)", example: 14 }),
+    fontFamily: z
+        .string()
+        .describe("SVGのフォントファミリー")
+        .optional()
+        .openapi({
+        description: "SVGのフォントファミリー",
         example: "monospace",
     }),
     strokeWidth: z
         .number()
+        .describe("線の太さ (px)")
         .optional()
-        .openapi({ description: "Stroke width for the SVG", example: 1 }),
-    strokeColor: z.string().optional().openapi({
-        description: "Stroke color for the SVG",
+        .openapi({ description: "線の太さ (px)", example: 1 }),
+    strokeColor: z
+        .string()
+        .describe("線の色 (カラーコード等)")
+        .optional()
+        .openapi({
+        description: "線の色 (カラーコード等)",
         example: "#000000",
     }),
-    backgroundColor: z.string().optional().openapi({
-        description: "Background color for the SVG",
+    backgroundColor: z
+        .string()
+        .describe("図全体の背景色 (カラーコード等)")
+        .optional()
+        .openapi({
+        description: "図全体の背景色 (カラーコード等)",
         example: "#ffffff",
     }),
-    baseBackgroundColor: z.string().optional().openapi({
-        description: "Base background color for the SVG",
+    baseBackgroundColor: z
+        .string()
+        .describe("ベース背景色 (none またはカラーコード等)")
+        .optional()
+        .openapi({
+        description: "ベース背景色 (none またはカラーコード等)",
         example: "none",
     }),
     textColor: z
         .string()
+        .describe("テキストの色 (カラーコード等)")
         .optional()
-        .openapi({ description: "Text color for the SVG", example: "#000000" }),
+        .openapi({
+        description: "テキストの色 (カラーコード等)",
+        example: "#000000",
+    }),
     lineHeight: z
         .number()
+        .describe("行高さの倍率")
         .optional()
-        .openapi({ description: "Line height for the SVG", example: 1.2 }),
-    listRenderType: z.enum(["Original", "TerminalOffset"]).optional().openapi({
-        description: "List render type for the SVG",
+        .openapi({ description: "行高さの倍率", example: 1.2 }),
+    listRenderType: z
+        .enum(["Original", "TerminalOffset"])
+        .describe("リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)")
+        .optional()
+        .openapi({
+        description: "リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)",
         example: "TerminalOffset",
     }),
-    prettyprint: z.boolean().optional().openapi({
-        description: "Whether to pretty print the SVG output",
+    prettyprint: z
+        .boolean()
+        .describe("出力されるSVGを整形（インデント等）するかどうか")
+        .optional()
+        .openapi({
+        description: "出力されるSVGを整形（インデント等）するかどうか",
         example: true,
     }),
 });
 export const ConvertRequestSchema = z.object({
-    spd: z.string().openapi({
+    spd: z
+        .string()
+        .openapi({
         example: `:terminal 開始
 命令
 :comment コメント文
@@ -71,21 +104,28 @@ export const ConvertRequestSchema = z.object({
 :dowhile 繰り返し条件（後判定）
 	中身
 :terminal 終了`,
-        description: "The SPD text to convert",
-    }),
-    options: ConvertRequestOptionsSchema.optional(),
+        description: "変換対象のSPDテキスト",
+    })
+        .describe("変換対象のSPDテキスト"),
+    options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 export const ConvertSpdToAstRequestSchema = z.object({
-    spd: z.string().openapi({
+    spd: z
+        .string()
+        .openapi({
         example: ":terminal Start\nProcess\n:terminal End",
-        description: "The SPD text to convert to AST",
-    }),
+        description: "ASTに変換するSPDテキスト",
+    })
+        .describe("ASTに変換するSPDテキスト"),
 });
 export const ConvertAstToSvgRequestSchema = z.object({
-    ast: z.any().openapi({
-        description: "The AST JSON object to convert to SVG",
-    }),
-    options: ConvertRequestOptionsSchema.optional(),
+    ast: z
+        .any()
+        .openapi({
+        description: "SVGに変換するAST JSONオブジェクト",
+    })
+        .describe("SVGに変換するAST JSONオブジェクト"),
+    options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 export const generateSvg = (spd, options = {}) => {
     const ast = parse(spd);
