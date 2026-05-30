@@ -7,6 +7,7 @@ const tsJestTransformCfg = createDefaultPreset({
     module: "commonjs",
     moduleResolution: "NodeNext",
     esModuleInterop: true,
+    allowJs: true,
   },
 }).transform;
 
@@ -15,7 +16,23 @@ module.exports = {
   testEnvironment: "node",
   transform: {
     ...tsJestTransformCfg,
+    // Transpile JS files in node_modules (like commander)
+    "^.+\\.jsx?$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          module: "commonjs",
+          moduleResolution: "NodeNext",
+          esModuleInterop: true,
+          allowJs: true,
+        },
+      },
+    ],
   },
+  transformIgnorePatterns: [
+    // Transpile commander from node_modules, ignore other node_modules
+    "/node_modules/(?!(commander)/)",
+  ],
   moduleNameMapper: {
     // Map .js imports to the original source files for TypeScript in jest environment
     "^(\\.\\.?/.*)\\.js$": "$1",
