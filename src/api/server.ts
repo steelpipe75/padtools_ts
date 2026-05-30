@@ -23,7 +23,7 @@ if (typeof __filename !== "undefined") {
     ? fs.realpathSync(__filename) === fs.realpathSync(process.argv[1])
     : false;
 } else {
-  const metaUrl = new Function("return import.meta.url")();
+  const metaUrl = import.meta.url;
   isMain = process.argv[1]
     ? fs.realpathSync(fileURLToPath(metaUrl)) ===
       fs.realpathSync(process.argv[1])
