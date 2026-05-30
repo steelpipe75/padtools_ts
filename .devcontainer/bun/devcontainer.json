@@ -2,7 +2,7 @@
   "name": "Bun (padtools_ts)",
   "image": "mcr.microsoft.com/devcontainers/base:bookworm",
   "features": {
-    "ghcr.io/devcontainers-contrib/features/bun:1": {
+    "ghcr.io/devcontainers-extra/features/bun:1": {
       "version": "latest"
     }
   },
