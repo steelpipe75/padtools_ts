@@ -74,8 +74,7 @@ mcpServer.registerPrompt(
 mcpServer.registerPrompt(
   "generate-spd",
   {
-    description:
-      "タスクの説明からSPD（Simple PAD Description）を生成します。",
+    description: "タスクの説明からSPD（Simple PAD Description）を生成します。",
     argsSchema: {
       // biome-ignore lint/suspicious/noExplicitAny: Required for dynamic access to Zod schema shape in MCP argsSchema
       description: (ConvertSpdToAstRequestSchema.shape as any).spd.describe(
@@ -103,8 +102,7 @@ mcpServer.registerPrompt(
 mcpServer.registerTool(
   "get_spd_explanation",
   {
-    description:
-      "SPD（Simple PAD Description）表記法の説明を取得します。",
+    description: "SPD（Simple PAD Description）表記法の説明を取得します。",
   },
   async () => {
     const text = await handleGetSpdExplanationTool();
@@ -175,8 +173,7 @@ mcpServer.registerTool(
 mcpServer.registerTool(
   "convert_ast_to_svg",
   {
-    description:
-      "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
+    description: "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
     inputSchema: ConvertAstToSvgRequestSchema.shape,
   },
   async (args) => {

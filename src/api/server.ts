@@ -16,7 +16,9 @@ export const startServer = (p: number) => {
 };
 
 // Check if this file is run directly
-const argv1 = process.argv[1] ? fs.realpathSync(process.argv[1]).replace(/\\/g, "/") : "";
+const argv1 = process.argv[1]
+  ? fs.realpathSync(process.argv[1]).replace(/\\/g, "/")
+  : "";
 const isMain =
   argv1.endsWith("src/api/server.ts") ||
   argv1.endsWith("src/api/server.js") ||

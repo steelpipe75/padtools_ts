@@ -76,8 +76,7 @@ mcp.addTool({
 
 mcp.addTool({
   name: "convert_ast_to_svg",
-  description:
-    "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
+  description: "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
   parameters: ConvertAstToSvgRequestSchema,
   execute: handleConvertAstToSvgTool,
 });

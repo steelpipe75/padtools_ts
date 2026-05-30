@@ -59,7 +59,10 @@ export const ConvertRequestOptionsSchema = z.object({
     .string()
     .describe("テキストの色 (カラーコード等)")
     .optional()
-    .openapi({ description: "テキストの色 (カラーコード等)", example: "#000000" }),
+    .openapi({
+      description: "テキストの色 (カラーコード等)",
+      example: "#000000",
+    }),
   lineHeight: z
     .number()
     .describe("行高さの倍率")
@@ -67,10 +70,13 @@ export const ConvertRequestOptionsSchema = z.object({
     .openapi({ description: "行高さの倍率", example: 1.2 }),
   listRenderType: z
     .enum(["Original", "TerminalOffset"])
-    .describe("リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)")
+    .describe(
+      "リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)",
+    )
     .optional()
     .openapi({
-      description: "リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)",
+      description:
+        "リスト（選択肢）の描画タイプ (Original: 通常, TerminalOffset: 端子オフセット)",
       example: "TerminalOffset",
     }),
   prettyprint: z
