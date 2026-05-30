@@ -27,25 +27,25 @@ export const mcp = new FastMCP({
 
 mcp.addResource({
   uri: "spd://docs/explanation",
-  name: "SPD Notation Explanation",
+  name: "SPD表記法の説明",
   mimeType: "text/markdown",
-  description: "Explanation of SPD (Simple PAD Description) notation.",
+  description: "SPD（Simple PAD Description）表記法の説明。",
   load: handleGetSpdExplanationResource,
 });
 
 mcp.addPrompt({
   name: "explain-spd",
-  description: "Explain SPD (Simple PAD Description) notation with examples.",
+  description: "SPD（Simple PAD Description）表記法を例付きで説明します。",
   load: handleExplainSpdPrompt,
 });
 
 mcp.addPrompt({
   name: "generate-spd",
-  description: "Generate SPD (Simple PAD Description) from a task description.",
+  description: "タスクの説明からSPD（Simple PAD Description）を生成します。",
   arguments: [
     {
       name: "description",
-      description: "Description of the logic or task to convert to SPD",
+      description: "SPDに変換するためのロジックまたはタスクの説明",
       required: true,
     },
   ] as const,
@@ -54,14 +54,14 @@ mcp.addPrompt({
 
 mcp.addTool({
   name: "get_spd_explanation",
-  description: "Get the explanation of SPD (Simple PAD Description) notation.",
+  description: "SPD（Simple PAD Description）表記法の説明を取得します。",
   execute: handleGetSpdExplanationTool,
 });
 
 mcp.addTool({
   name: "convert_spd_to_svg",
   description:
-    "Convert SPD (Simple PAD Description) text to a PAD diagram in SVG format.",
+    "SPD（Simple PAD Description）テキストをSVG形式のPAD図に変換します。",
   parameters: ConvertRequestSchema,
   execute: handleConvertSpdToSvgTool,
 });
@@ -69,15 +69,14 @@ mcp.addTool({
 mcp.addTool({
   name: "convert_spd_to_ast",
   description:
-    "Convert SPD (Simple PAD Description) text to its Abstract Syntax Tree (AST) in JSON format.",
+    "SPD（Simple PAD Description）テキストをJSON形式の抽象構文木（AST）に変換します。",
   parameters: ConvertSpdToAstRequestSchema,
   execute: handleConvertSpdToAstTool,
 });
 
 mcp.addTool({
   name: "convert_ast_to_svg",
-  description:
-    "Convert an Abstract Syntax Tree (AST) in JSON format to a PAD diagram in SVG format.",
+  description: "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
   parameters: ConvertAstToSvgRequestSchema,
   execute: handleConvertAstToSvgTool,
 });

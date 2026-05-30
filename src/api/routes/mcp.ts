@@ -33,7 +33,7 @@ mcpServer.registerResource(
   "spd://docs/explanation",
   {
     mimeType: "text/markdown",
-    description: "Explanation of SPD (Simple PAD Description) notation.",
+    description: "SPD（Simple PAD Description）表記法の説明。",
   },
   async (uri) => {
     const result = await handleGetSpdExplanationResource();
@@ -53,7 +53,7 @@ mcpServer.registerResource(
 mcpServer.registerPrompt(
   "explain-spd",
   {
-    description: "Explain SPD (Simple PAD Description) notation with examples.",
+    description: "SPD（Simple PAD Description）表記法を例付きで説明します。",
   },
   async () => {
     const text = await handleExplainSpdPrompt();
@@ -74,12 +74,11 @@ mcpServer.registerPrompt(
 mcpServer.registerPrompt(
   "generate-spd",
   {
-    description:
-      "Generate SPD (Simple PAD Description) from a task description.",
+    description: "タスクの説明からSPD（Simple PAD Description）を生成します。",
     argsSchema: {
       // biome-ignore lint/suspicious/noExplicitAny: Required for dynamic access to Zod schema shape in MCP argsSchema
       description: (ConvertSpdToAstRequestSchema.shape as any).spd.describe(
-        "Description of the logic or task to convert to SPD",
+        "SPDに変換するためのロジックまたはタスクの説明",
       ),
     },
   },
@@ -103,8 +102,7 @@ mcpServer.registerPrompt(
 mcpServer.registerTool(
   "get_spd_explanation",
   {
-    description:
-      "Get the explanation of SPD (Simple PAD Description) notation.",
+    description: "SPD（Simple PAD Description）表記法の説明を取得します。",
   },
   async () => {
     const text = await handleGetSpdExplanationTool();
@@ -118,7 +116,7 @@ mcpServer.registerTool(
   "convert_spd_to_svg",
   {
     description:
-      "Convert SPD (Simple PAD Description) text to a PAD diagram in SVG format.",
+      "SPD（Simple PAD Description）テキストをSVG形式のPAD図に変換します。",
     inputSchema: ConvertRequestSchema.shape,
   },
   async (args) => {
@@ -147,7 +145,7 @@ mcpServer.registerTool(
   "convert_spd_to_ast",
   {
     description:
-      "Convert SPD (Simple PAD Description) text to its Abstract Syntax Tree (AST) in JSON format.",
+      "SPD（Simple PAD Description）テキストをJSON形式の抽象構文木（AST）に変換します。",
     inputSchema: ConvertSpdToAstRequestSchema.shape,
   },
   async (args) => {
@@ -175,8 +173,7 @@ mcpServer.registerTool(
 mcpServer.registerTool(
   "convert_ast_to_svg",
   {
-    description:
-      "Convert an Abstract Syntax Tree (AST) in JSON format to a PAD diagram in SVG format.",
+    description: "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
     inputSchema: ConvertAstToSvgRequestSchema.shape,
   },
   async (args) => {
