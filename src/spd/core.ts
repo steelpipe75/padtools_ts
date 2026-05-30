@@ -1,8 +1,10 @@
+import { getRequire } from "../utils/compat.js";
+const cjsRequire = getRequire();
+const xmlFormat = cjsRequire("xml-formatter");
 import { z } from "@hono/zod-openapi";
 import { optimize } from "svgo";
-import xmlFormat from "xml-formatter";
-import { parse } from "./parser";
-import { render } from "./svg-renderer";
+import { parse } from "./parser.js";
+import { render } from "./svg-renderer.js";
 
 export const ConvertRequestOptionsSchema = z.object({
   fontSize: z
@@ -148,4 +150,9 @@ export const generateSvgFromAst = (
     multipass: true,
   });
   return optimizedSvg.data;
+}
+
+export const core = {
+  generateSvg,
+  generateSvgFromAst,
 };

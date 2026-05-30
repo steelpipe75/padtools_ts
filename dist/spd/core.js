@@ -1,58 +1,54 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateSvgFromAst = exports.generateSvg = exports.ConvertAstToSvgRequestSchema = exports.ConvertSpdToAstRequestSchema = exports.ConvertRequestSchema = exports.ConvertRequestOptionsSchema = void 0;
-const zod_openapi_1 = require("@hono/zod-openapi");
-const svgo_1 = require("svgo");
-const xml_formatter_1 = __importDefault(require("xml-formatter"));
-const parser_1 = require("./parser");
-const svg_renderer_1 = require("./svg-renderer");
-exports.ConvertRequestOptionsSchema = zod_openapi_1.z.object({
-    fontSize: zod_openapi_1.z
+import { getRequire } from "../utils/compat.js";
+const cjsRequire = getRequire();
+const xmlFormat = cjsRequire("xml-formatter");
+import { z } from "@hono/zod-openapi";
+import { optimize } from "svgo";
+import { parse } from "./parser.js";
+import { render } from "./svg-renderer.js";
+export const ConvertRequestOptionsSchema = z.object({
+    fontSize: z
         .number()
         .optional()
         .openapi({ description: "Font size for the SVG", example: 14 }),
-    fontFamily: zod_openapi_1.z.string().optional().openapi({
+    fontFamily: z.string().optional().openapi({
         description: "Font family for the SVG",
         example: "monospace",
     }),
-    strokeWidth: zod_openapi_1.z
+    strokeWidth: z
         .number()
         .optional()
         .openapi({ description: "Stroke width for the SVG", example: 1 }),
-    strokeColor: zod_openapi_1.z.string().optional().openapi({
+    strokeColor: z.string().optional().openapi({
         description: "Stroke color for the SVG",
         example: "#000000",
     }),
-    backgroundColor: zod_openapi_1.z.string().optional().openapi({
+    backgroundColor: z.string().optional().openapi({
         description: "Background color for the SVG",
         example: "#ffffff",
     }),
-    baseBackgroundColor: zod_openapi_1.z.string().optional().openapi({
+    baseBackgroundColor: z.string().optional().openapi({
         description: "Base background color for the SVG",
         example: "none",
     }),
-    textColor: zod_openapi_1.z
+    textColor: z
         .string()
         .optional()
         .openapi({ description: "Text color for the SVG", example: "#000000" }),
-    lineHeight: zod_openapi_1.z
+    lineHeight: z
         .number()
         .optional()
         .openapi({ description: "Line height for the SVG", example: 1.2 }),
-    listRenderType: zod_openapi_1.z.enum(["Original", "TerminalOffset"]).optional().openapi({
+    listRenderType: z.enum(["Original", "TerminalOffset"]).optional().openapi({
         description: "List render type for the SVG",
         example: "TerminalOffset",
     }),
-    prettyprint: zod_openapi_1.z.boolean().optional().openapi({
+    prettyprint: z.boolean().optional().openapi({
         description: "Whether to pretty print the SVG output",
         example: true,
     }),
 });
-exports.ConvertRequestSchema = zod_openapi_1.z.object({
-    spd: zod_openapi_1.z.string().openapi({
+export const ConvertRequestSchema = z.object({
+    spd: z.string().openapi({
         example: `:terminal 開始
 命令
 :comment コメント文
@@ -76,26 +72,25 @@ exports.ConvertRequestSchema = zod_openapi_1.z.object({
 :terminal 終了`,
         description: "The SPD text to convert",
     }),
-    options: exports.ConvertRequestOptionsSchema.optional(),
+    options: ConvertRequestOptionsSchema.optional(),
 });
-exports.ConvertSpdToAstRequestSchema = zod_openapi_1.z.object({
-    spd: zod_openapi_1.z.string().openapi({
+export const ConvertSpdToAstRequestSchema = z.object({
+    spd: z.string().openapi({
         example: ":terminal Start\nProcess\n:terminal End",
         description: "The SPD text to convert to AST",
     }),
 });
-exports.ConvertAstToSvgRequestSchema = zod_openapi_1.z.object({
-    ast: zod_openapi_1.z.any().openapi({
+export const ConvertAstToSvgRequestSchema = z.object({
+    ast: z.any().openapi({
         description: "The AST JSON object to convert to SVG",
     }),
-    options: exports.ConvertRequestOptionsSchema.optional(),
+    options: ConvertRequestOptionsSchema.optional(),
 });
-const generateSvg = (spd, options = {}) => {
-    const ast = (0, parser_1.parse)(spd);
-    return (0, exports.generateSvgFromAst)(ast, options);
+export const generateSvg = (spd, options = {}) => {
+    const ast = parse(spd);
+    return generateSvgFromAst(ast, options);
 };
-exports.generateSvg = generateSvg;
-const generateSvgFromAst = (ast, options = {}) => {
+export const generateSvgFromAst = (ast, options = {}) => {
     if (!ast) {
         throw new Error("AST is null or undefined");
     }
@@ -119,13 +114,16 @@ const generateSvgFromAst = (ast, options = {}) => {
         renderOptions.lineHeight = options.lineHeight;
     if (options.listRenderType !== undefined)
         renderOptions.listRenderType = options.listRenderType;
-    const svgOutput = (0, svg_renderer_1.render)(ast, renderOptions);
+    const svgOutput = render(ast, renderOptions);
     if (options.prettyprint) {
-        return (0, xml_formatter_1.default)(svgOutput);
+        return xmlFormat(svgOutput);
     }
-    const optimizedSvg = (0, svgo_1.optimize)(svgOutput, {
+    const optimizedSvg = optimize(svgOutput, {
         multipass: true,
     });
     return optimizedSvg.data;
 };
-exports.generateSvgFromAst = generateSvgFromAst;
+export const core = {
+    generateSvg,
+    generateSvgFromAst,
+};

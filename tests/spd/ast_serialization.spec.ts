@@ -3,7 +3,7 @@ import {
   type NodeListNode,
   type SwitchNode,
   serializeAST,
-} from "../../src/spd/ast";
+} from "../../src/spd/ast.js";
 
 describe("AST Serialization/Deserialization", () => {
   it("should serialize and deserialize a simple AST", () => {

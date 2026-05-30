@@ -127,3 +127,8 @@ export function deserializeAST(json: string): Node | null {
     return value;
   });
 }
+
+export const astUtils = {
+  serializeAST,
+  deserializeAST,
+};

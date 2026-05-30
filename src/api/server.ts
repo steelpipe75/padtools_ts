@@ -1,5 +1,7 @@
 import { serve } from "@hono/node-server";
-import app from "./app";
+import { fileURLToPath } from "node:url";
+import * as fs from "node:fs";
+import app from "./app.js";
 
 const port = Number(process.env.PORT) || 3000;
 
@@ -14,9 +16,23 @@ export const startServer = (p: number) => {
   return server;
 };
 
+// Check if this file is run directly
+let isMain = false;
+if (typeof __filename !== "undefined") {
+  isMain = process.argv[1]
+    ? fs.realpathSync(__filename) === fs.realpathSync(process.argv[1])
+    : false;
+} else {
+  // @ts-ignore
+  const metaUrl = new Function("return import.meta.url")();
+  isMain = process.argv[1]
+    ? fs.realpathSync(fileURLToPath(metaUrl)) === fs.realpathSync(process.argv[1])
+    : false;
+}
+
 // Start server
 if (
-  require.main === module &&
+  isMain &&
   // @ts-expect-error: Bun is only defined in Bun environment
   typeof Bun === "undefined"
 ) {

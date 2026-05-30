@@ -1,11 +1,25 @@
 import { execFileSync, execSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const inputDir = path.join(__dirname, "input");
-const outputDir = path.join(__dirname, "output");
-const minifiedOutputDir = path.join(__dirname, "output_minified");
-const tempDir = path.join(__dirname, "temp");
+let filename: string;
+let dirname: string;
+
+if (typeof __filename !== "undefined") {
+  filename = __filename;
+  dirname = __dirname;
+} else {
+  // @ts-ignore
+  const metaUrl = new Function("return import.meta.url")();
+  filename = fileURLToPath(metaUrl);
+  dirname = path.dirname(filename);
+}
+
+const inputDir = path.join(dirname, "input");
+const outputDir = path.join(dirname, "output");
+const minifiedOutputDir = path.join(dirname, "output_minified");
+const tempDir = path.join(dirname, "temp");
 
 const testCases = fs
   .readdirSync(inputDir)

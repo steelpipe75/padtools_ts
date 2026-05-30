@@ -1,48 +1,36 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.astRenderDownloadHandler = exports.astRenderHandler = exports.astParseDownloadHandler = exports.astParseHandler = exports.astRenderDownloadRoute = exports.astRenderRoute = exports.astParseDownloadRoute = exports.astParseRoute = void 0;
-const zod_openapi_1 = require("@hono/zod-openapi");
-const ast_1 = require("../../spd/ast");
-const core_1 = require("../../spd/core");
-const parser_1 = require("../../spd/parser");
-const ErrorResponseSchema = zod_openapi_1.z.object({
-    error: zod_openapi_1.z.string().openapi({
+import { createRoute, z } from "@hono/zod-openapi";
+import { astUtils } from "../../spd/ast.js";
+import { ConvertRequestOptionsSchema, generateSvgFromAst, } from "../../spd/core.js";
+import { parser } from "../../spd/parser.js";
+const ErrorResponseSchema = z.object({
+    error: z.string().openapi({
         description: "Error message",
     }),
 });
-const AstParseRequestSchema = zod_openapi_1.z.object({
-    spd: zod_openapi_1.z.string().openapi({
+const AstParseRequestSchema = z.object({
+    spd: z.string().openapi({
         description: "The SPD text to parse",
         example: ":terminal Start\nProcess\n:terminal End",
     }),
-    options: core_1.ConvertRequestOptionsSchema.optional(),
+    options: ConvertRequestOptionsSchema.optional(),
 });
-const AstParseResponseSchema = zod_openapi_1.z.object({
-    ast: zod_openapi_1.z.any().openapi({
+const AstParseResponseSchema = z.object({
+    ast: z.any().openapi({
         description: "The parsed AST as JSON object",
     }),
 });
-const AstRenderRequestSchema = zod_openapi_1.z.object({
-    ast: zod_openapi_1.z.any().openapi({
+const AstRenderRequestSchema = z.object({
+    ast: z.any().openapi({
         description: "The AST JSON object to render",
     }),
-    options: core_1.ConvertRequestOptionsSchema.optional(),
+    options: ConvertRequestOptionsSchema.optional(),
 });
-const AstRenderResponseSchema = zod_openapi_1.z.object({
-    svg: zod_openapi_1.z.string().openapi({
+const AstRenderResponseSchema = z.object({
+    svg: z.string().openapi({
         description: "The generated SVG content",
     }),
 });
-exports.astParseRoute = (0, zod_openapi_1.createRoute)({
+export const astParseRoute = createRoute({
     method: "post",
     path: "/ast/parse",
     request: {
@@ -81,7 +69,7 @@ exports.astParseRoute = (0, zod_openapi_1.createRoute)({
         },
     },
 });
-exports.astParseDownloadRoute = (0, zod_openapi_1.createRoute)({
+export const astParseDownloadRoute = createRoute({
     method: "post",
     path: "/ast/parse/download",
     request: {
@@ -97,7 +85,7 @@ exports.astParseDownloadRoute = (0, zod_openapi_1.createRoute)({
         200: {
             content: {
                 "application/json": {
-                    schema: zod_openapi_1.z.any().openapi({
+                    schema: z.any().openapi({
                         format: "binary",
                         description: "The parsed AST as JSON file",
                     }),
@@ -123,7 +111,7 @@ exports.astParseDownloadRoute = (0, zod_openapi_1.createRoute)({
         },
     },
 });
-exports.astRenderRoute = (0, zod_openapi_1.createRoute)({
+export const astRenderRoute = createRoute({
     method: "post",
     path: "/ast/render",
     request: {
@@ -162,7 +150,7 @@ exports.astRenderRoute = (0, zod_openapi_1.createRoute)({
         },
     },
 });
-exports.astRenderDownloadRoute = (0, zod_openapi_1.createRoute)({
+export const astRenderDownloadRoute = createRoute({
     method: "post",
     path: "/ast/render/download",
     request: {
@@ -178,7 +166,7 @@ exports.astRenderDownloadRoute = (0, zod_openapi_1.createRoute)({
         200: {
             content: {
                 "image/svg+xml": {
-                    schema: zod_openapi_1.z.string().openapi({
+                    schema: z.string().openapi({
                         format: "binary",
                         description: "The generated SVG file from AST",
                     }),
@@ -204,37 +192,36 @@ exports.astRenderDownloadRoute = (0, zod_openapi_1.createRoute)({
         },
     },
 });
-const astParseHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
+export const astParseHandler = async (c) => {
     try {
         const { spd, options = {} } = c.req.valid("json");
         if (!spd) {
             return c.json({ error: "SPD content is required" }, 400);
         }
-        const ast = (0, parser_1.parse)(spd);
+        const ast = parser.parse(spd);
         if (!ast) {
             return c.json({ error: "Failed to parse SPD" }, 400);
         }
         // serialize to handle Map and then parse back to object for JSON response
-        const astJson = JSON.parse((0, ast_1.serializeAST)(ast, options.prettyprint ? 2 : undefined));
+        const astJson = JSON.parse(astUtils.serializeAST(ast, options.prettyprint ? 2 : undefined));
         return c.json({ ast: astJson }, 200);
     }
     catch (error) {
         console.error("AST parse error:", error);
         return c.json({ error: error instanceof Error ? error.message : "Failed to parse AST" }, 400);
     }
-});
-exports.astParseHandler = astParseHandler;
-const astParseDownloadHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const astParseDownloadHandler = async (c) => {
     try {
         const { spd, options = {} } = c.req.valid("json");
         if (!spd) {
             return c.json({ error: "SPD content is required" }, 400);
         }
-        const ast = (0, parser_1.parse)(spd);
+        const ast = parser.parse(spd);
         if (!ast) {
             return c.json({ error: "Failed to parse SPD" }, 400);
         }
-        const astString = (0, ast_1.serializeAST)(ast, options.prettyprint ? 2 : undefined);
+        const astString = astUtils.serializeAST(ast, options.prettyprint ? 2 : undefined);
         const astJson = JSON.parse(astString);
         c.header("Content-Type", "application/json");
         c.header("Content-Disposition", 'attachment; filename="diagram.json"');
@@ -248,9 +235,8 @@ const astParseDownloadHandler = (c) => __awaiter(void 0, void 0, void 0, functio
                 : "Failed to parse AST download",
         }, 400);
     }
-});
-exports.astParseDownloadHandler = astParseDownloadHandler;
-const astRenderHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const astRenderHandler = async (c) => {
     try {
         const { ast, options = {} } = c.req.valid("json");
         if (!ast) {
@@ -258,11 +244,11 @@ const astRenderHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
         }
         // Convert AST object to string and then deserialize to handle Map restoration
         const astString = JSON.stringify(ast);
-        const deserializedAst = (0, ast_1.deserializeAST)(astString);
+        const deserializedAst = astUtils.deserializeAST(astString);
         if (!deserializedAst) {
             return c.json({ error: "Invalid AST format" }, 400);
         }
-        const svgOutput = (0, core_1.generateSvgFromAst)(deserializedAst, options);
+        const svgOutput = generateSvgFromAst(deserializedAst, options);
         return c.json({ svg: svgOutput }, 200);
     }
     catch (error) {
@@ -271,9 +257,8 @@ const astRenderHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
             error: error instanceof Error ? error.message : "Failed to render AST",
         }, 500);
     }
-});
-exports.astRenderHandler = astRenderHandler;
-const astRenderDownloadHandler = (c) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const astRenderDownloadHandler = async (c) => {
     try {
         const { ast, options = {} } = c.req.valid("json");
         if (!ast) {
@@ -281,11 +266,11 @@ const astRenderDownloadHandler = (c) => __awaiter(void 0, void 0, void 0, functi
         }
         // Convert AST object to string and then deserialize to handle Map restoration
         const astString = JSON.stringify(ast);
-        const deserializedAst = (0, ast_1.deserializeAST)(astString);
+        const deserializedAst = astUtils.deserializeAST(astString);
         if (!deserializedAst) {
             return c.json({ error: "Invalid AST format" }, 400);
         }
-        const svgOutput = (0, core_1.generateSvgFromAst)(deserializedAst, options);
+        const svgOutput = generateSvgFromAst(deserializedAst, options);
         c.header("Content-Type", "image/svg+xml");
         c.header("Content-Disposition", 'attachment; filename="diagram.svg"');
         return c.body(svgOutput, 200);
@@ -298,5 +283,4 @@ const astRenderDownloadHandler = (c) => __awaiter(void 0, void 0, void 0, functi
                 : "Failed to render AST download",
         }, 500);
     }
-});
-exports.astRenderDownloadHandler = astRenderDownloadHandler;
+};

@@ -1,3 +1,3 @@
-import { mcp } from "./app";
+import { mcp } from "./app.js";
 
 mcp.start();

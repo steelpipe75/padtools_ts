@@ -1,10 +1,13 @@
 import { FastMCP } from "fastmcp";
-import { version } from "../../package.json";
+import { getRequire } from "../utils/compat.js";
+const cjsRequire = getRequire();
+const packageJson = cjsRequire("../../package.json");
+const { version } = packageJson;
 import {
   ConvertAstToSvgRequestSchema,
   ConvertRequestSchema,
   ConvertSpdToAstRequestSchema,
-} from "../spd/core";
+} from "../spd/core.js";
 import {
   handleConvertAstToSvgTool,
   handleConvertSpdToAstTool,
@@ -13,7 +16,7 @@ import {
   handleGenerateSpdPrompt,
   handleGetSpdExplanationResource,
   handleGetSpdExplanationTool,
-} from "./handlers";
+} from "./handlers.js";
 
 export const mcp = new FastMCP({
   name: "PAD Tools",

@@ -1,15 +1,11 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.startServer = void 0;
-const node_server_1 = require("@hono/node-server");
-const app_1 = __importDefault(require("./app"));
+import { serve } from "@hono/node-server";
+import { fileURLToPath } from "node:url";
+import * as fs from "node:fs";
+import app from "./app.js";
 const port = Number(process.env.PORT) || 3000;
-const startServer = (p) => {
-    const server = (0, node_server_1.serve)({
-        fetch: app_1.default.fetch,
+export const startServer = (p) => {
+    const server = serve({
+        fetch: app.fetch,
         port: p,
     });
     console.log(`Server is running on http://localhost:${p}`);
@@ -17,10 +13,23 @@ const startServer = (p) => {
     console.log(`OpenAPI spec available at http://localhost:${p}/openapi.json`);
     return server;
 };
-exports.startServer = startServer;
+// Check if this file is run directly
+let isMain = false;
+if (typeof __filename !== "undefined") {
+    isMain = process.argv[1]
+        ? fs.realpathSync(__filename) === fs.realpathSync(process.argv[1])
+        : false;
+}
+else {
+    // @ts-ignore
+    const metaUrl = new Function("return import.meta.url")();
+    isMain = process.argv[1]
+        ? fs.realpathSync(fileURLToPath(metaUrl)) === fs.realpathSync(process.argv[1])
+        : false;
+}
 // Start server
-if (require.main === module &&
+if (isMain &&
     // @ts-expect-error: Bun is only defined in Bun environment
     typeof Bun === "undefined") {
-    (0, exports.startServer)(port);
+    startServer(port);
 }

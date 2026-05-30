@@ -1,10 +1,10 @@
-import type { NodeListNode } from "../../../src/spd/ast";
+import type { NodeListNode } from "../../../src/spd/ast.js";
 import {
   NotRequireArgumentException,
   parse,
   RequireArgumentException,
   UnexpectedElseException,
-} from "../../../src/spd/parser";
+} from "../../../src/spd/parser.js";
 
 describe("SPDParser - If", () => {
   it("if文をパースすること", () => {

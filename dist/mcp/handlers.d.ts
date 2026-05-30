@@ -1,4 +1,4 @@
-import { type ConvertAstToSvgRequest, type ConvertRequest, type ConvertSpdToAstRequest } from "../spd/core";
+import { type ConvertAstToSvgRequest, type ConvertRequest, type ConvertSpdToAstRequest } from "../spd/core.js";
 /**
  * Handler for the SPD notation explanation resource.
  */
@@ -23,7 +23,7 @@ export declare const handleGetSpdExplanationTool: () => Promise<string>;
 /**
  * Handler for the convert_spd_to_svg tool.
  */
-export declare const handleConvertSpdToSvgTool: (args: ConvertRequest) => Promise<string>;
+export declare const handleConvertSpdToSvgTool: (args: ConvertRequest) => Promise<any>;
 /**
  * Handler for the convert_spd_to_ast tool.
  */
@@ -31,4 +31,4 @@ export declare const handleConvertSpdToAstTool: (args: ConvertSpdToAstRequest) =
 /**
  * Handler for the convert_ast_to_svg tool.
  */
-export declare const handleConvertAstToSvgTool: (args: ConvertAstToSvgRequest) => Promise<string>;
+export declare const handleConvertAstToSvgTool: (args: ConvertAstToSvgRequest) => Promise<any>;

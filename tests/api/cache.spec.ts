@@ -1,4 +1,4 @@
-import app from "../../src/api/app";
+import app from "../../src/api/app.js";
 
 describe("API Cache Control", () => {
   const routes = ["/health", "/spd-info", "/openapi.json", "/docs/"];

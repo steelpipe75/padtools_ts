@@ -1,12 +1,26 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import xmlFormat from "xml-formatter";
-import { parse } from "../../../src/spd/parser";
-import { render } from "../../../src/spd/svg-renderer";
+import { parse } from "../../../src/spd/parser.js";
+import { render } from "../../../src/spd/svg-renderer.js";
 
-const inputDir = path.join(__dirname, "input");
-const outputDir = path.join(__dirname, "output");
-const tempDir = path.join(__dirname, "temp");
+let filename: string;
+let dirname: string;
+
+if (typeof __filename !== "undefined") {
+  filename = __filename;
+  dirname = __dirname;
+} else {
+  // @ts-ignore
+  const metaUrl = new Function("return import.meta.url")();
+  filename = fileURLToPath(metaUrl);
+  dirname = path.dirname(filename);
+}
+
+const inputDir = path.join(dirname, "input");
+const outputDir = path.join(dirname, "output");
+const tempDir = path.join(dirname, "temp");
 
 const testCases = fs
   .readdirSync(inputDir)

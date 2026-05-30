@@ -8,7 +8,7 @@ import type {
   ProcessNode,
   SwitchNode,
   TerminalNode,
-} from "./ast";
+} from "./ast.js";
 
 // カスタムエラークラス群
 export class ParseError extends Error {
@@ -512,4 +512,8 @@ export const parse = (
     children: rootContext.nodeList,
   };
   return topNode;
+}
+
+export const parser = {
+  parse,
 };

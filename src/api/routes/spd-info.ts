@@ -1,5 +1,5 @@
 import { createRoute, type RouteHandler, z } from "@hono/zod-openapi";
-import { SPD_EXPLANATION } from "../../spd/docs";
+import { SPD_EXPLANATION } from "../../spd/docs.js";
 
 const SpdInfoResponseSchema = z.object({
   explanation: z.string().openapi({
