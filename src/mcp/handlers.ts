@@ -1,13 +1,12 @@
-import { deserializeAST, serializeAST } from "../spd/ast";
+import { astUtils } from "../spd/ast.js";
 import {
   type ConvertAstToSvgRequest,
   type ConvertRequest,
   type ConvertSpdToAstRequest,
-  generateSvg,
-  generateSvgFromAst,
-} from "../spd/core";
-import { SPD_EXPLANATION } from "../spd/docs";
-import { ParseError, parse } from "../spd/parser";
+  core,
+} from "../spd/core.js";
+import { SPD_EXPLANATION } from "../spd/docs.js";
+import { ParseError, parser } from "../spd/parser.js";
 
 /**
  * Handler for the SPD notation explanation resource.
@@ -50,7 +49,7 @@ export const handleGetSpdExplanationTool = async () => {
  */
 export const handleConvertSpdToSvgTool = async (args: ConvertRequest) => {
   try {
-    const svg = generateSvg(args.spd, args.options);
+    const svg = core.generateSvg(args.spd, args.options);
     return svg;
   } catch (error) {
     if (error instanceof ParseError) {
@@ -71,12 +70,12 @@ export const handleConvertSpdToAstTool = async (
   args: ConvertSpdToAstRequest,
 ) => {
   try {
-    const ast = parse(args.spd);
-    if (!ast) {
+    const astVal = parser.parse(args.spd);
+    if (!astVal) {
       throw new Error("Failed to parse SPD");
     }
     // serialize to handle Map and then parse back to object for JSON response
-    const astJson = JSON.parse(serializeAST(ast));
+    const astJson = JSON.parse(astUtils.serializeAST(astVal));
     return astJson;
   } catch (error) {
     if (error instanceof ParseError) {
@@ -99,13 +98,13 @@ export const handleConvertAstToSvgTool = async (
   try {
     // Convert AST object to string and then deserialize to handle Map restoration
     const astString = JSON.stringify(args.ast);
-    const deserializedAst = deserializeAST(astString);
+    const deserializedAst = astUtils.deserializeAST(astString);
 
     if (!deserializedAst) {
       throw new Error("Invalid AST format");
     }
 
-    const svgOutput = generateSvgFromAst(deserializedAst, args.options);
+    const svgOutput = core.generateSvgFromAst(deserializedAst, args.options);
     return svgOutput;
   } catch (error) {
     throw new Error(

@@ -1,103 +1,90 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.parse = exports.UnexpectedIOException = exports.UnexpectedInnerException = exports.CaseDuplicateException = exports.UnexpectedCaseException = exports.UnexpectedElseException = exports.UnknownCommandException = exports.IllegalIndentException = exports.NotRequireArgumentException = exports.RequireArgumentException = exports.ParseError = void 0;
 // カスタムエラークラス群
-class ParseError extends Error {
+export class ParseError extends Error {
+    lineNo;
+    lineStr;
     constructor(message) {
         super(message);
         this.name = this.constructor.name;
         Object.setPrototypeOf(this, ParseError.prototype);
     }
 }
-exports.ParseError = ParseError;
 // 引数が必要な場合にスローされる例外
-class RequireArgumentException extends ParseError {
+export class RequireArgumentException extends ParseError {
     constructor() {
         super("このコマンドは引数が必要です");
         Object.setPrototypeOf(this, RequireArgumentException.prototype);
     }
 }
-exports.RequireArgumentException = RequireArgumentException;
 // 引数が不要な場合にスローされる例外
-class NotRequireArgumentException extends ParseError {
+export class NotRequireArgumentException extends ParseError {
     constructor() {
         super("このコマンドに引数は不要です");
         Object.setPrototypeOf(this, NotRequireArgumentException.prototype);
     }
 }
-exports.NotRequireArgumentException = NotRequireArgumentException;
 // 不正なインデントの場合にスローされる例外
-class IllegalIndentException extends ParseError {
+export class IllegalIndentException extends ParseError {
     constructor() {
         super("インデントの数が不正です");
         Object.setPrototypeOf(this, IllegalIndentException.prototype);
     }
 }
-exports.IllegalIndentException = IllegalIndentException;
 // 未知のコマンドの場合にスローされる例外
-class UnknownCommandException extends ParseError {
+export class UnknownCommandException extends ParseError {
     constructor() {
         super("未知のコマンドです");
         Object.setPrototypeOf(this, UnknownCommandException.prototype);
     }
 }
-exports.UnknownCommandException = UnknownCommandException;
 // 予期しない:elseコマンドの場合にスローされる例外
-class UnexpectedElseException extends ParseError {
+export class UnexpectedElseException extends ParseError {
     constructor() {
         super("不適切なelseです");
         Object.setPrototypeOf(this, UnexpectedElseException.prototype);
     }
 }
-exports.UnexpectedElseException = UnexpectedElseException;
 // 予期しない:caseコマンドの場合にスローされる例外
-class UnexpectedCaseException extends ParseError {
+export class UnexpectedCaseException extends ParseError {
     constructor() {
         super("不適切なcaseが現れました");
         Object.setPrototypeOf(this, UnexpectedCaseException.prototype);
     }
 }
-exports.UnexpectedCaseException = UnexpectedCaseException;
 // :caseの値が重複している場合にスローされる例外
-class CaseDuplicateException extends ParseError {
+export class CaseDuplicateException extends ParseError {
     constructor() {
         super("既に同名のCaseが存在します");
         Object.setPrototypeOf(this, CaseDuplicateException.prototype);
     }
 }
-exports.CaseDuplicateException = CaseDuplicateException;
 // 内部で予期しないエラーが発生した場合にスローされる例外
-class UnexpectedInnerException extends ParseError {
+export class UnexpectedInnerException extends ParseError {
     constructor(message) {
         super(`内部エラー:${message}`);
         Object.setPrototypeOf(this, UnexpectedInnerException.prototype);
     }
 }
-exports.UnexpectedInnerException = UnexpectedInnerException;
 // 予期しないI/Oエラーが発生した場合にスローされる例外
-class UnexpectedIOException extends ParseError {
+export class UnexpectedIOException extends ParseError {
     constructor() {
         super("予期しないIOエラーが発生しました");
         Object.setPrototypeOf(this, UnexpectedIOException.prototype);
     }
 }
-exports.UnexpectedIOException = UnexpectedIOException;
 /**
  * パース中のコンテキストを扱うクラス。
  */
 class Context {
-    constructor() {
-        // 親のコンテキスト
-        this.parent = null;
-        // 深さ
-        this.depth = 0;
-        // ノードリスト
-        this.nodeList = [];
-        // コンテキストの追加状態
-        this.optionStatus = "Default";
-        // コンテキストの状態に結びつく引数
-        this.optionArg = null;
-    }
+    // 親のコンテキスト
+    parent = null;
+    // 深さ
+    depth = 0;
+    // ノードリスト
+    nodeList = [];
+    // コンテキストの追加状態
+    optionStatus = "Default";
+    // コンテキストの状態に結びつく引数
+    optionArg = null;
 }
 /**
  * SPD (Simple PAD Description) フォーマットのパーサー。
@@ -341,7 +328,7 @@ const upToParent = (context) => {
  * @param src SPDフォーマットの文字列。
  * @returns パースされたASTのルートノード。
  */
-const parse = (src, exr = DummyParseErrorReceiver) => {
+export const parse = (src, exr = DummyParseErrorReceiver) => {
     // if(src == null) throw new IllegalArgumentException("src is null"); // # diff TypeScriptではnullチェックは不要
     // 先頭のコンテキスト
     const rootContext = new Context();
@@ -491,4 +478,6 @@ const parse = (src, exr = DummyParseErrorReceiver) => {
     };
     return topNode;
 };
-exports.parse = parse;
+export const parser = {
+    parse,
+};

@@ -3,7 +3,7 @@ import {
   parse,
   RequireArgumentException,
   UnknownCommandException,
-} from "../../../src/spd/parser";
+} from "../../../src/spd/parser.js";
 
 describe("SPDParser - Exception Handling", () => {
   it("引数なしのcallコマンドに対してRequireArgumentExceptionをスローすること", () => {

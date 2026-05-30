@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SPD_EXPLANATION = void 0;
 /**
  * SPD (Simple PAD Description) 記法の説明
  */
-exports.SPD_EXPLANATION = `
+export const SPD_EXPLANATION = `
 # SPD (Simple PAD Description) 記法リファレンス
 
 SPDは、テキストでPAD図を記述するための簡潔な記法です。

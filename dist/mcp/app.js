@@ -1,27 +1,27 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.mcp = void 0;
-const fastmcp_1 = require("fastmcp");
-const package_json_1 = require("../../package.json");
-const core_1 = require("../spd/core");
-const handlers_1 = require("./handlers");
-exports.mcp = new fastmcp_1.FastMCP({
+import { FastMCP } from "fastmcp";
+import { getRequire } from "../utils/compat.js";
+const cjsRequire = getRequire();
+const packageJson = cjsRequire("../../package.json");
+const { version } = packageJson;
+import { ConvertAstToSvgRequestSchema, ConvertRequestSchema, ConvertSpdToAstRequestSchema, } from "../spd/core.js";
+import { handleConvertAstToSvgTool, handleConvertSpdToAstTool, handleConvertSpdToSvgTool, handleExplainSpdPrompt, handleGenerateSpdPrompt, handleGetSpdExplanationResource, handleGetSpdExplanationTool, } from "./handlers.js";
+export const mcp = new FastMCP({
     name: "PAD Tools",
-    version: package_json_1.version,
+    version: version,
 });
-exports.mcp.addResource({
+mcp.addResource({
     uri: "spd://docs/explanation",
     name: "SPD Notation Explanation",
     mimeType: "text/markdown",
     description: "Explanation of SPD (Simple PAD Description) notation.",
-    load: handlers_1.handleGetSpdExplanationResource,
+    load: handleGetSpdExplanationResource,
 });
-exports.mcp.addPrompt({
+mcp.addPrompt({
     name: "explain-spd",
     description: "Explain SPD (Simple PAD Description) notation with examples.",
-    load: handlers_1.handleExplainSpdPrompt,
+    load: handleExplainSpdPrompt,
 });
-exports.mcp.addPrompt({
+mcp.addPrompt({
     name: "generate-spd",
     description: "Generate SPD (Simple PAD Description) from a task description.",
     arguments: [
@@ -31,28 +31,28 @@ exports.mcp.addPrompt({
             required: true,
         },
     ],
-    load: handlers_1.handleGenerateSpdPrompt,
+    load: handleGenerateSpdPrompt,
 });
-exports.mcp.addTool({
+mcp.addTool({
     name: "get_spd_explanation",
     description: "Get the explanation of SPD (Simple PAD Description) notation.",
-    execute: handlers_1.handleGetSpdExplanationTool,
+    execute: handleGetSpdExplanationTool,
 });
-exports.mcp.addTool({
+mcp.addTool({
     name: "convert_spd_to_svg",
     description: "Convert SPD (Simple PAD Description) text to a PAD diagram in SVG format.",
-    parameters: core_1.ConvertRequestSchema,
-    execute: handlers_1.handleConvertSpdToSvgTool,
+    parameters: ConvertRequestSchema,
+    execute: handleConvertSpdToSvgTool,
 });
-exports.mcp.addTool({
+mcp.addTool({
     name: "convert_spd_to_ast",
     description: "Convert SPD (Simple PAD Description) text to its Abstract Syntax Tree (AST) in JSON format.",
-    parameters: core_1.ConvertSpdToAstRequestSchema,
-    execute: handlers_1.handleConvertSpdToAstTool,
+    parameters: ConvertSpdToAstRequestSchema,
+    execute: handleConvertSpdToAstTool,
 });
-exports.mcp.addTool({
+mcp.addTool({
     name: "convert_ast_to_svg",
     description: "Convert an Abstract Syntax Tree (AST) in JSON format to a PAD diagram in SVG format.",
-    parameters: core_1.ConvertAstToSvgRequestSchema,
-    execute: handlers_1.handleConvertAstToSvgTool,
+    parameters: ConvertAstToSvgRequestSchema,
+    execute: handleConvertAstToSvgTool,
 });

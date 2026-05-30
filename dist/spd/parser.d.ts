@@ -1,4 +1,4 @@
-import type { Node } from "./ast";
+import type { Node } from "./ast.js";
 export declare class ParseError extends Error {
     lineNo?: number;
     lineStr?: string;
@@ -38,4 +38,7 @@ type ParseErrorReceiverFunction = (lineStr: string, lineNo: number, err: ParseEr
  * @returns パースされたASTのルートノード。
  */
 export declare const parse: (src: string, exr?: ParseErrorReceiverFunction) => Node | null;
+export declare const parser: {
+    parse: (src: string, exr?: ParseErrorReceiverFunction) => Node | null;
+};
 export {};

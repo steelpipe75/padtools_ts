@@ -1,10 +1,10 @@
 import { createRoute, type RouteHandler, z } from "@hono/zod-openapi";
-import { deserializeAST, serializeAST } from "../../spd/ast";
+import { astUtils } from "../../spd/ast.js";
 import {
   ConvertRequestOptionsSchema,
   generateSvgFromAst,
-} from "../../spd/core";
-import { parse } from "../../spd/parser";
+} from "../../spd/core.js";
+import { parser } from "../../spd/parser.js";
 
 const ErrorResponseSchema = z.object({
   error: z.string().openapi({
@@ -214,14 +214,14 @@ export const astParseHandler: RouteHandler<typeof astParseRoute> = async (
       return c.json({ error: "SPD content is required" }, 400);
     }
 
-    const ast = parse(spd);
+    const ast = parser.parse(spd);
     if (!ast) {
       return c.json({ error: "Failed to parse SPD" }, 400);
     }
 
     // serialize to handle Map and then parse back to object for JSON response
     const astJson = JSON.parse(
-      serializeAST(ast, options.prettyprint ? 2 : undefined),
+      astUtils.serializeAST(ast, options.prettyprint ? 2 : undefined),
     );
     return c.json({ ast: astJson }, 200);
   } catch (error) {
@@ -242,12 +242,15 @@ export const astParseDownloadHandler: RouteHandler<
       return c.json({ error: "SPD content is required" }, 400);
     }
 
-    const ast = parse(spd);
+    const ast = parser.parse(spd);
     if (!ast) {
       return c.json({ error: "Failed to parse SPD" }, 400);
     }
 
-    const astString = serializeAST(ast, options.prettyprint ? 2 : undefined);
+    const astString = astUtils.serializeAST(
+      ast,
+      options.prettyprint ? 2 : undefined,
+    );
     const astJson = JSON.parse(astString);
 
     c.header("Content-Type", "application/json");
@@ -279,7 +282,7 @@ export const astRenderHandler: RouteHandler<typeof astRenderRoute> = async (
 
     // Convert AST object to string and then deserialize to handle Map restoration
     const astString = JSON.stringify(ast);
-    const deserializedAst = deserializeAST(astString);
+    const deserializedAst = astUtils.deserializeAST(astString);
 
     if (!deserializedAst) {
       return c.json({ error: "Invalid AST format" }, 400);
@@ -309,7 +312,7 @@ export const astRenderDownloadHandler: RouteHandler<
 
     // Convert AST object to string and then deserialize to handle Map restoration
     const astString = JSON.stringify(ast);
-    const deserializedAst = deserializeAST(astString);
+    const deserializedAst = astUtils.deserializeAST(astString);
 
     if (!deserializedAst) {
       return c.json({ error: "Invalid AST format" }, 400);

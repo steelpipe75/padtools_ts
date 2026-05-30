@@ -1,5 +1,6 @@
 import { serve } from "@hono/node-server";
-import { startServer } from "../../src/api/server";
+import { jest } from "@jest/globals";
+import { startServer } from "../../src/api/server.js";
 
 // @hono/node-server をモックして実際にポートを開かないようにする
 jest.mock("@hono/node-server", () => ({
@@ -9,11 +10,11 @@ jest.mock("@hono/node-server", () => ({
 }));
 
 describe("Server Startup", () => {
-  let consoleSpy: jest.SpyInstance;
+  let consoleSpy: jest.Spied<typeof console.log>;
 
   beforeEach(() => {
-    // console.log をスパイする
-    consoleSpy = jest.spyOn(console, "log").mockImplementation();
+    // ログ出力をモックする
+    consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
   });
 
   afterEach(() => {

@@ -1,4 +1,4 @@
-import * as eaw from "eastasianwidth";
+import eaw from "eastasianwidth";
 import sanitizeHtml from "sanitize-html";
 import type {
   CallNode,
@@ -10,7 +10,7 @@ import type {
   ProcessNode,
   SwitchNode,
   TerminalNode,
-} from "./ast";
+} from "./ast.js";
 
 type Branch = {
   label: string;

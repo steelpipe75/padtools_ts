@@ -1,15 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.spdInfoHandler = exports.spdInfoRoute = void 0;
-const zod_openapi_1 = require("@hono/zod-openapi");
-const docs_1 = require("../../spd/docs");
-const SpdInfoResponseSchema = zod_openapi_1.z.object({
-    explanation: zod_openapi_1.z.string().openapi({
+import { createRoute, z } from "@hono/zod-openapi";
+import { SPD_EXPLANATION } from "../../spd/docs.js";
+const SpdInfoResponseSchema = z.object({
+    explanation: z.string().openapi({
         example: "SPD (Simple PAD Description) is...",
         description: "The explanation of SPD notation in Markdown format",
     }),
 });
-exports.spdInfoRoute = (0, zod_openapi_1.createRoute)({
+export const spdInfoRoute = createRoute({
     method: "get",
     path: "/spd-info",
     responses: {
@@ -23,7 +20,6 @@ exports.spdInfoRoute = (0, zod_openapi_1.createRoute)({
         },
     },
 });
-const spdInfoHandler = (c) => {
-    return c.json({ explanation: docs_1.SPD_EXPLANATION });
+export const spdInfoHandler = (c) => {
+    return c.json({ explanation: SPD_EXPLANATION });
 };
-exports.spdInfoHandler = spdInfoHandler;

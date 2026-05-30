@@ -1,5 +1,5 @@
-import type { NodeListNode } from "../../../src/spd/ast";
-import { parse, RequireArgumentException } from "../../../src/spd/parser";
+import type { NodeListNode } from "../../../src/spd/ast.js";
+import { parse, RequireArgumentException } from "../../../src/spd/parser.js";
 
 describe("SPDParser - Loop", () => {
   it("処理が空のwhileループをパースすること", () => {

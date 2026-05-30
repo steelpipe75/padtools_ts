@@ -1,4 +1,4 @@
-import type { Node } from "./ast";
+import type { Node } from "./ast.js";
 /**
  * 描画に関する設定をまとめたオブジェクト
  */

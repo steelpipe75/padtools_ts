@@ -1,7 +1,12 @@
 import { StreamableHTTPTransport } from "@hono/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Context } from "hono";
-import { version } from "../../../package.json";
+import { getRequire } from "../../utils/compat.js";
+
+const cjsRequire = getRequire();
+const packageJson = cjsRequire("../../../package.json");
+const { version } = packageJson;
+
 import {
   handleConvertAstToSvgTool,
   handleConvertSpdToAstTool,
@@ -10,12 +15,12 @@ import {
   handleGenerateSpdPrompt,
   handleGetSpdExplanationResource,
   handleGetSpdExplanationTool,
-} from "../../mcp/handlers";
+} from "../../mcp/handlers.js";
 import {
   ConvertAstToSvgRequestSchema,
   ConvertRequestSchema,
   ConvertSpdToAstRequestSchema,
-} from "../../spd/core";
+} from "../../spd/core.js";
 
 const mcpServer = new McpServer({
   name: "PAD Tools",

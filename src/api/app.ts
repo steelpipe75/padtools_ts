@@ -1,7 +1,12 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { cors } from "hono/cors";
-import { version } from "../../package.json";
+import { getRequire } from "../utils/compat.js";
+
+const cjsRequire = getRequire();
+const packageJson = cjsRequire("../../package.json");
+const { version } = packageJson;
+
 import {
   astParseDownloadHandler,
   astParseDownloadRoute,
@@ -11,16 +16,16 @@ import {
   astRenderDownloadRoute,
   astRenderHandler,
   astRenderRoute,
-} from "./routes/ast";
+} from "./routes/ast.js";
 import {
   convertHandler,
   convertRoute,
   downloadHandler,
   downloadRoute,
-} from "./routes/convert";
-import { healthHandler, healthRoute } from "./routes/health";
-import { mcpHandler } from "./routes/mcp";
-import { spdInfoHandler, spdInfoRoute } from "./routes/spd-info";
+} from "./routes/convert.js";
+import { healthHandler, healthRoute } from "./routes/health.js";
+import { mcpHandler } from "./routes/mcp.js";
+import { spdInfoHandler, spdInfoRoute } from "./routes/spd-info.js";
 
 const app = new OpenAPIHono();
 
