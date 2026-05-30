@@ -10,7 +10,7 @@ jest.mock("@hono/node-server", () => ({
 }));
 
 describe("Server Startup", () => {
-  let consoleSpy: any;
+  let consoleSpy: jest.Spied<typeof console.log>;
 
   beforeEach(() => {
     // ログ出力をモックする

@@ -1,9 +1,8 @@
 import { createRequire } from "node:module";
 import { jest } from "@jest/globals";
 
-let cjsRequire: any;
+let cjsRequire: NodeRequire;
 try {
-  // @ts-expect-error
   const metaUrl = new Function("return import.meta.url")();
   cjsRequire = createRequire(metaUrl);
 } catch {

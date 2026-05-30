@@ -1,6 +1,6 @@
-import { serve } from "@hono/node-server";
-import { fileURLToPath } from "node:url";
 import * as fs from "node:fs";
+import { fileURLToPath } from "node:url";
+import { serve } from "@hono/node-server";
 import app from "./app.js";
 const port = Number(process.env.PORT) || 3000;
 export const startServer = (p) => {
@@ -21,10 +21,10 @@ if (typeof __filename !== "undefined") {
         : false;
 }
 else {
-    // @ts-ignore
     const metaUrl = new Function("return import.meta.url")();
     isMain = process.argv[1]
-        ? fs.realpathSync(fileURLToPath(metaUrl)) === fs.realpathSync(process.argv[1])
+        ? fs.realpathSync(fileURLToPath(metaUrl)) ===
+            fs.realpathSync(process.argv[1])
         : false;
 }
 // Start server

@@ -11,11 +11,11 @@ export function getRequire(callerFilename?: string): NodeRequire {
     const orig = Error.prepareStackTrace;
     Error.prepareStackTrace = (_, stack) => stack;
     const err = new Error();
-    const stack = err.stack as any;
+    const stack = err.stack as unknown as NodeJS.CallSite[];
     Error.prepareStackTrace = orig;
     // stack[0] is getRequire
     // stack[1] is the caller of getRequire
-    filename = stack[1] ? stack[1].getFileName() : "";
+    filename = stack[1]?.getFileName() ?? "";
   }
 
   if (!filename) {

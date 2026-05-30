@@ -14,7 +14,7 @@ export function getRequire(callerFilename) {
         Error.prepareStackTrace = orig;
         // stack[0] is getRequire
         // stack[1] is the caller of getRequire
-        filename = stack[1] ? stack[1].getFileName() : "";
+        filename = stack[1]?.getFileName() ?? "";
     }
     if (!filename) {
         throw new Error("Could not determine caller filename to create require context");
