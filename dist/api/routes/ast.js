@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { describeRoute, resolver } from "hono-openapi";
+import { z } from "zod";
 import { astUtils } from "../../spd/ast.js";
 import { ConvertRequestOptionsSchema, generateSvgFromAst, } from "../../spd/core.js";
 import { parser } from "../../spd/parser.js";
@@ -7,10 +7,7 @@ const ErrorResponseSchema = z.object({
     error: z.string().describe("Error message"),
 });
 export const AstParseRequestSchema = z.object({
-    spd: z
-        .string()
-        .describe("The SPD text to parse")
-        .meta({
+    spd: z.string().describe("The SPD text to parse").meta({
         example: ":terminal Start\nProcess\n:terminal End",
     }),
     options: ConvertRequestOptionsSchema.optional(),

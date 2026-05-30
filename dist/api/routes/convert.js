@@ -1,15 +1,23 @@
-import { z } from "zod";
 import { describeRoute, resolver } from "hono-openapi";
+import { z } from "zod";
 import { core } from "../../spd/core.js";
 const ConvertResponseSchema = z.object({
     svg: z.string().describe("The generated SVG content"),
 });
 const ErrorResponseSchema = z.object({
     error: z.string().describe("Error message"),
-    lineNo: z.number().optional().describe("The line number where the error occurred").meta({
+    lineNo: z
+        .number()
+        .optional()
+        .describe("The line number where the error occurred")
+        .meta({
         example: 2,
     }),
-    lineStr: z.string().optional().describe("The string content of the line where the error occurred").meta({
+    lineStr: z
+        .string()
+        .optional()
+        .describe("The string content of the line where the error occurred")
+        .meta({
         example: ":invalid_command arg",
     }),
 });

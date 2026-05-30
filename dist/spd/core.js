@@ -2,8 +2,8 @@ import _xmlFormat from "xml-formatter";
 const xmlFormat = typeof _xmlFormat === "function"
     ? _xmlFormat
     : _xmlFormat.default;
-import { z } from "zod";
 import { optimize } from "svgo";
+import { z } from "zod";
 import { parse } from "./parser.js";
 import { render } from "./svg-renderer.js";
 export const ConvertRequestOptionsSchema = z.object({
@@ -12,11 +12,7 @@ export const ConvertRequestOptionsSchema = z.object({
         .describe("SVGのフォントサイズ (px)")
         .optional()
         .meta({ example: 14 }),
-    fontFamily: z
-        .string()
-        .describe("SVGのフォントファミリー")
-        .optional()
-        .meta({
+    fontFamily: z.string().describe("SVGのフォントファミリー").optional().meta({
         example: "monospace",
     }),
     strokeWidth: z
@@ -24,11 +20,7 @@ export const ConvertRequestOptionsSchema = z.object({
         .describe("線の太さ (px)")
         .optional()
         .meta({ example: 1 }),
-    strokeColor: z
-        .string()
-        .describe("線の色 (カラーコード等)")
-        .optional()
-        .meta({
+    strokeColor: z.string().describe("線の色 (カラーコード等)").optional().meta({
         example: "#000000",
     }),
     backgroundColor: z
@@ -102,17 +94,12 @@ export const ConvertRequestSchema = z.object({
     options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 export const ConvertSpdToAstRequestSchema = z.object({
-    spd: z
-        .string()
-        .describe("ASTに変換するSPDテキスト")
-        .meta({
+    spd: z.string().describe("ASTに変換するSPDテキスト").meta({
         example: ":terminal Start\nProcess\n:terminal End",
     }),
 });
 export const ConvertAstToSvgRequestSchema = z.object({
-    ast: z
-        .any()
-        .describe("SVGに変換するAST JSONオブジェクト"),
+    ast: z.any().describe("SVGに変換するAST JSONオブジェクト"),
     options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 export const generateSvg = (spd, options = {}) => {

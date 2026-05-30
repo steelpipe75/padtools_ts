@@ -1,9 +1,9 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { Hono } from "hono";
-import { openAPIRouteHandler, validator as zValidator } from "hono-openapi";
 import { cors } from "hono/cors";
-import { getRequire } from "../utils/compat.js";
+import { openAPIRouteHandler, validator as zValidator } from "hono-openapi";
 import { ConvertRequestSchema } from "../spd/core.js";
+import { getRequire } from "../utils/compat.js";
 const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../package.json");
 const { version } = packageJson;
