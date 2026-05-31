@@ -1,3 +1,5 @@
-import { mcp } from "./app.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { mcpServer } from "./app.js";
 
-mcp.start();
+const transport = new StdioServerTransport();
+await mcpServer.connect(transport);
