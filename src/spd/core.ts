@@ -197,9 +197,9 @@ export const ConvertSpdToSvgResponseSchema = z.object({
   svg: z.string().describe("生成されたSVG形式のPAD図"),
 });
 
-export const ConvertSpdToAstResponseSchema = AstNodeSchema.describe(
-  "変換されたJSON形式の抽象構文木（AST）",
-);
+export const ConvertSpdToAstResponseSchema = z.object({
+  ast: AstNodeSchema.describe("変換されたJSON形式の抽象構文木（AST）"),
+});
 
 export const ConvertAstToSvgResponseSchema = z.object({
   svg: z.string().describe("生成されたSVG形式のPAD図"),
