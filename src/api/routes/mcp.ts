@@ -186,7 +186,7 @@ mcpServer.registerTool(
       );
       return {
         content: [{ type: "text", text: JSON.stringify(astJson) }],
-        structuredContent: astJson,
+        structuredContent: { ast: astJson },
       };
     } catch (error) {
       return {

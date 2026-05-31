@@ -75,7 +75,9 @@ export declare const GetSpdExplanationResponseSchema: z.ZodObject<{
 export declare const ConvertSpdToSvgResponseSchema: z.ZodObject<{
     svg: z.ZodString;
 }, z.core.$strip>;
-export declare const ConvertSpdToAstResponseSchema: z.ZodType<AstNode, unknown, z.core.$ZodTypeInternals<AstNode, unknown>>;
+export declare const ConvertSpdToAstResponseSchema: z.ZodObject<{
+    ast: z.ZodType<AstNode, unknown, z.core.$ZodTypeInternals<AstNode, unknown>>;
+}, z.core.$strip>;
 export declare const ConvertAstToSvgResponseSchema: z.ZodObject<{
     svg: z.ZodString;
 }, z.core.$strip>;

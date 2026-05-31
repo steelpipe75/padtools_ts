@@ -128,7 +128,7 @@ mcpServer.registerTool("convert_spd_to_ast", {
         const astJson = await handleConvertSpdToAstTool(args);
         return {
             content: [{ type: "text", text: JSON.stringify(astJson) }],
-            structuredContent: astJson,
+            structuredContent: { ast: astJson },
         };
     }
     catch (error) {
