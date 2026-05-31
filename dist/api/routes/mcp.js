@@ -79,6 +79,7 @@ mcpServer.registerTool("get_spd_explanation", {
     const text = await handleGetSpdExplanationTool();
     return {
         content: [{ type: "text", text: text }],
+        structuredContent: { explanation: text },
     };
 });
 mcpServer.registerTool("convert_spd_to_svg", {
@@ -97,6 +98,7 @@ mcpServer.registerTool("convert_spd_to_svg", {
         const svg = await handleConvertSpdToSvgTool(args);
         return {
             content: [{ type: "text", text: svg }],
+            structuredContent: { svg },
         };
     }
     catch (error) {
@@ -127,6 +129,7 @@ mcpServer.registerTool("convert_spd_to_ast", {
         const astJson = await handleConvertSpdToAstTool(args);
         return {
             content: [{ type: "text", text: JSON.stringify(astJson) }],
+            structuredContent: astJson,
         };
     }
     catch (error) {
@@ -157,6 +160,7 @@ mcpServer.registerTool("convert_ast_to_svg", {
         const svgOutput = await handleConvertAstToSvgTool(args);
         return {
             content: [{ type: "text", text: svgOutput }],
+            structuredContent: { svg: svgOutput },
         };
     }
     catch (error) {
