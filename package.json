@@ -60,7 +60,6 @@
     "@hono/standard-validator": "^0.2.2",
     "@hono/swagger-ui": "^0.6.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "@smithery/sdk": "^4.3.0",
     "commander": "^15.0.0",
     "eastasianwidth": "^0.3.0",
     "fastmcp": "^4.0.1",
