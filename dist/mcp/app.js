@@ -1,92 +1,176 @@
-import { FastMCP } from "fastmcp";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { getRequire } from "../utils/compat.js";
 const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../package.json");
 const { version } = packageJson;
-import { z } from "zod";
 import { ConvertAstToSvgRequestSchema, ConvertAstToSvgResponseSchema, ConvertRequestSchema, ConvertSpdToAstRequestSchema, ConvertSpdToAstResponseSchema, ConvertSpdToSvgResponseSchema, GetSpdExplanationResponseSchema, } from "../spd/core.js";
 import { handleConvertAstToSvgTool, handleConvertSpdToAstTool, handleConvertSpdToSvgTool, handleExplainSpdPrompt, handleGenerateSpdPrompt, handleGetSpdExplanationResource, handleGetSpdExplanationTool, } from "./handlers.js";
-export const mcp = new FastMCP({
+export const mcpServer = new McpServer({
     name: "PAD Tools",
     version: version,
 });
-mcp.addResource({
-    uri: "spd://docs/explanation",
-    name: "SPD表記法の説明",
+// Resource
+mcpServer.registerResource("spd-explanation", "spd://docs/explanation", {
     mimeType: "text/markdown",
     description: "SPD（Simple PAD Description）表記法の説明。",
-    load: handleGetSpdExplanationResource,
+}, async (uri) => {
+    const result = await handleGetSpdExplanationResource();
+    return {
+        contents: [
+            {
+                uri: uri.href,
+                text: result.text,
+                mimeType: result.mimeType,
+            },
+        ],
+    };
 });
-mcp.addPrompt({
-    name: "explain-spd",
+// Prompts
+mcpServer.registerPrompt("explain-spd", {
     description: "SPD（Simple PAD Description）表記法を例付きで説明します。",
-    load: handleExplainSpdPrompt,
+}, async () => {
+    const text = await handleExplainSpdPrompt();
+    return {
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: text,
+                },
+            },
+        ],
+    };
 });
-mcp.addPrompt({
-    name: "generate-spd",
+mcpServer.registerPrompt("generate-spd", {
     description: "タスクの説明からSPD（Simple PAD Description）を生成します。",
-    arguments: [
-        {
-            name: "description",
-            description: "SPDに変換するためのロジックまたはタスクの説明",
-            required: true,
-        },
-    ],
-    load: handleGenerateSpdPrompt,
+    argsSchema: {
+        // biome-ignore lint/suspicious/noExplicitAny: Required for dynamic access to Zod schema shape in MCP argsSchema
+        description: ConvertSpdToAstRequestSchema.shape.spd.describe("SPDに変換するためのロジックまたはタスクの説明"),
+    },
+}, async (args) => {
+    const text = await handleGenerateSpdPrompt(args);
+    return {
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: text,
+                },
+            },
+        ],
+    };
 });
-mcp.addTool({
-    name: "get_spd_explanation",
+// Tools
+mcpServer.registerTool("get_spd_explanation", {
+    title: "SPD表記法の説明取得",
     description: "SPD（Simple PAD Description）表記法の説明を取得します。",
-    parameters: z.object({}),
+    inputSchema: {},
     outputSchema: GetSpdExplanationResponseSchema,
     annotations: {
-        title: "SPD表記法の説明取得",
         readOnlyHint: true,
         destructiveHint: false,
         idempotentHint: true,
         openWorldHint: false,
     },
-    execute: handleGetSpdExplanationTool,
+}, async () => {
+    const text = await handleGetSpdExplanationTool();
+    return {
+        content: [{ type: "text", text: text }],
+        structuredContent: { explanation: text },
+    };
 });
-mcp.addTool({
-    name: "convert_spd_to_svg",
-    description: "SPD（Simple PAD Description）テキストをSVG形式 of PAD図に変換します。",
-    parameters: ConvertRequestSchema,
+mcpServer.registerTool("convert_spd_to_svg", {
+    title: "SPDからSVGへ変換",
+    description: "SPD（Simple PAD Description）テキストをSVG形式のPAD図に変換します。",
+    inputSchema: ConvertRequestSchema.shape,
     outputSchema: ConvertSpdToSvgResponseSchema,
     annotations: {
-        title: "SPDからSVGへ変換",
         readOnlyHint: true,
         destructiveHint: false,
         idempotentHint: true,
         openWorldHint: false,
     },
-    execute: handleConvertSpdToSvgTool,
+}, async (args) => {
+    try {
+        const svg = await handleConvertSpdToSvgTool(args);
+        return {
+            content: [{ type: "text", text: svg }],
+            structuredContent: { svg },
+        };
+    }
+    catch (error) {
+        return {
+            isError: true,
+            content: [
+                {
+                    type: "text",
+                    text: error instanceof Error ? error.message : String(error),
+                },
+            ],
+        };
+    }
 });
-mcp.addTool({
-    name: "convert_spd_to_ast",
+mcpServer.registerTool("convert_spd_to_ast", {
+    title: "SPDからASTへ変換",
     description: "SPD（Simple PAD Description）テキストをJSON形式の抽象構文木（AST）に変換します。",
-    parameters: ConvertSpdToAstRequestSchema,
+    inputSchema: ConvertSpdToAstRequestSchema.shape,
     outputSchema: ConvertSpdToAstResponseSchema,
     annotations: {
-        title: "SPDからASTへ変換",
         readOnlyHint: true,
         destructiveHint: false,
         idempotentHint: true,
         openWorldHint: false,
     },
-    execute: handleConvertSpdToAstTool,
+}, async (args) => {
+    try {
+        const astJson = await handleConvertSpdToAstTool(args);
+        return {
+            content: [{ type: "text", text: JSON.stringify(astJson) }],
+            structuredContent: astJson,
+        };
+    }
+    catch (error) {
+        return {
+            isError: true,
+            content: [
+                {
+                    type: "text",
+                    text: error instanceof Error ? error.message : String(error),
+                },
+            ],
+        };
+    }
 });
-mcp.addTool({
-    name: "convert_ast_to_svg",
+mcpServer.registerTool("convert_ast_to_svg", {
+    title: "ASTからSVGへ変換",
     description: "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
-    parameters: ConvertAstToSvgRequestSchema,
+    inputSchema: ConvertAstToSvgRequestSchema.shape,
     outputSchema: ConvertAstToSvgResponseSchema,
     annotations: {
-        title: "ASTからSVGへ変換",
         readOnlyHint: true,
         destructiveHint: false,
         idempotentHint: true,
         openWorldHint: false,
     },
-    execute: handleConvertAstToSvgTool,
+}, async (args) => {
+    try {
+        const svgOutput = await handleConvertAstToSvgTool(args);
+        return {
+            content: [{ type: "text", text: svgOutput }],
+            structuredContent: { svg: svgOutput },
+        };
+    }
+    catch (error) {
+        return {
+            isError: true,
+            content: [
+                {
+                    type: "text",
+                    text: error instanceof Error ? error.message : String(error),
+                },
+            ],
+        };
+    }
 });
