@@ -121,6 +121,7 @@ mcpServer.registerTool(
     const text = await handleGetSpdExplanationTool();
     return {
       content: [{ type: "text", text: text }],
+      structuredContent: { explanation: text },
     };
   },
 );
@@ -147,6 +148,7 @@ mcpServer.registerTool(
       );
       return {
         content: [{ type: "text", text: svg }],
+        structuredContent: { svg },
       };
     } catch (error) {
       return {
@@ -184,6 +186,7 @@ mcpServer.registerTool(
       );
       return {
         content: [{ type: "text", text: JSON.stringify(astJson) }],
+        structuredContent: astJson,
       };
     } catch (error) {
       return {
@@ -220,6 +223,7 @@ mcpServer.registerTool(
       );
       return {
         content: [{ type: "text", text: svgOutput }],
+        structuredContent: { svg: svgOutput },
       };
     } catch (error) {
       return {

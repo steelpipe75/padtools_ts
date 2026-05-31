@@ -189,21 +189,21 @@ export type ConvertAstToSvgRequest = z.infer<
 >;
 
 // MCP Output schemas
-export const GetSpdExplanationResponseSchema = z
-  .string()
-  .describe("SPD表記法の説明テキスト（Markdown形式）");
+export const GetSpdExplanationResponseSchema = z.object({
+  explanation: z.string().describe("SPD表記法の説明テキスト（Markdown形式）"),
+});
 
-export const ConvertSpdToSvgResponseSchema = z
-  .string()
-  .describe("生成されたSVG形式のPAD図");
+export const ConvertSpdToSvgResponseSchema = z.object({
+  svg: z.string().describe("生成されたSVG形式のPAD図"),
+});
 
 export const ConvertSpdToAstResponseSchema = AstNodeSchema.describe(
   "変換されたJSON形式の抽象構文木（AST）",
 );
 
-export const ConvertAstToSvgResponseSchema = z
-  .string()
-  .describe("生成されたSVG形式のPAD図");
+export const ConvertAstToSvgResponseSchema = z.object({
+  svg: z.string().describe("生成されたSVG形式のPAD図"),
+});
 
 export const generateSvg = (
   spd: string,
