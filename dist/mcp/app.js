@@ -4,7 +4,7 @@ const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../package.json");
 const { version } = packageJson;
 import { z } from "zod";
-import { ConvertAstToSvgRequestSchema, ConvertRequestSchema, ConvertSpdToAstRequestSchema, GetSpdExplanationResponseSchema, ConvertSpdToSvgResponseSchema, ConvertSpdToAstResponseSchema, ConvertAstToSvgResponseSchema, } from "../spd/core.js";
+import { ConvertAstToSvgRequestSchema, ConvertAstToSvgResponseSchema, ConvertRequestSchema, ConvertSpdToAstRequestSchema, ConvertSpdToAstResponseSchema, ConvertSpdToSvgResponseSchema, GetSpdExplanationResponseSchema, } from "../spd/core.js";
 import { handleConvertAstToSvgTool, handleConvertSpdToAstTool, handleConvertSpdToSvgTool, handleExplainSpdPrompt, handleGenerateSpdPrompt, handleGetSpdExplanationResource, handleGetSpdExplanationTool, } from "./handlers.js";
 export const mcp = new FastMCP({
     name: "PAD Tools",

@@ -5,7 +5,7 @@ const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../../package.json");
 const { version } = packageJson;
 import { handleConvertAstToSvgTool, handleConvertSpdToAstTool, handleConvertSpdToSvgTool, handleExplainSpdPrompt, handleGenerateSpdPrompt, handleGetSpdExplanationResource, handleGetSpdExplanationTool, } from "../../mcp/handlers.js";
-import { ConvertAstToSvgRequestSchema, ConvertRequestSchema, ConvertSpdToAstRequestSchema, GetSpdExplanationResponseSchema, ConvertSpdToSvgResponseSchema, ConvertSpdToAstResponseSchema, ConvertAstToSvgResponseSchema, } from "../../spd/core.js";
+import { ConvertAstToSvgRequestSchema, ConvertAstToSvgResponseSchema, ConvertRequestSchema, ConvertSpdToAstRequestSchema, ConvertSpdToAstResponseSchema, ConvertSpdToSvgResponseSchema, GetSpdExplanationResponseSchema, } from "../../spd/core.js";
 const mcpServer = new McpServer({
     name: "PAD Tools",
     version: version,
