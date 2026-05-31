@@ -5,7 +5,7 @@ const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../../package.json");
 const { version } = packageJson;
 import { handleConvertAstToSvgTool, handleConvertSpdToAstTool, handleConvertSpdToSvgTool, handleExplainSpdPrompt, handleGenerateSpdPrompt, handleGetSpdExplanationResource, handleGetSpdExplanationTool, } from "../../mcp/handlers.js";
-import { ConvertAstToSvgRequestSchema, ConvertRequestSchema, ConvertSpdToAstRequestSchema, } from "../../spd/core.js";
+import { ConvertAstToSvgRequestSchema, ConvertRequestSchema, ConvertSpdToAstRequestSchema, GetSpdExplanationResponseSchema, ConvertSpdToSvgResponseSchema, ConvertSpdToAstResponseSchema, ConvertAstToSvgResponseSchema, } from "../../spd/core.js";
 const mcpServer = new McpServer({
     name: "PAD Tools",
     version: version,
@@ -65,7 +65,16 @@ mcpServer.registerPrompt("generate-spd", {
 });
 // Tools
 mcpServer.registerTool("get_spd_explanation", {
+    title: "SPD表記法の説明取得",
     description: "SPD（Simple PAD Description）表記法の説明を取得します。",
+    inputSchema: {},
+    outputSchema: GetSpdExplanationResponseSchema,
+    annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+    },
 }, async () => {
     const text = await handleGetSpdExplanationTool();
     return {
@@ -73,8 +82,16 @@ mcpServer.registerTool("get_spd_explanation", {
     };
 });
 mcpServer.registerTool("convert_spd_to_svg", {
+    title: "SPDからSVGへ変換",
     description: "SPD（Simple PAD Description）テキストをSVG形式のPAD図に変換します。",
     inputSchema: ConvertRequestSchema.shape,
+    outputSchema: ConvertSpdToSvgResponseSchema,
+    annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+    },
 }, async (args) => {
     try {
         const svg = await handleConvertSpdToSvgTool(args);
@@ -95,8 +112,16 @@ mcpServer.registerTool("convert_spd_to_svg", {
     }
 });
 mcpServer.registerTool("convert_spd_to_ast", {
+    title: "SPDからASTへ変換",
     description: "SPD（Simple PAD Description）テキストをJSON形式の抽象構文木（AST）に変換します。",
     inputSchema: ConvertSpdToAstRequestSchema.shape,
+    outputSchema: ConvertSpdToAstResponseSchema,
+    annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+    },
 }, async (args) => {
     try {
         const astJson = await handleConvertSpdToAstTool(args);
@@ -117,8 +142,16 @@ mcpServer.registerTool("convert_spd_to_ast", {
     }
 });
 mcpServer.registerTool("convert_ast_to_svg", {
+    title: "ASTからSVGへ変換",
     description: "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
     inputSchema: ConvertAstToSvgRequestSchema.shape,
+    outputSchema: ConvertAstToSvgResponseSchema,
+    annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+    },
 }, async (args) => {
     try {
         const svgOutput = await handleConvertAstToSvgTool(args);

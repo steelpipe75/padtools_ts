@@ -20,6 +20,10 @@ import {
   ConvertAstToSvgRequestSchema,
   ConvertRequestSchema,
   ConvertSpdToAstRequestSchema,
+  GetSpdExplanationResponseSchema,
+  ConvertSpdToSvgResponseSchema,
+  ConvertSpdToAstResponseSchema,
+  ConvertAstToSvgResponseSchema,
 } from "../../spd/core.js";
 
 const mcpServer = new McpServer({
@@ -102,7 +106,16 @@ mcpServer.registerPrompt(
 mcpServer.registerTool(
   "get_spd_explanation",
   {
+    title: "SPD表記法の説明取得",
     description: "SPD（Simple PAD Description）表記法の説明を取得します。",
+    inputSchema: {},
+    outputSchema: GetSpdExplanationResponseSchema,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
   },
   async () => {
     const text = await handleGetSpdExplanationTool();
@@ -115,9 +128,17 @@ mcpServer.registerTool(
 mcpServer.registerTool(
   "convert_spd_to_svg",
   {
+    title: "SPDからSVGへ変換",
     description:
       "SPD（Simple PAD Description）テキストをSVG形式のPAD図に変換します。",
     inputSchema: ConvertRequestSchema.shape,
+    outputSchema: ConvertSpdToSvgResponseSchema,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
   },
   async (args) => {
     try {
@@ -144,9 +165,17 @@ mcpServer.registerTool(
 mcpServer.registerTool(
   "convert_spd_to_ast",
   {
+    title: "SPDからASTへ変換",
     description:
       "SPD（Simple PAD Description）テキストをJSON形式の抽象構文木（AST）に変換します。",
     inputSchema: ConvertSpdToAstRequestSchema.shape,
+    outputSchema: ConvertSpdToAstResponseSchema,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
   },
   async (args) => {
     try {
@@ -173,8 +202,16 @@ mcpServer.registerTool(
 mcpServer.registerTool(
   "convert_ast_to_svg",
   {
+    title: "ASTからSVGへ変換",
     description: "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
     inputSchema: ConvertAstToSvgRequestSchema.shape,
+    outputSchema: ConvertAstToSvgResponseSchema,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
   },
   async (args) => {
     try {
