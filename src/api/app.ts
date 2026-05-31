@@ -109,26 +109,6 @@ app.post(
 // MCP Route
 app.all("/mcp", mcpHandler);
 
-// Static Server Card for Smithery/MCP Client discovery
-app.get("/.well-known/mcp/server-card.json", (c) => {
-  const origin = new URL(c.req.url).origin;
-  return c.json({
-    serverInfo: {
-      name: "PAD Tools",
-      version: version,
-      description:
-        "SPD（Simple PAD Description）をSVG形式のPAD図やASTに変換するMCPサーバー。",
-    },
-    authentication: {
-      required: false,
-    },
-    transport: {
-      type: "streamable-http",
-      url: `${origin}/mcp`,
-    },
-  });
-});
-
 // Handle base URL
 app.get("/", (c) => {
   return c.redirect("/docs/");
