@@ -117,14 +117,48 @@ export type ConvertSpdToAstRequest = z.infer<
   typeof ConvertSpdToAstRequestSchema
 >;
 
+interface AstNode {
+  type: "process" | "if" | "loop" | "call" | "terminal" | "comment" | "switch" | "list";
+  text: string;
+  childNode?: AstNode | null;
+  trueNode?: AstNode | null;
+  falseNode?: AstNode | null;
+  isWhile?: boolean;
+  cases?: AstNode[];
+  nodes?: AstNode[];
+}
+
+export const AstNodeSchema: z.ZodType<AstNode> = z.lazy(() => z.object({
+  type: z
+    .enum(["process", "if", "loop", "call", "terminal", "comment", "switch", "list"])
+    .describe("ノードの種類 (process: 処理, if: 条件分岐, loop: 繰り返し, call: 呼び出し, terminal: 端子, comment: コメント, switch: 多岐分岐, list: ノードリスト)"),
+  text: z.string().describe("ノードに表示するテキスト"),
+  childNode: AstNodeSchema.nullable().optional().describe("次に実行される子ノード (process, loop, call, terminal 用)"),
+  trueNode: AstNodeSchema.nullable().optional().describe("条件が真の場合に実行されるノード (if 用)"),
+  falseNode: AstNodeSchema.nullable().optional().describe("条件が偽の場合に実行されるノード (if 用)"),
+  isWhile: z.boolean().optional().describe("前判定ループ（while）か後判定ループ（dowhile）か (loop 用)"),
+  cases: z.array(AstNodeSchema).optional().describe("多岐分岐のケース一覧 (switch 用)"),
+  nodes: z.array(AstNodeSchema).optional().describe("ノードリスト内の子ノード一覧 (list 用)"),
+})).describe("抽象構文木（AST）のノード構造");
+
 export const ConvertAstToSvgRequestSchema = z.object({
-  ast: z.any().describe("SVGに変換するAST JSONオブジェクト"),
+  ast: AstNodeSchema.describe("SVGに変換するAST JSONオブジェクト"),
   options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 
 export type ConvertAstToSvgRequest = z.infer<
   typeof ConvertAstToSvgRequestSchema
 >;
+
+// MCP Output schemas
+export const GetSpdExplanationResponseSchema = z.string().describe("SPD表記法の説明テキスト（Markdown形式）");
+
+export const ConvertSpdToSvgResponseSchema = z.string().describe("生成されたSVG形式のPAD図");
+
+export const ConvertSpdToAstResponseSchema = AstNodeSchema.describe("変換されたJSON形式の抽象構文木（AST）");
+
+export const ConvertAstToSvgResponseSchema = z.string().describe("生成されたSVG形式のPAD図");
+
 
 export const generateSvg = (
   spd: string,

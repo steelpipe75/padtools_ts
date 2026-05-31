@@ -5,10 +5,15 @@ const cjsRequire = getRequire();
 const packageJson = cjsRequire("../../package.json");
 const { version } = packageJson;
 
+import { z } from "zod";
 import {
   ConvertAstToSvgRequestSchema,
   ConvertRequestSchema,
   ConvertSpdToAstRequestSchema,
+  GetSpdExplanationResponseSchema,
+  ConvertSpdToSvgResponseSchema,
+  ConvertSpdToAstResponseSchema,
+  ConvertAstToSvgResponseSchema,
 } from "../spd/core.js";
 import {
   handleConvertAstToSvgTool,
@@ -55,14 +60,31 @@ mcp.addPrompt({
 mcp.addTool({
   name: "get_spd_explanation",
   description: "SPD（Simple PAD Description）表記法の説明を取得します。",
+  parameters: z.object({}),
+  outputSchema: GetSpdExplanationResponseSchema,
+  annotations: {
+    title: "SPD表記法の説明取得",
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   execute: handleGetSpdExplanationTool,
 });
 
 mcp.addTool({
   name: "convert_spd_to_svg",
   description:
-    "SPD（Simple PAD Description）テキストをSVG形式のPAD図に変換します。",
+    "SPD（Simple PAD Description）テキストをSVG形式 of PAD図に変換します。",
   parameters: ConvertRequestSchema,
+  outputSchema: ConvertSpdToSvgResponseSchema,
+  annotations: {
+    title: "SPDからSVGへ変換",
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   execute: handleConvertSpdToSvgTool,
 });
 
@@ -71,6 +93,14 @@ mcp.addTool({
   description:
     "SPD（Simple PAD Description）テキストをJSON形式の抽象構文木（AST）に変換します。",
   parameters: ConvertSpdToAstRequestSchema,
+  outputSchema: ConvertSpdToAstResponseSchema,
+  annotations: {
+    title: "SPDからASTへ変換",
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   execute: handleConvertSpdToAstTool,
 });
 
@@ -78,5 +108,13 @@ mcp.addTool({
   name: "convert_ast_to_svg",
   description: "JSON形式の抽象構文木（AST）をSVG形式のPAD図に変換します。",
   parameters: ConvertAstToSvgRequestSchema,
+  outputSchema: ConvertAstToSvgResponseSchema,
+  annotations: {
+    title: "ASTからSVGへ変換",
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   execute: handleConvertAstToSvgTool,
 });
