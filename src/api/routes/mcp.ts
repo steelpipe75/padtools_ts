@@ -1,7 +1,6 @@
 import { StreamableHTTPTransport } from "@hono/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Context } from "hono";
-import { z } from "zod";
 import { getRequire } from "../../utils/compat.js";
 
 const cjsRequire = getRequire();
@@ -26,8 +25,6 @@ import {
   ConvertSpdToSvgResponseSchema,
   GetSpdExplanationResponseSchema,
 } from "../../spd/core.js";
-
-export const configSchema = z.object({});
 
 const mcpServer = new McpServer({
   name: "PAD Tools",
