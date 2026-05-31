@@ -39,8 +39,19 @@ export declare const ConvertSpdToAstRequestSchema: z.ZodObject<{
     spd: z.ZodString;
 }, z.core.$strip>;
 export type ConvertSpdToAstRequest = z.infer<typeof ConvertSpdToAstRequestSchema>;
+interface AstNode {
+    type: "process" | "if" | "loop" | "call" | "terminal" | "comment" | "switch" | "list";
+    text: string;
+    childNode?: AstNode | null;
+    trueNode?: AstNode | null;
+    falseNode?: AstNode | null;
+    isWhile?: boolean;
+    cases?: AstNode[];
+    nodes?: AstNode[];
+}
+export declare const AstNodeSchema: z.ZodType<AstNode>;
 export declare const ConvertAstToSvgRequestSchema: z.ZodObject<{
-    ast: z.ZodAny;
+    ast: z.ZodType<AstNode, unknown, z.core.$ZodTypeInternals<AstNode, unknown>>;
     options: z.ZodOptional<z.ZodObject<{
         fontSize: z.ZodOptional<z.ZodNumber>;
         fontFamily: z.ZodOptional<z.ZodString>;
@@ -58,9 +69,14 @@ export declare const ConvertAstToSvgRequestSchema: z.ZodObject<{
     }, z.core.$strip>>;
 }, z.core.$strip>;
 export type ConvertAstToSvgRequest = z.infer<typeof ConvertAstToSvgRequestSchema>;
+export declare const GetSpdExplanationResponseSchema: z.ZodString;
+export declare const ConvertSpdToSvgResponseSchema: z.ZodString;
+export declare const ConvertSpdToAstResponseSchema: z.ZodType<AstNode, unknown, z.core.$ZodTypeInternals<AstNode, unknown>>;
+export declare const ConvertAstToSvgResponseSchema: z.ZodString;
 export declare const generateSvg: (spd: string, options?: ConvertRequestOptions) => string;
 export declare const generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => string;
 export declare const core: {
     generateSvg: (spd: string, options?: ConvertRequestOptions) => string;
     generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => string;
 };
+export {};
