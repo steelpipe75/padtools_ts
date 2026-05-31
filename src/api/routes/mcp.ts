@@ -18,12 +18,12 @@ import {
 } from "../../mcp/handlers.js";
 import {
   ConvertAstToSvgRequestSchema,
+  ConvertAstToSvgResponseSchema,
   ConvertRequestSchema,
   ConvertSpdToAstRequestSchema,
-  GetSpdExplanationResponseSchema,
-  ConvertSpdToSvgResponseSchema,
   ConvertSpdToAstResponseSchema,
-  ConvertAstToSvgResponseSchema,
+  ConvertSpdToSvgResponseSchema,
+  GetSpdExplanationResponseSchema,
 } from "../../spd/core.js";
 
 const mcpServer = new McpServer({

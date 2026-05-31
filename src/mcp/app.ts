@@ -8,12 +8,12 @@ const { version } = packageJson;
 import { z } from "zod";
 import {
   ConvertAstToSvgRequestSchema,
+  ConvertAstToSvgResponseSchema,
   ConvertRequestSchema,
   ConvertSpdToAstRequestSchema,
-  GetSpdExplanationResponseSchema,
-  ConvertSpdToSvgResponseSchema,
   ConvertSpdToAstResponseSchema,
-  ConvertAstToSvgResponseSchema,
+  ConvertSpdToSvgResponseSchema,
+  GetSpdExplanationResponseSchema,
 } from "../spd/core.js";
 import {
   handleConvertAstToSvgTool,
