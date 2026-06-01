@@ -76,7 +76,7 @@ export declare const ConvertSpdToSvgResponseSchema: z.ZodObject<{
     svg: z.ZodString;
 }, z.core.$strip>;
 export declare const ConvertSpdToAstResponseSchema: z.ZodObject<{
-    ast: z.ZodObject<{}, z.core.$strip>;
+    ast: z.ZodString;
 }, z.core.$strip>;
 export declare const ConvertAstToSvgResponseSchema: z.ZodObject<{
     svg: z.ZodString;
