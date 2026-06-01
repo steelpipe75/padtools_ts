@@ -180,7 +180,7 @@ export const AstNodeSchema: z.ZodType<AstNode> = z
   .describe("抽象構文木（AST）のノード構造");
 
 export const ConvertAstToSvgRequestSchema = z.object({
-  ast: AstNodeSchema.describe("SVGに変換するAST JSONオブジェクト"),
+  ast: z.object().describe("SVGに変換するAST JSONオブジェクト"),
   options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 
@@ -198,7 +198,7 @@ export const ConvertSpdToSvgResponseSchema = z.object({
 });
 
 export const ConvertSpdToAstResponseSchema = z.object({
-  ast: AstNodeSchema.describe("変換されたJSON形式の抽象構文木（AST）"),
+  ast: z.object().describe("変換されたJSON形式の抽象構文木（AST）"),
 });
 
 export const ConvertAstToSvgResponseSchema = z.object({

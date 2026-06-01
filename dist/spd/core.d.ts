@@ -51,7 +51,7 @@ interface AstNode {
 }
 export declare const AstNodeSchema: z.ZodType<AstNode>;
 export declare const ConvertAstToSvgRequestSchema: z.ZodObject<{
-    ast: z.ZodType<AstNode, unknown, z.core.$ZodTypeInternals<AstNode, unknown>>;
+    ast: z.ZodObject<{}, z.core.$strip>;
     options: z.ZodOptional<z.ZodObject<{
         fontSize: z.ZodOptional<z.ZodNumber>;
         fontFamily: z.ZodOptional<z.ZodString>;
@@ -76,7 +76,7 @@ export declare const ConvertSpdToSvgResponseSchema: z.ZodObject<{
     svg: z.ZodString;
 }, z.core.$strip>;
 export declare const ConvertSpdToAstResponseSchema: z.ZodObject<{
-    ast: z.ZodType<AstNode, unknown, z.core.$ZodTypeInternals<AstNode, unknown>>;
+    ast: z.ZodObject<{}, z.core.$strip>;
 }, z.core.$strip>;
 export declare const ConvertAstToSvgResponseSchema: z.ZodObject<{
     svg: z.ZodString;
