@@ -137,7 +137,7 @@ export const AstNodeSchema = z
 }))
     .describe("抽象構文木（AST）のノード構造");
 export const ConvertAstToSvgRequestSchema = z.object({
-    ast: AstNodeSchema.describe("SVGに変換するAST JSONオブジェクト"),
+    ast: z.object().describe("SVGに変換するAST JSONオブジェクト"),
     options: ConvertRequestOptionsSchema.optional().describe("変換オプション"),
 });
 // MCP Output schemas
@@ -148,7 +148,7 @@ export const ConvertSpdToSvgResponseSchema = z.object({
     svg: z.string().describe("生成されたSVG形式のPAD図"),
 });
 export const ConvertSpdToAstResponseSchema = z.object({
-    ast: AstNodeSchema.describe("変換されたJSON形式の抽象構文木（AST）"),
+    ast: z.object().describe("変換されたJSON形式の抽象構文木（AST）"),
 });
 export const ConvertAstToSvgResponseSchema = z.object({
     svg: z.string().describe("生成されたSVG形式のPAD図"),
