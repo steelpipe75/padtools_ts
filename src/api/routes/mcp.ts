@@ -239,7 +239,9 @@ mcpServer.registerTool(
   },
 );
 
-const transport = new StreamableHTTPTransport();
+const transport = new StreamableHTTPTransport({
+  strictAcceptHeader: true,
+});
 
 export const mcpHandler = async (c: Context) => {
   if (!mcpServer.isConnected()) {
