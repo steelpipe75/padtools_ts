@@ -175,7 +175,9 @@ mcpServer.registerTool("convert_ast_to_svg", {
         };
     }
 });
-const transport = new StreamableHTTPTransport();
+const transport = new StreamableHTTPTransport({
+    strictAcceptHeader: true,
+});
 export const mcpHandler = async (c) => {
     if (!mcpServer.isConnected()) {
         await mcpServer.connect(transport);
