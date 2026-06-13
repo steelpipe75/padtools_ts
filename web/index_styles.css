@@ -405,7 +405,8 @@ button .material-symbols-outlined {
   gap: 10px;
 }
 
-.option-group label {
+.option-group label,
+.option-group .label-text {
   font-weight: bold;
   min-width: 80px;
 }
