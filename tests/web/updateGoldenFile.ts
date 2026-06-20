@@ -7,9 +7,10 @@ const normalizePathForGlob = (p: string) => p.replace(/\\/g, "/");
 
 import { fileURLToPath } from "node:url";
 
-const _filename = typeof import.meta !== "undefined" && typeof import.meta.url === "string" 
-  ? fileURLToPath(import.meta.url) 
-  : __filename;
+const _filename =
+  typeof import.meta !== "undefined" && typeof import.meta.url === "string"
+    ? fileURLToPath(import.meta.url)
+    : __filename;
 const _dirname = path.dirname(_filename);
 
 // The base directory is the directory where this script is located (tests/web).

@@ -6,9 +6,10 @@ import { globSync } from "glob";
 // Helper function to normalize path separators for glob, which prefers forward slashes.
 const normalizePathForGlob = (p: string) => p.replace(/\\/g, "/");
 
-const _filename = typeof import.meta !== "undefined" && typeof import.meta.url === "string" 
-  ? fileURLToPath(import.meta.url) 
-  : __filename;
+const _filename =
+  typeof import.meta !== "undefined" && typeof import.meta.url === "string"
+    ? fileURLToPath(import.meta.url)
+    : __filename;
 const _dirname = path.dirname(_filename);
 
 // The base directory is the directory where this script is located.

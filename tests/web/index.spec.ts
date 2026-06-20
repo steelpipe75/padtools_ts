@@ -114,7 +114,9 @@ test.describe("E2E tests for web", () => {
 
       expect(downloadedSvg).toBe(goldenSvg);
     } else {
-      console.warn(`Golden file not found: ${goldenFilePath}. Skipping assertion.`);
+      console.warn(
+        `Golden file not found: ${goldenFilePath}. Skipping assertion.`,
+      );
     }
   });
 
@@ -186,7 +188,9 @@ test.describe("E2E tests for web", () => {
         .replace(/\r\n/g, "\n");
       expect(downloadedSvg).toBe(goldenSvg);
     } else {
-      console.warn(`Golden file not found: ${goldenFilePath}. Skipping assertion.`);
+      console.warn(
+        `Golden file not found: ${goldenFilePath}. Skipping assertion.`,
+      );
     }
   });
 
