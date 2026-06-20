@@ -6,13 +6,13 @@ import { globSync } from "glob";
 // Helper function to normalize path separators for glob, which prefers forward slashes.
 const normalizePathForGlob = (p: string) => p.replace(/\\/g, "/");
 
-// @ts-expect-error
-const metaUrl = new Function("return import.meta.url")();
-const __filename = fileURLToPath(metaUrl);
-const __dirname = path.dirname(__filename);
+const _filename = typeof import.meta !== "undefined" && typeof import.meta.url === "string" 
+  ? fileURLToPath(import.meta.url) 
+  : __filename;
+const _dirname = path.dirname(_filename);
 
 // The base directory is the directory where this script is located.
-const baseDir = __dirname;
+const baseDir = _dirname;
 
 const tempOriginalDir = path.join(baseDir, "temp", "Original");
 const tempTerminalOffsetDir = path.join(baseDir, "temp", "TerminalOffset");
