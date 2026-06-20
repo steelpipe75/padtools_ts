@@ -98,7 +98,7 @@ program
         renderOptions.lineHeight = options.lineHeight;
       if (options.listRenderType !== undefined)
         renderOptions.listRenderType = options.listRenderType;
-      
+
       if (!options.importAst) {
         renderOptions.title = inputContent;
       }

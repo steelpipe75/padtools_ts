@@ -249,8 +249,7 @@ export const generateSvgFromAst = (
     renderOptions.lineHeight = options.lineHeight;
   if (options.listRenderType !== undefined)
     renderOptions.listRenderType = options.listRenderType;
-  if (options.title !== undefined)
-    renderOptions.title = options.title;
+  if (options.title !== undefined) renderOptions.title = options.title;
 
   const svgOutput = render(ast, renderOptions);
 
