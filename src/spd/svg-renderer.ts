@@ -53,6 +53,7 @@ export interface RenderOptions {
   nodeListSpace: number; // ノードListNodeの子ノード間のスペース
   childNodeOffsetWidth: number;
   listRenderType: string;
+  title?: string;
 }
 
 /**
@@ -144,6 +145,11 @@ export function render(
   svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
   svg += `viewBox="0 0 ${svgWidth.toFixed(1)} ${svgHeight.toFixed(1)}" `;
   svg += `xmlns="http://www.w3.org/2000/svg">`;
+
+  if (mergedOptions.title) {
+    svg += `<title>${escapeXmlAttribute(mergedOptions.title)}</title>`;
+  }
+
   const baseFillColor = sanitizeSvgColor(mergedOptions.baseBackgroundColor);
   svg += `<rect x="0" y="0" `;
   svg += `width="${svgWidth.toFixed(1)}" height="${svgHeight.toFixed(1)}" `;
@@ -158,6 +164,7 @@ export function render(
   const sanitizedSvg = sanitizeHtml(svg, {
     allowedTags: [
       "svg",
+      "title",
       "g",
       "rect",
       "path",

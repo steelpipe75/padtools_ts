@@ -14,6 +14,7 @@ export declare const ConvertRequestOptionsSchema: z.ZodObject<{
         TerminalOffset: "TerminalOffset";
     }>>;
     prettyprint: z.ZodOptional<z.ZodBoolean>;
+    title: z.ZodOptional<z.ZodString>;
 }, z.core.$strip>;
 export type ConvertRequestOptions = z.infer<typeof ConvertRequestOptionsSchema>;
 export declare const ConvertRequestSchema: z.ZodObject<{
@@ -32,6 +33,7 @@ export declare const ConvertRequestSchema: z.ZodObject<{
             TerminalOffset: "TerminalOffset";
         }>>;
         prettyprint: z.ZodOptional<z.ZodBoolean>;
+        title: z.ZodOptional<z.ZodString>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
 export type ConvertRequest = z.infer<typeof ConvertRequestSchema>;
@@ -66,6 +68,7 @@ export declare const ConvertAstToSvgRequestSchema: z.ZodObject<{
             TerminalOffset: "TerminalOffset";
         }>>;
         prettyprint: z.ZodOptional<z.ZodBoolean>;
+        title: z.ZodOptional<z.ZodString>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
 export type ConvertAstToSvgRequest = z.infer<typeof ConvertAstToSvgRequestSchema>;

@@ -35,6 +35,7 @@ export interface RenderOptions {
     nodeListSpace: number;
     childNodeOffsetWidth: number;
     listRenderType: string;
+    title?: string;
 }
 /**
  * ASTを受け取り、完全なSVG文字列を返す

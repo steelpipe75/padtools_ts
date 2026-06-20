@@ -16,6 +16,7 @@ export declare const AstParseRequestSchema: z.ZodObject<{
             TerminalOffset: "TerminalOffset";
         }>>;
         prettyprint: z.ZodOptional<z.ZodBoolean>;
+        title: z.ZodOptional<z.ZodString>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
 export declare const AstRenderRequestSchema: z.ZodObject<{
@@ -34,6 +35,7 @@ export declare const AstRenderRequestSchema: z.ZodObject<{
             TerminalOffset: "TerminalOffset";
         }>>;
         prettyprint: z.ZodOptional<z.ZodBoolean>;
+        title: z.ZodOptional<z.ZodString>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
 export declare const astParseRoute: import("hono").MiddlewareHandler;

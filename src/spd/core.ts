@@ -71,6 +71,13 @@ export const ConvertRequestOptionsSchema = z.object({
     .meta({
       example: true,
     }),
+  title: z
+    .string()
+    .describe("SVGに付与する代替テキスト (title)")
+    .optional()
+    .meta({
+      example: "SPD記法のソーステキスト",
+    }),
 });
 
 export type ConvertRequestOptions = z.infer<typeof ConvertRequestOptionsSchema>;
@@ -210,7 +217,8 @@ export const generateSvg = (
   options: ConvertRequestOptions = {},
 ) => {
   const ast = parse(spd);
-  return generateSvgFromAst(ast, options);
+  const mergedOptions = { title: spd, ...options };
+  return generateSvgFromAst(ast, mergedOptions);
 };
 
 export const generateSvgFromAst = (
@@ -241,6 +249,7 @@ export const generateSvgFromAst = (
     renderOptions.lineHeight = options.lineHeight;
   if (options.listRenderType !== undefined)
     renderOptions.listRenderType = options.listRenderType;
+  if (options.title !== undefined) renderOptions.title = options.title;
 
   const svgOutput = render(ast, renderOptions);
 
