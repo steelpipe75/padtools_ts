@@ -273,7 +273,6 @@ describe("CLI E2E tests", () => {
 
   // Demo
   describe("Demo", () => {
-
     const sampleOutputPath = "sample_output.svg";
     const sampleOutputFile = sampleInputFile.replace(".spd", ".svg.txt");
 
