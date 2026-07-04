@@ -118,11 +118,11 @@ function cleanText(rawText: string, isCommand: boolean): string {
     }
     newLines.push(l);
   }
-  
+
   let text = newLines.join("\n");
   text = text.replace(/(?<!\\)@/g, "\n");
   text = text.replace(/\\@/g, "@");
-  
+
   return text;
 }
 
