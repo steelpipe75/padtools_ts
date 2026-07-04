@@ -121,6 +121,21 @@ const DummyParseErrorReceiver: ParseErrorReceiverFunction = (
   return false;
 };
 
+import { spdServices } from "./langium/spd-module.js";
+import {
+  isCallStatement,
+  isCaseStatement,
+  isCommandStatement,
+  isCommentStatement,
+  isDoWhileStatement,
+  isElseStatement,
+  isIfStatement,
+  isProcessStatement,
+  isSwitchStatement,
+  isTerminalStatement,
+  isWhileStatement,
+} from "./langium/generated/ast.js";
+
 /**
  * 本文を処理する
  * @param context 現在のコンテキスト
@@ -131,22 +146,39 @@ const handleBody = (context: Context, body: string): void => {
   if (context.nodeList.length > 0) {
     const lnode = context.nodeList[context.nodeList.length - 1];
     if (context.optionArg != null && lnode.type === "switch") {
-      const node: SwitchNode = lnode;
+      const node: SwitchNode = lnode as SwitchNode;
       node.cases.set(context.optionArg, null);
       context.optionArg = null;
     }
   }
 
-  if (body.startsWith(":")) {
-    const parts = body.split(/[ \t]+/);
+  const parseResult = spdServices.parser.LangiumParser.parse(body);
+  const stmt = parseResult.value;
 
-    // コマンド部分と引数部分を分離
-    const cmd = parts[0].substring(1); // コマンド名（例: "call", "if"）
-    const arg =
-      parts.length > 1 ? body.substring(parts[0].length).trim() : null; // 引数
+  if (!stmt || parseResult.parserErrors.length > 0 || parseResult.lexerErrors.length > 0) {
+    if (parseResult.lexerErrors.length > 0) {
+      console.error("Lexer Errors:", parseResult.lexerErrors);
+    }
+    if (parseResult.parserErrors.length > 0) {
+      console.error("Parser Errors:", parseResult.parserErrors);
+    }
+    // パースに失敗した場合は未知のコマンドか不正な文法
+    throw new UnknownCommandException();
+  }
 
-    switch (cmd) {
-      case "call":
+  if (isProcessStatement(stmt)) {
+    context.nodeList.push({
+      type: "process",
+      text: stmt.content ?? "",
+      childNode: null,
+    } as ProcessNode);
+    context.optionStatus = "Default";
+    context.optionArg = null;
+  } else if (isCommandStatement(stmt)) {
+    // any command statement has `arg?: string` in generated AST
+    const arg = "arg" in stmt && typeof stmt.arg === "string" ? stmt.arg.trim() : null;
+
+    if (isCallStatement(stmt)) {
         if (!arg) throw new RequireArgumentException();
         context.nodeList.push({
           type: "call",
@@ -155,8 +187,7 @@ const handleBody = (context: Context, body: string): void => {
         } as CallNode);
         context.optionStatus = "Default";
         context.optionArg = null;
-        break;
-      case "terminal":
+    } else if (isTerminalStatement(stmt)) {
         if (!arg) throw new RequireArgumentException();
         context.nodeList.push({
           type: "terminal",
@@ -164,14 +195,12 @@ const handleBody = (context: Context, body: string): void => {
         } as TerminalNode);
         context.optionStatus = "Default";
         context.optionArg = null;
-        break;
-      case "comment":
+    } else if (isCommentStatement(stmt)) {
         if (!arg) throw new RequireArgumentException();
         context.nodeList.push({ type: "comment", text: arg } as CommentNode);
         context.optionStatus = "Default";
         context.optionArg = null;
-        break;
-      case "while":
+    } else if (isWhileStatement(stmt)) {
         if (!arg) throw new RequireArgumentException();
         context.nodeList.push({
           type: "loop",
@@ -181,8 +210,7 @@ const handleBody = (context: Context, body: string): void => {
         } as LoopNode);
         context.optionStatus = "Default";
         context.optionArg = null;
-        break;
-      case "dowhile":
+    } else if (isDoWhileStatement(stmt)) {
         if (!arg) throw new RequireArgumentException();
         context.nodeList.push({
           type: "loop",
@@ -192,8 +220,7 @@ const handleBody = (context: Context, body: string): void => {
         } as LoopNode);
         context.optionStatus = "Default";
         context.optionArg = null;
-        break;
-      case "if":
+    } else if (isIfStatement(stmt)) {
         if (!arg) throw new RequireArgumentException();
         context.nodeList.push({
           type: "if",
@@ -203,8 +230,7 @@ const handleBody = (context: Context, body: string): void => {
         } as IfNode);
         context.optionStatus = "Default";
         context.optionArg = null;
-        break;
-      case "switch":
+    } else if (isSwitchStatement(stmt)) {
         if (!arg) throw new RequireArgumentException();
         context.nodeList.push({
           type: "switch",
@@ -213,8 +239,7 @@ const handleBody = (context: Context, body: string): void => {
         } as SwitchNode);
         context.optionStatus = "Default";
         context.optionArg = null;
-        break;
-      case "else": {
+    } else if (isElseStatement(stmt)) {
         const lastIfNode =
           context.nodeList.length === 0
             ? null
@@ -222,14 +247,12 @@ const handleBody = (context: Context, body: string): void => {
         if (lastIfNode === null || lastIfNode.type !== "if") {
           throw new UnexpectedElseException();
         }
-        if (arg !== null) {
+        if (arg !== null && arg !== "") {
           throw new NotRequireArgumentException();
         }
         context.optionStatus = "Else";
         context.optionArg = null;
-        break;
-      }
-      case "case": {
+    } else if (isCaseStatement(stmt)) {
         const lastSwitchNode =
           context.nodeList.length === 0
             ? null
@@ -243,19 +266,9 @@ const handleBody = (context: Context, body: string): void => {
         }
         context.optionStatus = "Default";
         context.optionArg = arg;
-        break;
-      }
-      default:
+    } else {
         throw new UnknownCommandException();
     }
-  } else {
-    context.nodeList.push({
-      type: "process",
-      text: body,
-      childNode: null,
-    } as ProcessNode);
-    context.optionStatus = "Default";
-    context.optionArg = null;
   }
 };
 

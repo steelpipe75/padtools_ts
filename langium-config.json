@@ -1,0 +1,11 @@
+{
+  "projectName": "spd",
+  "out": "src/spd/langium/generated",
+  "languages": [
+    {
+      "id": "spd",
+      "grammar": "src/spd/langium/spd.langium",
+      "fileExtensions": [".spd"]
+    }
+  ]
+}

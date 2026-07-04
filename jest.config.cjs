@@ -31,10 +31,13 @@ module.exports = {
   },
   transformIgnorePatterns: [
     // Transpile commander and standard-community from node_modules, ignore other node_modules
-    "/node_modules/(?!(commander|@standard-community)/)",
+    "/node_modules/(?!(commander|@standard-community|langium|chevrotain|chevrotain-allstar|@chevrotain|vscode-uri|vscode-languageserver|vscode-languageserver-protocol|vscode-languageserver-types|vscode-languageserver-textdocument|lodash-es)/)",
   ],
   moduleNameMapper: {
     "^zod/v4/core$": "<rootDir>/node_modules/zod/v4/core/index.cjs",
+    "^langium$": "<rootDir>/node_modules/langium/lib/index.js",
+    "^chevrotain$": "<rootDir>/node_modules/chevrotain/lib/src/api.js",
+    "^@chevrotain/([^/]+)$": "<rootDir>/node_modules/@chevrotain/$1/lib/src/api.js",
     // Map .js imports to the original source files for TypeScript in jest environment
     "^(\\.\\.?/.*)\\.js$": "$1",
   },
