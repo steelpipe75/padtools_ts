@@ -3,36 +3,23 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 
-import type {
-  LangiumCoreServices,
-  LangiumGeneratedCoreServices,
-  LangiumGeneratedSharedCoreServices,
-  LangiumSharedCoreServices,
-  LanguageMetaData,
-  Module,
-} from "langium";
-import { spdAstReflection } from "./ast.js";
-import { SpdGrammar } from "./grammar.js";
+import type { LangiumSharedCoreServices, LangiumCoreServices, LangiumGeneratedCoreServices, LangiumGeneratedSharedCoreServices, LanguageMetaData, Module } from 'langium';
+import { spdAstReflection } from './ast.js';
+import { SpdGrammar } from './grammar.js';
 
 export const SpdLanguageMetaData = {
-  languageId: "spd",
-  fileExtensions: [".spd"],
-  caseInsensitive: false,
-  mode: "development",
+    languageId: 'spd',
+    fileExtensions: ['.spd'],
+    caseInsensitive: false,
+    mode: 'development'
 } as const satisfies LanguageMetaData;
 
-export const spdGeneratedSharedModule: Module<
-  LangiumSharedCoreServices,
-  LangiumGeneratedSharedCoreServices
-> = {
-  AstReflection: () => new spdAstReflection(),
+export const spdGeneratedSharedModule: Module<LangiumSharedCoreServices, LangiumGeneratedSharedCoreServices> = {
+    AstReflection: () => new spdAstReflection()
 };
 
-export const SpdGeneratedModule: Module<
-  LangiumCoreServices,
-  LangiumGeneratedCoreServices
-> = {
-  Grammar: () => SpdGrammar(),
-  LanguageMetaData: () => SpdLanguageMetaData,
-  parser: {},
+export const SpdGeneratedModule: Module<LangiumCoreServices, LangiumGeneratedCoreServices> = {
+    Grammar: () => SpdGrammar(),
+    LanguageMetaData: () => SpdLanguageMetaData,
+    parser: {}
 };

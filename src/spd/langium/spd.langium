@@ -32,7 +32,7 @@ terminal INDENT: 'synthetic:indent';
 terminal DEDENT: 'synthetic:dedent';
 
 hidden terminal LINE_COMMENT: /#[^\n\r]*/;
-terminal Content: /[^\t:\n\r](?:[^\n\r]*@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/;
+terminal Content: /[^\t:\n\r](?:[^\n\r]*(?<!\\)@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/;
 
 hidden terminal WS: /[ \t]+/;
 hidden terminal NEWLINE: /\r?\n/;

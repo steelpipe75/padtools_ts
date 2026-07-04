@@ -113,10 +113,17 @@ function cleanText(rawText: string, isCommand: boolean): string {
     let l = lines[i];
     l = l.replace(/^\t+/, "");
     if (l.trim().startsWith("#")) continue;
-    if (l.endsWith("@")) l = l.substring(0, l.length - 1);
+    if (l.endsWith("@") && !l.endsWith("\\@")) {
+      l = l.substring(0, l.length - 1);
+    }
     newLines.push(l);
   }
-  return newLines.join("\n").replace(/@/g, "\n");
+  
+  let text = newLines.join("\n");
+  text = text.replace(/(?<!\\)@/g, "\n");
+  text = text.replace(/\\@/g, "@");
+  
+  return text;
 }
 
 function processStatement(
