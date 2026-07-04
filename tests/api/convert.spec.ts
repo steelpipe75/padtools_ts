@@ -32,7 +32,7 @@ describe("API /api/convert", () => {
 
     // ステータスコード 200 (OK) を確認
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body: any = await res.json();
     // レスポンスボディに svg プロパティが含まれていることを確認
     expect(body).toHaveProperty("svg");
     expect(typeof body.svg).toBe("string");
@@ -65,7 +65,7 @@ describe("API /api/convert", () => {
     });
 
     expect(res.status).toBe(400);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body).toHaveProperty("error", "SPD content is required");
   });
 
@@ -108,7 +108,7 @@ describe("API /api/convert", () => {
     });
 
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body).toHaveProperty("svg");
     expect(body.svg).toContain("<svg");
     // XML フォーマットされているか（改行が含まれるか）の簡易確認
@@ -131,7 +131,7 @@ describe("API /api/convert", () => {
     });
 
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body).toHaveProperty("svg");
     // svgo によって最適化されていることを確認（通常は改行が除去される）
     expect(body.svg).not.toContain("\n");
@@ -217,7 +217,7 @@ describe("API /api/convert", () => {
     });
 
     expect(res.status).toBe(400);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body).toHaveProperty("error");
     expect(body).toHaveProperty("lineNo", 2);
     expect(body).toHaveProperty("lineStr", ":invalid_command arg");
@@ -236,7 +236,7 @@ describe("API /api/convert", () => {
   it("should serve OpenAPI doc (OpenAPI ドキュメントが提供されていること)", async () => {
     const res = await app.request("/openapi.json");
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body.openapi).toBe("3.0.0");
     expect(body.info.title).toBe("PAD Tools API");
   });
@@ -267,7 +267,7 @@ describe("API /api/convert", () => {
       });
 
       expect(res.status).toBe(500);
-      const body = await res.json();
+      const body: any = await res.json();
       expect(body).toHaveProperty("error", "Failed to convert SPD to SVG");
     } finally {
       generateSvgSpy.mockRestore();
@@ -286,7 +286,7 @@ describe("API /api/convert", () => {
     });
 
     expect(res.status).toBe(400);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body).toHaveProperty("error");
     expect(body).toHaveProperty("lineNo", 2);
   });
@@ -309,7 +309,7 @@ describe("API /api/convert", () => {
       });
 
       expect(res.status).toBe(500);
-      const body = await res.json();
+      const body: any = await res.json();
       expect(body).toHaveProperty(
         "error",
         "Failed to generate SVG for download",
@@ -323,7 +323,7 @@ describe("API /api/convert", () => {
   it("should return 200 OK for health check (ヘルスチェックが200 OKを返すこと)", async () => {
     const res = await app.request("/health");
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body).toEqual({ status: "ok", version });
   });
 });
