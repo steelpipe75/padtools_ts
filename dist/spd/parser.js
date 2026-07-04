@@ -65,8 +65,8 @@ export class UnexpectedIOException extends ParseError {
 const DummyParseErrorReceiver = () => {
     return false;
 };
-import { spdServices } from "./langium/spd-module.js";
 import { isCallStatement, isCaseStatement, isCommandStatement, isCommentStatement, isDoWhileStatement, isElseStatement, isIfStatement, isProcessStatement, isSwitchStatement, isTerminalStatement, isWhileStatement, } from "./langium/generated/ast.js";
+import { spdServices } from "./langium/spd-module.js";
 function cleanText(rawText, isCommand) {
     if (!rawText)
         return "";
@@ -96,7 +96,7 @@ function processStatement(stmt, srcLines, exr, errorLines) {
             arg = cleanText(stmt.arg, true);
         }
         if (isProcessStatement(stmt)) {
-            let content = cleanText(stmt.content ?? "", false);
+            const content = cleanText(stmt.content ?? "", false);
             if (content.trim() === "") {
                 return null;
             }
@@ -213,7 +213,7 @@ function processBlock(statements, srcLines, exr, errorLines) {
                     throw new UnexpectedElseException();
                 if (lastNode.falseNode !== null)
                     throw new UnexpectedElseException();
-                let arg = "";
+                const _arg = "";
                 if (stmt.$cstNode) {
                     const lineStr = srcLines[stmt.$cstNode.range.start.line] ?? "";
                     const idx = lineStr.indexOf(":else");
@@ -281,21 +281,35 @@ export const parse = (src, exr = DummyParseErrorReceiver) => {
     try {
         const parseResult = spdServices.parser.LangiumParser.parse(src);
         const errorLines = new Set();
-        if (parseResult.lexerErrors.length > 0 || parseResult.parserErrors.length > 0) {
+        if (parseResult.lexerErrors.length > 0 ||
+            parseResult.parserErrors.length > 0) {
             const errors = [...parseResult.lexerErrors, ...parseResult.parserErrors];
             for (const err of errors) {
                 let lineNo = 1;
-                if (err.line) {
-                    lineNo = err.line;
+                const errObj = err;
+                if (errObj.line) {
+                    lineNo = errObj.line;
                 }
-                else if (err.token) {
-                    lineNo = err.token.startLine || 1;
+                else if (errObj.token) {
+                    lineNo = errObj.token.startLine || 1;
                 }
                 const lineStr = srcLines[lineNo - 1] ?? "";
                 const msg = err.message || "";
-                const tokenName = err.token?.tokenType?.name || "";
-                const isIndentError = msg.includes("INDENT") || msg.includes("DEDENT") || msg.includes("IllegalIndent") || msg.includes("synthetic:indent") || msg.includes("synthetic:dedent") || msg.includes("Unexpected token: INDENT") || msg.includes("Unexpected token: DEDENT") || (msg.includes("Expecting token of type") && (msg.includes("indent") || msg.includes("dedent"))) || tokenName === "INDENT" || tokenName === "DEDENT";
-                const parseErr = isIndentError ? new IllegalIndentException() : new UnknownCommandException();
+                const tokenName = errObj.token?.tokenType?.name || "";
+                const isIndentError = msg.includes("INDENT") ||
+                    msg.includes("DEDENT") ||
+                    msg.includes("IllegalIndent") ||
+                    msg.includes("synthetic:indent") ||
+                    msg.includes("synthetic:dedent") ||
+                    msg.includes("Unexpected token: INDENT") ||
+                    msg.includes("Unexpected token: DEDENT") ||
+                    (msg.includes("Expecting token of type") &&
+                        (msg.includes("indent") || msg.includes("dedent"))) ||
+                    tokenName === "INDENT" ||
+                    tokenName === "DEDENT";
+                const parseErr = isIndentError
+                    ? new IllegalIndentException()
+                    : new UnknownCommandException();
                 parseErr.lineNo = lineNo;
                 parseErr.lineStr = lineStr;
                 if (!exr(lineStr, lineNo - 1, parseErr)) {
@@ -305,10 +319,11 @@ export const parse = (src, exr = DummyParseErrorReceiver) => {
             }
         }
         const model = parseResult.value;
-        if (!model || model.$type !== 'Model') {
+        if (model?.$type !== "Model") {
             return null;
         }
-        const statements = model.statements;
+        const statements = model
+            .statements;
         const blockResult = processBlock(statements, srcLines, exr, errorLines);
         if (!blockResult)
             return null;

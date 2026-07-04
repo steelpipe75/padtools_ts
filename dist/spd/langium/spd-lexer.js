@@ -1,20 +1,20 @@
-import { DefaultLexer } from 'langium';
+import { DefaultLexer } from "langium";
 export class SpdLexer extends DefaultLexer {
     tokenize(text, options) {
         const result = super.tokenize(text, options);
         const newTokens = [];
         let currentDepth = 0;
-        const indentType = this.definition['INDENT'];
-        const dedentType = this.definition['DEDENT'];
+        const indentType = this.definition.INDENT;
+        const dedentType = this.definition.DEDENT;
         const lines = text.split(/\r?\n/);
         let lastLine = 0;
         for (const token of result.tokens) {
             if (token.startLine && token.startLine > lastLine) {
                 const lineIndex = token.startLine - 1;
-                const lineStr = lines[lineIndex] || '';
+                const lineStr = lines[lineIndex] || "";
                 let tabNum = 0;
                 for (let i = 0; i < lineStr.length; ++i) {
-                    if (lineStr.charAt(i) === '\t') {
+                    if (lineStr.charAt(i) === "\t") {
                         tabNum++;
                     }
                     else {
@@ -25,15 +25,15 @@ export class SpdLexer extends DefaultLexer {
                 if (tabNum > currentDepth) {
                     for (let i = 0; i < tabNum - currentDepth; i++) {
                         newTokens.push({
-                            image: '',
+                            image: "",
                             startOffset: token.startOffset,
                             startLine: token.startLine,
                             startColumn: token.startColumn,
                             endOffset: token.startOffset,
                             endLine: token.startLine,
                             endColumn: token.startColumn,
-                            tokenTypeIdx: indentType.tokenTypeIdx,
-                            tokenType: indentType
+                            tokenTypeIdx: indentType.tokenTypeIdx ?? 0,
+                            tokenType: indentType,
                         });
                     }
                     currentDepth = tabNum;
@@ -41,15 +41,15 @@ export class SpdLexer extends DefaultLexer {
                 else if (tabNum < currentDepth) {
                     for (let i = 0; i < currentDepth - tabNum; i++) {
                         newTokens.push({
-                            image: '',
+                            image: "",
                             startOffset: token.startOffset,
                             startLine: token.startLine,
                             startColumn: token.startColumn,
                             endOffset: token.startOffset,
                             endLine: token.startLine,
                             endColumn: token.startColumn,
-                            tokenTypeIdx: dedentType.tokenTypeIdx,
-                            tokenType: dedentType
+                            tokenTypeIdx: dedentType.tokenTypeIdx ?? 0,
+                            tokenType: dedentType,
                         });
                     }
                     currentDepth = tabNum;
@@ -67,15 +67,15 @@ export class SpdLexer extends DefaultLexer {
             const lastToken = result.tokens[result.tokens.length - 1];
             for (let i = 0; i < currentDepth; i++) {
                 newTokens.push({
-                    image: '',
-                    startOffset: lastToken ? lastToken.endOffset ?? 0 : text.length,
-                    startLine: lastToken ? lastToken.endLine ?? 1 : 1,
-                    startColumn: lastToken ? lastToken.endColumn ?? 1 : 1,
-                    endOffset: lastToken ? lastToken.endOffset ?? 0 : text.length,
-                    endLine: lastToken ? lastToken.endLine ?? 1 : 1,
-                    endColumn: lastToken ? lastToken.endColumn ?? 1 : 1,
-                    tokenTypeIdx: dedentType.tokenTypeIdx,
-                    tokenType: dedentType
+                    image: "",
+                    startOffset: lastToken ? (lastToken.endOffset ?? 0) : text.length,
+                    startLine: lastToken ? (lastToken.endLine ?? 1) : 1,
+                    startColumn: lastToken ? (lastToken.endColumn ?? 1) : 1,
+                    endOffset: lastToken ? (lastToken.endOffset ?? 0) : text.length,
+                    endLine: lastToken ? (lastToken.endLine ?? 1) : 1,
+                    endColumn: lastToken ? (lastToken.endColumn ?? 1) : 1,
+                    tokenTypeIdx: dedentType.tokenTypeIdx ?? 0,
+                    tokenType: dedentType,
                 });
             }
         }
