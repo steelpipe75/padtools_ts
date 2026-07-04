@@ -15,7 +15,7 @@ if (typeof __filename !== "undefined") {
   dirname = path.dirname(filename);
 }
 
-const inputDir = path.join(dirname, "input");
+const inputDir = path.join(dirname, "../../..");
 const outputDir = path.join(dirname, "output");
 const minifiedOutputDir = path.join(dirname, "output_minified");
 const tempDir = path.join(dirname, "temp");
