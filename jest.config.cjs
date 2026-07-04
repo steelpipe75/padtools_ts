@@ -43,4 +43,5 @@ module.exports = {
     "^(\\.\\.?/.*)\\.js$": "$1",
   },
   testPathIgnorePatterns: ["/node_modules/", "/tests/web/"],
+  setupFiles: ["<rootDir>/src/polyfills.ts"],
 };

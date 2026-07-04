@@ -1,3 +1,4 @@
+import "../polyfills.js";
 import * as fs from "node:fs";
 import { serve } from "@hono/node-server";
 import app from "./app.js";
