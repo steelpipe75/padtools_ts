@@ -34,7 +34,6 @@ describe("CLI", () => {
     consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     processExitSpy = jest
       .spyOn(process, "exit")
-      // biome-ignore lint/suspicious/noExplicitAny: Mock implementation to prevent actual exit
       .mockImplementation((() => {}) as any); // Mock implementation to prevent actual exit
 
     // Backup original process.argv
