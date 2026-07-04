@@ -3,7 +3,7 @@
  * that don't support ES2024 features natively.
  */
 if (typeof Object.groupBy !== "function") {
-    Object.groupBy = function (items, keySelector) {
+    Object.groupBy = (items, keySelector) => {
         const result = {};
         let index = 0;
         for (const item of items) {
@@ -11,13 +11,13 @@ if (typeof Object.groupBy !== "function") {
             if (result[key] === undefined) {
                 result[key] = [];
             }
-            result[key].push(item);
+            result[key]?.push(item);
         }
         return result;
     };
 }
 if (typeof Map.groupBy !== "function") {
-    Map.groupBy = function (items, keySelector) {
+    Map.groupBy = (items, keySelector) => {
         const map = new Map();
         let index = 0;
         for (const item of items) {
