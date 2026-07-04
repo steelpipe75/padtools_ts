@@ -37,7 +37,8 @@ module.exports = {
     "^zod/v4/core$": "<rootDir>/node_modules/zod/v4/core/index.cjs",
     "^langium$": "<rootDir>/node_modules/langium/lib/index.js",
     "^chevrotain$": "<rootDir>/node_modules/chevrotain/lib/src/api.js",
-    "^@chevrotain/([^/]+)$": "<rootDir>/node_modules/@chevrotain/$1/lib/src/api.js",
+    "^@chevrotain/([^/]+)$":
+      "<rootDir>/node_modules/@chevrotain/$1/lib/src/api.js",
     // Map .js imports to the original source files for TypeScript in jest environment
     "^(\\.\\.?/.*)\\.js$": "$1",
   },

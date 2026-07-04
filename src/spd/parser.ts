@@ -86,9 +86,7 @@ const DummyParseErrorReceiver: ParseErrorReceiverFunction = (): boolean => {
   return false;
 };
 
-import { spdServices } from "./langium/spd-module.js";
 import {
-  Statement,
   isCallStatement,
   isCaseStatement,
   isCommandStatement,
@@ -100,7 +98,9 @@ import {
   isSwitchStatement,
   isTerminalStatement,
   isWhileStatement,
+  type Statement,
 } from "./langium/generated/ast.js";
+import { spdServices } from "./langium/spd-module.js";
 
 function cleanText(rawText: string, isCommand: boolean): string {
   if (!rawText) return "";
@@ -119,7 +119,12 @@ function cleanText(rawText: string, isCommand: boolean): string {
   return newLines.join("\n").replace(/@/g, "\n");
 }
 
-function processStatement(stmt: Statement, srcLines: string[], exr: ParseErrorReceiverFunction, errorLines: Set<number>): Node | null {
+function processStatement(
+  stmt: Statement,
+  srcLines: string[],
+  exr: ParseErrorReceiverFunction,
+  errorLines: Set<number>,
+): Node | null {
   try {
     if (stmt.$cstNode && errorLines.has(stmt.$cstNode.range.start.line + 1)) {
       return null;
@@ -131,7 +136,7 @@ function processStatement(stmt: Statement, srcLines: string[], exr: ParseErrorRe
     }
 
     if (isProcessStatement(stmt)) {
-      let content = cleanText(stmt.content ?? "", false);
+      const content = cleanText(stmt.content ?? "", false);
       if (content.trim() === "") {
         return null;
       }
@@ -139,7 +144,12 @@ function processStatement(stmt: Statement, srcLines: string[], exr: ParseErrorRe
       return {
         type: "process",
         text: content,
-        childNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+        childNode: processBlock(
+          stmt.block?.statements ?? [],
+          srcLines,
+          exr,
+          errorLines,
+        ),
       } as ProcessNode;
     } else if (isCommandStatement(stmt)) {
       if (isCallStatement(stmt)) {
@@ -147,17 +157,24 @@ function processStatement(stmt: Statement, srcLines: string[], exr: ParseErrorRe
         return {
           type: "call",
           text: arg,
-          childNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+          childNode: processBlock(
+            stmt.block?.statements ?? [],
+            srcLines,
+            exr,
+            errorLines,
+          ),
         } as CallNode;
       } else if (isTerminalStatement(stmt)) {
-        if (stmt.block && stmt.block.statements.length > 0) throw new IllegalIndentException();
+        if (stmt.block && stmt.block.statements.length > 0)
+          throw new IllegalIndentException();
         if (!arg) throw new RequireArgumentException();
         return {
           type: "terminal",
           text: arg,
         } as TerminalNode;
       } else if (isCommentStatement(stmt)) {
-        if (stmt.block && stmt.block.statements.length > 0) throw new IllegalIndentException();
+        if (stmt.block && stmt.block.statements.length > 0)
+          throw new IllegalIndentException();
         if (!arg) throw new RequireArgumentException();
         return { type: "comment", text: arg } as CommentNode;
       } else if (isWhileStatement(stmt)) {
@@ -166,7 +183,12 @@ function processStatement(stmt: Statement, srcLines: string[], exr: ParseErrorRe
           type: "loop",
           isWhile: true,
           text: arg,
-          childNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+          childNode: processBlock(
+            stmt.block?.statements ?? [],
+            srcLines,
+            exr,
+            errorLines,
+          ),
         } as LoopNode;
       } else if (isDoWhileStatement(stmt)) {
         if (!arg) throw new RequireArgumentException();
@@ -174,18 +196,29 @@ function processStatement(stmt: Statement, srcLines: string[], exr: ParseErrorRe
           type: "loop",
           isWhile: false,
           text: arg,
-          childNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+          childNode: processBlock(
+            stmt.block?.statements ?? [],
+            srcLines,
+            exr,
+            errorLines,
+          ),
         } as LoopNode;
       } else if (isIfStatement(stmt)) {
         if (!arg) throw new RequireArgumentException();
         return {
           type: "if",
           text: arg,
-          trueNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+          trueNode: processBlock(
+            stmt.block?.statements ?? [],
+            srcLines,
+            exr,
+            errorLines,
+          ),
           falseNode: null,
         } as IfNode;
       } else if (isSwitchStatement(stmt)) {
-        if (stmt.block && stmt.block.statements.length > 0) throw new IllegalIndentException();
+        if (stmt.block && stmt.block.statements.length > 0)
+          throw new IllegalIndentException();
         if (!arg) throw new RequireArgumentException();
         const cases = new Map<string, Node | null>();
         // cases are handled at block level, not inside switch block
@@ -212,7 +245,12 @@ function processStatement(stmt: Statement, srcLines: string[], exr: ParseErrorRe
   }
 }
 
-function processBlock(statements: Statement[], srcLines: string[], exr: ParseErrorReceiverFunction, errorLines: Set<number>): Node | null {
+function processBlock(
+  statements: Statement[],
+  srcLines: string[],
+  exr: ParseErrorReceiverFunction,
+  errorLines: Set<number>,
+): Node | null {
   if (!statements || statements.length === 0) return null;
   const nodeList: Node[] = [];
 
@@ -227,9 +265,10 @@ function processBlock(statements: Statement[], srcLines: string[], exr: ParseErr
         if (nodeList.length === 0) throw new UnexpectedElseException();
         const lastNode = nodeList[nodeList.length - 1];
         if (lastNode.type !== "if") throw new UnexpectedElseException();
-        if ((lastNode as IfNode).falseNode !== null) throw new UnexpectedElseException();
-        
-        let arg = "";
+        if ((lastNode as IfNode).falseNode !== null)
+          throw new UnexpectedElseException();
+
+        const _arg = "";
         if (stmt.$cstNode) {
           const lineStr = srcLines[stmt.$cstNode.range.start.line] ?? "";
           const idx = lineStr.indexOf(":else");
@@ -240,20 +279,29 @@ function processBlock(statements: Statement[], srcLines: string[], exr: ParseErr
             }
           }
         }
-        
-        (lastNode as IfNode).falseNode = processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines);
+
+        (lastNode as IfNode).falseNode = processBlock(
+          stmt.block?.statements ?? [],
+          srcLines,
+          exr,
+          errorLines,
+        );
       } else if (isCaseStatement(stmt)) {
         if (nodeList.length === 0) throw new UnexpectedCaseException();
         const lastNode = nodeList[nodeList.length - 1];
         if (lastNode.type !== "switch") throw new UnexpectedCaseException();
-        
+
         let arg = "";
         if ("arg" in stmt && typeof stmt.arg === "string") {
           arg = cleanText(stmt.arg, true);
         }
         if (!arg) throw new RequireArgumentException();
-        if ((lastNode as SwitchNode).cases.has(arg)) throw new CaseDuplicateException();
-        (lastNode as SwitchNode).cases.set(arg, processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines));
+        if ((lastNode as SwitchNode).cases.has(arg))
+          throw new CaseDuplicateException();
+        (lastNode as SwitchNode).cases.set(
+          arg,
+          processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+        );
       } else {
         const node = processStatement(stmt, srcLines, exr, errorLines);
         if (node) {
@@ -295,23 +343,43 @@ export const parse = (
     const parseResult = spdServices.parser.LangiumParser.parse(src);
     const errorLines = new Set<number>();
 
-    if (parseResult.lexerErrors.length > 0 || parseResult.parserErrors.length > 0) {
+    if (
+      parseResult.lexerErrors.length > 0 ||
+      parseResult.parserErrors.length > 0
+    ) {
       const errors = [...parseResult.lexerErrors, ...parseResult.parserErrors];
       for (const err of errors) {
         let lineNo = 1;
-        if ((err as any).line) {
-          lineNo = (err as any).line;
-        } else if ((err as any).token) {
-          lineNo = (err as any).token.startLine || 1;
+        const errObj = err as {
+          line?: number;
+          token?: { startLine?: number; tokenType?: { name?: string } };
+        };
+        if (errObj.line) {
+          lineNo = errObj.line;
+        } else if (errObj.token) {
+          lineNo = errObj.token.startLine || 1;
         }
         const lineStr = srcLines[lineNo - 1] ?? "";
         const msg = err.message || "";
-        const tokenName = (err as any).token?.tokenType?.name || "";
-        const isIndentError = msg.includes("INDENT") || msg.includes("DEDENT") || msg.includes("IllegalIndent") || msg.includes("synthetic:indent") || msg.includes("synthetic:dedent") || msg.includes("Unexpected token: INDENT") || msg.includes("Unexpected token: DEDENT") || (msg.includes("Expecting token of type") && (msg.includes("indent") || msg.includes("dedent"))) || tokenName === "INDENT" || tokenName === "DEDENT";
-        const parseErr = isIndentError ? new IllegalIndentException() : new UnknownCommandException();
+        const tokenName = errObj.token?.tokenType?.name || "";
+        const isIndentError =
+          msg.includes("INDENT") ||
+          msg.includes("DEDENT") ||
+          msg.includes("IllegalIndent") ||
+          msg.includes("synthetic:indent") ||
+          msg.includes("synthetic:dedent") ||
+          msg.includes("Unexpected token: INDENT") ||
+          msg.includes("Unexpected token: DEDENT") ||
+          (msg.includes("Expecting token of type") &&
+            (msg.includes("indent") || msg.includes("dedent"))) ||
+          tokenName === "INDENT" ||
+          tokenName === "DEDENT";
+        const parseErr = isIndentError
+          ? new IllegalIndentException()
+          : new UnknownCommandException();
         parseErr.lineNo = lineNo;
         parseErr.lineStr = lineStr;
-        
+
         if (!exr(lineStr, lineNo - 1, parseErr)) {
           throw parseErr;
         }
@@ -320,30 +388,30 @@ export const parse = (
     }
 
     const model = parseResult.value;
-    if (!model || model.$type !== 'Model') {
-       return null;
+    if (model?.$type !== "Model") {
+      return null;
     }
 
-    const statements = (model as any).statements;
+    const statements = (model as unknown as { statements: Statement[] })
+      .statements;
     const blockResult = processBlock(statements, srcLines, exr, errorLines);
     if (!blockResult) return null;
     if (blockResult.type !== "nodeList") {
-        return { type: "nodeList", children: [blockResult] } as NodeListNode;
+      return { type: "nodeList", children: [blockResult] } as NodeListNode;
     }
     return blockResult;
-
   } catch (ex) {
-      if (ex instanceof ParseError) {
-          if (ex.lineNo === undefined) {
-             ex.lineNo = 1;
-             ex.lineStr = srcLines[0] ?? "";
-          }
-          if (exr(ex.lineStr ?? "", ex.lineNo - 1, ex)) {
-              return null;
-          }
-          throw ex;
+    if (ex instanceof ParseError) {
+      if (ex.lineNo === undefined) {
+        ex.lineNo = 1;
+        ex.lineStr = srcLines[0] ?? "";
+      }
+      if (exr(ex.lineStr ?? "", ex.lineNo - 1, ex)) {
+        return null;
       }
       throw ex;
+    }
+    throw ex;
   }
 };
 

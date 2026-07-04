@@ -4,443 +4,466 @@
  ******************************************************************************/
 
 /* eslint-disable */
-import * as langium from 'langium';
+import * as langium from "langium";
 
 export const spdTerminals = {
-    INDENT: /synthetic:indent/,
-    DEDENT: /synthetic:dedent/,
-    LINE_COMMENT: /#[^\n\r]*/,
-    Content: /[^\t:\n\r](?:[^\n\r]*@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/,
-    WS: /[ \t]+/,
-    NEWLINE: /\r?\n/,
+  INDENT: /synthetic:indent/,
+  DEDENT: /synthetic:dedent/,
+  LINE_COMMENT: /#[^\n\r]*/,
+  Content:
+    /[^\t:\n\r](?:[^\n\r]*@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/,
+  WS: /[ \t]+/,
+  NEWLINE: /\r?\n/,
 };
 
 export type spdTerminalNames = keyof typeof spdTerminals;
 
 export type spdKeywordNames =
-    | ":call"
-    | ":case"
-    | ":comment"
-    | ":dowhile"
-    | ":else"
-    | ":if"
-    | ":switch"
-    | ":terminal"
-    | ":while";
+  | ":call"
+  | ":case"
+  | ":comment"
+  | ":dowhile"
+  | ":else"
+  | ":if"
+  | ":switch"
+  | ":terminal"
+  | ":while";
 
 export type spdTokenNames = spdTerminalNames | spdKeywordNames;
 
 export type Argument = string;
 
 export function isArgument(item: unknown): item is Argument {
-    return (typeof item === 'string' && (/[^\t:\n\r](?:[^\n\r]*@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/.test(item)));
+  return (
+    typeof item === "string" &&
+    /[^\t:\n\r](?:[^\n\r]*@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/.test(
+      item,
+    )
+  );
 }
 
 export interface Block extends langium.AstNode {
-    readonly $container: CallStatement | CaseStatement | CommentStatement | DoWhileStatement | ElseStatement | IfStatement | ProcessStatement | SwitchStatement | TerminalStatement | WhileStatement;
-    readonly $type: 'Block';
-    statements: Array<Statement>;
+  readonly $container:
+    | CallStatement
+    | CaseStatement
+    | CommentStatement
+    | DoWhileStatement
+    | ElseStatement
+    | IfStatement
+    | ProcessStatement
+    | SwitchStatement
+    | TerminalStatement
+    | WhileStatement;
+  readonly $type: "Block";
+  statements: Array<Statement>;
 }
 
 export const Block = {
-    $type: 'Block',
-    statements: 'statements'
+  $type: "Block",
+  statements: "statements",
 } as const;
 
 export function isBlock(item: unknown): item is Block {
-    return reflection.isInstance(item, Block.$type);
+  return reflection.isInstance(item, Block.$type);
 }
 
 export interface CallStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'CallStatement';
-    arg?: Argument;
-    block?: Block;
+  readonly $container: Block | Model;
+  readonly $type: "CallStatement";
+  arg?: Argument;
+  block?: Block;
 }
 
 export const CallStatement = {
-    $type: 'CallStatement',
-    arg: 'arg',
-    block: 'block'
+  $type: "CallStatement",
+  arg: "arg",
+  block: "block",
 } as const;
 
 export function isCallStatement(item: unknown): item is CallStatement {
-    return reflection.isInstance(item, CallStatement.$type);
+  return reflection.isInstance(item, CallStatement.$type);
 }
 
 export interface CaseStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'CaseStatement';
-    arg?: Argument;
-    block?: Block;
+  readonly $container: Block | Model;
+  readonly $type: "CaseStatement";
+  arg?: Argument;
+  block?: Block;
 }
 
 export const CaseStatement = {
-    $type: 'CaseStatement',
-    arg: 'arg',
-    block: 'block'
+  $type: "CaseStatement",
+  arg: "arg",
+  block: "block",
 } as const;
 
 export function isCaseStatement(item: unknown): item is CaseStatement {
-    return reflection.isInstance(item, CaseStatement.$type);
+  return reflection.isInstance(item, CaseStatement.$type);
 }
 
-export type CommandStatement = CallStatement | CaseStatement | CommentStatement | DoWhileStatement | ElseStatement | IfStatement | SwitchStatement | TerminalStatement | WhileStatement;
+export type CommandStatement =
+  | CallStatement
+  | CaseStatement
+  | CommentStatement
+  | DoWhileStatement
+  | ElseStatement
+  | IfStatement
+  | SwitchStatement
+  | TerminalStatement
+  | WhileStatement;
 
 export const CommandStatement = {
-    $type: 'CommandStatement'
+  $type: "CommandStatement",
 } as const;
 
 export function isCommandStatement(item: unknown): item is CommandStatement {
-    return reflection.isInstance(item, CommandStatement.$type);
+  return reflection.isInstance(item, CommandStatement.$type);
 }
 
 export interface CommentStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'CommentStatement';
-    arg?: Argument;
-    block?: Block;
+  readonly $container: Block | Model;
+  readonly $type: "CommentStatement";
+  arg?: Argument;
+  block?: Block;
 }
 
 export const CommentStatement = {
-    $type: 'CommentStatement',
-    arg: 'arg',
-    block: 'block'
+  $type: "CommentStatement",
+  arg: "arg",
+  block: "block",
 } as const;
 
 export function isCommentStatement(item: unknown): item is CommentStatement {
-    return reflection.isInstance(item, CommentStatement.$type);
+  return reflection.isInstance(item, CommentStatement.$type);
 }
 
 export interface DoWhileStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'DoWhileStatement';
-    arg?: Argument;
-    block?: Block;
+  readonly $container: Block | Model;
+  readonly $type: "DoWhileStatement";
+  arg?: Argument;
+  block?: Block;
 }
 
 export const DoWhileStatement = {
-    $type: 'DoWhileStatement',
-    arg: 'arg',
-    block: 'block'
+  $type: "DoWhileStatement",
+  arg: "arg",
+  block: "block",
 } as const;
 
 export function isDoWhileStatement(item: unknown): item is DoWhileStatement {
-    return reflection.isInstance(item, DoWhileStatement.$type);
+  return reflection.isInstance(item, DoWhileStatement.$type);
 }
 
 export interface ElseStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'ElseStatement';
-    block?: Block;
+  readonly $container: Block | Model;
+  readonly $type: "ElseStatement";
+  block?: Block;
 }
 
 export const ElseStatement = {
-    $type: 'ElseStatement',
-    block: 'block'
+  $type: "ElseStatement",
+  block: "block",
 } as const;
 
 export function isElseStatement(item: unknown): item is ElseStatement {
-    return reflection.isInstance(item, ElseStatement.$type);
+  return reflection.isInstance(item, ElseStatement.$type);
 }
 
 export interface IfStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'IfStatement';
-    arg?: Argument;
-    block?: Block;
+  readonly $container: Block | Model;
+  readonly $type: "IfStatement";
+  arg?: Argument;
+  block?: Block;
 }
 
 export const IfStatement = {
-    $type: 'IfStatement',
-    arg: 'arg',
-    block: 'block'
+  $type: "IfStatement",
+  arg: "arg",
+  block: "block",
 } as const;
 
 export function isIfStatement(item: unknown): item is IfStatement {
-    return reflection.isInstance(item, IfStatement.$type);
+  return reflection.isInstance(item, IfStatement.$type);
 }
 
 export interface Model extends langium.AstNode {
-    readonly $type: 'Model';
-    statements: Array<Statement>;
+  readonly $type: "Model";
+  statements: Array<Statement>;
 }
 
 export const Model = {
-    $type: 'Model',
-    statements: 'statements'
+  $type: "Model",
+  statements: "statements",
 } as const;
 
 export function isModel(item: unknown): item is Model {
-    return reflection.isInstance(item, Model.$type);
+  return reflection.isInstance(item, Model.$type);
 }
 
 export interface ProcessStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'ProcessStatement';
-    block?: Block;
-    content: string;
+  readonly $container: Block | Model;
+  readonly $type: "ProcessStatement";
+  block?: Block;
+  content: string;
 }
 
 export const ProcessStatement = {
-    $type: 'ProcessStatement',
-    block: 'block',
-    content: 'content'
+  $type: "ProcessStatement",
+  block: "block",
+  content: "content",
 } as const;
 
 export function isProcessStatement(item: unknown): item is ProcessStatement {
-    return reflection.isInstance(item, ProcessStatement.$type);
+  return reflection.isInstance(item, ProcessStatement.$type);
 }
 
 export type Statement = CommandStatement | ProcessStatement;
 
 export const Statement = {
-    $type: 'Statement'
+  $type: "Statement",
 } as const;
 
 export function isStatement(item: unknown): item is Statement {
-    return reflection.isInstance(item, Statement.$type);
+  return reflection.isInstance(item, Statement.$type);
 }
 
 export interface SwitchStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'SwitchStatement';
-    arg?: Argument;
-    block?: Block;
+  readonly $container: Block | Model;
+  readonly $type: "SwitchStatement";
+  arg?: Argument;
+  block?: Block;
 }
 
 export const SwitchStatement = {
-    $type: 'SwitchStatement',
-    arg: 'arg',
-    block: 'block'
+  $type: "SwitchStatement",
+  arg: "arg",
+  block: "block",
 } as const;
 
 export function isSwitchStatement(item: unknown): item is SwitchStatement {
-    return reflection.isInstance(item, SwitchStatement.$type);
+  return reflection.isInstance(item, SwitchStatement.$type);
 }
 
 export interface TerminalStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'TerminalStatement';
-    arg?: Argument;
-    block?: Block;
+  readonly $container: Block | Model;
+  readonly $type: "TerminalStatement";
+  arg?: Argument;
+  block?: Block;
 }
 
 export const TerminalStatement = {
-    $type: 'TerminalStatement',
-    arg: 'arg',
-    block: 'block'
+  $type: "TerminalStatement",
+  arg: "arg",
+  block: "block",
 } as const;
 
 export function isTerminalStatement(item: unknown): item is TerminalStatement {
-    return reflection.isInstance(item, TerminalStatement.$type);
+  return reflection.isInstance(item, TerminalStatement.$type);
 }
 
 export interface WhileStatement extends langium.AstNode {
-    readonly $container: Block | Model;
-    readonly $type: 'WhileStatement';
-    arg?: Argument;
-    block?: Block;
+  readonly $container: Block | Model;
+  readonly $type: "WhileStatement";
+  arg?: Argument;
+  block?: Block;
 }
 
 export const WhileStatement = {
-    $type: 'WhileStatement',
-    arg: 'arg',
-    block: 'block'
+  $type: "WhileStatement",
+  arg: "arg",
+  block: "block",
 } as const;
 
 export function isWhileStatement(item: unknown): item is WhileStatement {
-    return reflection.isInstance(item, WhileStatement.$type);
+  return reflection.isInstance(item, WhileStatement.$type);
 }
 
 export type spdAstType = {
-    Block: Block
-    CallStatement: CallStatement
-    CaseStatement: CaseStatement
-    CommandStatement: CommandStatement
-    CommentStatement: CommentStatement
-    DoWhileStatement: DoWhileStatement
-    ElseStatement: ElseStatement
-    IfStatement: IfStatement
-    Model: Model
-    ProcessStatement: ProcessStatement
-    Statement: Statement
-    SwitchStatement: SwitchStatement
-    TerminalStatement: TerminalStatement
-    WhileStatement: WhileStatement
-}
+  Block: Block;
+  CallStatement: CallStatement;
+  CaseStatement: CaseStatement;
+  CommandStatement: CommandStatement;
+  CommentStatement: CommentStatement;
+  DoWhileStatement: DoWhileStatement;
+  ElseStatement: ElseStatement;
+  IfStatement: IfStatement;
+  Model: Model;
+  ProcessStatement: ProcessStatement;
+  Statement: Statement;
+  SwitchStatement: SwitchStatement;
+  TerminalStatement: TerminalStatement;
+  WhileStatement: WhileStatement;
+};
 
 export class spdAstReflection extends langium.AbstractAstReflection {
-    override readonly types = {
-        Block: {
-            name: Block.$type,
-            properties: {
-                statements: {
-                    name: Block.statements,
-                    defaultValue: []
-                }
-            },
-            superTypes: []
+  override readonly types = {
+    Block: {
+      name: Block.$type,
+      properties: {
+        statements: {
+          name: Block.statements,
+          defaultValue: [],
         },
-        CallStatement: {
-            name: CallStatement.$type,
-            properties: {
-                arg: {
-                    name: CallStatement.arg,
-                    optional: true
-                },
-                block: {
-                    name: CallStatement.block,
-                    optional: true
-                }
-            },
-            superTypes: [CommandStatement.$type]
+      },
+      superTypes: [],
+    },
+    CallStatement: {
+      name: CallStatement.$type,
+      properties: {
+        arg: {
+          name: CallStatement.arg,
+          optional: true,
         },
-        CaseStatement: {
-            name: CaseStatement.$type,
-            properties: {
-                arg: {
-                    name: CaseStatement.arg,
-                    optional: true
-                },
-                block: {
-                    name: CaseStatement.block,
-                    optional: true
-                }
-            },
-            superTypes: [CommandStatement.$type]
+        block: {
+          name: CallStatement.block,
+          optional: true,
         },
-        CommandStatement: {
-            name: CommandStatement.$type,
-            properties: {
-            },
-            superTypes: [Statement.$type]
+      },
+      superTypes: [CommandStatement.$type],
+    },
+    CaseStatement: {
+      name: CaseStatement.$type,
+      properties: {
+        arg: {
+          name: CaseStatement.arg,
+          optional: true,
         },
-        CommentStatement: {
-            name: CommentStatement.$type,
-            properties: {
-                arg: {
-                    name: CommentStatement.arg,
-                    optional: true
-                },
-                block: {
-                    name: CommentStatement.block,
-                    optional: true
-                }
-            },
-            superTypes: [CommandStatement.$type]
+        block: {
+          name: CaseStatement.block,
+          optional: true,
         },
-        DoWhileStatement: {
-            name: DoWhileStatement.$type,
-            properties: {
-                arg: {
-                    name: DoWhileStatement.arg,
-                    optional: true
-                },
-                block: {
-                    name: DoWhileStatement.block,
-                    optional: true
-                }
-            },
-            superTypes: [CommandStatement.$type]
+      },
+      superTypes: [CommandStatement.$type],
+    },
+    CommandStatement: {
+      name: CommandStatement.$type,
+      properties: {},
+      superTypes: [Statement.$type],
+    },
+    CommentStatement: {
+      name: CommentStatement.$type,
+      properties: {
+        arg: {
+          name: CommentStatement.arg,
+          optional: true,
         },
-        ElseStatement: {
-            name: ElseStatement.$type,
-            properties: {
-                block: {
-                    name: ElseStatement.block,
-                    optional: true
-                }
-            },
-            superTypes: [CommandStatement.$type]
+        block: {
+          name: CommentStatement.block,
+          optional: true,
         },
-        IfStatement: {
-            name: IfStatement.$type,
-            properties: {
-                arg: {
-                    name: IfStatement.arg,
-                    optional: true
-                },
-                block: {
-                    name: IfStatement.block,
-                    optional: true
-                }
-            },
-            superTypes: [CommandStatement.$type]
+      },
+      superTypes: [CommandStatement.$type],
+    },
+    DoWhileStatement: {
+      name: DoWhileStatement.$type,
+      properties: {
+        arg: {
+          name: DoWhileStatement.arg,
+          optional: true,
         },
-        Model: {
-            name: Model.$type,
-            properties: {
-                statements: {
-                    name: Model.statements,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: []
+        block: {
+          name: DoWhileStatement.block,
+          optional: true,
         },
-        ProcessStatement: {
-            name: ProcessStatement.$type,
-            properties: {
-                block: {
-                    name: ProcessStatement.block,
-                    optional: true
-                },
-                content: {
-                    name: ProcessStatement.content
-                }
-            },
-            superTypes: [Statement.$type]
+      },
+      superTypes: [CommandStatement.$type],
+    },
+    ElseStatement: {
+      name: ElseStatement.$type,
+      properties: {
+        block: {
+          name: ElseStatement.block,
+          optional: true,
         },
-        Statement: {
-            name: Statement.$type,
-            properties: {
-            },
-            superTypes: []
+      },
+      superTypes: [CommandStatement.$type],
+    },
+    IfStatement: {
+      name: IfStatement.$type,
+      properties: {
+        arg: {
+          name: IfStatement.arg,
+          optional: true,
         },
-        SwitchStatement: {
-            name: SwitchStatement.$type,
-            properties: {
-                arg: {
-                    name: SwitchStatement.arg,
-                    optional: true
-                },
-                block: {
-                    name: SwitchStatement.block,
-                    optional: true
-                }
-            },
-            superTypes: [CommandStatement.$type]
+        block: {
+          name: IfStatement.block,
+          optional: true,
         },
-        TerminalStatement: {
-            name: TerminalStatement.$type,
-            properties: {
-                arg: {
-                    name: TerminalStatement.arg,
-                    optional: true
-                },
-                block: {
-                    name: TerminalStatement.block,
-                    optional: true
-                }
-            },
-            superTypes: [CommandStatement.$type]
+      },
+      superTypes: [CommandStatement.$type],
+    },
+    Model: {
+      name: Model.$type,
+      properties: {
+        statements: {
+          name: Model.statements,
+          defaultValue: [],
+          optional: true,
         },
-        WhileStatement: {
-            name: WhileStatement.$type,
-            properties: {
-                arg: {
-                    name: WhileStatement.arg,
-                    optional: true
-                },
-                block: {
-                    name: WhileStatement.block,
-                    optional: true
-                }
-            },
-            superTypes: [CommandStatement.$type]
-        }
-    } as const satisfies langium.AstMetaData
+      },
+      superTypes: [],
+    },
+    ProcessStatement: {
+      name: ProcessStatement.$type,
+      properties: {
+        block: {
+          name: ProcessStatement.block,
+          optional: true,
+        },
+        content: {
+          name: ProcessStatement.content,
+        },
+      },
+      superTypes: [Statement.$type],
+    },
+    Statement: {
+      name: Statement.$type,
+      properties: {},
+      superTypes: [],
+    },
+    SwitchStatement: {
+      name: SwitchStatement.$type,
+      properties: {
+        arg: {
+          name: SwitchStatement.arg,
+          optional: true,
+        },
+        block: {
+          name: SwitchStatement.block,
+          optional: true,
+        },
+      },
+      superTypes: [CommandStatement.$type],
+    },
+    TerminalStatement: {
+      name: TerminalStatement.$type,
+      properties: {
+        arg: {
+          name: TerminalStatement.arg,
+          optional: true,
+        },
+        block: {
+          name: TerminalStatement.block,
+          optional: true,
+        },
+      },
+      superTypes: [CommandStatement.$type],
+    },
+    WhileStatement: {
+      name: WhileStatement.$type,
+      properties: {
+        arg: {
+          name: WhileStatement.arg,
+          optional: true,
+        },
+        block: {
+          name: WhileStatement.block,
+          optional: true,
+        },
+      },
+      superTypes: [CommandStatement.$type],
+    },
+  } as const satisfies langium.AstMetaData;
 }
 
 export const reflection = new spdAstReflection();
