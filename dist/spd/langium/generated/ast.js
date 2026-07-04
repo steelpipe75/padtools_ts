@@ -3,120 +3,119 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 /* eslint-disable */
-import * as langium from "langium";
+import * as langium from 'langium';
 export const spdTerminals = {
     INDENT: /synthetic:indent/,
     DEDENT: /synthetic:dedent/,
     LINE_COMMENT: /#[^\n\r]*/,
-    Content: /[^\t:\n\r](?:[^\n\r]*@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/,
+    Content: /[^\t:\n\r](?:[^\n\r]*(?<!\\)@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/,
     WS: /[ \t]+/,
     NEWLINE: /\r?\n/,
 };
 export function isArgument(item) {
-    return (typeof item === "string" &&
-        /[^\t:\n\r](?:[^\n\r]*@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/.test(item));
+    return (typeof item === 'string' && (/[^\t:\n\r](?:[^\n\r]*(?<!\\)@[ \t]*\r?\n[ \t]*|#[^\n\r]*\r?\n[ \t]*)*[^\n\r]*/.test(item)));
 }
 export const Block = {
-    $type: "Block",
-    statements: "statements",
+    $type: 'Block',
+    statements: 'statements'
 };
 export function isBlock(item) {
     return reflection.isInstance(item, Block.$type);
 }
 export const CallStatement = {
-    $type: "CallStatement",
-    arg: "arg",
-    block: "block",
+    $type: 'CallStatement',
+    arg: 'arg',
+    block: 'block'
 };
 export function isCallStatement(item) {
     return reflection.isInstance(item, CallStatement.$type);
 }
 export const CaseStatement = {
-    $type: "CaseStatement",
-    arg: "arg",
-    block: "block",
+    $type: 'CaseStatement',
+    arg: 'arg',
+    block: 'block'
 };
 export function isCaseStatement(item) {
     return reflection.isInstance(item, CaseStatement.$type);
 }
 export const CommandStatement = {
-    $type: "CommandStatement",
+    $type: 'CommandStatement'
 };
 export function isCommandStatement(item) {
     return reflection.isInstance(item, CommandStatement.$type);
 }
 export const CommentStatement = {
-    $type: "CommentStatement",
-    arg: "arg",
-    block: "block",
+    $type: 'CommentStatement',
+    arg: 'arg',
+    block: 'block'
 };
 export function isCommentStatement(item) {
     return reflection.isInstance(item, CommentStatement.$type);
 }
 export const DoWhileStatement = {
-    $type: "DoWhileStatement",
-    arg: "arg",
-    block: "block",
+    $type: 'DoWhileStatement',
+    arg: 'arg',
+    block: 'block'
 };
 export function isDoWhileStatement(item) {
     return reflection.isInstance(item, DoWhileStatement.$type);
 }
 export const ElseStatement = {
-    $type: "ElseStatement",
-    block: "block",
+    $type: 'ElseStatement',
+    block: 'block'
 };
 export function isElseStatement(item) {
     return reflection.isInstance(item, ElseStatement.$type);
 }
 export const IfStatement = {
-    $type: "IfStatement",
-    arg: "arg",
-    block: "block",
+    $type: 'IfStatement',
+    arg: 'arg',
+    block: 'block'
 };
 export function isIfStatement(item) {
     return reflection.isInstance(item, IfStatement.$type);
 }
 export const Model = {
-    $type: "Model",
-    statements: "statements",
+    $type: 'Model',
+    statements: 'statements'
 };
 export function isModel(item) {
     return reflection.isInstance(item, Model.$type);
 }
 export const ProcessStatement = {
-    $type: "ProcessStatement",
-    block: "block",
-    content: "content",
+    $type: 'ProcessStatement',
+    block: 'block',
+    content: 'content'
 };
 export function isProcessStatement(item) {
     return reflection.isInstance(item, ProcessStatement.$type);
 }
 export const Statement = {
-    $type: "Statement",
+    $type: 'Statement'
 };
 export function isStatement(item) {
     return reflection.isInstance(item, Statement.$type);
 }
 export const SwitchStatement = {
-    $type: "SwitchStatement",
-    arg: "arg",
-    block: "block",
+    $type: 'SwitchStatement',
+    arg: 'arg',
+    block: 'block'
 };
 export function isSwitchStatement(item) {
     return reflection.isInstance(item, SwitchStatement.$type);
 }
 export const TerminalStatement = {
-    $type: "TerminalStatement",
-    arg: "arg",
-    block: "block",
+    $type: 'TerminalStatement',
+    arg: 'arg',
+    block: 'block'
 };
 export function isTerminalStatement(item) {
     return reflection.isInstance(item, TerminalStatement.$type);
 }
 export const WhileStatement = {
-    $type: "WhileStatement",
-    arg: "arg",
-    block: "block",
+    $type: 'WhileStatement',
+    arg: 'arg',
+    block: 'block'
 };
 export function isWhileStatement(item) {
     return reflection.isInstance(item, WhileStatement.$type);
@@ -128,95 +127,95 @@ export class spdAstReflection extends langium.AbstractAstReflection {
             properties: {
                 statements: {
                     name: Block.statements,
-                    defaultValue: [],
-                },
+                    defaultValue: []
+                }
             },
-            superTypes: [],
+            superTypes: []
         },
         CallStatement: {
             name: CallStatement.$type,
             properties: {
                 arg: {
                     name: CallStatement.arg,
-                    optional: true,
+                    optional: true
                 },
                 block: {
                     name: CallStatement.block,
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [CommandStatement.$type],
+            superTypes: [CommandStatement.$type]
         },
         CaseStatement: {
             name: CaseStatement.$type,
             properties: {
                 arg: {
                     name: CaseStatement.arg,
-                    optional: true,
+                    optional: true
                 },
                 block: {
                     name: CaseStatement.block,
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [CommandStatement.$type],
+            superTypes: [CommandStatement.$type]
         },
         CommandStatement: {
             name: CommandStatement.$type,
             properties: {},
-            superTypes: [Statement.$type],
+            superTypes: [Statement.$type]
         },
         CommentStatement: {
             name: CommentStatement.$type,
             properties: {
                 arg: {
                     name: CommentStatement.arg,
-                    optional: true,
+                    optional: true
                 },
                 block: {
                     name: CommentStatement.block,
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [CommandStatement.$type],
+            superTypes: [CommandStatement.$type]
         },
         DoWhileStatement: {
             name: DoWhileStatement.$type,
             properties: {
                 arg: {
                     name: DoWhileStatement.arg,
-                    optional: true,
+                    optional: true
                 },
                 block: {
                     name: DoWhileStatement.block,
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [CommandStatement.$type],
+            superTypes: [CommandStatement.$type]
         },
         ElseStatement: {
             name: ElseStatement.$type,
             properties: {
                 block: {
                     name: ElseStatement.block,
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [CommandStatement.$type],
+            superTypes: [CommandStatement.$type]
         },
         IfStatement: {
             name: IfStatement.$type,
             properties: {
                 arg: {
                     name: IfStatement.arg,
-                    optional: true,
+                    optional: true
                 },
                 block: {
                     name: IfStatement.block,
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [CommandStatement.$type],
+            superTypes: [CommandStatement.$type]
         },
         Model: {
             name: Model.$type,
@@ -224,71 +223,71 @@ export class spdAstReflection extends langium.AbstractAstReflection {
                 statements: {
                     name: Model.statements,
                     defaultValue: [],
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [],
+            superTypes: []
         },
         ProcessStatement: {
             name: ProcessStatement.$type,
             properties: {
                 block: {
                     name: ProcessStatement.block,
-                    optional: true,
+                    optional: true
                 },
                 content: {
-                    name: ProcessStatement.content,
-                },
+                    name: ProcessStatement.content
+                }
             },
-            superTypes: [Statement.$type],
+            superTypes: [Statement.$type]
         },
         Statement: {
             name: Statement.$type,
             properties: {},
-            superTypes: [],
+            superTypes: []
         },
         SwitchStatement: {
             name: SwitchStatement.$type,
             properties: {
                 arg: {
                     name: SwitchStatement.arg,
-                    optional: true,
+                    optional: true
                 },
                 block: {
                     name: SwitchStatement.block,
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [CommandStatement.$type],
+            superTypes: [CommandStatement.$type]
         },
         TerminalStatement: {
             name: TerminalStatement.$type,
             properties: {
                 arg: {
                     name: TerminalStatement.arg,
-                    optional: true,
+                    optional: true
                 },
                 block: {
                     name: TerminalStatement.block,
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [CommandStatement.$type],
+            superTypes: [CommandStatement.$type]
         },
         WhileStatement: {
             name: WhileStatement.$type,
             properties: {
                 arg: {
                     name: WhileStatement.arg,
-                    optional: true,
+                    optional: true
                 },
                 block: {
                     name: WhileStatement.block,
-                    optional: true,
-                },
+                    optional: true
+                }
             },
-            superTypes: [CommandStatement.$type],
-        },
+            superTypes: [CommandStatement.$type]
+        }
     };
 }
 export const reflection = new spdAstReflection();
