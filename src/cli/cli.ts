@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import "../polyfills.js";
 import { getRequire } from "../utils/compat.js";
 
 const cjsRequire = getRequire();

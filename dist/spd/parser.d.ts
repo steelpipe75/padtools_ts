@@ -32,11 +32,6 @@ export declare class UnexpectedIOException extends ParseError {
     constructor();
 }
 type ParseErrorReceiverFunction = (lineStr: string, lineNo: number, err: ParseError) => boolean;
-/**
- * SPDフォーマットの文字列をPADモデル（AST）にパースします。
- * @param src SPDフォーマットの文字列。
- * @returns パースされたASTのルートノード。
- */
 export declare const parse: (src: string, exr?: ParseErrorReceiverFunction) => Node | null;
 export declare const parser: {
     parse: (src: string, exr?: ParseErrorReceiverFunction) => Node | null;

@@ -6,7 +6,7 @@ describe("API /spd-info", () => {
     const res = await app.request("/spd-info");
 
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body).toHaveProperty("explanation");
     expect(body.explanation).toBe(SPD_EXPLANATION);
     expect(body.explanation).toContain(

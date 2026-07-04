@@ -383,6 +383,7 @@ npm run build:web:gh-pages
 -   [@hono/mcp](https://github.com/honojs/mcp): HonoでのMCPサーバー実装に使用。 (MIT License)
 -   [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/typescript-sdk): MCP SDK。 (MIT License)
 -   [sanitize-html](https://github.com/apostrophecms/sanitize-html): SVG内のテキストのサニタイズに使用。 (MIT License)
+-   [langium](https://github.com/eclipse-langium/langium): SPDフォーマットの構文解析に使用。 (MIT License)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
 

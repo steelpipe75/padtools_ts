@@ -8,475 +8,343 @@ export class ParseError extends Error {
         Object.setPrototypeOf(this, ParseError.prototype);
     }
 }
-// 引数が必要な場合にスローされる例外
 export class RequireArgumentException extends ParseError {
     constructor() {
         super("このコマンドは引数が必要です");
         Object.setPrototypeOf(this, RequireArgumentException.prototype);
     }
 }
-// 引数が不要な場合にスローされる例外
 export class NotRequireArgumentException extends ParseError {
     constructor() {
         super("このコマンドに引数は不要です");
         Object.setPrototypeOf(this, NotRequireArgumentException.prototype);
     }
 }
-// 不正なインデントの場合にスローされる例外
 export class IllegalIndentException extends ParseError {
     constructor() {
         super("インデントの数が不正です");
         Object.setPrototypeOf(this, IllegalIndentException.prototype);
     }
 }
-// 未知のコマンドの場合にスローされる例外
 export class UnknownCommandException extends ParseError {
     constructor() {
         super("未知のコマンドです");
         Object.setPrototypeOf(this, UnknownCommandException.prototype);
     }
 }
-// 予期しない:elseコマンドの場合にスローされる例外
 export class UnexpectedElseException extends ParseError {
     constructor() {
         super("不適切なelseです");
         Object.setPrototypeOf(this, UnexpectedElseException.prototype);
     }
 }
-// 予期しない:caseコマンドの場合にスローされる例外
 export class UnexpectedCaseException extends ParseError {
     constructor() {
         super("不適切なcaseが現れました");
         Object.setPrototypeOf(this, UnexpectedCaseException.prototype);
     }
 }
-// :caseの値が重複している場合にスローされる例外
 export class CaseDuplicateException extends ParseError {
     constructor() {
         super("既に同名のCaseが存在します");
         Object.setPrototypeOf(this, CaseDuplicateException.prototype);
     }
 }
-// 内部で予期しないエラーが発生した場合にスローされる例外
 export class UnexpectedInnerException extends ParseError {
     constructor(message) {
         super(`内部エラー:${message}`);
         Object.setPrototypeOf(this, UnexpectedInnerException.prototype);
     }
 }
-// 予期しないI/Oエラーが発生した場合にスローされる例外
 export class UnexpectedIOException extends ParseError {
     constructor() {
         super("予期しないIOエラーが発生しました");
         Object.setPrototypeOf(this, UnexpectedIOException.prototype);
     }
 }
-/**
- * パース中のコンテキストを扱うクラス。
- */
-class Context {
-    // 親のコンテキスト
-    parent = null;
-    // 深さ
-    depth = 0;
-    // ノードリスト
-    nodeList = [];
-    // コンテキストの追加状態
-    optionStatus = "Default";
-    // コンテキストの状態に結びつく引数
-    optionArg = null;
-}
-/**
- * SPD (Simple PAD Description) フォーマットのパーサー。
- */
-// コメントを判定する正規表現オブジェクト
-const patternComment = /^\s*(#.*)?$/;
-const DummyParseErrorReceiver = (
-// lineStr: string,
-// lineNo: number,
-// err: ParseError,
-) => {
+const DummyParseErrorReceiver = () => {
     return false;
 };
-/**
- * 本文を処理する
- * @param context 現在のコンテキスト
- * @param body 本文
- */
-const handleBody = (context, body) => {
-    // 状態の制御
-    if (context.nodeList.length > 0) {
-        const lnode = context.nodeList[context.nodeList.length - 1];
-        if (context.optionArg != null && lnode.type === "switch") {
-            const node = lnode;
-            node.cases.set(context.optionArg, null);
-            context.optionArg = null;
-        }
+import { isCallStatement, isCaseStatement, isCommandStatement, isCommentStatement, isDoWhileStatement, isElseStatement, isIfStatement, isProcessStatement, isSwitchStatement, isTerminalStatement, isWhileStatement, } from "./langium/generated/ast.js";
+import { spdServices } from "./langium/spd-module.js";
+function cleanText(rawText, isCommand) {
+    if (!rawText)
+        return "";
+    if (isCommand) {
+        rawText = rawText.trim();
     }
-    if (body.startsWith(":")) {
-        const parts = body.split(/[ \t]+/);
-        // コマンド部分と引数部分を分離
-        const cmd = parts[0].substring(1); // コマンド名（例: "call", "if"）
-        const arg = parts.length > 1 ? body.substring(parts[0].length).trim() : null; // 引数
-        switch (cmd) {
-            case "call":
+    const lines = rawText.split(/\r?\n/);
+    const newLines = [];
+    for (let i = 0; i < lines.length; i++) {
+        let l = lines[i];
+        l = l.replace(/^\t+/, "");
+        if (l.trim().startsWith("#"))
+            continue;
+        if (l.endsWith("@"))
+            l = l.substring(0, l.length - 1);
+        newLines.push(l);
+    }
+    return newLines.join("\n").replace(/@/g, "\n");
+}
+function processStatement(stmt, srcLines, exr, errorLines) {
+    try {
+        if (stmt.$cstNode && errorLines.has(stmt.$cstNode.range.start.line + 1)) {
+            return null;
+        }
+        let arg = "";
+        if ("arg" in stmt && typeof stmt.arg === "string") {
+            arg = cleanText(stmt.arg, true);
+        }
+        if (isProcessStatement(stmt)) {
+            const content = cleanText(stmt.content ?? "", false);
+            if (content.trim() === "") {
+                return null;
+            }
+            return {
+                type: "process",
+                text: content,
+                childNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+            };
+        }
+        else if (isCommandStatement(stmt)) {
+            if (isCallStatement(stmt)) {
                 if (!arg)
                     throw new RequireArgumentException();
-                context.nodeList.push({
+                return {
                     type: "call",
                     text: arg,
-                    childNode: null,
-                });
-                context.optionStatus = "Default";
-                context.optionArg = null;
-                break;
-            case "terminal":
+                    childNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+                };
+            }
+            else if (isTerminalStatement(stmt)) {
+                if (stmt.block && stmt.block.statements.length > 0)
+                    throw new IllegalIndentException();
                 if (!arg)
                     throw new RequireArgumentException();
-                context.nodeList.push({
+                return {
                     type: "terminal",
                     text: arg,
-                });
-                context.optionStatus = "Default";
-                context.optionArg = null;
-                break;
-            case "comment":
+                };
+            }
+            else if (isCommentStatement(stmt)) {
+                if (stmt.block && stmt.block.statements.length > 0)
+                    throw new IllegalIndentException();
                 if (!arg)
                     throw new RequireArgumentException();
-                context.nodeList.push({ type: "comment", text: arg });
-                context.optionStatus = "Default";
-                context.optionArg = null;
-                break;
-            case "while":
+                return { type: "comment", text: arg };
+            }
+            else if (isWhileStatement(stmt)) {
                 if (!arg)
                     throw new RequireArgumentException();
-                context.nodeList.push({
+                return {
                     type: "loop",
                     isWhile: true,
                     text: arg,
-                    childNode: null,
-                });
-                context.optionStatus = "Default";
-                context.optionArg = null;
-                break;
-            case "dowhile":
+                    childNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+                };
+            }
+            else if (isDoWhileStatement(stmt)) {
                 if (!arg)
                     throw new RequireArgumentException();
-                context.nodeList.push({
+                return {
                     type: "loop",
                     isWhile: false,
                     text: arg,
-                    childNode: null,
-                });
-                context.optionStatus = "Default";
-                context.optionArg = null;
-                break;
-            case "if":
+                    childNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
+                };
+            }
+            else if (isIfStatement(stmt)) {
                 if (!arg)
                     throw new RequireArgumentException();
-                context.nodeList.push({
+                return {
                     type: "if",
                     text: arg,
-                    trueNode: null,
+                    trueNode: processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines),
                     falseNode: null,
-                });
-                context.optionStatus = "Default";
-                context.optionArg = null;
-                break;
-            case "switch":
+                };
+            }
+            else if (isSwitchStatement(stmt)) {
+                if (stmt.block && stmt.block.statements.length > 0)
+                    throw new IllegalIndentException();
                 if (!arg)
                     throw new RequireArgumentException();
-                context.nodeList.push({
+                const cases = new Map();
+                // cases are handled at block level, not inside switch block
+                return {
                     type: "switch",
                     text: arg,
-                    cases: new Map(),
-                });
-                context.optionStatus = "Default";
-                context.optionArg = null;
-                break;
-            case "else": {
-                const lastIfNode = context.nodeList.length === 0
-                    ? null
-                    : context.nodeList[context.nodeList.length - 1];
-                if (lastIfNode === null || lastIfNode.type !== "if") {
-                    throw new UnexpectedElseException();
-                }
-                if (arg !== null) {
-                    throw new NotRequireArgumentException();
-                }
-                context.optionStatus = "Else";
-                context.optionArg = null;
-                break;
+                    cases,
+                };
             }
-            case "case": {
-                const lastSwitchNode = context.nodeList.length === 0
-                    ? null
-                    : context.nodeList[context.nodeList.length - 1];
-                if (lastSwitchNode === null || lastSwitchNode.type !== "switch") {
+            else if (isCaseStatement(stmt)) {
+                throw new UnexpectedCaseException();
+            }
+            else if (isElseStatement(stmt)) {
+                throw new UnexpectedElseException();
+            }
+        }
+        throw new UnknownCommandException();
+    }
+    catch (ex) {
+        if (ex instanceof ParseError && ex.lineNo === undefined) {
+            if (stmt.$cstNode) {
+                ex.lineNo = stmt.$cstNode.range.start.line + 1; // Langium range line is 0-based
+                ex.lineStr = srcLines[ex.lineNo - 1] ?? "";
+            }
+        }
+        throw ex;
+    }
+}
+function processBlock(statements, srcLines, exr, errorLines) {
+    if (!statements || statements.length === 0)
+        return null;
+    const nodeList = [];
+    for (let i = 0; i < statements.length; i++) {
+        const stmt = statements[i];
+        try {
+            if (stmt.$cstNode && errorLines.has(stmt.$cstNode.range.start.line + 1)) {
+                continue;
+            }
+            if (isElseStatement(stmt)) {
+                if (nodeList.length === 0)
+                    throw new UnexpectedElseException();
+                const lastNode = nodeList[nodeList.length - 1];
+                if (lastNode.type !== "if")
+                    throw new UnexpectedElseException();
+                if (lastNode.falseNode !== null)
+                    throw new UnexpectedElseException();
+                const _arg = "";
+                if (stmt.$cstNode) {
+                    const lineStr = srcLines[stmt.$cstNode.range.start.line] ?? "";
+                    const idx = lineStr.indexOf(":else");
+                    if (idx !== -1) {
+                        const afterElse = lineStr.substring(idx + 5).trim();
+                        if (afterElse.length > 0 && !afterElse.startsWith("#")) {
+                            throw new NotRequireArgumentException();
+                        }
+                    }
+                }
+                lastNode.falseNode = processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines);
+            }
+            else if (isCaseStatement(stmt)) {
+                if (nodeList.length === 0)
                     throw new UnexpectedCaseException();
+                const lastNode = nodeList[nodeList.length - 1];
+                if (lastNode.type !== "switch")
+                    throw new UnexpectedCaseException();
+                let arg = "";
+                if ("arg" in stmt && typeof stmt.arg === "string") {
+                    arg = cleanText(stmt.arg, true);
                 }
                 if (!arg)
                     throw new RequireArgumentException();
-                if (lastSwitchNode.cases.has(arg)) {
+                if (lastNode.cases.has(arg))
                     throw new CaseDuplicateException();
-                }
-                context.optionStatus = "Default";
-                context.optionArg = arg;
-                break;
-            }
-            default:
-                throw new UnknownCommandException();
-        }
-    }
-    else {
-        context.nodeList.push({
-            type: "process",
-            text: body,
-            childNode: null,
-        });
-        context.optionStatus = "Default";
-        context.optionArg = null;
-    }
-};
-/**
- * 現在のコンテキストを確定し、親コンテキストに移動します。
- * @param context 現在のコンテキスト。
- * @returns 親コンテキスト。
- */
-const upToParent = (context) => {
-    if (context === null)
-        return null;
-    // 状態の制御
-    if (context.nodeList.length > 0) {
-        const lnode = context.nodeList[context.nodeList.length - 1];
-        if (context.optionArg != null && lnode.type === "switch") {
-            const node = lnode;
-            node.cases.set(context.optionArg, null);
-            context.optionArg = null;
-        }
-    }
-    if (context.parent === null)
-        return null;
-    // 追加するノードを新規作成。
-    let newNode = null;
-    if (context.nodeList.length === 0) {
-        return context.parent;
-    }
-    else if (context.nodeList.length === 1) {
-        newNode = context.nodeList[0];
-    }
-    else {
-        const nodeList = { type: "nodeList", children: [] };
-        for (let i = 0; i < context.nodeList.length; i++) {
-            nodeList.children.push(context.nodeList[i]);
-        }
-        newNode = nodeList;
-    }
-    // ノードの追加先となるノード。
-    const pnode = context.parent.nodeList[context.parent.nodeList.length - 1];
-    // ノードの種類に応じてノードの追加先に追加。
-    switch (pnode.type) {
-        case "process": {
-            const processNode = pnode;
-            processNode.childNode = newNode;
-            break;
-        }
-        case "loop": {
-            const loopNode = pnode;
-            loopNode.childNode = newNode;
-            break;
-        }
-        case "call": {
-            const callNode = pnode;
-            callNode.childNode = newNode;
-            break;
-        }
-        case "switch": {
-            const snode = pnode;
-            if (context.parent.optionArg !== null) {
-                snode.cases.set(context.parent.optionArg, newNode);
+                lastNode.cases.set(arg, processBlock(stmt.block?.statements ?? [], srcLines, exr, errorLines));
             }
             else {
-                throw new UnexpectedInnerException("optionArg is null when it shouldn't be for switch node.");
+                const node = processStatement(stmt, srcLines, exr, errorLines);
+                if (node) {
+                    nodeList.push(node);
+                }
             }
-            break;
         }
-        case "if": {
-            const ifnode = pnode;
-            if (context.parent.optionStatus === "Default") {
-                ifnode.trueNode = newNode;
-            }
-            else if (context.parent.optionStatus === "Else") {
-                if (ifnode.falseNode !== null) {
-                    throw new UnexpectedElseException();
-                }
-                else {
-                    ifnode.falseNode = newNode;
-                }
-            }
-            break;
-        }
-    }
-    // 親ノードの状態をリセットする。
-    context.parent.optionStatus = "Default";
-    context.parent.optionArg = null;
-    // 親ノードを返す。
-    return context.parent;
-};
-/**
- * SPDフォーマットの文字列をPADモデル（AST）にパースします。
- * @param src SPDフォーマットの文字列。
- * @returns パースされたASTのルートノード。
- */
-export const parse = (src, exr = DummyParseErrorReceiver) => {
-    // if(src == null) throw new IllegalArgumentException("src is null"); // # diff TypeScriptではnullチェックは不要
-    // 先頭のコンテキスト
-    const rootContext = new Context();
-    // 現在のコンテキスト
-    let context = rootContext;
-    // １行づつ読み込む
-    // ソースコードを行ごとに分割
-    const lines = src.split(/\r?\n/);
-    let lineNo = 0; // 現在の行番号
-    try {
-        while (lineNo < lines.length) {
-            const line = lines[lineNo];
-            lineNo++;
-            // コメント行は読み飛ばし
-            if (patternComment.test(line))
-                continue;
-            // 先頭のタブ数を数える。
-            let tabNum = 0;
-            for (let i = 0; i < line.length; ++i) {
-                if (line.charAt(i) === "\t") {
-                    tabNum++;
-                }
-                else {
-                    break;
-                }
-            }
-            try {
-                if (context === null) {
-                    throw new IllegalIndentException();
-                }
-                // 子コンテキストの作成処理を行う。
-                if ((tabNum > 0 && context.nodeList.length === 0) || tabNum < 0) {
-                    // 最初からタブがある場合は不正。
-                    throw new IllegalIndentException();
-                }
-                if (tabNum > context.depth) {
-                    // タブが増加した場合の処理
-                    // 正当性をチェックする。
-                    const parentNode = context.nodeList[context.nodeList.length - 1];
-                    if (tabNum > context.depth + 1 ||
-                        (parentNode && parentNode.type === "comment")) {
-                        // 親がコメントか２階層以上離れているのは不正。
-                        throw new IllegalIndentException();
-                    }
-                    if (parentNode.type === "switch" && context.optionArg == null) {
-                        // 子を持たないタイプの場合は不正。
-                        throw new IllegalIndentException();
-                    }
-                    // 子コンテキストを生成する。
-                    const newContext = new Context();
-                    newContext.parent = context;
-                    newContext.depth = context.depth + 1;
-                    context = newContext;
-                }
-                // タブが減少した際の処理
-                while (tabNum < context.depth) {
-                    context = upToParent(context);
-                    if (context === null) {
-                        throw new IllegalIndentException();
-                    }
-                }
-                // 本文は行のデータをtrimしたものとする。
-                // 行末が @ の場合は複数行扱いとする。
-                let body = line.substring(tabNum); // タブの後の本体部分を抽出
-                if (body.endsWith("@")) {
-                    let multiLineContent = body.substring(0, body.length - 1);
-                    while (lineNo < lines.length) {
-                        const nextLine = lines[lineNo];
-                        lineNo++;
-                        // コメント行で止まる
-                        if (patternComment.test(nextLine))
-                            continue;
-                        // 行末に @ が間読み込む
-                        // 行末に @ がある間読み込む
-                        let nextLineTabNum = 0;
-                        for (let i = 0; i < nextLine.length; ++i) {
-                            if (nextLine.charAt(i) === "\t") {
-                                nextLineTabNum++;
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        const nextLineBody = nextLine.substring(nextLineTabNum);
-                        if (nextLineBody.endsWith("@")) {
-                            multiLineContent += `\n${nextLineBody.substring(0, nextLineBody.length - 1)}`;
-                        }
-                        else {
-                            multiLineContent += `\n${nextLineBody}`;
-                            break;
-                        }
-                    }
-                    body = multiLineContent;
-                }
-                body = body.replace(/@/g, "\n");
-                // 本文を処理する。
-                if (context !== null) {
-                    handleBody(context, body);
-                }
-                else {
-                    throw new IllegalIndentException(); // contextがnullの場合、これは不正な状態を示す
-                }
-            }
-            catch (ex) {
-                if (ex instanceof ParseError) {
-                    ex.lineNo = lineNo;
-                    ex.lineStr = line;
-                    if (exr(line, lineNo - 1, ex)) {
+        catch (ex) {
+            if (ex instanceof ParseError) {
+                if (ex.lineNo === undefined) {
+                    if (stmt.$cstNode) {
+                        ex.lineNo = stmt.$cstNode.range.start.line + 1;
+                        ex.lineStr = srcLines[ex.lineNo - 1] ?? "";
                     }
                     else {
-                        throw ex;
+                        ex.lineNo = 1;
+                        ex.lineStr = srcLines[0] ?? "";
                     }
                 }
-                else {
-                    throw ex;
+                if (exr(ex.lineStr ?? "", ex.lineNo - 1, ex)) {
+                    errorLines.add(ex.lineNo);
+                    continue; // ignore error and continue
                 }
+                throw ex;
+            }
+            throw ex;
+        }
+    }
+    if (nodeList.length === 0)
+        return null;
+    if (nodeList.length === 1)
+        return nodeList[0];
+    return { type: "nodeList", children: nodeList };
+}
+export const parse = (src, exr = DummyParseErrorReceiver) => {
+    const srcLines = src.split(/\r?\n/);
+    try {
+        const parseResult = spdServices.parser.LangiumParser.parse(src);
+        const errorLines = new Set();
+        if (parseResult.lexerErrors.length > 0 ||
+            parseResult.parserErrors.length > 0) {
+            const errors = [...parseResult.lexerErrors, ...parseResult.parserErrors];
+            for (const err of errors) {
+                let lineNo = 1;
+                const errObj = err;
+                if (errObj.line) {
+                    lineNo = errObj.line;
+                }
+                else if (errObj.token) {
+                    lineNo = errObj.token.startLine || 1;
+                }
+                const lineStr = srcLines[lineNo - 1] ?? "";
+                const msg = err.message || "";
+                const tokenName = errObj.token?.tokenType?.name || "";
+                const isIndentError = msg.includes("INDENT") ||
+                    msg.includes("DEDENT") ||
+                    msg.includes("IllegalIndent") ||
+                    msg.includes("synthetic:indent") ||
+                    msg.includes("synthetic:dedent") ||
+                    msg.includes("Unexpected token: INDENT") ||
+                    msg.includes("Unexpected token: DEDENT") ||
+                    (msg.includes("Expecting token of type") &&
+                        (msg.includes("indent") || msg.includes("dedent"))) ||
+                    tokenName === "INDENT" ||
+                    tokenName === "DEDENT";
+                const parseErr = isIndentError
+                    ? new IllegalIndentException()
+                    : new UnknownCommandException();
+                parseErr.lineNo = lineNo;
+                parseErr.lineStr = lineStr;
+                if (!exr(lineStr, lineNo - 1, parseErr)) {
+                    throw parseErr;
+                }
+                errorLines.add(lineNo);
             }
         }
-        // 先頭まで戻る
-        while (context != null) {
-            context = upToParent(context);
+        const model = parseResult.value;
+        if (model?.$type !== "Model") {
+            return null;
         }
+        const statements = model
+            .statements;
+        const blockResult = processBlock(statements, srcLines, exr, errorLines);
+        if (!blockResult)
+            return null;
+        if (blockResult.type !== "nodeList") {
+            return { type: "nodeList", children: [blockResult] };
+        }
+        return blockResult;
     }
     catch (ex) {
         if (ex instanceof ParseError) {
             if (ex.lineNo === undefined) {
-                ex.lineNo = lineNo;
-                ex.lineStr = lines[lineNo - 1];
+                ex.lineNo = 1;
+                ex.lineStr = srcLines[0] ?? "";
             }
-            throw ex; // テストと適切なエラーハンドリングのためにParseErrorを再スロー
+            if (exr(ex.lineStr ?? "", ex.lineNo - 1, ex)) {
+                return null;
+            }
+            throw ex;
         }
-        else {
-            console.error(`行 ${lineNo} で予期しないエラーが発生しました: ${ex}`);
-            const err = new ParseError(`予期しないエラー: ${ex}`);
-            err.lineNo = lineNo;
-            err.lineStr = lines[lineNo - 1];
-            throw err; // その他のエラーをラップ
-        }
+        throw ex;
     }
-    // モデルを最終化して返す
-    if (rootContext.nodeList.length === 0) {
-        return null;
-    }
-    const topNode = {
-        type: "nodeList",
-        children: rootContext.nodeList,
-    };
-    return topNode;
 };
 export const parser = {
     parse,
