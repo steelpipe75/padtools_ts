@@ -220,7 +220,6 @@ describe("SVG Renderer", () => {
     const node = {
       type: "unknown",
       text: "unknown",
-      // biome-ignore lint/suspicious/noExplicitAny: Testing unknown node type
     } as any;
     const svg = render(node);
     // It should produce an SVG wrapper but the fragment inside will be empty
