@@ -23,7 +23,7 @@ describe("API AST Download Endpoints", () => {
       'attachment; filename="diagram.json"',
     );
 
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body.type).toBe("nodeList");
     sharedAst = body;
   });
@@ -88,7 +88,7 @@ describe("API AST Download Endpoints", () => {
     });
 
     expect(res.status).toBe(400);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body.error).toBe("SPD content is required");
   });
 
@@ -110,7 +110,7 @@ describe("API AST Download Endpoints", () => {
       });
 
       expect(res.status).toBe(400);
-      const body = await res.json();
+      const body: any = await res.json();
       expect(body.error).toBe("Custom parse error");
     } finally {
       (parser.parser as unknown as { parse: typeof originalParse }).parse =
@@ -140,7 +140,7 @@ describe("API AST Download Endpoints", () => {
     });
 
     expect(res.status).toBe(400);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body.error).toBe("AST is required");
   });
 
@@ -160,7 +160,7 @@ describe("API AST Download Endpoints", () => {
       });
 
       expect(res.status).toBe(400);
-      const body = await res.json();
+      const body: any = await res.json();
       expect(body.error).toBe("Failed to parse SPD");
     } finally {
       (parser.parser as unknown as { parse: typeof originalParse }).parse =
@@ -202,7 +202,7 @@ describe("API AST Download Endpoints", () => {
       });
 
       expect(res.status).toBe(400);
-      const body = await res.json();
+      const body: any = await res.json();
       expect(body.error).toBe("Invalid AST format");
     } finally {
       (
@@ -231,7 +231,7 @@ describe("API AST Download Endpoints", () => {
       });
 
       expect(res.status).toBe(500);
-      const body = await res.json();
+      const body: any = await res.json();
       expect(body.error).toBe("Custom render error");
     } finally {
       (

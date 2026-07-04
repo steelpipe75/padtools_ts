@@ -21,7 +21,7 @@ describe("API AST Endpoints", () => {
     });
 
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body).toHaveProperty("ast");
     expect(body.ast.type).toBe("nodeList");
     sharedAst = body.ast;
@@ -61,7 +61,7 @@ describe("API AST Endpoints", () => {
     });
 
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body: any = await res.json();
     expect(body).toHaveProperty("svg");
     expect(body.svg).toContain("<svg");
   });
@@ -77,7 +77,7 @@ describe("API AST Endpoints", () => {
     });
 
     expect(parseRes.status).toBe(200);
-    const parseBody = await parseRes.json();
+    const parseBody: any = await parseRes.json();
 
     // SwitchNodeのcasesが__type: "Map"としてシリアライズされていることを確認
     const switchNode = parseBody.ast.children[0];
@@ -93,7 +93,7 @@ describe("API AST Endpoints", () => {
     });
 
     expect(renderRes.status).toBe(200);
-    const renderBody = await renderRes.json();
+    const renderBody: any = await renderRes.json();
     expect(renderBody.svg).toContain("<svg");
   });
 
@@ -139,7 +139,7 @@ describe("API AST Endpoints", () => {
         });
 
         expect(res.status).toBe(400);
-        const body = await res.json();
+        const body: any = await res.json();
         expect(body.error).toBe("Failed to parse SPD");
       } finally {
         (parser.parser as unknown as { parse: typeof originalParse }).parse =
@@ -165,7 +165,7 @@ describe("API AST Endpoints", () => {
         });
 
         expect(res.status).toBe(400);
-        const body = await res.json();
+        const body: any = await res.json();
         expect(body.error).toBe("Custom parse error");
       } finally {
         (parser.parser as unknown as { parse: typeof originalParse }).parse =
@@ -191,7 +191,7 @@ describe("API AST Endpoints", () => {
         });
 
         expect(res.status).toBe(400);
-        const body = await res.json();
+        const body: any = await res.json();
         expect(body.error).toBe("Failed to parse AST");
       } finally {
         (parser.parser as unknown as { parse: typeof originalParse }).parse =
@@ -209,7 +209,7 @@ describe("API AST Endpoints", () => {
       });
 
       expect(res.status).toBe(400);
-      const body = await res.json();
+      const body: any = await res.json();
       expect(body.error).toBe("SPD content is required");
     });
 
@@ -229,7 +229,7 @@ describe("API AST Endpoints", () => {
         });
 
         expect(res.status).toBe(400);
-        const body = await res.json();
+        const body: any = await res.json();
         expect(body.error).toBe("Invalid AST format");
       } finally {
         (
@@ -258,7 +258,7 @@ describe("API AST Endpoints", () => {
         });
 
         expect(res.status).toBe(500);
-        const body = await res.json();
+        const body: any = await res.json();
         expect(body.error).toBe("Custom render error");
       } finally {
         (
@@ -287,7 +287,7 @@ describe("API AST Endpoints", () => {
         });
 
         expect(res.status).toBe(500);
-        const body = await res.json();
+        const body: any = await res.json();
         expect(body.error).toBe("Failed to render AST");
       } finally {
         (
@@ -308,7 +308,7 @@ describe("API AST Endpoints", () => {
       });
 
       expect(res.status).toBe(400);
-      const body = await res.json();
+      const body: any = await res.json();
       expect(body.error).toBe("AST is required");
     });
 
@@ -325,7 +325,7 @@ describe("API AST Endpoints", () => {
       });
 
       expect(res.status).toBe(200);
-      const body = await res.json();
+      const body: any = await res.json();
       expect(body).toHaveProperty("svg");
     });
   });
