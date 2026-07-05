@@ -4,6 +4,8 @@ import { version } from "../../package.json";
 import { deserializeAST, serializeAST } from "../../src/spd/ast";
 import { ParseError, parse } from "../../src/spd/parser";
 import { render as renderSvg } from "../../src/spd/svg-renderer";
+// @ts-ignore
+import defaultSpdContent from "bundle-text:../../sample_input.spd";
 
 document.addEventListener("DOMContentLoaded", () => {
   const appVersion = document.getElementById("appVersion") as HTMLSpanElement;
@@ -582,25 +584,5 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function getDefaultSpd(): string {
-  return `:terminal 開始
-命令
-:comment コメント文
-:call 関数呼び出し
-	中身
-:if 条件式
-	真の場合
-:else
-	偽の場合(:else以下は省略可能)
-:switch 条件
-:case ケース1
-	ケース1の中身
-:case ケース2
-	ケース2の中身
-:case ...
-	ケース文は必要に応じていくつでも追加できます
-:while 繰り返し条件（先判定）
-	中身
-:dowhile 繰り返し条件（後判定）
-	中身
-:terminal 終了`;
+  return defaultSpdContent.trim();
 }
