@@ -15,88 +15,81 @@ if (typeof __filename !== "undefined") {
   dirname = path.dirname(filename);
 }
 
-const inputDir = path.join(dirname, "input");
+const inputDir = path.join(dirname, "../../..");
 const outputDir = path.join(dirname, "output");
 const minifiedOutputDir = path.join(dirname, "output_minified");
 const tempDir = path.join(dirname, "temp");
 
-const testCases = fs
-  .readdirSync(inputDir)
-  .filter((file) => file.endsWith(".spd"));
+const sampleInputFile = "sample_input.spd";
+const sampleInputPath = path.join(inputDir, sampleInputFile);
 
 describe("CLI E2E tests", () => {
   // Success cases
   describe("for success cases", () => {
-    testCases.forEach((file) => {
-      const inputPath = path.join(inputDir, file);
+    describe(`for file ${sampleInputFile}`, () => {
+      const cases = [
+        {
+          option: "--prettyprint",
+          isPretty: true,
+          name: "with --prettyprint option",
+        },
+        { option: "-p", isPretty: true, name: "with -p option" },
+        { option: "", isPretty: false, name: "without prettyprint option" },
+      ];
 
-      describe(`for file ${file}`, () => {
-        const cases = [
-          {
-            option: "--prettyprint",
-            isPretty: true,
-            name: "with --prettyprint option",
-          },
-          { option: "-p", isPretty: true, name: "with -p option" },
-          { option: "", isPretty: false, name: "without prettyprint option" },
-        ];
+      test.each(cases)("should correctly convert $name and exit with 0", ({
+        option,
+        isPretty,
+        name,
+      }) => {
+        const outputPath = path.join(
+          tempDir,
+          sampleInputFile.replace(".spd", `_${name.replace(/ /g, "_")}.svg`),
+        );
 
-        test.each(cases)("should correctly convert $name and exit with 0", ({
-          option,
-          isPretty,
-          name,
-        }) => {
-          const outputPath = path.join(
-            tempDir,
-            file.replace(".spd", `_${name.replace(/ /g, "_")}.svg`),
-          );
+        // The command should execute successfully (exit code 0).
+        // execSync will throw an error for non-zero exit codes.
+        expect(() => {
+          const args = [
+            "tsx",
+            "src/cli/cli.ts",
+            "-i",
+            sampleInputPath,
+            "-o",
+            outputPath,
+          ];
+          if (option) {
+            args.push(option);
+          }
+          execFileSync("npx", args, { shell: true });
+        }).not.toThrow();
 
-          // The command should execute successfully (exit code 0).
-          // execSync will throw an error for non-zero exit codes.
-          expect(() => {
-            const args = [
-              "tsx",
-              "src/cli/cli.ts",
-              "-i",
-              inputPath,
-              "-o",
-              outputPath,
-            ];
-            if (option) {
-              args.push(option);
-            }
-            execFileSync("npx", args, { shell: true });
-          }).not.toThrow();
+        const actual = fs.readFileSync(outputPath, "utf-8");
 
-          const actual = fs.readFileSync(outputPath, "utf-8");
+        const goldenFileDir = isPretty ? outputDir : minifiedOutputDir;
+        const goldenPath = path.join(
+          goldenFileDir,
+          sampleInputFile.replace(".spd", ".svg.txt"),
+        );
+        const expected = fs.readFileSync(goldenPath, "utf-8");
 
-          const goldenFileDir = isPretty ? outputDir : minifiedOutputDir;
-          const goldenPath = path.join(
-            goldenFileDir,
-            file.replace(".spd", ".svg.txt"),
-          );
-          const expected = fs.readFileSync(goldenPath, "utf-8");
-
-          expect(actual).toBe(expected);
-        });
+        expect(actual).toBe(expected);
       });
     });
 
     it("should correctly apply --font-size option", () => {
-      const file = "sample_input.spd";
-      const inputPath = path.join(inputDir, file);
       const outputPath = path.join(
         tempDir,
-        file.replace(".spd", "_font_size_20.svg"),
+        sampleInputFile.replace(".spd", "_font_size_20.svg"),
       );
       const goldenPath = path.join(
         outputDir,
-        file.replace(".spd", "_font_size_20.svg.txt"),
+        sampleInputFile.replace(".spd", "_font_size_20.svg.txt"),
       );
 
       expect(() => {
         execSync(
-          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --font-size 20`,
+          `npx tsx src/cli/cli.ts -i ${sampleInputPath} -o ${outputPath} --font-size 20`,
         );
       }).not.toThrow();
 
@@ -107,20 +100,18 @@ describe("CLI E2E tests", () => {
     });
 
     it("should correctly apply --base-background-color gray option", () => {
-      const file = "sample_input.spd";
-      const inputPath = path.join(inputDir, file);
       const outputPath = path.join(
         tempDir,
-        file.replace(".spd", "_base_background_color_gray.svg"),
+        sampleInputFile.replace(".spd", "_base_background_color_gray.svg"),
       );
       const goldenPath = path.join(
         outputDir,
-        file.replace(".spd", "_base_background_color_gray.svg.txt"),
+        sampleInputFile.replace(".spd", "_base_background_color_gray.svg.txt"),
       );
 
       expect(() => {
         execSync(
-          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#888"`,
+          `npx tsx src/cli/cli.ts -i ${sampleInputPath} -o ${outputPath} --base-background-color "#888"`,
         );
       }).not.toThrow();
 
@@ -131,20 +122,18 @@ describe("CLI E2E tests", () => {
     });
 
     it("should correctly apply --base-background-color black option", () => {
-      const file = "sample_input.spd";
-      const inputPath = path.join(inputDir, file);
       const outputPath = path.join(
         tempDir,
-        file.replace(".spd", "_base_background_color_black.svg"),
+        sampleInputFile.replace(".spd", "_base_background_color_black.svg"),
       );
       const goldenPath = path.join(
         outputDir,
-        file.replace(".spd", "_base_background_color_black.svg.txt"),
+        sampleInputFile.replace(".spd", "_base_background_color_black.svg.txt"),
       );
 
       expect(() => {
         execSync(
-          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#000"`,
+          `npx tsx src/cli/cli.ts -i ${sampleInputPath} -o ${outputPath} --base-background-color "#000"`,
         );
       }).not.toThrow();
 
@@ -155,20 +144,18 @@ describe("CLI E2E tests", () => {
     });
 
     it("should correctly apply --base-background-color white option", () => {
-      const file = "sample_input.spd";
-      const inputPath = path.join(inputDir, file);
       const outputPath = path.join(
         tempDir,
-        file.replace(".spd", "_base_background_color_white.svg"),
+        sampleInputFile.replace(".spd", "_base_background_color_white.svg"),
       );
       const goldenPath = path.join(
         outputDir,
-        file.replace(".spd", "_base_background_color_white.svg.txt"),
+        sampleInputFile.replace(".spd", "_base_background_color_white.svg.txt"),
       );
 
       expect(() => {
         execSync(
-          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "#FFF"`,
+          `npx tsx src/cli/cli.ts -i ${sampleInputPath} -o ${outputPath} --base-background-color "#FFF"`,
         );
       }).not.toThrow();
 
@@ -179,20 +166,18 @@ describe("CLI E2E tests", () => {
     });
 
     it("should correctly apply --base-background-color none option", () => {
-      const file = "sample_input.spd";
-      const inputPath = path.join(inputDir, file);
       const outputPath = path.join(
         tempDir,
-        file.replace(".spd", "_base_background_color_none.svg"),
+        sampleInputFile.replace(".spd", "_base_background_color_none.svg"),
       );
       const goldenPath = path.join(
         outputDir,
-        file.replace(".spd", "_base_background_color_none.svg.txt"),
+        sampleInputFile.replace(".spd", "_base_background_color_none.svg.txt"),
       );
 
       expect(() => {
         execSync(
-          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --base-background-color "none"`,
+          `npx tsx src/cli/cli.ts -i ${sampleInputPath} -o ${outputPath} --base-background-color "none"`,
         );
       }).not.toThrow();
 
@@ -203,20 +188,21 @@ describe("CLI E2E tests", () => {
     });
 
     it("should correctly apply --list-render-type TerminalOffset option", () => {
-      const file = "sample_input.spd";
-      const inputPath = path.join(inputDir, file);
       const outputPath = path.join(
         tempDir,
-        file.replace(".spd", "_list_render_type_TerminalOffset.svg"),
+        sampleInputFile.replace(".spd", "_list_render_type_TerminalOffset.svg"),
       );
       const goldenPath = path.join(
         outputDir,
-        file.replace(".spd", "_list_render_type_TerminalOffset.svg.txt"),
+        sampleInputFile.replace(
+          ".spd",
+          "_list_render_type_TerminalOffset.svg.txt",
+        ),
       );
 
       expect(() => {
         execSync(
-          `npx tsx src/cli/cli.ts -i ${inputPath} -o ${outputPath} --list-render-type TerminalOffset -p`,
+          `npx tsx src/cli/cli.ts -i ${sampleInputPath} -o ${outputPath} --list-render-type TerminalOffset -p`,
         );
       }).not.toThrow();
 
@@ -252,8 +238,6 @@ describe("CLI E2E tests", () => {
 
   // Stdin/Stdout cases
   describe("for stdin/stdout cases", () => {
-    const sampleInputFile = "sample_input.spd";
-    const sampleInputPath = path.join(inputDir, sampleInputFile);
     const sampleOutputFile = sampleInputFile.replace(".spd", ".svg.txt");
 
     it("should correctly convert from stdin to stdout with --prettyprint option", () => {
@@ -289,7 +273,6 @@ describe("CLI E2E tests", () => {
 
   // Demo
   describe("Demo", () => {
-    const sampleInputFile = "sample_input.spd";
     const sampleOutputPath = "sample_output.svg";
     const sampleOutputFile = sampleInputFile.replace(".spd", ".svg.txt");
 
