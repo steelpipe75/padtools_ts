@@ -25,7 +25,7 @@
     "start:mcp": "tsx src/mcp/server.ts",
     "test": "jest",
     "test:bun": "bun test --exclude tests/web",
-    "test:jest:bun": "npx -y node@22 ./node_modules/jest/bin/jest.js --runInBand",
+    "test:jest:bun": "node ./node_modules/jest/bin/jest.js --runInBand",
     "test:web": "playwright test",
     "test:web:headed": "playwright test --headed",
     "test:cov": "jest --coverage",
