@@ -31,7 +31,7 @@ module.exports = {
   },
   transformIgnorePatterns: [
     // Transpile commander and standard-community from node_modules, ignore other node_modules
-    "/node_modules/(?!(commander|@standard-community|langium|chevrotain|chevrotain-allstar|@chevrotain|vscode-uri|vscode-languageserver|vscode-languageserver-protocol|vscode-languageserver-types|vscode-languageserver-textdocument|lodash-es)/)",
+    "/node_modules/(?!(commander|@standard-community|langium|chevrotain|chevrotain-allstar|@chevrotain|vscode-uri|vscode-languageserver|vscode-languageserver-protocol|vscode-languageserver-types|vscode-languageserver-textdocument|lodash-es|sanitize-html|htmlparser2|dom-serializer|domelementtype|domhandler|domutils|entities|escape-string-regexp)/)",
   ],
   moduleNameMapper: {
     "^zod/v4/core$": "<rootDir>/node_modules/zod/v4/core/index.cjs",
