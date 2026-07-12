@@ -101,6 +101,7 @@
     "wrangler": "^4.107.0"
   },
   "alias": {
+    "entities/decode": "entities/lib/decode.js",
     "langium": "langium/lib/index.js",
     "vscode-languageserver-protocol": "vscode-languageserver-protocol/lib/browser/main.js",
     "vscode-languageserver-types": "vscode-languageserver-types/lib/umd/main.js",
