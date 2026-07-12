@@ -88,6 +88,7 @@
     "@types/sanitize-html": "^2.16.1",
     "baseline-browser-mapping": "^2.10.41",
     "buffer": "^6.0.3",
+    "entities": "^8.0.0",
     "husky": "^9.1.7",
     "jest": "^30.4.2",
     "langium-cli": "^4.3.0",
@@ -101,7 +102,7 @@
     "wrangler": "^4.107.0"
   },
   "alias": {
-    "entities/decode": "entities/lib/decode.js",
+    "entities/decode": "entities/dist/decode.js",
     "langium": "langium/lib/index.js",
     "vscode-languageserver-protocol": "vscode-languageserver-protocol/lib/browser/main.js",
     "vscode-languageserver-types": "vscode-languageserver-types/lib/umd/main.js",
