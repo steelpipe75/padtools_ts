@@ -37,44 +37,43 @@ describe("CLI E2E tests", () => {
         { option: "", isPretty: false, name: "without prettyprint option" },
       ];
 
-      test.each(cases)("should correctly convert $name and exit with 0", ({
-        option,
-        isPretty,
-        name,
-      }) => {
-        const outputPath = path.join(
-          tempDir,
-          sampleInputFile.replace(".spd", `_${name.replace(/ /g, "_")}.svg`),
-        );
+      test.each(cases)(
+        "should correctly convert $name and exit with 0",
+        ({ option, isPretty, name }) => {
+          const outputPath = path.join(
+            tempDir,
+            sampleInputFile.replace(".spd", `_${name.replace(/ /g, "_")}.svg`),
+          );
 
-        // The command should execute successfully (exit code 0).
-        // execSync will throw an error for non-zero exit codes.
-        expect(() => {
-          const args = [
-            "tsx",
-            "src/cli/cli.ts",
-            "-i",
-            sampleInputPath,
-            "-o",
-            outputPath,
-          ];
-          if (option) {
-            args.push(option);
-          }
-          execFileSync("npx", args, { shell: true });
-        }).not.toThrow();
+          // The command should execute successfully (exit code 0).
+          // execSync will throw an error for non-zero exit codes.
+          expect(() => {
+            const args = [
+              "tsx",
+              "src/cli/cli.ts",
+              "-i",
+              sampleInputPath,
+              "-o",
+              outputPath,
+            ];
+            if (option) {
+              args.push(option);
+            }
+            execFileSync("npx", args, { shell: true });
+          }).not.toThrow();
 
-        const actual = fs.readFileSync(outputPath, "utf-8");
+          const actual = fs.readFileSync(outputPath, "utf-8");
 
-        const goldenFileDir = isPretty ? outputDir : minifiedOutputDir;
-        const goldenPath = path.join(
-          goldenFileDir,
-          sampleInputFile.replace(".spd", ".svg.txt"),
-        );
-        const expected = fs.readFileSync(goldenPath, "utf-8");
+          const goldenFileDir = isPretty ? outputDir : minifiedOutputDir;
+          const goldenPath = path.join(
+            goldenFileDir,
+            sampleInputFile.replace(".spd", ".svg.txt"),
+          );
+          const expected = fs.readFileSync(goldenPath, "utf-8");
 
-        expect(actual).toBe(expected);
-      });
+          expect(actual).toBe(expected);
+        },
+      );
     });
 
     it("should correctly apply --font-size option", () => {
