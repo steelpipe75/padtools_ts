@@ -60,7 +60,7 @@
   "description": "Simple tool to write PAD.",
   "dependencies": {
     "@hono/mcp": "^0.3.1",
-    "@hono/node-server": "^2.0.12",
+    "@hono/node-server": "^2.1.1",
     "@hono/standard-validator": "^0.2.2",
     "@hono/swagger-ui": "^0.6.1",
     "@modelcontextprotocol/sdk": "^1.30.0",
