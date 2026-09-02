@@ -53,7 +53,7 @@ jobs:
           npm run convert:web:commands
           npm run convert:web:render_options
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
