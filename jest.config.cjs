@@ -1,30 +1,19 @@
-const { createDefaultPreset } = require("ts-jest");
-
-// Configure ts-jest to compile to CommonJS for testing,
-// but keep moduleResolution as NodeNext to support resolve of .js extension imports.
-const tsJestTransformCfg = createDefaultPreset({
-  tsconfig: {
-    module: "commonjs",
-    moduleResolution: "NodeNext",
-    esModuleInterop: true,
-    allowJs: true,
-  },
-}).transform;
-
 /** @type {import("jest").Config} **/
 module.exports = {
   testEnvironment: "node",
   transform: {
-    ...tsJestTransformCfg,
-    // Transpile JS files in node_modules (like commander)
-    "^.+\\.[cm]?jsx?$": [
-      "ts-jest",
+    "^.+\\.[cm]?[tj]sx?$": [
+      "@swc/jest",
       {
-        tsconfig: {
-          module: "commonjs",
-          moduleResolution: "NodeNext",
-          esModuleInterop: true,
-          allowJs: true,
+        jsc: {
+          parser: {
+            syntax: "typescript",
+            tsx: false,
+          },
+          target: "es2022",
+        },
+        module: {
+          type: "commonjs",
         },
       },
     ],
