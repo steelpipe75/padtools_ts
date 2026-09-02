@@ -87,7 +87,7 @@ export declare const ConvertAstToSvgResponseSchema: z.ZodObject<{
 export declare const generateSvg: (spd: string, options?: ConvertRequestOptions) => string;
 export declare const generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => string;
 export declare const core: {
-    generateSvg: (spd: string, options?: ConvertRequestOptions) => string;
-    generateSvgFromAst: (ast: ReturnType<typeof parse>, options?: ConvertRequestOptions) => string;
+    generateSvg: typeof generateSvg;
+    generateSvgFromAst: typeof generateSvgFromAst;
 };
 export {};

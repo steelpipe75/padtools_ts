@@ -22,8 +22,8 @@ export interface Block extends langium.AstNode {
     statements: Array<Statement>;
 }
 export declare const Block: {
-    readonly $type: "Block";
-    readonly statements: "statements";
+    readonly $type: 'Block';
+    readonly statements: 'statements';
 };
 export declare function isBlock(item: unknown): item is Block;
 export interface CallStatement extends langium.AstNode {
@@ -33,9 +33,9 @@ export interface CallStatement extends langium.AstNode {
     block?: Block;
 }
 export declare const CallStatement: {
-    readonly $type: "CallStatement";
-    readonly arg: "arg";
-    readonly block: "block";
+    readonly $type: 'CallStatement';
+    readonly arg: 'arg';
+    readonly block: 'block';
 };
 export declare function isCallStatement(item: unknown): item is CallStatement;
 export interface CaseStatement extends langium.AstNode {
@@ -45,14 +45,14 @@ export interface CaseStatement extends langium.AstNode {
     block?: Block;
 }
 export declare const CaseStatement: {
-    readonly $type: "CaseStatement";
-    readonly arg: "arg";
-    readonly block: "block";
+    readonly $type: 'CaseStatement';
+    readonly arg: 'arg';
+    readonly block: 'block';
 };
 export declare function isCaseStatement(item: unknown): item is CaseStatement;
 export type CommandStatement = CallStatement | CaseStatement | CommentStatement | DoWhileStatement | ElseStatement | IfStatement | SwitchStatement | TerminalStatement | WhileStatement;
 export declare const CommandStatement: {
-    readonly $type: "CommandStatement";
+    readonly $type: 'CommandStatement';
 };
 export declare function isCommandStatement(item: unknown): item is CommandStatement;
 export interface CommentStatement extends langium.AstNode {
@@ -62,9 +62,9 @@ export interface CommentStatement extends langium.AstNode {
     block?: Block;
 }
 export declare const CommentStatement: {
-    readonly $type: "CommentStatement";
-    readonly arg: "arg";
-    readonly block: "block";
+    readonly $type: 'CommentStatement';
+    readonly arg: 'arg';
+    readonly block: 'block';
 };
 export declare function isCommentStatement(item: unknown): item is CommentStatement;
 export interface DoWhileStatement extends langium.AstNode {
@@ -74,9 +74,9 @@ export interface DoWhileStatement extends langium.AstNode {
     block?: Block;
 }
 export declare const DoWhileStatement: {
-    readonly $type: "DoWhileStatement";
-    readonly arg: "arg";
-    readonly block: "block";
+    readonly $type: 'DoWhileStatement';
+    readonly arg: 'arg';
+    readonly block: 'block';
 };
 export declare function isDoWhileStatement(item: unknown): item is DoWhileStatement;
 export interface ElseStatement extends langium.AstNode {
@@ -85,8 +85,8 @@ export interface ElseStatement extends langium.AstNode {
     block?: Block;
 }
 export declare const ElseStatement: {
-    readonly $type: "ElseStatement";
-    readonly block: "block";
+    readonly $type: 'ElseStatement';
+    readonly block: 'block';
 };
 export declare function isElseStatement(item: unknown): item is ElseStatement;
 export interface IfStatement extends langium.AstNode {
@@ -96,9 +96,9 @@ export interface IfStatement extends langium.AstNode {
     block?: Block;
 }
 export declare const IfStatement: {
-    readonly $type: "IfStatement";
-    readonly arg: "arg";
-    readonly block: "block";
+    readonly $type: 'IfStatement';
+    readonly arg: 'arg';
+    readonly block: 'block';
 };
 export declare function isIfStatement(item: unknown): item is IfStatement;
 export interface Model extends langium.AstNode {
@@ -106,8 +106,8 @@ export interface Model extends langium.AstNode {
     statements: Array<Statement>;
 }
 export declare const Model: {
-    readonly $type: "Model";
-    readonly statements: "statements";
+    readonly $type: 'Model';
+    readonly statements: 'statements';
 };
 export declare function isModel(item: unknown): item is Model;
 export interface ProcessStatement extends langium.AstNode {
@@ -117,14 +117,14 @@ export interface ProcessStatement extends langium.AstNode {
     content: string;
 }
 export declare const ProcessStatement: {
-    readonly $type: "ProcessStatement";
-    readonly block: "block";
-    readonly content: "content";
+    readonly $type: 'ProcessStatement';
+    readonly block: 'block';
+    readonly content: 'content';
 };
 export declare function isProcessStatement(item: unknown): item is ProcessStatement;
 export type Statement = CommandStatement | ProcessStatement;
 export declare const Statement: {
-    readonly $type: "Statement";
+    readonly $type: 'Statement';
 };
 export declare function isStatement(item: unknown): item is Statement;
 export interface SwitchStatement extends langium.AstNode {
@@ -134,9 +134,9 @@ export interface SwitchStatement extends langium.AstNode {
     block?: Block;
 }
 export declare const SwitchStatement: {
-    readonly $type: "SwitchStatement";
-    readonly arg: "arg";
-    readonly block: "block";
+    readonly $type: 'SwitchStatement';
+    readonly arg: 'arg';
+    readonly block: 'block';
 };
 export declare function isSwitchStatement(item: unknown): item is SwitchStatement;
 export interface TerminalStatement extends langium.AstNode {
@@ -146,9 +146,9 @@ export interface TerminalStatement extends langium.AstNode {
     block?: Block;
 }
 export declare const TerminalStatement: {
-    readonly $type: "TerminalStatement";
-    readonly arg: "arg";
-    readonly block: "block";
+    readonly $type: 'TerminalStatement';
+    readonly arg: 'arg';
+    readonly block: 'block';
 };
 export declare function isTerminalStatement(item: unknown): item is TerminalStatement;
 export interface WhileStatement extends langium.AstNode {
@@ -158,9 +158,9 @@ export interface WhileStatement extends langium.AstNode {
     block?: Block;
 }
 export declare const WhileStatement: {
-    readonly $type: "WhileStatement";
-    readonly arg: "arg";
-    readonly block: "block";
+    readonly $type: 'WhileStatement';
+    readonly arg: 'arg';
+    readonly block: 'block';
 };
 export declare function isWhileStatement(item: unknown): item is WhileStatement;
 export type spdAstType = {

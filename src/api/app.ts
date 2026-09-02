@@ -1,7 +1,8 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { openAPIRouteHandler, validator as zValidator } from "hono-openapi";
+import { openAPIRouteHandler } from "hono-openapi";
+import { zValidator } from "@hono/zod-validator";
 import { ConvertRequestSchema } from "../spd/core.js";
 import { getRequire } from "../utils/compat.js";
 

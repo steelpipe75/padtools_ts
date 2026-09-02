@@ -47,9 +47,9 @@ export declare const astParseHandler: (c: Context) => Promise<(Response & import
 }, 400, "json">) | (Response & import("hono").TypedResponse<{
     ast: any;
 }, 200, "json">)>;
-export declare const astParseDownloadHandler: (c: Context) => Promise<(Response & import("hono").TypedResponse<{
+export declare const astParseDownloadHandler: (c: Context) => Promise<(Response & import("hono").TypedResponse<any, 200, "json">) | (Response & import("hono").TypedResponse<{
     error: string;
-}, 400, "json">) | (Response & import("hono").TypedResponse<any, 200, "json">)>;
+}, 400, "json">)>;
 export declare const astRenderHandler: (c: Context) => Promise<(Response & import("hono").TypedResponse<{
     error: string;
 }, 400, "json">) | (Response & import("hono").TypedResponse<{
@@ -59,6 +59,6 @@ export declare const astRenderHandler: (c: Context) => Promise<(Response & impor
 }, 500, "json">)>;
 export declare const astRenderDownloadHandler: (c: Context) => Promise<(Response & import("hono").TypedResponse<{
     error: string;
-}, 400, "json">) | (Response & import("hono").TypedResponse<string, 200, "body">) | (Response & import("hono").TypedResponse<{
+}, 400, "json">) | (Response & import("hono").TypedResponse<{
     error: string;
-}, 500, "json">)>;
+}, 500, "json">) | (Response & import("hono").TypedResponse<string, 200, "body">)>;

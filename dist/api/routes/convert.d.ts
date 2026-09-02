@@ -10,6 +10,6 @@ export declare const convertHandler: (c: Context) => Promise<(Response & import(
 }, 500, "json">)>;
 export declare const downloadHandler: (c: Context) => Promise<(Response & import("hono").TypedResponse<{
     error: string;
-}, 400, "json">) | (Response & import("hono").TypedResponse<string, import("hono/utils/http-status").ContentfulStatusCode, "body">) | (Response & import("hono").TypedResponse<{
+}, 400, "json">) | (Response & import("hono").TypedResponse<{
     error: string;
-}, 500, "json">)>;
+}, 500, "json">) | (Response & import("hono").TypedResponse<string, import("hono/utils/http-status").ContentfulStatusCode, "body">)>;
