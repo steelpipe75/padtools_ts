@@ -3,5 +3,8 @@ main = "src/api/app.ts"
 compatibility_date = "2025-01-01"
 compatibility_flags = [ "nodejs_compat" ]
 
+[alias]
+"@hono/standard-validator" = "./node_modules/@hono/standard-validator/dist/index.mjs"
+
 [observability]
 enabled = true
