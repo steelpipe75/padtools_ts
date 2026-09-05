@@ -35,6 +35,8 @@ npm install
 npm test
 ```
 
+テストはJestとSWC（`@swc/jest`）を使用して実行されます。TypeScriptの変換はSWCが担当します。
+
 ## テストカバレッジ
 
 テストカバレッジレポートを生成するには、以下のコマンドを実行します。
