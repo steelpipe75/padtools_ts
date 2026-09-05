@@ -1,7 +1,11 @@
 import type { Context } from "hono";
-import { describeRoute, resolver } from "hono-openapi";
+import { createRoute } from "@hono/zod-openapi";
 import { z } from "zod";
-import { type ConvertRequest, core } from "../../spd/core.js";
+import {
+  ConvertRequestSchema,
+  type ConvertRequest,
+  core,
+} from "../../spd/core.js";
 
 const ConvertResponseSchema = z.object({
   svg: z.string().describe("The generated SVG content"),
@@ -42,12 +46,24 @@ function isParseErrorLike(error: unknown): error is ParseErrorLike {
   );
 }
 
-export const convertRoute = describeRoute({
+export const convertRoute = createRoute({
+  method: "post",
+  path: "/convert",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: ConvertRequestSchema,
+        },
+      },
+      required: true,
+    },
+  },
   responses: {
     200: {
       content: {
         "application/json": {
-          schema: resolver(ConvertResponseSchema),
+          schema: ConvertResponseSchema,
         },
       },
       description: "Successful conversion",
@@ -55,7 +71,7 @@ export const convertRoute = describeRoute({
     400: {
       content: {
         "application/json": {
-          schema: resolver(ErrorResponseSchema),
+          schema: ErrorResponseSchema,
         },
       },
       description: "Bad request - invalid SPD or options",
@@ -63,7 +79,7 @@ export const convertRoute = describeRoute({
     500: {
       content: {
         "application/json": {
-          schema: resolver(ErrorResponseSchema),
+          schema: ErrorResponseSchema,
         },
       },
       description: "Internal server error",
@@ -71,16 +87,26 @@ export const convertRoute = describeRoute({
   },
 });
 
-export const downloadRoute = describeRoute({
+export const downloadRoute = createRoute({
+  method: "post",
+  path: "/convert/download",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: ConvertRequestSchema,
+        },
+      },
+      required: true,
+    },
+  },
   responses: {
     200: {
       content: {
         "image/svg+xml": {
-          schema: resolver(
-            z.string().describe("The generated SVG file").meta({
-              format: "binary",
-            }),
-          ),
+          schema: z.string().describe("The generated SVG file").meta({
+            format: "binary",
+          }),
         },
       },
       description: "Successful conversion and download",
@@ -88,7 +114,7 @@ export const downloadRoute = describeRoute({
     400: {
       content: {
         "application/json": {
-          schema: resolver(ErrorResponseSchema),
+          schema: ErrorResponseSchema,
         },
       },
       description: "Bad request - invalid SPD or options",
@@ -96,7 +122,7 @@ export const downloadRoute = describeRoute({
     500: {
       content: {
         "application/json": {
-          schema: resolver(ErrorResponseSchema),
+          schema: ErrorResponseSchema,
         },
       },
       description: "Internal server error",

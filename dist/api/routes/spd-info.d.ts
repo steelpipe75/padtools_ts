@@ -1,5 +1,23 @@
 import type { Context } from "hono";
-export declare const spdInfoRoute: import("hono").MiddlewareHandler;
+import { z } from "zod";
+export declare const spdInfoRoute: {
+    method: "get";
+    path: "/spd-info";
+    responses: {
+        200: {
+            content: {
+                "application/json": {
+                    schema: z.ZodObject<{
+                        explanation: z.ZodString;
+                    }, z.core.$strip>;
+                };
+            };
+            description: string;
+        };
+    };
+} & {
+    getRoutingPath(): "/spd-info";
+};
 export declare const spdInfoHandler: (c: Context) => Response & import("hono").TypedResponse<{
     explanation: string;
-}, import("hono/utils/http-status").ContentfulStatusCode, "json">;
+}, 200, "json">;

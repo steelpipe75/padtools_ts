@@ -1,4 +1,4 @@
-import { describeRoute, resolver } from "hono-openapi";
+import { createRoute } from "@hono/zod-openapi";
 import { z } from "zod";
 import { SPD_EXPLANATION } from "../../spd/docs.js";
 const SpdInfoResponseSchema = z.object({
@@ -9,12 +9,14 @@ const SpdInfoResponseSchema = z.object({
         example: "SPD (Simple PAD Description) is...",
     }),
 });
-export const spdInfoRoute = describeRoute({
+export const spdInfoRoute = createRoute({
+    method: "get",
+    path: "/spd-info",
     responses: {
         200: {
             content: {
                 "application/json": {
-                    schema: resolver(SpdInfoResponseSchema),
+                    schema: SpdInfoResponseSchema,
                 },
             },
             description: "Returns the explanation of SPD notation",
@@ -22,5 +24,5 @@ export const spdInfoRoute = describeRoute({
     },
 });
 export const spdInfoHandler = (c) => {
-    return c.json({ explanation: SPD_EXPLANATION });
+    return c.json({ explanation: SPD_EXPLANATION }, 200);
 };

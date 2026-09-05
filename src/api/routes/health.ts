@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { describeRoute, resolver } from "hono-openapi";
+import { createRoute } from "@hono/zod-openapi";
 import { z } from "zod";
 import { getRequire } from "../../utils/compat.js";
 
@@ -16,12 +16,14 @@ const HealthResponseSchema = z.object({
   }),
 });
 
-export const healthRoute = describeRoute({
+export const healthRoute = createRoute({
+  method: "get",
+  path: "/health",
   responses: {
     200: {
       content: {
         "application/json": {
-          schema: resolver(HealthResponseSchema),
+          schema: HealthResponseSchema,
         },
       },
       description: "API server is healthy",
@@ -30,5 +32,5 @@ export const healthRoute = describeRoute({
 });
 
 export const healthHandler = (c: Context) => {
-  return c.json({ status: "ok", version });
+  return c.json({ status: "ok", version }, 200);
 };

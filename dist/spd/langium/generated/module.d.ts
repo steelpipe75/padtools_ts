@@ -4,10 +4,10 @@
  ******************************************************************************/
 import type { LangiumSharedCoreServices, LangiumCoreServices, LangiumGeneratedCoreServices, LangiumGeneratedSharedCoreServices, Module } from 'langium';
 export declare const SpdLanguageMetaData: {
-    readonly languageId: "spd";
+    readonly languageId: 'spd';
     readonly fileExtensions: readonly [".spd"];
     readonly caseInsensitive: false;
-    readonly mode: "development";
+    readonly mode: 'development';
 };
 export declare const spdGeneratedSharedModule: Module<LangiumSharedCoreServices, LangiumGeneratedSharedCoreServices>;
 export declare const SpdGeneratedModule: Module<LangiumCoreServices, LangiumGeneratedCoreServices>;
