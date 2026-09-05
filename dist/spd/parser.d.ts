@@ -34,6 +34,6 @@ export declare class UnexpectedIOException extends ParseError {
 type ParseErrorReceiverFunction = (lineStr: string, lineNo: number, err: ParseError) => boolean;
 export declare const parse: (src: string, exr?: ParseErrorReceiverFunction) => Node | null;
 export declare const parser: {
-    parse: (src: string, exr?: ParseErrorReceiverFunction) => Node | null;
+    parse: typeof parse;
 };
 export {};

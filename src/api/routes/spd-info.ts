@@ -1,5 +1,5 @@
+import { createRoute } from "@hono/zod-openapi";
 import type { Context } from "hono";
-import { describeRoute, resolver } from "hono-openapi";
 import { z } from "zod";
 import { SPD_EXPLANATION } from "../../spd/docs.js";
 
@@ -12,12 +12,14 @@ const SpdInfoResponseSchema = z.object({
     }),
 });
 
-export const spdInfoRoute = describeRoute({
+export const spdInfoRoute = createRoute({
+  method: "get",
+  path: "/spd-info",
   responses: {
     200: {
       content: {
         "application/json": {
-          schema: resolver(SpdInfoResponseSchema),
+          schema: SpdInfoResponseSchema,
         },
       },
       description: "Returns the explanation of SPD notation",
@@ -26,5 +28,5 @@ export const spdInfoRoute = describeRoute({
 });
 
 export const spdInfoHandler = (c: Context) => {
-  return c.json({ explanation: SPD_EXPLANATION });
+  return c.json({ explanation: SPD_EXPLANATION }, 200);
 };
