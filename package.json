@@ -82,7 +82,7 @@
     "@parcel/transformer-inline-string": "^2.16.4",
     "@parcel/transformer-typescript-types": "^2.16.1",
     "@playwright/test": "^1.63.0",
-    "@swc/core": "^1.16.1",
+    "@swc/core": "^1.16.2",
     "@swc/jest": "^0.2.39",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.6.1",
