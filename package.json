@@ -66,7 +66,7 @@
     "@modelcontextprotocol/sdk": "^1.30.0",
     "commander": "^15.0.0",
     "eastasianwidth": "^0.3.0",
-    "fastmcp": "^4.20.14",
+    "fastmcp": "^4.20.16",
     "glob": "^13.0.6",
     "hono": "^4.13.5",
     "langium": "^4.3.1",
