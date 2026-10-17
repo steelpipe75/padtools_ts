@@ -73,7 +73,7 @@
     "sanitize-html": "^2.18.0",
     "svgo": "^4.1.0",
     "xml-formatter": "^3.7.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
