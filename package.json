@@ -70,7 +70,7 @@
     "glob": "^13.0.6",
     "hono": "^4.13.13",
     "langium": "^4.3.1",
-    "sanitize-html": "^2.18.0",
+    "sanitize-html": "^2.18.1",
     "svgo": "^4.1.0",
     "xml-formatter": "^3.7.0",
     "zod": "^4.6.7"
