@@ -76,7 +76,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.15",
+    "@biomejs/biome": "^2.6.3",
     "@fullhuman/postcss-purgecss": "^8.0.0",
     "@parcel/packager-ts": "^2.16.4",
     "@parcel/transformer-inline-string": "^2.16.4",
