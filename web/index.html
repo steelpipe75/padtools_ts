@@ -71,7 +71,8 @@
                 <input type="radio" id="inputModeAst" name="inputMode" value="ast">
                 <label for="inputModeAst">入力をAST(JSON)として解釈</label>
             </div>
-            <textarea id="spdInput" placeholder="ここにSPD記法のテキストを入力してください..."></textarea>
+            <div id="spdEditorContainer" class="editor-container"></div>
+            <textarea id="spdInput" style="display: none;" aria-hidden="true"></textarea>
             <div class="file-operations">
                 <div class="file-input-group">
                     <label for="fileInput">

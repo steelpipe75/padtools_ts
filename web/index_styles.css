@@ -127,6 +127,18 @@ textarea {
   height: 100%;
 }
 
+.editor-container {
+  width: 100%;
+  flex-grow: 1;
+  min-height: 400px;
+  height: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
 button {
   background-color: #007bff;
   color: white;

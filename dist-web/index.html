@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=ja><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/web.df349311.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"><body>
+<!DOCTYPE html><html lang=ja><script type=module src=/editorWebWorkerMain.8813adfb.js></script><link rel=stylesheet href=/web.888d69a7.css><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>SPD to SVG Converter</title><link rel=stylesheet href=/web.b7b0e9ef.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"><body>
     <h1>SPD(Simple PAD Description) to SVG Converter <span class=version-badge>v<span id=appVersion></span></span></h1>
     <div class=link-group>
         <p class=reference-link><a href=/commands.html>SPD Commands Reference</a></p>
@@ -62,7 +62,8 @@
                 <input type=radio id=inputModeAst name=inputMode value=ast>
                 <label for=inputModeAst>入力をAST(JSON)として解釈</label>
             </div>
-            <textarea id=spdInput placeholder=ここにSPD記法のテキストを入力してください...></textarea>
+            <div id=spdEditorContainer class=editor-container></div>
+            <textarea id=spdInput style=display:none aria-hidden=true></textarea>
             <div class=file-operations>
                 <div class=file-input-group>
                     <label for=fileInput>
@@ -144,5 +145,5 @@
             </div>
         </div>
     </div>
-    <script type=module src=/web.c30a1bb6.js></script>
+    <script type=module src=/web.de2c07f6.js></script>
 
