@@ -1,5 +1,6 @@
-export declare function createSpdServices(): {
-    shared: import("langium").LangiumSharedCoreServices;
-    Spd: import("langium").LangiumCoreServices;
+import { type DefaultSharedModuleContext, type LangiumServices, type LangiumSharedServices } from "langium/lsp";
+export declare function createSpdServices(context?: DefaultSharedModuleContext): {
+    shared: LangiumSharedServices;
+    Spd: LangiumServices;
 };
-export declare const spdServices: import("langium").LangiumCoreServices;
+export declare const spdServices: LangiumServices;

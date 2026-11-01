@@ -1,9 +1,10 @@
-import { createDefaultCoreModule, createDefaultSharedCoreModule, EmptyFileSystem, inject, } from "langium";
+import { EmptyFileSystem, inject } from "langium";
+import { createDefaultModule, createDefaultSharedModule, } from "langium/lsp";
 import { SpdGeneratedModule, spdGeneratedSharedModule, } from "./generated/module.js";
 import { SpdLexer } from "./spd-lexer.js";
-export function createSpdServices() {
-    const shared = inject(createDefaultSharedCoreModule(EmptyFileSystem), spdGeneratedSharedModule);
-    const Spd = inject(createDefaultCoreModule({ shared }), SpdGeneratedModule, {
+export function createSpdServices(context = EmptyFileSystem) {
+    const shared = inject(createDefaultSharedModule(context), spdGeneratedSharedModule);
+    const Spd = inject(createDefaultModule({ shared }), SpdGeneratedModule, {
         parser: {
             Lexer: (services) => new SpdLexer(services),
         },
