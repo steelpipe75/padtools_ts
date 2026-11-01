@@ -114,6 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     monaco.Uri.parse("inmemory://model/input.spd"),
   );
 
+  
   const editor = monaco.editor.create(spdEditorContainer, {
     model: spdModel,
     automaticLayout: true,
