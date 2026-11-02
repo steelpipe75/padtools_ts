@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -35,7 +35,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci
       - name: Lint and Format check
         run: npm run check
@@ -67,7 +67,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: 'npm'
+          cache: "npm"
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest

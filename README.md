@@ -12,8 +12,8 @@ padtools_ts はPAD図を活用することを目的として作成された、PA
 
 インストール不要で、ブラウザからすぐにPAD図の作成を試すことができます。
 
-*   **[Web版を開く (Cloudflare Pages)](https://padtools-ts.pages.dev/)** : `main` ブランチの最新状態が常に反映されます。
-*   **[Web版を開く (GitHub Pages)](https://steelpipe75.github.io/padtools_ts/)** : リリースバージョン（安定版）が反映されます。
+-   **[Web版を開く (Cloudflare Pages)](https://padtools-ts.pages.dev/)** : `main` ブランチの最新状態が常に反映されます。
+-   **[Web版を開く (GitHub Pages)](https://steelpipe75.github.io/padtools_ts/)** : リリースバージョン（安定版）が反映されます。
 
 ![Web版スクリーンショット](screenshot.png)
 
@@ -74,22 +74,22 @@ npm run start:web
 
 `padtools_ts` は以下のオプションをサポートしています。
 
-*   `-V, --version`: バージョン番号を出力します。
-*   `-i, --input <inputFilePath>`: 入力ファイル（SPDテキストまたはAST JSON）へのパスを指定します。指定がない場合は標準入力から読み込みます。
-*   `-o, --output <outputFilePath>`: 出力SVGファイルへのパスを指定します。指定がない場合は標準出力へ書き出します。
-*   `-p, --prettyprint`: 出力SVGまたはAST JSONを整形して出力します。
-*   `--export-ast <astFilePath>`: 解析されたASTをJSON形式でファイルに書き出します。
-*   `--import-ast`: 入力ファイルをAST JSONとして扱います。
-*   `--font-size <fontSize>`: SVGのフォントサイズを指定します。
-*   `--font-family <fontFamily>`: SVGのフォントファミリーを指定します。
-*   `--stroke-width <strokeWidth>`: SVGの線の太さを指定します。
-*   `--stroke-color <strokeColor>`: SVGの線の色を指定します。
-*   `--background-color <backgroundColor>`: SVGの背景色を指定します。
-*   `--base-background-color <baseBackgroundColor>`: SVGのベース背景色を指定します。
-*   `--text-color <textColor>`: SVGのテキスト色を指定します。
-*   `--line-height <lineHeight>`: SVGの行の高さを指定します。
-*   `--list-render-type <listRenderType>`: SVGのリスト描画タイプを指定します (`Original` または `TerminalOffset`)。
-*   `-h, --help`: コマンドのヘルプ情報を表示します。
+-   `-V, --version`: バージョン番号を出力します。
+-   `-i, --input <inputFilePath>`: 入力ファイル（SPDテキストまたはAST JSON）へのパスを指定します。指定がない場合は標準入力から読み込みます。
+-   `-o, --output <outputFilePath>`: 出力SVGファイルへのパスを指定します。指定がない場合は標準出力へ書き出します。
+-   `-p, --prettyprint`: 出力SVGまたはAST JSONを整形して出力します。
+-   `--export-ast <astFilePath>`: 解析されたASTをJSON形式でファイルに書き出します。
+-   `--import-ast`: 入力ファイルをAST JSONとして扱います。
+-   `--font-size <fontSize>`: SVGのフォントサイズを指定します。
+-   `--font-family <fontFamily>`: SVGのフォントファミリーを指定します。
+-   `--stroke-width <strokeWidth>`: SVGの線の太さを指定します。
+-   `--stroke-color <strokeColor>`: SVGの線の色を指定します。
+-   `--background-color <backgroundColor>`: SVGの背景色を指定します。
+-   `--base-background-color <baseBackgroundColor>`: SVGのベース背景色を指定します。
+-   `--text-color <textColor>`: SVGのテキスト色を指定します。
+-   `--line-height <lineHeight>`: SVGの行の高さを指定します。
+-   `--list-render-type <listRenderType>`: SVGのリスト描画タイプを指定します (`Original` または `TerminalOffset`)。
+-   `-h, --help`: コマンドのヘルプ情報を表示します。
 
 ## REST API
 
@@ -234,11 +234,7 @@ gemini mcp add --cwd "C:/path/to/padtools_ts" padtools npx -y tsx C:/path/to/pad
   "mcpServers": {
     "padtools": {
       "command": "npx",
-      "args": [
-        "-y",
-        "tsx",
-        "C:/path/to/padtools_ts/src/mcp/server.ts"
-      ],
+      "args": ["-y", "tsx", "C:/path/to/padtools_ts/src/mcp/server.ts"],
       "cwd": "C:/path/to/padtools_ts"
     }
   }
@@ -289,6 +285,7 @@ npm run start:api
 
 1.  公開サーバーを使用するか、ローカルでAPIサーバーを起動します。
 2.  別のターミナルで Inspector を起動します。
+
     ```shell
     npx @modelcontextprotocol/inspector
     ```
