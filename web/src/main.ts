@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   const editor = monaco.editor.create(spdEditorContainer, {
     model: spdModel,
-    automaticLayout: true,
+    automaticLayout: false,
     tabSize: 4,
     insertSpaces: false,
     minimap: { enabled: false },
@@ -127,6 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
     fontFamily: "monospace",
     theme: "vs",
   });
+
+  window.addEventListener("resize", () => {
+    editor.layout();
+  });
+
+  // テスト用にエディタインスタンスを window に公開
+  (window as any).__spdEditor = editor;
 
   // hidden textarea と同期
   if (spdInput) {
@@ -444,6 +451,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  function triggerDownload(blob: Blob, fileName: string) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
   const getFileName = (message: string, defaultName: string): string | null => {
     try {
       return prompt(message, defaultName);
@@ -479,14 +499,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mimeType = isAst ? "application/json" : "text/plain";
     const blob = new Blob([spdText], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    triggerDownload(blob, fileName);
   });
 
   downloadAstButton.addEventListener("click", () => {
@@ -521,14 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const blob = new Blob([astJson], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      triggerDownload(blob, fileName);
     } catch (error) {
       alert(
         `ASTの生成に失敗しました: ${error instanceof Error ? error.message : error}`,
@@ -558,14 +564,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const blob = new Blob([svgString], { type: "image/svg+xml" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    triggerDownload(blob, fileName);
   });
 
   shareButton.addEventListener("click", () => {
