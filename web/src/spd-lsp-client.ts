@@ -6,9 +6,51 @@ interface JsonRpcMessage {
   jsonrpc: "2.0";
   id?: number | string;
   method?: string;
-  params?: any;
-  result?: any;
-  error?: any;
+  params?: unknown;
+  result?: unknown;
+  error?: unknown;
+}
+
+interface LspPosition {
+  line: number;
+  character: number;
+}
+
+interface LspRange {
+  start: LspPosition;
+  end: LspPosition;
+}
+
+interface LspDiagnostic {
+  severity?: number;
+  message: string;
+  range: LspRange;
+  source?: string;
+}
+
+interface LspPublishDiagnosticsParams {
+  uri: string;
+  diagnostics?: LspDiagnostic[];
+}
+
+interface LspCompletionItem {
+  label: string;
+  kind?: number;
+  detail?: string;
+  documentation?: string | { value: string };
+  insertText?: string;
+}
+
+interface LspCompletionList {
+  isIncomplete?: boolean;
+  items: LspCompletionItem[];
+}
+
+interface LspHoverResult {
+  contents:
+    | string
+    | { language?: string; value: string }
+    | Array<string | { language?: string; value: string }>;
 }
 
 export class SpdLspClient {
@@ -17,8 +59,8 @@ export class SpdLspClient {
   private pendingRequests = new Map<
     number | string,
     {
-      resolve: (result: any) => void;
-      reject: (error: any) => void;
+      resolve: (result: unknown) => void;
+      reject: (error: unknown) => void;
     }
   >();
   private currentModel: monaco.editor.ITextModel | null = null;
@@ -26,8 +68,6 @@ export class SpdLspClient {
   private documentVersion = 1;
   private isInitialized = false;
   private initPromise: Promise<void> | null = null;
-
-  constructor() {}
 
   public async start(): Promise<void> {
     if (this.initPromise) {
@@ -154,7 +194,9 @@ export class SpdLspClient {
           }
 
           try {
-            const result = await this.sendRequest("textDocument/completion", {
+            const result = await this.sendRequest<
+              LspCompletionItem[] | LspCompletionList | null
+            >("textDocument/completion", {
               textDocument: { uri: this.modelUri },
               position: {
                 line: position.lineNumber - 1,
@@ -164,7 +206,7 @@ export class SpdLspClient {
 
             if (!result) return { suggestions: [] };
 
-            const items: any[] = Array.isArray(result)
+            const items: LspCompletionItem[] = Array.isArray(result)
               ? result
               : result.items || [];
             const wordUntil = model.getWordUntilPosition(position);
@@ -204,15 +246,18 @@ export class SpdLspClient {
           }
 
           try {
-            const result = await this.sendRequest("textDocument/hover", {
-              textDocument: { uri: this.modelUri },
-              position: {
-                line: position.lineNumber - 1,
-                character: position.column - 1,
+            const result = await this.sendRequest<LspHoverResult | null>(
+              "textDocument/hover",
+              {
+                textDocument: { uri: this.modelUri },
+                position: {
+                  line: position.lineNumber - 1,
+                  character: position.column - 1,
+                },
               },
-            });
+            );
 
-            if (!result || !result.contents) return null;
+            if (!result?.contents) return null;
 
             const contents: monaco.IMarkdownString[] = [];
             if (Array.isArray(result.contents)) {
@@ -241,28 +286,34 @@ export class SpdLspClient {
 
   private handleMessage(message: JsonRpcMessage): void {
     if (message.id !== undefined && this.pendingRequests.has(message.id)) {
-      const { resolve, reject } = this.pendingRequests.get(message.id)!;
+      const pending = this.pendingRequests.get(message.id);
       this.pendingRequests.delete(message.id);
-      if (message.error) {
-        reject(message.error);
-      } else {
-        resolve(message.result);
+      if (pending) {
+        if (message.error) {
+          pending.reject(message.error);
+        } else {
+          pending.resolve(message.result);
+        }
       }
       return;
     }
 
-    if (message.method === "textDocument/publishDiagnostics") {
-      this.handleDiagnostics(message.params);
+    if (
+      message.method === "textDocument/publishDiagnostics" &&
+      message.params &&
+      typeof message.params === "object"
+    ) {
+      this.handleDiagnostics(message.params as LspPublishDiagnosticsParams);
     }
   }
 
-  private handleDiagnostics(params: any): void {
+  private handleDiagnostics(params: LspPublishDiagnosticsParams): void {
     if (!this.currentModel || params.uri !== this.modelUri) {
       return;
     }
 
     const markers: monaco.editor.IMarkerData[] = (params.diagnostics || []).map(
-      (diag: any) => ({
+      (diag) => ({
         severity: this.mapSeverity(diag.severity),
         message: diag.message,
         startLineNumber: diag.range.start.line + 1,
@@ -310,13 +361,19 @@ export class SpdLspClient {
     }
   }
 
-  private sendRequest(method: string, params: any): Promise<any> {
+  private sendRequest<T = unknown>(
+    method: string,
+    params: unknown,
+  ): Promise<T> {
     return new Promise((resolve, reject) => {
       if (!this.worker) {
         return reject(new Error("Worker is not running"));
       }
       const id = this.requestId++;
-      this.pendingRequests.set(id, { resolve, reject });
+      this.pendingRequests.set(id, {
+        resolve: (result: unknown) => resolve(result as T),
+        reject,
+      });
       this.worker.postMessage({
         jsonrpc: "2.0",
         id,
@@ -326,7 +383,7 @@ export class SpdLspClient {
     });
   }
 
-  private sendNotification(method: string, params: any): void {
+  private sendNotification(method: string, params: unknown): void {
     if (!this.worker) return;
     this.worker.postMessage({
       jsonrpc: "2.0",

@@ -7,17 +7,22 @@ import { version } from "../../package.json";
 import { deserializeAST, serializeAST } from "../../src/spd/ast";
 import { ParseError, parse } from "../../src/spd/parser";
 import { render as renderSvg } from "../../src/spd/svg-renderer";
-import { SPD_LANGUAGE_ID, registerSpdLanguage } from "./spd-language";
+import { registerSpdLanguage, SPD_LANGUAGE_ID } from "./spd-language";
 import { SpdLspClient } from "./spd-lsp-client";
 
+declare global {
+  interface Window {
+    __spdEditor?: monaco.editor.IStandaloneCodeEditor;
+  }
+}
+
 // MonacoEnvironment の設定（Parcel の module worker を利用）
-// @ts-ignore
+// @ts-expect-error
 window.MonacoEnvironment = {
-  getWorker: function (_workerId: string, _label: string) {
-    return new Worker(new URL("./editor-worker.ts", import.meta.url), {
+  getWorker: (_workerId: string, _label: string) =>
+    new Worker(new URL("./editor-worker.ts", import.meta.url), {
       type: "module",
-    });
-  },
+    }),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -131,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // テスト用にエディタインスタンスを window に公開
-  (window as any).__spdEditor = editor;
+  window.__spdEditor = editor;
 
   // hidden textarea と同期
   if (spdInput) {

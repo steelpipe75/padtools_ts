@@ -358,11 +358,6 @@ button .material-symbols-outlined {
   cursor: pointer;
 }
 
-.display-mode-group input[type="radio"]:disabled + label {
-  cursor: not-allowed;
-  color: #999;
-}
-
 /* フルスクリーン時のスタイル */
 #svgViewer:fullscreen {
   padding: 0;
@@ -442,6 +437,11 @@ button .material-symbols-outlined {
 .option-group label.checkbox-label {
   min-width: auto;
   font-weight: normal;
+}
+
+.display-mode-group input[type="radio"]:disabled + label {
+  cursor: not-allowed;
+  color: #999;
 }
 
 .options-section button {
