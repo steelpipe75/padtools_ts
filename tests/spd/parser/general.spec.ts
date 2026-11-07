@@ -3,7 +3,7 @@ import type { Node, NodeListNode } from "../../../src/spd/ast.js";
 import { parse, UnknownCommandException } from "../../../src/spd/parser.js";
 
 describe("SPDParser - General", () => {
-  it("コメント行を無視すること", () => {
+  it("コメントだけの入力を無視すること", () => {
     const spd = `# This is a comment`;
     const ast = parse(spd);
     expect(ast).toEqual(null);
@@ -37,7 +37,7 @@ Process 2`;
     } as NodeListNode);
   });
 
-  it("callコマンドをパースすること", () => {
+  it("関数名を指定したcallコマンドをパースすること", () => {
     const spd = `:call MyFunction`;
     const ast = parse(spd);
     expect(ast).toEqual({
@@ -59,7 +59,7 @@ Process 2`;
     } as NodeListNode);
   });
 
-  it("callコマンドをパースすること", () => {
+  it("サブルーチン名を指定したcallコマンドをパースすること", () => {
     const spd = `:call SubRoutine`;
     const ast = parse(spd);
     expect(ast).toEqual({
@@ -94,7 +94,7 @@ Process 2`;
     } as NodeListNode);
   });
 
-  it("コメント行を無視すること", () => {
+  it("複数行に含まれるコメントを無視すること", () => {
     const spd = `# This is a comment
 Process 1
   # Another comment

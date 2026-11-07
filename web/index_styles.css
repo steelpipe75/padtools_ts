@@ -342,6 +342,19 @@ button .material-symbols-outlined {
   padding: 20px;
 }
 
+.option-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.option-group label,
+.option-group .label-text {
+  font-weight: bold;
+  min-width: 80px;
+}
+
 .display-mode-group {
   display: flex;
   align-items: center;
@@ -402,19 +415,6 @@ button .material-symbols-outlined {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-}
-
-.option-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  gap: 10px;
-}
-
-.option-group label,
-.option-group .label-text {
-  font-weight: bold;
-  min-width: 80px;
 }
 
 .option-group input[type="number"],
