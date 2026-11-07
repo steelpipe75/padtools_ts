@@ -1,6 +1,7 @@
 # タスクリスト: WebアプリのMonaco Editor化とLangium LSP連携
 
 ## 概要
+
 Webアプリ（`web/`）のテキスト入力欄を `textarea` から Monaco Editor に置き換え、Langium で構築された LSP（Language Server Protocol）と Web Worker 経由で連携させる。
 
 ---
