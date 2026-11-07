@@ -99,7 +99,7 @@
     "rimraf": "^4.1.4",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
-    "wrangler": "^4.154.0"
+    "wrangler": "^4.157.0"
   },
   "alias": {
     "entities/decode": "entities/dist/decode.js",
