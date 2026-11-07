@@ -14,10 +14,9 @@ import { SpdLspClient } from "./spd-lsp-client";
 // @ts-ignore
 window.MonacoEnvironment = {
   getWorker: function (_workerId: string, _label: string) {
-    return new Worker(
-      new URL("./editor-worker.ts", import.meta.url),
-      { type: "module" },
-    );
+    return new Worker(new URL("./editor-worker.ts", import.meta.url), {
+      type: "module",
+    });
   },
 };
 
@@ -114,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
     monaco.Uri.parse("inmemory://model/input.spd"),
   );
 
-  
   const editor = monaco.editor.create(spdEditorContainer, {
     model: spdModel,
     automaticLayout: false,

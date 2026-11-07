@@ -291,7 +291,9 @@ export class SpdLspClient {
     }
   }
 
-  private mapCompletionItemKind(kind?: number): monaco.languages.CompletionItemKind {
+  private mapCompletionItemKind(
+    kind?: number,
+  ): monaco.languages.CompletionItemKind {
     switch (kind) {
       case 1:
         return monaco.languages.CompletionItemKind.Text;
