@@ -127,6 +127,17 @@ textarea {
   height: 100%;
 }
 
+.editor-container {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 300px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
 button {
   background-color: #007bff;
   color: white;
@@ -360,11 +371,6 @@ button .material-symbols-outlined {
   cursor: pointer;
 }
 
-.display-mode-group input[type="radio"]:disabled + label {
-  cursor: not-allowed;
-  color: #999;
-}
-
 /* フルスクリーン時のスタイル */
 #svgViewer:fullscreen {
   padding: 0;
@@ -431,6 +437,11 @@ button .material-symbols-outlined {
 .option-group label.checkbox-label {
   min-width: auto;
   font-weight: normal;
+}
+
+.display-mode-group input[type="radio"]:disabled + label {
+  cursor: not-allowed;
+  color: #999;
 }
 
 .options-section button {

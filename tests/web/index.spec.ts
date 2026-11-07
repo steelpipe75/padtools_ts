@@ -1,8 +1,24 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 const tempDir = path.join(process.cwd(), "tests", "web", "temp");
+
+/** Monaco エディタの現在の値を取得する */
+async function getMonacoValue(page: Page): Promise<string> {
+  return page.evaluate(() => {
+    return (window as any).__spdEditor?.getValue() ?? "";
+  });
+}
+
+/** Monaco エディタにテキストを入力する（既存の内容を置き換える） */
+async function setMonacoValue(page: Page, text: string): Promise<void> {
+  await page.evaluate((value: string) => {
+    (window as any).__spdEditor?.setValue(value);
+  }, text);
+  // SVG の再レンダリングを待つ
+  await page.waitForTimeout(300);
+}
 
 test.describe("E2E tests for web", () => {
   test.beforeAll(() => {
@@ -23,7 +39,7 @@ test.describe("E2E tests for web", () => {
 
   test("should load default sample and render SVG", async ({ page }) => {
     // 入力にデフォルトのテキストがあるか確認
-    const inputValue = await page.inputValue("#spdInput");
+    const inputValue = await getMonacoValue(page);
     expect(inputValue).toContain(":terminal");
 
     // SVGがレンダリングされているか確認
@@ -32,7 +48,7 @@ test.describe("E2E tests for web", () => {
 
   test("should convert valid SPD input to SVG", async ({ page }) => {
     // 入力をクリアし、シンプルなSPDを入力
-    await page.fill("#spdInput", ":terminal start\n:terminal end");
+    await setMonacoValue(page, ":terminal start\n:terminal end");
 
     // SVGが更新されているか確認
     await expect(page.locator("#svgOutput svg")).toBeVisible();
@@ -42,7 +58,7 @@ test.describe("E2E tests for web", () => {
 
   test("should show error message for invalid SPD input", async ({ page }) => {
     // 無効なSPDを入力（不明なコマンド）
-    await page.fill("#spdInput", ":unknown");
+    await setMonacoValue(page, ":unknown");
 
     // エラーメッセージを確認
     // アプリは .error-message クラスを持つ要素でエラーを表示する
@@ -63,8 +79,8 @@ test.describe("E2E tests for web", () => {
   });
 
   test("should download SVG file", async ({ page }) => {
-    // #spdInput 欄を ':terminal 開始\ntest\n:terminal 終了' に書き換えた後
-    await page.fill("#spdInput", ":terminal 開始\ntest\n:terminal 終了");
+    // 入力欄を ':terminal 開始\ntest\n:terminal 終了' に書き換えた後
+    await setMonacoValue(page, ":terminal 開始\ntest\n:terminal 終了");
 
     // SVGがレンダリングされるのを待つ
     await expect(page.locator("#svgOutput svg")).toBeVisible();
@@ -74,10 +90,11 @@ test.describe("E2E tests for web", () => {
     const expectedFileName = "test_output.svg";
     page.on("dialog", (dialog) => dialog.accept(expectedFileName));
 
-    // ダウンロードを開始
-    const downloadPromise = page.waitForEvent("download");
-    await page.click("#downloadSvgButton");
-    const download = await downloadPromise;
+    // ダウンロードイベントの待機とクリックを並列実行
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      page.click("#downloadSvgButton"),
+    ]);
 
     expect(download.suggestedFilename()).toBe(expectedFileName);
 
@@ -149,10 +166,11 @@ test.describe("E2E tests for web", () => {
     const expectedFileName = "render_options_test.svg";
     page.on("dialog", (dialog) => dialog.accept(expectedFileName));
 
-    // ダウンロードを開始
-    const downloadPromise = page.waitForEvent("download");
-    await page.click("#downloadSvgButton");
-    const download = await downloadPromise;
+    // ダウンロードイベントの待機とクリックを並列実行
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      page.click("#downloadSvgButton"),
+    ]);
 
     expect(download.suggestedFilename()).toBe(expectedFileName);
 
@@ -195,18 +213,21 @@ test.describe("E2E tests for web", () => {
   });
 
   test("should download AST file", async ({ page }) => {
-    await page.fill("#spdInput", ":terminal start\n:terminal end");
+    await setMonacoValue(page, ":terminal start\n:terminal end");
 
     // AST表示モードに切り替える
     await page.check("#displayModeAst");
+    // ボタンが安定するのを待つ
+    await expect(page.locator("#downloadAstButton")).toBeVisible();
 
     const expectedFileName = "test_ast.json";
     page.on("dialog", (dialog) => dialog.accept(expectedFileName));
 
-    // ダウンロードを開始
-    const downloadPromise = page.waitForEvent("download");
-    await page.click("#downloadAstButton");
-    const download = await downloadPromise;
+    // ダウンロードイベントの待機とクリックを並列実行
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      page.locator("#downloadAstButton").click(),
+    ]);
 
     expect(download.suggestedFilename()).toBe(expectedFileName);
 
@@ -239,7 +260,7 @@ test.describe("E2E tests for web", () => {
     await page.check("#inputModeAst");
 
     // ASTを入力
-    await page.fill("#spdInput", astJson);
+    await setMonacoValue(page, astJson);
 
     // SVGがレンダリングされているか確認
     await expect(page.locator("#svgOutput svg")).toBeVisible();
@@ -253,7 +274,7 @@ test.describe("E2E tests for web", () => {
       type: "nodeList",
       children: [{ type: "terminal", text: "Shared AST" }],
     });
-    await page.fill("#spdInput", spdText);
+    await setMonacoValue(page, spdText);
     // 入力モードをASTに切り替える
     await page.check("#inputModeAst");
 
@@ -269,8 +290,11 @@ test.describe("E2E tests for web", () => {
 
     await page.goto(`/?spd=${base64}&ast=1`);
 
+    // Monaco エディタが初期化されるのを待つ
+    await page.waitForFunction(() => !!(window as any).__spdEditor);
+
     // 復元を確認
-    expect(await page.inputValue("#spdInput")).toBe(spdText);
+    expect(await getMonacoValue(page)).toBe(spdText);
     expect(await page.isChecked("#inputModeAst")).toBe(true);
     await expect(page.locator("#svgOutput svg")).toBeVisible();
     await expect(page.locator("#svgOutput")).toContainText("Shared AST");

@@ -24,6 +24,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     "^zod/v4/core$": "<rootDir>/node_modules/zod/v4/core/index.cjs",
+    "^langium/lsp$": "<rootDir>/node_modules/langium/lib/lsp/index.js",
     "^langium$": "<rootDir>/node_modules/langium/lib/index.js",
     "^chevrotain$": "<rootDir>/node_modules/chevrotain/lib/src/api.js",
     "^@chevrotain/([^/]+)$":
