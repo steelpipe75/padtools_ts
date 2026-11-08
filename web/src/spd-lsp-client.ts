@@ -1,6 +1,6 @@
 // web/src/spd-lsp-client.ts
 
-import * as monaco from "monaco-editor";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 interface JsonRpcMessage {
   jsonrpc: "2.0";

@@ -2,7 +2,7 @@
 
 // @ts-expect-error
 import defaultSpdContent from "bundle-text:../../sample_input.spd";
-import * as monaco from "monaco-editor";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { version } from "../../package.json";
 import { deserializeAST, serializeAST } from "../../src/spd/ast";
 import { ParseError, parse } from "../../src/spd/parser";

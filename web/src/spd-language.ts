@@ -1,6 +1,6 @@
 // web/src/spd-language.ts
 
-import type * as monaco from "monaco-editor";
+import type * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 export const SPD_LANGUAGE_ID = "spd";
 
