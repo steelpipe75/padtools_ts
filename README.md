@@ -10,7 +10,7 @@ padtools_ts はPAD図を活用することを目的として作成された、PA
 
 ## 今すぐ試す
 
-インストール不要で、ブラウザからすぐにPAD図の作成を試すことができます。
+インストール不要で、ブラウザからすぐにPAD図の作成を試すことができます。Monaco Editor を搭載し、シンタックスハイライトや補完、リアルタイム構文チェックに対応しています。
 
 -   **[Web版を開く (Cloudflare Pages)](https://padtools-ts.pages.dev/)** : `main` ブランチの最新状態が常に反映されます。
 -   **[Web版を開く (GitHub Pages)](https://steelpipe75.github.io/padtools_ts/)** : リリースバージョン（安定版）が反映されます。
@@ -328,7 +328,14 @@ SPD 記法の仕様とサンプルコードを取得します。
 
 ## Webツール
 
-このプロジェクトには、Webベースのツールも含まれています。
+このプロジェクトには、ブラウザ上で快適にPAD図を作成・プレビューできるWebベースのツールが含まれています。
+エディタには **Monaco Editor** を採用し、Langium による LSP (Language Server Protocol) と Web Worker 連携により、以下の機能を提供します。
+
+- **シンタックスハイライト**: SPD記法（ノード種別コマンドやコメントなど）のカラー表示
+- **リアルタイム構文エラー検知 (Diagnostics)**: 構文誤りを波線とホバーメッセージで即座に通知
+- **コード補完 (Completion)**: `:terminal`, `:if`, `:while`, `:for`, `:repeat` などのコマンド入力支援
+- **リアルタイムプレビュー**: 入力したSPDに応じたPAD図（SVG）のリアルタイム描画
+- **エクスポート/共有**: SVGダウンロードやURLパラメータによる図の共有
 
 ### Webツールの実行 (開発用)
 
@@ -382,7 +389,8 @@ npm run build:web:gh-pages
 -   [@hono/mcp](https://github.com/honojs/mcp): HonoでのMCPサーバー実装に使用。 (MIT License)
 -   [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/typescript-sdk): MCP SDK。 (MIT License)
 -   [sanitize-html](https://github.com/apostrophecms/sanitize-html): SVG内のテキストのサニタイズに使用。 (MIT License)
--   [langium](https://github.com/eclipse-langium/langium): SPDフォーマットの構文解析に使用。 (MIT License)
+-   [langium](https://github.com/eclipse-langium/langium): SPDフォーマットの構文解析およびLSPサービスに使用。 (MIT License)
+-   [monaco-editor](https://github.com/microsoft/monaco-editor): Webツールのエディタコンポーネントに使用。 (MIT License)
 
 各ライブラリのライセンス詳細については、それぞれのリンク先をご確認ください。
 
