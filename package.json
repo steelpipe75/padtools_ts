@@ -94,7 +94,7 @@
     "entities": "^8.1.0",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
-    "langium-cli": "^4.4.0",
+    "langium-cli": "^4.4.1",
     "parcel": "^2.16.4",
     "postcss": "^8.5.32",
     "process": "^0.11.10",
