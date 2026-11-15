@@ -299,4 +299,44 @@ test.describe("E2E tests for web", () => {
     await expect(page.locator("#svgOutput svg")).toBeVisible();
     await expect(page.locator("#svgOutput")).toContainText("Shared AST");
   });
+
+  test("should enable JSON syntax highlighting when AST input mode is selected", async ({
+    page,
+  }) => {
+    const astJson = JSON.stringify(
+      {
+        type: "nodeList",
+        children: [{ type: "terminal", text: "AST Start" }],
+      },
+      null,
+      2,
+    );
+
+    // 入力モードをASTに切り替える
+    await page.check("#inputModeAst");
+    await setMonacoValue(page, astJson);
+
+    // モデルの言語が json であることを検証
+    const languageId = await page.evaluate(() => {
+      const editor = (window as any).__spdEditor;
+      return editor?.getModel()?.getLanguageId();
+    });
+    expect(languageId).toBe("json");
+
+    // Monaco のトークナイザーで JSON トークン（キー、文字列など）が生成されることを検証
+    const tokenTypes = await page.evaluate(() => {
+      const monaco = (window as any).__monaco;
+      const editor = (window as any).__spdEditor;
+      const text = editor?.getModel()?.getValue() ?? "";
+      const tokens = monaco?.editor?.tokenize(text, "json");
+      // 平坦化してトークンタイプの一覧を取得
+      return (tokens ?? []).flatMap((lineTokens: any[]) =>
+        lineTokens.map((t: any) => t.type),
+      );
+    });
+
+    // string.key.json や string.value.json などのトークンが存在することを検証
+    expect(tokenTypes).toContain("string.key.json");
+    expect(tokenTypes).toContain("string.value.json");
+  });
 });

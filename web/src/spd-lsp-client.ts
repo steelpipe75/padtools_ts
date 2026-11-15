@@ -159,25 +159,37 @@ export class SpdLspClient {
 
     // モデル変更イベントの購読
     let debounceTimer: number | null = null;
+    const notifyChange = () => {
+      if (!this.isInitialized || model.getLanguageId() !== languageId) return;
+      this.documentVersion++;
+      this.sendNotification("textDocument/didChange", {
+        textDocument: {
+          uri: this.modelUri,
+          version: this.documentVersion,
+        },
+        contentChanges: [
+          {
+            text: model.getValue(),
+          },
+        ],
+      });
+    };
+
     model.onDidChangeContent(() => {
       if (debounceTimer) {
         window.clearTimeout(debounceTimer);
       }
-      debounceTimer = window.setTimeout(() => {
-        if (!this.isInitialized) return;
-        this.documentVersion++;
-        this.sendNotification("textDocument/didChange", {
-          textDocument: {
-            uri: this.modelUri,
-            version: this.documentVersion,
-          },
-          contentChanges: [
-            {
-              text: model.getValue(),
-            },
-          ],
-        });
-      }, 100);
+      debounceTimer = window.setTimeout(notifyChange, 100);
+    });
+
+    model.onDidChangeLanguage((e) => {
+      if (e.newLanguageId !== languageId) {
+        // SPD以外の言語（例: JSON）に切り替わったらSPD LSPのエラーマーカーをクリア
+        monaco.editor.setModelMarkers(model, "spd-lsp", []);
+      } else {
+        // SPD言語に戻ったら診断をリフレッシュ
+        notifyChange();
+      }
     });
   }
 
@@ -308,7 +320,11 @@ export class SpdLspClient {
   }
 
   private handleDiagnostics(params: LspPublishDiagnosticsParams): void {
-    if (!this.currentModel || params.uri !== this.modelUri) {
+    if (
+      !this.currentModel ||
+      params.uri !== this.modelUri ||
+      this.currentModel.getLanguageId() !== "spd"
+    ) {
       return;
     }
 
