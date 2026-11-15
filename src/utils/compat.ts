@@ -43,7 +43,7 @@ export function getRequire(callerFilename?: string): NodeRequire {
   // Fallback require implementation for restricted environments (like Cloudflare Workers)
   return ((path: string) => {
     if (path.endsWith("package.json")) {
-      return { version: "0.4.0" };
+      return { version: "0.5.1" };
     }
     const globalRequire = (
       globalThis as typeof globalThis & { require?: unknown }
