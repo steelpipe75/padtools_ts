@@ -68,7 +68,7 @@
     "eastasianwidth": "^0.3.0",
     "fastmcp": "^4.26.1",
     "glob": "^14.0.4",
-    "hono": "^4.13.16",
+    "hono": "^4.13.22",
     "langium": "^4.4.2",
     "monaco-editor": "^0.57.0",
     "sanitize-html": "^2.18.1",
