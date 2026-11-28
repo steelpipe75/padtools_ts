@@ -73,7 +73,7 @@
     "monaco-editor": "^0.57.0",
     "sanitize-html": "^2.18.1",
     "svgo": "^4.1.0",
-    "xml-formatter": "^3.7.0",
+    "xml-formatter": "^3.7.1",
     "zod": "^4.6.7"
   },
   "devDependencies": {
