@@ -64,7 +64,7 @@
     "@hono/swagger-ui": "^0.6.2",
     "@hono/zod-openapi": "^1.6.3",
     "@modelcontextprotocol/sdk": "^1.32.2",
-    "commander": "^15.0.0",
+    "commander": "^15.1.0",
     "eastasianwidth": "^0.3.0",
     "fastmcp": "^4.26.1",
     "glob": "^14.0.4",
