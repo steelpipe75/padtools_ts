@@ -91,7 +91,7 @@
     "@types/sanitize-html": "^2.16.2",
     "baseline-browser-mapping": "^2.11.30",
     "buffer": "^6.0.3",
-    "entities": "^8.1.0",
+    "entities": "^9.0.0",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
     "langium-cli": "^4.4.1",
